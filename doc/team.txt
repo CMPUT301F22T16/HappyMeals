@@ -2,8 +2,5 @@ hammad MHUalberta
 junye  JohnYu2000
 qzhou2 Jayparkrighthere
 shehraj shehraj123
-<<<<<<< HEAD
 tianyuan CarlHat
-=======
 yihe2 yihe2
->>>>>>> e76dd5a0d7667f44a3fb8da98e784b8f77c4edf8
