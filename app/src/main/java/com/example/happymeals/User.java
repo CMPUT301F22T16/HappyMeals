@@ -18,19 +18,11 @@ import java.util.List;
 
 
 public class User {
-    private String u_id;
     private String username;
     private FirebaseFirestore conn;
     CollectionReference userRef;
 
-
-    private String get_u_id(String username) {
-        // Search up database to get the u_id for the user with username = 'username'
-        return "";
-    }
-
     public User() {
-        u_id = "Fw8E3ba2rjfSmuOPxxHE"; // Default generated right now (temporary)
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
         userRef = conn.collection("users");
@@ -40,19 +32,12 @@ public class User {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
-        u_id = this.get_u_id(this.username);
     }
 
     public void newUser(String username) {
         HashMap<String, String> data = new HashMap<>();
         data.put("username", username);
         userRef.add(data);
-    }
-
-
-
-    public String getU_id() {
-        return this.u_id;
     }
 
     public String getUsername() {
@@ -71,7 +56,7 @@ public class User {
 //
 //    }
 
-    public void addMeal(User user, Meal meal, Context context) {
+    public void addMeal(Meal meal, Context context) {
         List<Recipe> recipes = meal.getRecipes();
         List<Double> scalings = meal.getScalings();
         double cost = meal.getCost();
@@ -85,7 +70,7 @@ public class User {
 
         data.put("recipes", recipe_ids);
 
-        FirebaseFirestore conn = user.getConn();
+        FirebaseFirestore conn = this.getConn();
         CollectionReference user_meals = conn.collection("user_meals");
         String TAG = "User";
         user_meals
@@ -106,8 +91,47 @@ public class User {
                 });
     }
 
-//    public void addMealPlan(User user, MealPlan mealplan, ) {
-//
-//    }
+    public void addMealPlan(MealPlan mealplan, Context context) {
+        List<Meal> breakfast = mealplan.getBreakfast();
+        List<Meal> lunch = mealplan.getLunch();
+        List<Meal> dinner = mealplan.getDinner();
+        int num_days = mealplan.getNum_days();
+        List<String> breakfast_ids = new ArrayList<>();
+        List<String> lunch_ids = new ArrayList<>();
+        List<String> dinner_ids = new ArrayList<>();
+
+        for (int i = 0; i < num_days; i++) {
+            breakfast_ids.add(breakfast.get(i).getM_id());
+            lunch_ids.add(lunch.get(i).getM_id());
+            dinner_ids.add(dinner.get(i).getM_id());
+        }
+
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("breakfast", breakfast_ids);
+        data.put("lunch", lunch_ids);
+        data.put("dinner", dinner_ids);
+        data.put("num_days", num_days);
+
+        FirebaseFirestore conn = this.getConn();
+        CollectionReference user_mealplans = conn.collection("user_mealplans");
+        String TAG = "User";
+
+        user_mealplans
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Data has been added successfully!");
+                        Toast.makeText(context, "Meal plan created successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data could not be added!" + e.toString());
+                        Toast.makeText(context, "Meal plan could not be added", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
 }
