@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "81420419900",
+    "project_id": "happymeals-a7f9d",
+    "storage_bucket": "happymeals-a7f9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81420419900:android:b0be08ef3ed53d8b42d439",
+        "android_client_info": {
+          "package_name": "com.example.happymeals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81420419900-hsd5jfre40j72n1mbfdh02prlul5emq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9tZ4Fu2ahvPKRWWEGMUL_789-tnjnsdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81420419900-hsd5jfre40j72n1mbfdh02prlul5emq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
