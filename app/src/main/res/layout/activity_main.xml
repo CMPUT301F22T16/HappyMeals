@@ -16,6 +16,12 @@
             android:layout_height="wrap_content"
             android:text="Add User">
         </Button>
+        <Button
+            android:id="@+id/add_stor_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add stor">
+        </Button>
     </LinearLayout>
     <ListView
         android:id="@+id/city_list"

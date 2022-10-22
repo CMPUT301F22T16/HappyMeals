@@ -17,11 +17,12 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class User {
+public class User{
     private String u_id;
     private String username;
     private FirebaseFirestore conn;
     CollectionReference userRef;
+    CollectionReference storRef;
 
 
     private String get_u_id(String username) {
@@ -34,6 +35,7 @@ public class User {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
         userRef = conn.collection("users");
+        storRef = conn.collection("storages");
     }
 
     public User(String username) {
@@ -47,6 +49,32 @@ public class User {
         HashMap<String, String> data = new HashMap<>();
         data.put("username", username);
         userRef.add(data);
+    }
+
+    public void store(CollectionReference ref, String collType, HashMap data, Context context) {
+        storRef
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("Stor", "Data has been added successfully!");
+                        Toast.makeText(context,  collType + " added successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Stor", "Data could not be added!" + e.toString());
+                        Toast.makeText(context, collType + " not be added", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void addStorage(Context context, Storage stor) {
+        HashMap<String, String> data = new HashMap<>();
+        data.put("type", stor.getStorName());
+        data.put("user", this.username);
+        store(storRef, "Storage", data, context);
     }
     
 
@@ -89,22 +117,7 @@ public class User {
         FirebaseFirestore conn = user.getConn();
         CollectionReference user_meals = conn.collection("user_meals");
         String TAG = "User";
-        user_meals
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Data has been added successfully!");
-                        Toast.makeText(context, "Meal added successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e.toString());
-                        Toast.makeText(context, "Meal could not be added", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        store(user_meals, "Meal", data, context);
     }
 
 //    public void addMealPlan(User user, MealPlan mealplan, ) {
