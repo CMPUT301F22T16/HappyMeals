@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +22,6 @@ public class User{
     private String u_id;
     private String username;
     private FirebaseFirestore conn;
-    CollectionReference userRef;
-    CollectionReference storRef;
 
 
     private String get_u_id(String username) {
@@ -34,8 +33,6 @@ public class User{
         u_id = "Fw8E3ba2rjfSmuOPxxHE"; // Default generated right now (temporary)
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
-        userRef = conn.collection("users");
-        storRef = conn.collection("storages");
     }
 
     public User(String username) {
@@ -45,14 +42,31 @@ public class User{
         u_id = this.get_u_id(this.username);
     }
 
-    public void newUser(String username) {
+    public void newUser(Context context, String username) {
         HashMap<String, String> data = new HashMap<>();
-        data.put("username", username);
-        userRef.add(data);
+        data.put("pass", "");
+        CollectionReference ref = conn.collection("users");
+        ref //Did not use the store method because adding a new user requires a different set of methods.
+                .document(username)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Stor", "Data has been added successfully!");
+                        Toast.makeText(context,  "New user added successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Stor", "Data could not be added!" + e.toString());
+                        Toast.makeText(context, "New user could not be added", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    public void store(CollectionReference ref, String collType, HashMap data, Context context) {
-        storRef
+    private void store(CollectionReference ref, String collType, HashMap data, Context context) {
+        ref
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -73,8 +87,13 @@ public class User{
     public void addStorage(Context context, Storage stor) {
         HashMap<String, String> data = new HashMap<>();
         data.put("type", stor.getStorName());
-        data.put("user", this.username);
-        store(storRef, "Storage", data, context);
+        data.put("user", getU_id());
+        CollectionReference ref = conn.collection("storages");
+        store(ref, "Storage", data, context);
+    }
+
+    public Query getStorages(Context context) {
+        return db.collection("cities").whereEqualTo("capital", true);
     }
     
 
