@@ -17,15 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
 public class User {
+
     private String username;
     private FirebaseFirestore conn;
-    CollectionReference userRef;
 
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
-        userRef = conn.collection("users");
     }
 
     public User(String username) {
@@ -37,7 +37,36 @@ public class User {
     public void newUser(String username) {
         HashMap<String, String> data = new HashMap<>();
         data.put("username", username);
-        userRef.add(data);
+        CollectionReference ref = this.conn.collection("users");
+        ref.add(data);
+    }
+
+
+    private void store(CollectionReference ref, String collType, HashMap data, Context context) {
+        ref
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("User", "Data has been added successfully!");
+                        Toast.makeText(context,  collType + " added successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("User", "Data could not be added!" + e.toString());
+                        Toast.makeText(context, collType + " not be added", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void addStorage(Context context, Storage stor) {
+        HashMap<String, String> data = new HashMap<>();
+        data.put("type", stor.getStorName());
+        data.put("user", this.username);
+        CollectionReference storRef = this.conn.collection("storages");
+        store(storRef,"Storage", data, context);
     }
 
     public String getUsername() {
@@ -47,14 +76,6 @@ public class User {
     public FirebaseFirestore getConn() {
         return this.conn;
     }
-
-//    public static User createUser(String username) {
-//        // Create a new user in the database
-//        // Create a User object for that user
-//        // Return that user
-//
-//
-//    }
 
     public void addMeal(Meal meal, Context context) {
         List<Recipe> recipes = meal.getRecipes();
@@ -69,26 +90,8 @@ public class User {
         }
 
         data.put("recipes", recipe_ids);
-
-        FirebaseFirestore conn = this.getConn();
         CollectionReference user_meals = conn.collection("user_meals");
-        String TAG = "User";
-        user_meals
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Data has been added successfully!");
-                        Toast.makeText(context, "Meal added successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e.toString());
-                        Toast.makeText(context, "Meal could not be added", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        store(user_meals, "Meal", data, context);
     }
 
     public void addMealPlan(MealPlan mealplan, Context context) {
@@ -112,26 +115,8 @@ public class User {
         data.put("dinner", dinner_ids);
         data.put("num_days", num_days);
 
-        FirebaseFirestore conn = this.getConn();
         CollectionReference user_mealplans = conn.collection("user_mealplans");
-        String TAG = "User";
-
-        user_mealplans
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Data has been added successfully!");
-                        Toast.makeText(context, "Meal plan created successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data could not be added!" + e.toString());
-                        Toast.makeText(context, "Meal plan could not be added", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        store(user_mealplans, "Meal Plan", data, context);
     }
 
 }
