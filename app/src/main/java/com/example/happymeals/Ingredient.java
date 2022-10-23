@@ -7,5 +7,6 @@ public class Ingredient {
     public Integer amount;
     public Integer cost;
     public Date date;
+    String i_id;
 
 }

@@ -17,9 +17,23 @@ import java.util.HashMap;
 import java.util.List;
 
 
-
+/**
+ * Represents a User object. User class maintains a username and also has a database connection established that it can use to add/modify/delete
+ * content of following collections in Firestore
+ * 1. user_ingredients: {@link Ingredient} is model class for this.
+ * 2. users: {@link User} is model class for this.
+ * 3. user_storages: {@link Storage} is the model class for this.
+ * 4. user_recipes: {@link Recipe} is the model class for this.
+ * 5. user_meals: {@link Meal} is the model class for this.
+ * 6. user_mealplans: {@link MealPlan} is the model class for this.
+ *
+ */
 public class User {
-
+    /**
+     * Members
+     *  username: A {@link String} username that represents the document id of the user document in database.
+     *  conn: A {@link FirebaseFirestore} database connection to add/modify/delete/query data upon request.
+     */
     private String username;
     private FirebaseFirestore conn;
 
@@ -77,6 +91,11 @@ public class User {
         return this.conn;
     }
 
+    /**
+     * Used to add Meals to user's database
+     * @param meal : A meal of type {@link Meal} containing information to be added to the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     */
     public void addMeal(Meal meal, Context context) {
         List<Recipe> recipes = meal.getRecipes();
         List<Double> scalings = meal.getScalings();
@@ -94,6 +113,11 @@ public class User {
         store(user_meals, "Meal", data, context);
     }
 
+    /**
+     * Used to add Meal plans to user's database.
+     * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     */
     public void addMealPlan(MealPlan mealplan, Context context) {
         List<Meal> breakfast = mealplan.getBreakfast();
         List<Meal> lunch = mealplan.getLunch();
