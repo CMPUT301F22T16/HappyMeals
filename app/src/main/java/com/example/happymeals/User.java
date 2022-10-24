@@ -58,7 +58,6 @@ public class User {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
-        u_id = this.get_u_id(this.username);
     }
 
     public void newUser(Context context, String username) {
@@ -204,11 +203,6 @@ public class User {
                     }
                 });
         return list;
-    }
-
-
-    public String getU_id() {
-        return this.u_id;
     }
 
     public String getUsername() {
