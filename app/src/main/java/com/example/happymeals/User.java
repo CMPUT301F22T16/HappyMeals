@@ -37,13 +37,6 @@ public class User {
         return this.conn;
     }
 
-//    public static User createUser(String username) {
-//        // Create a new user in the database
-//        // Create a User object for that user
-//        // Return that user
-//
-//
-//    }
 
 
 
