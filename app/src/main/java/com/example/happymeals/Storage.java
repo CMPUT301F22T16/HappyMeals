@@ -3,6 +3,7 @@ package com.example.happymeals;
 import java.util.UUID;
 
 public class Storage {
+
     private String storName;
     private String id;
 

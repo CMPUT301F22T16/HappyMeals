@@ -7,6 +7,8 @@ public class Meal {
     List<Recipe> recipes;
     List<Double> scalings;
     double cost;
+    String m_id;
+
     public List<Recipe> getRecipes() {
         return this.recipes;
     }
@@ -17,5 +19,9 @@ public class Meal {
 
     public double getCost() {
         return this.cost;
+    }
+
+    public String getM_id() {
+        return this.m_id;
     }
 }

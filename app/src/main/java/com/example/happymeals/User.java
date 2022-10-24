@@ -23,8 +23,23 @@ import java.util.List;
 import java.util.Map;
 
 
-public class User{
-    private String u_id;
+/**
+ * Represents a User object. User class maintains a username and also has a database connection established that it can use to add/modify/delete
+ * content of following collections in Firestore
+ * 1. user_ingredients: {@link Ingredient} is model class for this.
+ * 2. users: {@link User} is model class for this.
+ * 3. user_storages: {@link Storage} is the model class for this.
+ * 4. user_recipes: {@link Recipe} is the model class for this.
+ * 5. user_meals: {@link Meal} is the model class for this.
+ * 6. user_mealplans: {@link MealPlan} is the model class for this.
+ *
+ */
+public class User {
+    /**
+     * Members
+     *  username: A {@link String} username that represents the document id of the user document in database.
+     *  conn: A {@link FirebaseFirestore} database connection to add/modify/delete/query data upon request.
+     */
     private String username;
     private FirebaseFirestore conn;
 
@@ -35,7 +50,6 @@ public class User{
     }
 
     public User() {
-        u_id = "Fw8E3ba2rjfSmuOPxxHE"; // Default generated right now (temporary)
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
     }
@@ -205,15 +219,12 @@ public class User{
         return this.conn;
     }
 
-//    public static User createUser(String username) {
-//        // Create a new user in the database
-//        // Create a User object for that user
-//        // Return that user
-//
-//
-//    }
-
-    public void addMeal(User user, Meal meal, Context context) {
+    /**
+     * Used to add Meals to user's database
+     * @param meal : A meal of type {@link Meal} containing information to be added to the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     */
+    public void addMeal(Meal meal, Context context) {
         List<Recipe> recipes = meal.getRecipes();
         List<Double> scalings = meal.getScalings();
         double cost = meal.getCost();
@@ -226,15 +237,38 @@ public class User{
         }
 
         data.put("recipes", recipe_ids);
-
-        FirebaseFirestore conn = user.getConn();
         CollectionReference user_meals = conn.collection("user_meals");
-        String TAG = "User";
         store(user_meals, "Meal", data, context);
     }
 
-//    public void addMealPlan(User user, MealPlan mealplan, ) {
-//
-//    }
+    /**
+     * Used to add Meal plans to user's database.
+     * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     */
+    public void addMealPlan(MealPlan mealplan, Context context) {
+        List<Meal> breakfast = mealplan.getBreakfast();
+        List<Meal> lunch = mealplan.getLunch();
+        List<Meal> dinner = mealplan.getDinner();
+        int num_days = mealplan.getNum_days();
+        List<String> breakfast_ids = new ArrayList<>();
+        List<String> lunch_ids = new ArrayList<>();
+        List<String> dinner_ids = new ArrayList<>();
+
+        for (int i = 0; i < num_days; i++) {
+            breakfast_ids.add(breakfast.get(i).getM_id());
+            lunch_ids.add(lunch.get(i).getM_id());
+            dinner_ids.add(dinner.get(i).getM_id());
+        }
+
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("breakfast", breakfast_ids);
+        data.put("lunch", lunch_ids);
+        data.put("dinner", dinner_ids);
+        data.put("num_days", num_days);
+
+        CollectionReference user_mealplans = conn.collection("user_mealplans");
+        store(user_mealplans, "Meal Plan", data, context);
+    }
 
 }
