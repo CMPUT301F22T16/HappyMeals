@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HappyMeals</string>
+    <string name="meal_plan_activity">Manage Your Meal Plan</string>
 </resources>
