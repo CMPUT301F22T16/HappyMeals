@@ -219,20 +219,15 @@ public class User {
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
     public void addMeal(Meal meal, Context context) {
-        List<Recipe> recipes = meal.getRecipes();
-        List<Double> scalings = meal.getScalings();
-        double cost = meal.getCost();
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("cost", cost);
-        data.put("scalings", scalings);
-        List<String> recipe_ids = new ArrayList<>();
-        for (Recipe recipe: recipes) {
-            recipe_ids.add(recipe.get_r_id());
-        }
-
-        data.put("recipes", recipe_ids);
+        HashMap<String, Object> data = meal.getStorable();
         CollectionReference user_meals = conn.collection("user_meals");
         store(user_meals, "Meal", data, context);
+    }
+
+    public void modifyMeal(String oldMeal_id, Meal newMeal, Context context) {
+        CollectionReference user_meals = this.conn.collection("user_meals");
+
+
     }
 
     /**
