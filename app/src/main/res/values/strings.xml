@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">HappyMeals</string>
+    <string-array name="sort_category">
+        <item>Description</item>
+        <item>Best Before Date</item>
+        <item>Location</item>
+        <item>Ingredient Category</item>
+    </string-array>
 </resources>

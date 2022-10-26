@@ -13,28 +13,27 @@ import com.example.happymeals.R;
 
 import java.util.ArrayList;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>{
+public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientAdapter.MyViewHolder> {
 
     private Context context;
     private ArrayList<Ingredient> ingredients;
 
-    public IngredientAdapter(Context context, ArrayList<Ingredient> ingredients) {
+    public RecipeIngredientAdapter(Context context, ArrayList<Ingredient> ingredients) {
         this.context = context;
         this.ingredients = ingredients;
     }
 
     @NonNull
     @Override
-    public IngredientAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeIngredientAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.recipe_add_ingredient_custom_layout, parent, false);
+        View view = inflater.inflate(R.layout.add_recipe_custom_layout, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull IngredientAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipeIngredientAdapter.MyViewHolder holder, int position) {
         holder.desc.setText(ingredients.get(position).getDesc());
-        holder.category.setText(ingredients.get(position).getCategory());
     }
 
     @Override
@@ -45,12 +44,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView desc;
-        TextView category;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            desc = itemView.findViewById(R.id.recipe_add_ingredient_desc);
-            category = itemView.findViewById(R.id.recipe_add_ingredient_category);
+            desc = itemView.findViewById(R.id.recipe_ingredient_desc);
         }
     }
 }
+
