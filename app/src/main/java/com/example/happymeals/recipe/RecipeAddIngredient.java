@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.happymeals.R;
@@ -21,6 +22,8 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
     RecyclerView ingredient_list;
     IngredientAdapter adapter;
     ArrayList<Ingredient> data_list;
+
+    Button add_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,13 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
 
         ingredient_list.setAdapter(adapter);
         ingredient_list.setLayoutManager(new LinearLayoutManager(this));
+
+        add_btn = findViewById(R.id.recipe_add_ingredient_btn);
+        add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 
     @Override

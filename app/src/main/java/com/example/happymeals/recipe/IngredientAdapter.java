@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.R;
@@ -35,6 +36,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public void onBindViewHolder(@NonNull IngredientAdapter.MyViewHolder holder, int position) {
         holder.desc.setText(ingredients.get(position).getDesc());
         holder.category.setText(ingredients.get(position).getCategory());
+
+        holder.rootLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Send ingredient data to NewRecipe.java
+            }
+        });
     }
 
     @Override
@@ -46,11 +54,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
         TextView desc;
         TextView category;
+        ConstraintLayout rootLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             desc = itemView.findViewById(R.id.recipe_add_ingredient_desc);
             category = itemView.findViewById(R.id.recipe_add_ingredient_category);
+            rootLayout = itemView.findViewById(R.id.recipe_add_ingredient_custom_layout_root_constraintlayout)
         }
     }
 }
