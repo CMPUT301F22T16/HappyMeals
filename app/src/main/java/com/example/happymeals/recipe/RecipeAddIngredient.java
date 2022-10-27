@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +26,7 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
     IngredientAdapter adapter;
     ArrayList<Ingredient> data_list;
 
-    Button add_btn;
+    Button submit_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
         ingredient_list.setAdapter(adapter);
         ingredient_list.setLayoutManager(new LinearLayoutManager(this));
 
-        add_btn = findViewById(R.id.recipe_add_ingredient_btn);
+        submit_btn = findViewById(R.id.recipe_add_ingredient_btn);
     }
 
     @Override
@@ -70,14 +71,24 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemClick(int position) {
-        add_btn.setOnClickListener(new View.OnClickListener() {
+
+        // ----- This code changes the item color upon selection ----- //
+        for (Ingredient i : data_list) {
+            i.setSelected(false);
+        }
+        data_list.get(position).setSelected(true);
+        ingredient_list.setAdapter(adapter);
+
+        // ----- This code handles the submit button press ----- //
+        submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Ingredient i : data_list) {
-                    i.setSelected(false);
-                }
-                data_list.get(position).setSelected(true);
-                ingredient_list.setAdapter(adapter);
+                Intent intent = new Intent();
+                Ingredient item = data_list.get(position);
+                intent.putExtra("desc", item.getDesc());
+                intent.putExtra("category", item.getCategory());
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 

@@ -54,12 +54,6 @@
         android:inputType="textMultiLine"
         android:hint="Comment"/>
 
-<!--    <ListView-->
-<!--        android:id="@+id/recipe_ingredient_listview"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"/>-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_ingredient_recyclerview"
         android:layout_width="match_parent"
@@ -67,7 +61,7 @@
         android:layout_weight="1"/>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/recipe_pick_new_ingredient_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pick a new ingredient" />

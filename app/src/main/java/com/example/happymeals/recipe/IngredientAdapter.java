@@ -43,7 +43,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         holder.desc.setText(ingredients.get(position).getDesc());
         holder.category.setText(ingredients.get(position).getCategory());
         if (ingredients.get(position).isSelected()) {
-            holder.cardview.setBackgroundColor(Color.rgb(255, 0, 0));
+            holder.cardview.setBackgroundColor(Color.rgb(248, 248, 248));
         } else {
             holder.cardview.setBackgroundColor(Color.rgb(255, 255, 255));
         }
