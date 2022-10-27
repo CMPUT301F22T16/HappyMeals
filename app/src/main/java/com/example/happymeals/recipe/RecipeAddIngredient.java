@@ -1,9 +1,11 @@
 package com.example.happymeals.recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,7 +17,7 @@ import com.example.happymeals.R;
 
 import java.util.ArrayList;
 
-public class RecipeAddIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RecipeAddIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener, RecyclerViewInterface {
 
     Spinner spinner;
 
@@ -45,17 +47,12 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
         data_list.add(new Ingredient("Milk", "Dairy"));
         data_list.add(new Ingredient("Eggs", "Meat"));
 
-        adapter = new IngredientAdapter(this, data_list);
+        adapter = new IngredientAdapter(this, data_list, this);
 
         ingredient_list.setAdapter(adapter);
         ingredient_list.setLayoutManager(new LinearLayoutManager(this));
 
         add_btn = findViewById(R.id.recipe_add_ingredient_btn);
-        add_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
     }
 
     @Override
@@ -68,6 +65,21 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        add_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (Ingredient i : data_list) {
+                    i.setSelected(false);
+                }
+                data_list.get(position).setSelected(true);
+                ingredient_list.setAdapter(adapter);
+            }
+        });
 
     }
 }
