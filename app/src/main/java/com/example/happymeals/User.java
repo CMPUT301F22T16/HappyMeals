@@ -224,8 +224,19 @@ public class User{
         store(user_meals, "Meal", data, context);
     }
 
-    public void modifyMeal(String oldMeal_id, Meal newMeal, Context context) {
+    public void modifyMeal(Meal new_meal, Context context) {
+        HashMap<String, Object> data = new_meal.getStorable();
+        data.put("user", this.getUsername());
+        CollectionReference user_meals = this.getConn().collection("user_meals");
 
+        try {
+            DocumentReference doc = user_meals.document(new_meal.getM_id());
+            doc.update(data);
+            Toast.makeText(context, "Meal updated successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void removeMeal(Meal meal, Context context) {
@@ -247,6 +258,19 @@ public class User{
 
     public void modifyMealPlan(MealPlan mealPlan, Context context) {
 
+        HashMap<String, Object> data = mealPlan.getStorable();
+        data.put("user", this.getUsername());
+        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
+
+        try {
+            DocumentReference doc = user_mealplans.document(mealPlan.get_ump_id());
+            doc.update(data);
+            Toast.makeText(context, "Mealplan updated successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void removeMealPlan(MealPlan mealPlan, Context context) {
@@ -254,11 +278,25 @@ public class User{
     }
 
     public void addRecipe(Recipe recipe, Context context) {
-
+        HashMap<String, Object> data = recipe.getStorable();
+        data.put("user", this.getUsername());
+        CollectionReference user_recipes = this.getConn().collection("user_recipes");
+        store(user_recipes, "Recipes", data, context);
     }
 
-    public void modifyRecipe(Recipe recipe, Context context) {
+    public void modifyRecipe(Recipe new_recipe, Context context) {
+        HashMap<String, Object> data = new_recipe.getStorable();
+        data.put("user", this.getUsername());
+        CollectionReference user_recipes = this.getConn().collection("user_recipes");
 
+        try {
+            DocumentReference doc = user_recipes.document(new_recipe.get_r_id());
+            doc.update(data);
+            Toast.makeText(context, "Recipe updated successfully", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void removeRecipe(Recipe recipe, Context context) {
