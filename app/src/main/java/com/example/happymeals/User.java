@@ -1,10 +1,12 @@
 package com.example.happymeals;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -12,7 +14,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -34,7 +39,7 @@ import java.util.Map;
  * 6. user_mealplans: {@link MealPlan} is the model class for this.
  *
  */
-public class User {
+public class User{
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -42,10 +47,13 @@ public class User {
      */
     private String username;
     private FirebaseFirestore conn;
+    private List<Storage> storages = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
+        storagesListenAndUpdate();
     }
 
     public User(String username) {
@@ -86,12 +94,14 @@ public class User {
     }
 
     private void store(CollectionReference ref, String collType, HashMap data, Context context) {
+        String id;
         ref
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("store", "Data has been added successfully!");
+                        //id = documentReference.getId();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -103,51 +113,46 @@ public class User {
                 });
     }
 
-    public void newStorage(Context context, Storage storage) {
-        HashMap<String, String> data = new HashMap<>();
-        data.put("type", storage.getStorName());
-        data.put("user", getUsername());
-        CollectionReference ref = conn.collection("storages");
-        ref
-                .document(storage.getId())
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("store", "Data has been added successfully!");
+    //-------------------------------------------------Storage Methods-------------------------------------------------//
+    /**
+     * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
+     */
+
+    private void storagesListenAndUpdate() {
+        Query query = conn.collection("storages").whereEqualTo("user", getUsername());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uStor", "An error has occured while trying to update storages");
+                }
+                else {
+                    storages.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        List<String> ingredients = (List<String>) doc.get("ingredients");
+                        Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
+                        storages.add(storage);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("store", "Data could not be added!" + e.toString());
-                        Toast.makeText(context, "Storage not be added", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    Log.d("uStor", "Storages updated successfully!");
+                }
+            }
+        });
     }
 
-    public List<Storage> getStorages(Context context) {
-        List<Storage> list = new ArrayList<Storage>(){};
+    /**
+     * Gets the storages associated with the current user.
+     * @return List of Objects of class Storage.
+     */
+    public List<Storage> getStorages() {
+        //while (this.storages.size() == 0);
+        return this.storages;
+    }
+
+    public void newStorage(Context context, Storage storage) {
+        HashMap<String, Object> data = storage.getStorable();
+        data.put("user", getUsername());
         CollectionReference ref = conn.collection("storages");
-        ref
-                .whereEqualTo("user", getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Storage stor = new Storage(document.getString("type"), document.getId());
-                                list.add(stor);
-                            }
-                            Log.d("gStor", "Documents successfully queried", task.getException());
-                        } else {
-                            Log.d("gStor", "Error getting documents: ", task.getException());
-                            Toast.makeText(context,  "There was an error in retrieving data", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-        return list;
+        store(ref, "Storage", data, context);
     }
 
     public void deleteStorage(Storage storage) {

@@ -1,28 +1,32 @@
 package com.example.happymeals;
 
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.List;
 
-public class Storage {
+public class Storage implements Storable {
 
-    private String storName;
+    private String storeName;
     private String id;
+    private List<String> ingredients;
 
-    public Storage(String storName) {
-        this.storName = storName;
-        this.id = UUID.randomUUID().toString();
+    public Storage(String storeName, String id, List<String> ingredients) {
+        this.storeName = storeName;
+        this.ingredients = ingredients;
     }
 
-    public Storage(String storName, String id) {
-        this.storName = storName;
-        this.id = id;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public String getStorName() {
-        return storName;
-    }
+    public String getId() { return id; }
 
-    //NOTE: Do not use these methods, they are for querying purposes only.
-    public String getId() {
-        return id;
+    public void setId(String id) { this.id = id; }
+
+    @Override
+    public HashMap<String, Object> getStorable() {
+        HashMap<String, Object> data = new HashMap();
+        data.put("type", this.storeName);
+        data.put("ingredients", this.ingredients);
+        return data;
     }
 }
