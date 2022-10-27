@@ -61,7 +61,7 @@ public class User {
     public FirebaseFirestore getConn() {
         return this.conn;
     }
-    
+
     public void newUser(Context context, String username) {
         HashMap<String, String> data = new HashMap<>();
         data.put("pass", "");
