@@ -34,6 +34,8 @@ public class MealPlan implements Storable{
         return num_days;
     }
 
+    public String get_ump_id() {return this.ump_id;};
+
     @Override
     public HashMap<String, Object> getStorable() {
         List<Meal> breakfast = this.getBreakfast();
