@@ -43,12 +43,6 @@ public class User {
     private String username;
     private FirebaseFirestore conn;
 
-
-    private String get_u_id(String username) {
-        // Search up database to get the u_id for the user with username = 'username'
-        return "";
-    }
-
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
@@ -58,6 +52,14 @@ public class User {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public FirebaseFirestore getConn() {
+        return this.conn;
     }
 
     public void newUser(Context context, String username) {
@@ -205,14 +207,6 @@ public class User {
         return list;
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public FirebaseFirestore getConn() {
-        return this.conn;
-    }
-
     /**
      * Used to add Meals to user's database
      * @param meal : A meal of type {@link Meal} containing information to be added to the database.
@@ -220,13 +214,16 @@ public class User {
      */
     public void addMeal(Meal meal, Context context) {
         HashMap<String, Object> data = meal.getStorable();
-        CollectionReference user_meals = conn.collection("user_meals");
+        data.put("user", this.getUsername());
+        CollectionReference user_meals = this.getConn().collection("user_meals");
         store(user_meals, "Meal", data, context);
     }
 
     public void modifyMeal(String oldMeal_id, Meal newMeal, Context context) {
-        CollectionReference user_meals = this.conn.collection("user_meals");
 
+    }
+
+    public void removeMeal(Meal meal, Context context) {
 
     }
 
@@ -236,28 +233,31 @@ public class User {
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
     public void addMealPlan(MealPlan mealplan, Context context) {
-        List<Meal> breakfast = mealplan.getBreakfast();
-        List<Meal> lunch = mealplan.getLunch();
-        List<Meal> dinner = mealplan.getDinner();
-        int num_days = mealplan.getNum_days();
-        List<String> breakfast_ids = new ArrayList<>();
-        List<String> lunch_ids = new ArrayList<>();
-        List<String> dinner_ids = new ArrayList<>();
-
-        for (int i = 0; i < num_days; i++) {
-            breakfast_ids.add(breakfast.get(i).getM_id());
-            lunch_ids.add(lunch.get(i).getM_id());
-            dinner_ids.add(dinner.get(i).getM_id());
-        }
-
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("breakfast", breakfast_ids);
-        data.put("lunch", lunch_ids);
-        data.put("dinner", dinner_ids);
-        data.put("num_days", num_days);
-
-        CollectionReference user_mealplans = conn.collection("user_mealplans");
+        // TODO Do we need to check a unique constraint for this?
+        HashMap<String, Object> data = mealplan.getStorable();
+        data.put("user", this.getUsername());
+        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
         store(user_mealplans, "Meal Plan", data, context);
+    }
+
+    public void modifyMealPlan(MealPlan mealPlan, Context context) {
+
+    }
+
+    public void removeMealPlan(MealPlan mealPlan, Context context) {
+
+    }
+
+    public void addRecipe(Recipe recipe, Context context) {
+
+    }
+
+    public void modifyRecipe(Recipe recipe, Context context) {
+
+    }
+
+    public void removeRecipe(Recipe recipe, Context context) {
+
     }
 
 }

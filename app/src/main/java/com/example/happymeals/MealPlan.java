@@ -5,11 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MealPlan implements Storable{
-    List<Meal> breakfast;
-    List<Meal> lunch;
-    List<Meal> dinner;
-    int num_days;
-    String ump_id;
+    private final List<Meal> breakfast;
+    private final List<Meal> lunch;
+    private final List<Meal> dinner;
+    private final int num_days;
+    private String ump_id = null; // ids' null by default if not fetched
+
+    public MealPlan(List<Meal> breakfast, List<Meal> lunch, List<Meal> dinner, int num_days) {
+        this.breakfast = breakfast;
+        this.lunch = lunch;
+        this.dinner = dinner;
+        this.num_days = num_days;
+    }
 
     public List<Meal> getBreakfast() {
         return breakfast;

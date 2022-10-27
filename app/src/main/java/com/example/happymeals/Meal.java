@@ -5,10 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Meal implements Storable {
-    List<Recipe> recipes;
-    List<Double> scalings;
-    double cost;
-    String m_id;
+    private final List<Recipe> recipes;
+    private final List<Double> scalings;
+    private final double cost;
+    private String m_id = null;
+
+    public Meal(List<Recipe> recipes, List<Double> scalings, double cost) {
+        this.recipes = recipes;
+        this.scalings = scalings;
+        this.cost = cost;
+    }
 
     public List<Recipe> getRecipes() {
         return this.recipes;
@@ -36,7 +42,7 @@ public class Meal implements Storable {
         data.put("scalings", scalings);
         List<String> recipe_ids = new ArrayList<>();
         for (Recipe recipe: recipes) {
-            recipe_ids.add(recipe.get_r_id());
+            recipe_ids.add("/user_recipes/" + recipe.get_r_id());
         }
 
         data.put("recipes", recipe_ids);
