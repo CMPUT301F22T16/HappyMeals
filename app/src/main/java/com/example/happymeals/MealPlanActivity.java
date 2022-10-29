@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class MealPlanActivity extends AppCompatActivity {
 //    ArrayList<MealPlan> mealPlans;
     Button new_mp_button;
@@ -26,7 +24,7 @@ public class MealPlanActivity extends AppCompatActivity {
 
     public void setOnAddButtonListener() {
         new_mp_button.setOnClickListener(v -> {
-            intent_mpl = new Intent(this, MealPlanListActivity.class);
+            intent_mpl = new Intent(this, MealPlanMealListActivity.class);
             startActivity(intent_mpl);
         });
     }
