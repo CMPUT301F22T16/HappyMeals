@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">HappyMeals</string>
     <string name="meal_plan_activity">Manage Your Meal Plan</string>
+    <string name="meal_plan_day">Day 1</string>
+    <string name="add_meal_text">add meal</string>
+    <string name="meal_plan_previous_day">Previous</string>
+    <string name="meal_plan_finish">finish</string>
+    <string name="meal_plan_next_day">Next Day</string>
 </resources>
