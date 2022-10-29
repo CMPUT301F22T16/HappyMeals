@@ -23,7 +23,7 @@
             android:name=".MyMealsActivity"
             android:exported="false" />
         <activity
-            android:name=".MealPlanListActivity"
+            android:name=".MealPlanMealListActivity"
             android:exported="false" />
         <activity
             android:name=".MealPlanActivity"
