@@ -10,7 +10,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MealPlanActivity extends AppCompatActivity {
-    ArrayList<MealPlan> mealPlans;
+//    ArrayList<MealPlan> mealPlans;
     Button new_mp_button;
     ListView meal_plan_list;
     Intent intent_mpl;
