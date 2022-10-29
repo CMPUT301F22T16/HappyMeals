@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/dotted.xml" value="0.303" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.4609375" />
         <entry key="app/src/main/res/layout/activity_meal_plan.xml" value="0.3550185873605948" />
         <entry key="app/src/main/res/layout/activity_meal_plan_list.xml" value="0.45677083333333335" />
+        <entry key="app/src/main/res/layout/activity_my_meals.xml" value="0.4317708333333333" />
         <entry key="app/src/main/res/layout/meal_plan_list_content.xml" value="0.3882113821138211" />
       </map>
     </option>
