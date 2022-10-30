@@ -10,13 +10,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.example.happymeals.databinding.ActivityMealRecipeListBinding;
+import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 
 import java.util.ArrayList;
 
 public class MPMealRecipeList extends AppCompatActivity {
 
-    ActivityMealRecipeListBinding activityMealRecipeListBinding;
+    ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     RecyclerView.Adapter mpMealRecipeListAdapter;
     ArrayList<Recipe> recipes;
     Button addRecipButton;
@@ -25,14 +25,14 @@ public class MPMealRecipeList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_recipe_list);
+        setContentView(R.layout.activity_mpmeal_recipe_list);
 
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         intent = new Intent(this,MPPickRecipeActivity.class);
 
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
-        activityMealRecipeListBinding.mpRecipeListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMealRecipeListBinding.mpRecipeListRecyclerview.setAdapter(mpMealRecipeListAdapter);
+        activityMpmealRecipeListBinding.mpRecipeListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        activityMpmealRecipeListBinding.mpRecipeListRecyclerview.setAdapter(mpMealRecipeListAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -46,7 +46,7 @@ public class MPMealRecipeList extends AppCompatActivity {
                 // delete recipe
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMealRecipeListBinding.mpRecipeListRecyclerview);
+        itemTouchHelper.attachToRecyclerView(activityMpmealRecipeListBinding.mpRecipeListRecyclerview);
     }
 
     private void setOnAddButtonListener() {

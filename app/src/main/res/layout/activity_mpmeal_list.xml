@@ -60,7 +60,7 @@
         >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mp_recipe_list_recyclerview"
+            android:id="@+id/mp_meal_list_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="10dp">

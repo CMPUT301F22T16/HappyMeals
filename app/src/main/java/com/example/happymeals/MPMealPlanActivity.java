@@ -7,20 +7,16 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 
-import com.example.happymeals.databinding.ActivityMealPlanBinding;
+import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
 
 import java.util.ArrayList;
 
 public class MPMealPlanActivity extends AppCompatActivity {
 
-    ActivityMealPlanBinding activityMealPlanBinding;
+    ActivityMpmealPlanBinding activityMpmealPlanBinding;
 
     RecyclerView.Adapter mpAdapter;
     ArrayList<MealPlan> mealPlans;
@@ -31,14 +27,14 @@ public class MPMealPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_plan);
+        setContentView(R.layout.activity_mpmeal_plan);
 
         new_mp_button = findViewById(R.id.my_meals_add_button);
         meal_plan_list = findViewById(R.id.mp_recyclerview);
 
         mpAdapter = new MPListAdapter(this, mealPlans);
-        activityMealPlanBinding.mpRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMealPlanBinding.mpRecyclerview.setAdapter(mpAdapter);
+        activityMpmealPlanBinding.mpRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        activityMpmealPlanBinding.mpRecyclerview.setAdapter(mpAdapter);
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -53,7 +49,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
                 // delete mealPlan
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMealPlanBinding.mpRecyclerview);
+        itemTouchHelper.attachToRecyclerView(activityMpmealPlanBinding.mpRecyclerview);
         setOnAddButtonListener();
     }
 

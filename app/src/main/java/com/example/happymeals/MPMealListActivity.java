@@ -10,13 +10,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.example.happymeals.databinding.ActivityMealPlanMealListBinding;
+import com.example.happymeals.databinding.ActivityMpmealListBinding;
 
 import java.util.ArrayList;
 
 public class MPMealListActivity extends AppCompatActivity {
 
-    ActivityMealPlanMealListBinding activityMealPlanMealListBinding;
+    ActivityMpmealListBinding activityMpmealListBinding;
     RecyclerView.Adapter mpMealListAdapter;
     ArrayList<Meal> meals;
     Button addMealsButton;
@@ -28,7 +28,7 @@ public class MPMealListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_plan_meal_list);
+        setContentView(R.layout.activity_mpmeal_list);
 
         addMealsButton = findViewById(R.id.meal_plan_add_button);
         nextDayButton = findViewById(R.id.mp_fab_next_day);
@@ -36,8 +36,8 @@ public class MPMealListActivity extends AppCompatActivity {
         intent = new Intent(this, MPMyMealsActivity.class);
 
         mpMealListAdapter = new MPMealListAdapter(this, meals);
-        activityMealPlanMealListBinding.mpMealListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMealPlanMealListBinding.mpMealListRecyclerview.setAdapter(mpMealListAdapter);
+        activityMpmealListBinding.mpMealListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        activityMpmealListBinding.mpMealListRecyclerview.setAdapter(mpMealListAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -51,7 +51,7 @@ public class MPMealListActivity extends AppCompatActivity {
                 // delete mealPlan
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMealPlanMealListBinding.mpMealListRecyclerview);
+        itemTouchHelper.attachToRecyclerView(activityMpmealListBinding.mpMealListRecyclerview);
 
         setOnAddButtonListener();
 

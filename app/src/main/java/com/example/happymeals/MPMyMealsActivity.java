@@ -10,13 +10,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.example.happymeals.databinding.ActivityMyMealsBinding;
+import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 
 import java.util.ArrayList;
 
 public class MPMyMealsActivity extends AppCompatActivity {
 
-    ActivityMyMealsBinding activityMyMealsBinding;
+    ActivityMpmyMealsBinding activityMpmyMealsBinding;
     RecyclerView.Adapter myMealsAdapter;
     ArrayList<Meal> meals;
     Button cancel_button;
@@ -27,7 +27,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_meals);
+        setContentView(R.layout.activity_mpmy_meals);
 
         cancel_button = findViewById(R.id.my_meals_cancel);
         finish_button = findViewById(R.id.my_meals_finish);
@@ -35,8 +35,8 @@ public class MPMyMealsActivity extends AppCompatActivity {
         intent = new Intent(this,MPMealRecipeList.class);
 
         myMealsAdapter = new MPMyMealsAdapter(this, meals);
-        activityMyMealsBinding.myMealsRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMyMealsBinding.myMealsRecyclerview.setAdapter(myMealsAdapter);
+        activityMpmyMealsBinding.myMealsRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        activityMpmyMealsBinding.myMealsRecyclerview.setAdapter(myMealsAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -50,7 +50,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
                 // TODO: delete mealPlan
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMyMealsBinding.myMealsRecyclerview);
+        itemTouchHelper.attachToRecyclerView(activityMpmyMealsBinding.myMealsRecyclerview);
 
         setOnCancelButtonListener();
         setOnFinishButtonListener();

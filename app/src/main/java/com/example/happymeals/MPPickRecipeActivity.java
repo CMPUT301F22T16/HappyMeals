@@ -2,7 +2,6 @@ package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +21,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pick_recipe);
+        setContentView(R.layout.activity_mppick_recipe);
 
         confirmButton = findViewById(R.id.confirm_recipe_selection_button);
         // mocking recipe list
