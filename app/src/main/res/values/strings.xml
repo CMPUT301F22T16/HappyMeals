@@ -7,4 +7,6 @@
     <string name="meal_plan_finish">finish</string>
     <string name="meal_plan_next_day">Next Day</string>
     <string name="pick_recipe_confirm_button">Confirm</string>
+    <string name="mp_meal_recipe_list">All Recipes</string>
+    <string name="mp_add_recipe_text">recipes</string>
 </resources>
