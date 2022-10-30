@@ -51,7 +51,7 @@ public class MealPlanActivity extends AppCompatActivity {
                 // delete mealPlan
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMealPlanBinding.);
+        itemTouchHelper.attachToRecyclerView(activityMealPlanBinding.mpRecyclerview);
     }
 
     public void setOnAddButtonListener() {
