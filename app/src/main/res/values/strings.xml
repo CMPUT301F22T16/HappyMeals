@@ -6,4 +6,5 @@
     <string name="meal_plan_previous_day">Previous</string>
     <string name="meal_plan_finish">finish</string>
     <string name="meal_plan_next_day">Next Day</string>
+    <string name="pick_recipe_confirm_button">Confirm</string>
 </resources>
