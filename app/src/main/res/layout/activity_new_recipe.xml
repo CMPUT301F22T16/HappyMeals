@@ -11,6 +11,7 @@
         android:id="@+id/recipe_img_picker_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:text="Add Image" />
 
     <EditText
@@ -60,11 +61,27 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <Button
-        android:id="@+id/recipe_pick_new_ingredient_button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pick a new ingredient" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/recipe_pick_new_ingredient_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Pick a new ingredient" />
+
+        <Button
+            android:id="@+id/recipe_submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="Submit" />
+    </LinearLayout>
 
 
 </LinearLayout>
