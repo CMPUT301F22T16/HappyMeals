@@ -44,11 +44,11 @@
             app:srcCompat="@android:drawable/ic_input_add" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
-        android:id="@+id/meal_plan_listView"
-        android:paddingVertical="10dp"
-        android:layout_weight="4"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mp_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:paddingVertical="10dp" />
 
 </LinearLayout>
