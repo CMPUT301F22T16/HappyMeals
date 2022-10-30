@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="6"
-    tools:context=".MealRecipeList">
+    tools:context=".MPMealRecipeList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -48,7 +48,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/mp_meal_list_recyclerview"
+        android:id="@+id/mp_recipe_list_recyclerview"
         android:layout_weight="5.5"
         android:layout_width="match_parent"
         android:layout_height="0dp"

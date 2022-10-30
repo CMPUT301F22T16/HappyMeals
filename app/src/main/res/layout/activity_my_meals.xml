@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MyMealsActivity">
+    tools:context=".MPMyMealsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/my_meals_linearLayout"

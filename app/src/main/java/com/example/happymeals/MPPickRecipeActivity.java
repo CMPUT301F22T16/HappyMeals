@@ -8,9 +8,9 @@ import android.widget.SearchView;
 
 import java.util.ArrayList;
 
-public class PickRecipeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class MPPickRecipeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
     ListView recipe_list;
-    PickRecipeListAdapter recipe_adapter;
+    MPPickRecipeListAdapter recipe_adapter;
     ArrayList<Recipe> dataList;
     SearchView recipe_search_bar;
 
@@ -31,7 +31,7 @@ public class PickRecipeActivity extends AppCompatActivity implements SearchView.
 
 
         recipe_list = findViewById(R.id.mp_recipe_list);
-        recipe_adapter = new PickRecipeListAdapter(this,dataList);
+        recipe_adapter = new MPPickRecipeListAdapter(this,dataList);
 //
         recipe_list.setAdapter(recipe_adapter);
         recipe_search_bar = findViewById(R.id.searchview_recipe);

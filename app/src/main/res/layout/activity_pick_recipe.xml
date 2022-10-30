@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="6"
-    tools:context=".PickRecipeActivity">
+    tools:context=".MPPickRecipeActivity">
 
     <SearchView
         android:id="@+id/searchview_recipe"

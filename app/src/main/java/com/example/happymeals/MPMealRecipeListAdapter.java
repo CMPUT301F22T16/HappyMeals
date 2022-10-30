@@ -1,5 +1,6 @@
 package com.example.happymeals;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,12 +11,11 @@ import com.example.happymeals.databinding.MealRecipeListContentBinding;
 
 import java.util.ArrayList;
 
-import io.grpc.Context;
 
 public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeListAdapter.MRLViewHolder>{
     private ArrayList<Recipe> recipes;
 
-    public MPMealRecipeListAdapter(Context context,ArrayList<Recipe> recipes) {this.recipes = recipes;}
+    public MPMealRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {this.recipes = recipes;}
     @NonNull
     @Override
     public MPMealRecipeListAdapter.MRLViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -7,21 +7,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.happymeals.databinding.ActivityMyMealsBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
 
 import java.util.ArrayList;
 
-public class MyMealsAdapter extends RecyclerView.Adapter<MyMealsAdapter.MyMealViewHolder> {
+public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMealViewHolder> {
 
     private ArrayList<Meal> meals;
 
-    public MyMealsAdapter(Context context, ArrayList<Meal> meals) { this.meals = meals;}
+    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals) { this.meals = meals;}
 
     @NonNull
     @Override
     public MyMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyMealsAdapter.MyMealViewHolder(MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new MPMyMealsAdapter.MyMealViewHolder(MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override

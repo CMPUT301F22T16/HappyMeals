@@ -14,19 +14,19 @@
         android:theme="@style/Theme.HappyMeals"
         tools:targetApi="31">
         <activity
-            android:name=".PickRecipeActivity"
+            android:name=".MPPickRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".MealRecipeList"
+            android:name=".MPMealRecipeList"
             android:exported="false" />
         <activity
-            android:name=".MyMealsActivity"
+            android:name=".MPMyMealsActivity"
             android:exported="false" />
         <activity
-            android:name=".MealPlanMealListActivity"
+            android:name=".MPMealListActivity"
             android:exported="false" />
         <activity
-            android:name=".MealPlanActivity"
+            android:name=".MPMealPlanActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

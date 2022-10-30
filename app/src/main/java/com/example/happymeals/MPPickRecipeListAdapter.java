@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,13 +13,13 @@ import java.util.Locale;
 /**
  * Custom adapter for recipe lists
  */
-public class PickRecipeListAdapter extends BaseAdapter {
+public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> recipes;
     private ArrayList<Recipe> arraylist;
     private Context context;
     LayoutInflater inflater;
 
-    public PickRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
+    public MPPickRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
         this.recipes = new ArrayList<Recipe>(recipes);
         this.arraylist = new ArrayList<Recipe>(recipes);

@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class MealPlanActivity extends AppCompatActivity {
+public class MPMealPlanActivity extends AppCompatActivity {
 
     ActivityMealPlanBinding activityMealPlanBinding;
 
@@ -51,7 +51,7 @@ public class MealPlanActivity extends AppCompatActivity {
 
     public void setOnAddButtonListener() {
         new_mp_button.setOnClickListener(v -> {
-            intent_mpl = new Intent(this, MealPlanMealListActivity.class);
+            intent_mpl = new Intent(this, MPMealListActivity.class);
             startActivity(intent_mpl);
         });
     }

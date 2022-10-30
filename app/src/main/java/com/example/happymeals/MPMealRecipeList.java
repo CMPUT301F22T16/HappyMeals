@@ -8,23 +8,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.example.happymeals.databinding.ActivityMealPlanMealListBinding;
+import com.example.happymeals.databinding.ActivityMealRecipeListBinding;
 
-public class MealPlanMealListActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
-    ActivityMealPlanMealListBinding activityMealPlanMealListBinding;
-    RecyclerView.Adapter mpMealListAdapter;
-    ArrayList<Meal> meals;
+public class MPMealRecipeList extends AppCompatActivity {
 
+    ActivityMealRecipeListBinding activityMealRecipeListBinding;
+    RecyclerView.Adapter mpMealRecipeListAdapter;
+    ArrayList<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_plan_meal_list);
+        setContentView(R.layout.activity_meal_recipe_list);
 
-        mpMealListAdapter = new MPMealListAdapter(this, meals);
-        activityMealPlanMealListBinding.mpMealListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMealPlanMealListBinding.mpMealListRecyclerview.setAdapter(mpMealListAdapter);
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
+        activityMealRecipeListBinding.mpRecipeListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        activityMealRecipeListBinding.mpRecipeListRecyclerview.setAdapter(mpMealRecipeListAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -34,11 +35,10 @@ public class MealPlanMealListActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                final Meal meal = meals.get(viewHolder.getAdapterPosition());
-                // delete mealPlan
+                final Recipe recipe = recipes.get(viewHolder.getAdapterPosition());
+                // delete recipe
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMealPlanMealListBinding.mpMealListRecyclerview);
-
+        itemTouchHelper.attachToRecyclerView(activityMealRecipeListBinding.mpRecipeListRecyclerview);
     }
 }

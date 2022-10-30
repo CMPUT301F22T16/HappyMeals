@@ -12,7 +12,7 @@ import com.example.happymeals.databinding.ActivityMyMealsBinding;
 
 import java.util.ArrayList;
 
-public class MyMealsActivity extends AppCompatActivity {
+public class MPMyMealsActivity extends AppCompatActivity {
 
     ActivityMyMealsBinding activityMyMealsBinding;
     RecyclerView.Adapter myMealsAdapter;
@@ -23,7 +23,7 @@ public class MyMealsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_meals);
 
-        myMealsAdapter = new MyMealsAdapter(this, meals);
+        myMealsAdapter = new MPMyMealsAdapter(this, meals);
         activityMyMealsBinding.myMealsRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
         activityMyMealsBinding.myMealsRecyclerview.setAdapter(myMealsAdapter);
 
