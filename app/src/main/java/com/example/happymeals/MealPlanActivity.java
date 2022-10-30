@@ -8,13 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
-
-import com.example.happymeals.databinding.ActivityMealPlanBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MealPlanActivity extends AppCompatActivity {
 
@@ -31,7 +26,7 @@ public class MealPlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_plan);
 
-        new_mp_button = findViewById(R.id.meal_plan_add_button);
+        new_mp_button = findViewById(R.id.my_meals_add_button);
         meal_plan_list = findViewById(R.id.mp_recyclerview);
 
         mpAdapter = new MPListAdapter(this, mealPlans);

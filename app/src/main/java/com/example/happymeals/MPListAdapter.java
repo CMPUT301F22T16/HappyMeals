@@ -20,7 +20,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
     @NonNull
     @Override
     public MPViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MPListAdapter.MPViewHolder(MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));;
+        return new MPListAdapter.MPViewHolder(MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
