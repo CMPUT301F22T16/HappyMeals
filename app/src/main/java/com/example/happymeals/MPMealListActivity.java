@@ -6,21 +6,34 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMealPlanMealListBinding;
+
+import java.util.ArrayList;
 
 public class MPMealListActivity extends AppCompatActivity {
 
     ActivityMealPlanMealListBinding activityMealPlanMealListBinding;
     RecyclerView.Adapter mpMealListAdapter;
     ArrayList<Meal> meals;
+    Button addMealsButton;
+    Button nextDayButton;
+    Button finishButton;
+    Intent intent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_plan_meal_list);
+
+        addMealsButton = findViewById(R.id.meal_plan_add_button);
+        nextDayButton = findViewById(R.id.mp_fab_next_day);
+        finishButton = findViewById(R.id.mp_fab_finish);
+        intent = new Intent(this, MPMyMealsActivity.class);
 
         mpMealListAdapter = new MPMealListAdapter(this, meals);
         activityMealPlanMealListBinding.mpMealListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
@@ -40,5 +53,16 @@ public class MPMealListActivity extends AppCompatActivity {
         });
         itemTouchHelper.attachToRecyclerView(activityMealPlanMealListBinding.mpMealListRecyclerview);
 
+        setOnAddButtonListener();
+
+    }
+
+    private void setOnAddButtonListener() {
+        addMealsButton.setOnClickListener(v -> {
+            // pass user id, mealplan index(or which day it is)
+//            intent.putExtra();
+            startActivity(intent);
+
+        });
     }
 }

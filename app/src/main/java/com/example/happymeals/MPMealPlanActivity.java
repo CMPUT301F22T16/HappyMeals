@@ -7,9 +7,16 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.example.happymeals.databinding.ActivityMealPlanBinding;
+
+import java.util.ArrayList;
 
 public class MPMealPlanActivity extends AppCompatActivity {
 
@@ -18,7 +25,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
     RecyclerView.Adapter mpAdapter;
     ArrayList<MealPlan> mealPlans;
     Button new_mp_button;
-    ListView meal_plan_list;
+    RecyclerView meal_plan_list;
     Intent intent_mpl;
 
     @Override
@@ -47,12 +54,15 @@ public class MPMealPlanActivity extends AppCompatActivity {
             }
         });
         itemTouchHelper.attachToRecyclerView(activityMealPlanBinding.mpRecyclerview);
+        setOnAddButtonListener();
     }
 
-    public void setOnAddButtonListener() {
+    private void setOnAddButtonListener() {
         new_mp_button.setOnClickListener(v -> {
             intent_mpl = new Intent(this, MPMealListActivity.class);
             startActivity(intent_mpl);
         });
     }
+
+
 }
