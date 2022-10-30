@@ -12,6 +12,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Custom adapter for recipe lists
+ */
 public class PickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> recipes;
     private ArrayList<Recipe> arraylist;
@@ -55,6 +58,11 @@ public class PickRecipeListAdapter extends BaseAdapter {
         recipeText.setText(recipe.getname());
         return v;
     }
+
+    /**
+     * Filter recipe list based on user inputs to search bar
+     * got inspiration from https://abhiandroid.com/ui/searchview
+     */
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         recipes.clear();
