@@ -23,6 +23,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     private final RecyclerViewInterface recyclerViewInterface;
     private Context context;
     private ArrayList<Ingredient> ingredients;
+    private int selection = -1;
 
     public IngredientAdapter(Context context, ArrayList<Ingredient> ingredients, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
@@ -35,17 +36,17 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public IngredientAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recipe_add_ingredient_custom_layout, parent, false);
-        return new MyViewHolder(view, recyclerViewInterface);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.MyViewHolder holder, int position) {
         holder.desc.setText(ingredients.get(position).getDesc());
         holder.category.setText(ingredients.get(position).getCategory());
-        if (ingredients.get(position).isSelected()) {
-            holder.cardview.setBackgroundColor(Color.rgb(248, 248, 248));
+        if (selection == position) {
+            holder.cardview.setBackgroundColor(context.getResources().getColor(R.color.highlight));
         } else {
-            holder.cardview.setBackgroundColor(Color.rgb(255, 255, 255));
+            holder.cardview.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 
@@ -54,14 +55,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         return ingredients.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView desc;
         TextView category;
         CardView cardview;
         ConstraintLayout rootLayout;
 
-        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             desc = itemView.findViewById(R.id.recipe_add_ingredient_desc);
             category = itemView.findViewById(R.id.recipe_add_ingredient_category);
@@ -72,11 +73,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                 @Override
                 public void onClick(View view) {
                     if (recyclerViewInterface != null) {
-                        int pos = getAdapterPosition();
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
 
-                        if (pos != RecyclerView.NO_POSITION) {
-                            recyclerViewInterface.onItemClick(pos);
-                        }
+                        notifyItemChanged(selection);
+                        selection = getAdapterPosition();
+                        notifyItemChanged(selection);
+
+                        recyclerViewInterface.onItemClick(selection);
                     }
                 }
             });

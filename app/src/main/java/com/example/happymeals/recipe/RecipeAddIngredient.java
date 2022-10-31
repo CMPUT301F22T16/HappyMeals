@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,8 +51,8 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
 
         adapter = new IngredientAdapter(this, data_list, this);
 
-        ingredient_list.setAdapter(adapter);
         ingredient_list.setLayoutManager(new LinearLayoutManager(this));
+        ingredient_list.setAdapter(adapter);
 
         submit_btn = findViewById(R.id.recipe_add_ingredient_btn);
     }
@@ -71,7 +72,6 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemClick(int position) {
-
         // ----- This code changes the item color upon selection ----- //
         for (Ingredient i : data_list) {
             i.setSelected(false);
