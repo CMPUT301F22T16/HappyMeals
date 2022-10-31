@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import com.example.happymeals.R;
 
-public class NewRecipe extends AppCompatActivity {
+public class NewRecipe extends AppCompatActivity implements RecyclerViewInterface {
 
     Button recipe_img_picker_btn;
     RecyclerView recipe_ingredient_list;
@@ -60,9 +60,9 @@ public class NewRecipe extends AppCompatActivity {
         ingredient_data_list.add(new Ingredient("Milk"));
         ingredient_data_list.add(new Ingredient("Eggs"));
 
-        ingredient_adapter = new RecipeIngredientAdapter(this, ingredient_data_list);
-        recipe_ingredient_list.setAdapter(ingredient_adapter);
+        ingredient_adapter = new RecipeIngredientAdapter(this, ingredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
+        recipe_ingredient_list.setAdapter(ingredient_adapter);
 
         pick_new_ingredient_btn = findViewById(R.id.recipe_pick_new_ingredient_button);
         pick_new_ingredient_btn.setOnClickListener(new View.OnClickListener() {
@@ -103,5 +103,11 @@ public class NewRecipe extends AppCompatActivity {
         } else {
             ;
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        ingredient_data_list.remove(position);
+        recipe_ingredient_list.setAdapter(ingredient_adapter);
     }
 }
