@@ -18,7 +18,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import com.example.happymeals.Ingredient;
 import com.example.happymeals.R;
 
 public class NewRecipe extends AppCompatActivity implements RecyclerViewInterface {
@@ -54,11 +56,11 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
         recipe_ingredient_list = findViewById(R.id.recipe_ingredient_recyclerview);
 
         ingredient_data_list = new ArrayList<>();
-        ingredient_data_list.add(new Ingredient("Carrot"));
-        ingredient_data_list.add(new Ingredient("Broccoli"));
-        ingredient_data_list.add(new Ingredient("Chicken"));
-        ingredient_data_list.add(new Ingredient("Milk"));
-        ingredient_data_list.add(new Ingredient("Eggs"));
+        ingredient_data_list.add(new Ingredient("Vegetable","Carrot", 1, 1, null, null));
+        ingredient_data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1, null, null));
+        ingredient_data_list.add(new Ingredient("Meat", "Chicken", 1, 1, null, null));
+        ingredient_data_list.add(new Ingredient("Dairy", "Milk", 1, 1, null, null));
+        ingredient_data_list.add(new Ingredient("Meat", "Eggs", 1, 1, null, null));
 
         ingredient_adapter = new RecipeIngredientAdapter(this, ingredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
@@ -84,9 +86,10 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
 
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
+            if (result.getData() == null) return;
             String descExtra = result.getData().getStringExtra("desc");
             String categoryExtra = result.getData().getStringExtra("category");
-            ingredient_data_list.add(new Ingredient(descExtra, categoryExtra));
+            ingredient_data_list.add(new Ingredient(categoryExtra, descExtra, 1, 1, null, null));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(NewRecipe.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();

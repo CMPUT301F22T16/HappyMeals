@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.example.happymeals.Ingredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
@@ -43,11 +44,11 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
         ingredient_list = findViewById(R.id.recipe_add_ingredient_recyclerview);
 
         data_list = new ArrayList<>();
-        data_list.add(new Ingredient("Carrot", "Vegetable"));
-        data_list.add(new Ingredient("Broccoli", "Vegetable"));
-        data_list.add(new Ingredient("Chicken", "Meat"));
-        data_list.add(new Ingredient("Milk", "Dairy"));
-        data_list.add(new Ingredient("Eggs", "Meat"));
+        data_list.add(new Ingredient("Vegetable", "Carrot", 1, 1, null, null));
+        data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1, null, null));
+        data_list.add(new Ingredient("Meat", "Chicken", 1, 1, null, null));
+        data_list.add(new Ingredient("Dairy", "Milk", 1, 1, null, null));
+        data_list.add(new Ingredient("Meat", "Eggs", 1, 1, null, null));
 
         adapter = new IngredientAdapter(this, data_list, this);
 
@@ -73,10 +74,10 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
     @Override
     public void onItemClick(int position) {
         // ----- This code changes the item color upon selection ----- //
-        for (Ingredient i : data_list) {
-            i.setSelected(false);
-        }
-        data_list.get(position).setSelected(true);
+//        for (Ingredient i : data_list) {
+//            i.setSelected(false);
+//        }
+//        data_list.get(position).setSelected(true);
         ingredient_list.setAdapter(adapter);
 
         // ----- This code handles the submit button press ----- //
@@ -85,7 +86,7 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
             public void onClick(View view) {
                 Intent intent = new Intent();
                 Ingredient item = data_list.get(position);
-                intent.putExtra("desc", item.getDesc());
+                intent.putExtra("desc", item.getDescription());
                 intent.putExtra("category", item.getCategory());
                 setResult(RESULT_OK, intent);
                 finish();

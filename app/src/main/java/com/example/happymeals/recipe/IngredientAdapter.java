@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.Ingredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.MyViewHolder holder, int position) {
-        holder.desc.setText(ingredients.get(position).getDesc());
+        holder.desc.setText(ingredients.get(position).getDescription());
         holder.category.setText(ingredients.get(position).getCategory());
         if (selection == position) {
             holder.cardview.setBackgroundColor(context.getResources().getColor(R.color.highlight));

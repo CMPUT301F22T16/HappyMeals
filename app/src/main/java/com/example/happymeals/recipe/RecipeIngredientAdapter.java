@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.Ingredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientAdapter.MyViewHolder holder, int position) {
-        holder.desc.setText(ingredients.get(position).getDesc());
+        holder.desc.setText(ingredients.get(position).getDescription());
     }
 
     @Override
