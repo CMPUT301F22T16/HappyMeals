@@ -23,38 +23,17 @@ public class MainActivity extends AppCompatActivity {
     //ListView view;
     Context context = this;
     List<Storage> nice = new ArrayList<>();
+    List<Meal> databasemeals = new ArrayList<>();
     //ArrayAdapter<Storage> adapter;
+    LoadingDialog loadingDialog = new LoadingDialog(MainActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         User user = new User();
-        nice = user.getStorages();
-        Log.d("Storagesd", nice.toString());
 
-        addUButton = findViewById(R.id.add_user_button);
-        addUButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("gStor", String.valueOf(nice.size()));
-                }
-            });
-
-        addStorButton = findViewById(R.id.add_stor_button);
-        addStorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Date date = new Date();
-                //Storage storage = new Storage("Cabinet");
-                //Ingredient ing = new Ingredient(2, 2, date, storage);
-                //user.newIngredient(context, ing);
-                //user.getIngredients(context);
-                Log.d("Storagesd", nice.toString());
-            }
-        });
-
-        //view = findViewById(R.id.city_list);
-        //adapter = new ArrayAdapter<>(this, R.layout.content, user.getStorages());
+        loadingDialog.startLoadingDialog();
+        user.getAllUserMeals(databasemeals, loadingDialog);
     }
 }

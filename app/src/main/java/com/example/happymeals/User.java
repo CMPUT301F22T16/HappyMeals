@@ -212,6 +212,24 @@ public class User{
         return list;
     }
 
+    public void getAllUserMeals(List<Meal> meals, LoadingDialog dialog) {
+        CollectionReference ref=  conn.collection("user_meals");
+        ref
+                .whereEqualTo("user", getUsername())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("USER", document.toString());
+                            }
+                            dialog.dismissDialog();
+                        }
+                    }
+                });
+    }
+
     /**
      * Used to add Meals to user's database
      * @param meal : A meal of type {@link Meal} containing information to be added to the database.
@@ -228,18 +246,43 @@ public class User{
         HashMap<String, Object> data = new_meal.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_meals = this.getConn().collection("user_meals");
-
-        try {
-            DocumentReference doc = user_meals.document(new_meal.getM_id());
-            doc.update(data);
-            Toast.makeText(context, "Meal updated successfully", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+        DocumentReference doc = user_meals.document(new_meal.getM_id());
+        doc.update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("USER","Meal updated successfully.");
+                        Toast.makeText(context, "Meal updated successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER",e.toString());
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void removeMeal(Meal meal, Context context) {
+        CollectionReference user_meals = this.getConn().collection("user_meals");
+        user_meals
+                .document(meal.getM_id())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("USER","Meal deleted successfully.");
+                        Toast.makeText(context, "Meal deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER",e.toString());
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
@@ -261,19 +304,43 @@ public class User{
         HashMap<String, Object> data = mealPlan.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-
-        try {
-            DocumentReference doc = user_mealplans.document(mealPlan.get_ump_id());
-            doc.update(data);
-            Toast.makeText(context, "Mealplan updated successfully", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
-
+        DocumentReference doc = user_mealplans.document(mealPlan.get_ump_id());
+        doc.update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("USER","Mealplan updated successfully.");
+                        Toast.makeText(context, "Mealplan updated successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER",e.toString());
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void removeMealPlan(MealPlan mealPlan, Context context) {
+        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
+        user_mealplans
+                .document(mealPlan.get_ump_id())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("USER","MealPlan deleted successfully.");
+                        Toast.makeText(context, "MealPlan deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER",e.toString());
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
@@ -282,25 +349,50 @@ public class User{
         data.put("user", this.getUsername());
         CollectionReference user_recipes = this.getConn().collection("user_recipes");
         store(user_recipes, "Recipes", data, context);
+
     }
 
     public void modifyRecipe(Recipe new_recipe, Context context) {
         HashMap<String, Object> data = new_recipe.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_recipes = this.getConn().collection("user_recipes");
-
-        try {
-            DocumentReference doc = user_recipes.document(new_recipe.get_r_id());
-            doc.update(data);
-            Toast.makeText(context, "Recipe updated successfully", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+        DocumentReference doc = user_recipes.document(new_recipe.get_r_id());
+        doc.update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("USER","Recipe updated successfully.");
+                        Toast.makeText(context, "Recipe updated successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER",e.toString());
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void removeRecipe(Recipe recipe, Context context) {
-
+        CollectionReference user_recipes = this.getConn().collection("user_recipes");
+        user_recipes
+                .document(recipe.get_r_id())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("USER","Recipe deleted successfully.");
+                        Toast.makeText(context, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("USER",e.toString());
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }
