@@ -93,15 +93,15 @@ public class User{
                 });
     }
 
-    private void store(CollectionReference ref, String collType, HashMap data, Context context) {
+    private String store(CollectionReference ref, String collType, HashMap data, Context context) {
         String id;
-        ref
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        DocumentReference doc = ref.document();
+        doc
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void unused) {
                         Log.d("store", "Data has been added successfully!");
-                        //id = documentReference.getId();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -111,13 +111,14 @@ public class User{
                         Toast.makeText(context, collType + " not be added", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        return doc.getId();
     }
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
      */
-
     private void storagesListenAndUpdate() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -147,13 +148,23 @@ public class User{
         return this.storages;
     }
 
+    /**
+     * Stores a Storage object in the database, and attaches the database ID of the entry to the object.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     * @param storage : Object of type {@link Storage} that will be stored in the database.
+     */
     public void newStorage(Context context, Storage storage) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("storages");
-        store(ref, "Storage", data, context);
+        String id = store(ref, "Storage", data, context);
+        storage.setId(id);
     }
 
+    /**
+     * Deletes the entry of a {@link Storage} object from the database.
+     * @param storage : Object of type {@link Storage} that will be removed from the database
+     */
     public void deleteStorage(Storage storage) {
         CollectionReference ref = conn.collection("storages");
         ref

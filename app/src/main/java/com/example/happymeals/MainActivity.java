@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
     Button testButton;
     Context context = this;
-    List<Storage> nice = new ArrayList<>();
+    List<Storage> storages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
         //FOR TESTING PURPOSES
         User user = new User();
-        nice = user.getStorages();
-        Log.d("test", nice.toString());
-
+        Storage storage = new Storage("Basket 3");
+        storages = user.getStorages();
 
         testButton = findViewById(R.id.test_button);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date date = new Date();
-                Log.d("test", nice.toString());
+                for (int i=0; i<2; i++) {
+                    user.deleteStorage(storages.get(i));
+                }
             }
         });
     }
