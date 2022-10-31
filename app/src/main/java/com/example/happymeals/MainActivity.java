@@ -29,16 +29,17 @@ public class MainActivity extends AppCompatActivity {
 
         //FOR TESTING PURPOSES
         User user = new User();
-        Storage storage = new Storage("Basket 3");
-        storages = user.getStorages();
+        Storage storage = new Storage("Basket 4");
+        user.newStorage(storage, context);
 
         testButton = findViewById(R.id.test_button);
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i=0; i<2; i++) {
-                    user.deleteStorage(storages.get(i));
-                }
+                Ingredient ing = new Ingredient("Test", "Test", 2, 2, new Date(), "Test");
+                ing.setId("Test");
+                storage.addIngredient(ing);
+                user.updateStorage(storage, context);
             }
         });
     }

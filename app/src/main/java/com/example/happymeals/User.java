@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -93,7 +92,7 @@ public class User{
                 });
     }
 
-    private String store(CollectionReference ref, String collType, HashMap data, Context context) {
+    private String store(CollectionReference ref, HashMap data, String collType, Context context) {
         String id;
         DocumentReference doc = ref.document();
         doc
@@ -108,11 +107,49 @@ public class User{
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("store", "Data could not be added!" + e.toString());
-                        Toast.makeText(context, collType + " not be added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Error: " + collType + "could not be added", Toast.LENGTH_SHORT).show();
                     }
                 });
 
         return doc.getId();
+    }
+
+    private void delete(CollectionReference ref, String id, String collType, Context context) {
+        ref
+                .document(id)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("delete", "Data has been deleted successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("delete", "Data could not be deleted!" + e.toString());
+                        Toast.makeText(context, "Error: " + collType + " not be deleted", Toast.LENGTH_SHORT);
+                    }
+                });
+    }
+
+    private void update(CollectionReference ref, String id, HashMap<String, Object> data, String collType, Context context) {
+        ref
+                .document(id)
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("update", "Data has been updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("update", "Data could not be updated!" + e.toString());
+                        Toast.makeText(context, "Error: " + collType + " not be updated", Toast.LENGTH_SHORT);
+                    }
+                });
     }
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
@@ -130,9 +167,9 @@ public class User{
                 else {
                     storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
-                        List<String> ingredients = (List<String>) doc.get("ingredients");
-                        Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
-                        storages.add(storage);
+                        //List<String> ingredients = (List<String>) doc.get("ingredients");
+                        //Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
+                        //storages.add(storage);
                     }
                     Log.d("uStor", "Storages updated successfully!");
                 }
@@ -150,39 +187,40 @@ public class User{
 
     /**
      * Stores a Storage object in the database, and attaches the database ID of the entry to the object.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      * @param storage : Object of type {@link Storage} that will be stored in the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void newStorage(Context context, Storage storage) {
+    public void newStorage(Storage storage, Context context) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("storages");
-        String id = store(ref, "Storage", data, context);
+        String id = store(ref, data, "Storage", context);
         storage.setId(id);
     }
 
     /**
      * Deletes the entry of a {@link Storage} object from the database.
      * @param storage : Object of type {@link Storage} that will be removed from the database
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void deleteStorage(Storage storage) {
+    public void deleteStorage(Storage storage, Context context) {
         CollectionReference ref = conn.collection("storages");
-        ref
-                .document(storage.getId())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("dStor", "Document successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("dStor", "Error deleting document", e);
-                    }
-                });
+        delete(ref, storage.getId(), "Storage", context);
     }
+
+    /**
+     * Updates the entry of {@link Storage} object in the database.
+     * @param storage : Object of type storage to be updated in the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void updateStorage(Storage storage, Context context) {
+        CollectionReference ref = conn.collection("storages");
+        update(ref, storage.getId(), storage.getStorable(), "Storage", context);
+    }
+
+
+
+
 
     public void newIngredient(Context context, Ingredient ingredient) {
         HashMap<String, Object> data = new HashMap<>();
@@ -192,7 +230,7 @@ public class User{
         data.put("location", ingredient.getLoc());
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("user_ingredients");
-        store(ref, "Ingredient", data, context);
+        //store(ref, "Ingredient", data, context);
     }
 
     public List<Ingredient> getIngredients(Context context) {
@@ -231,7 +269,7 @@ public class User{
         HashMap<String, Object> data = meal.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_meals = this.getConn().collection("user_meals");
-        store(user_meals, "Meal", data, context);
+        store(user_meals, data,"Meal", context);
     }
 
     public void modifyMeal(Meal new_meal, Context context) {
@@ -263,7 +301,7 @@ public class User{
         HashMap<String, Object> data = mealplan.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-        store(user_mealplans, "Meal Plan", data, context);
+        store(user_mealplans, data,"Meal Plan", context);
     }
 
     public void modifyMealPlan(MealPlan mealPlan, Context context) {
@@ -291,7 +329,7 @@ public class User{
         HashMap<String, Object> data = recipe.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_recipes = this.getConn().collection("user_recipes");
-        store(user_recipes, "Recipes", data, context);
+        store(user_recipes, data,"Recipes", context);
     }
 
     public void modifyRecipe(Recipe new_recipe, Context context) {
