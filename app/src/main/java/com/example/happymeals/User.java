@@ -196,11 +196,13 @@ public class User{
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                String category = document.getString("category");
                                 Integer amount = document.getLong("amount").intValue();
                                 Integer cost = document.getLong("cost").intValue();
                                 Date date = document.getDate("date");
                                 String locRef = document.getString("location");
-                                Ingredient ingredient = new Ingredient(amount, cost, date, locRef);
+                                String description = document.getString("description");
+                                Ingredient ingredient = new Ingredient(description, category, amount, cost, date, locRef);
                                 list.add(ingredient);
                             }
                             Log.d("gStor", "Documents successfully queried", task.getException());
@@ -214,25 +216,51 @@ public class User{
 
     /**
      * Used to fetch all Meals for current user.
-     * @param meals
+     * @param adapter
      * @param dialog
      */
-    public void getAllUserMeals(List<Meal> meals, LoadingDialog dialog) {
+    public CollectionReference getAllUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+        //TODO needs to change
         CollectionReference ref=  conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("USER", document.toString());
-                            }
-                            dialog.dismissDialog();
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALPLANS", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve mealplans", Toast.LENGTH_SHORT);
+                            return;
                         }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc:value) {
+                            Log.d("USER", String.valueOf(doc.getData().get("Province Name")));
+                            String ump_id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Integer> amounts = (List<Integer>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = (Integer) data.get("num_servings");
+                            Integer preparation_time = (Integer) data.get("preparation_time");
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
                     }
                 });
+
+        return ref;
     }
 
     /**
@@ -300,18 +328,6 @@ public class User{
         CollectionReference ref=  conn.collection("user_mealplans");
         ref
                 .whereEqualTo("user", getUsername())
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d("USER", document.toString());
-//                            }
-//                            dialog.dismissDialog();
-//                        }
-//                    }
-//                });
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
