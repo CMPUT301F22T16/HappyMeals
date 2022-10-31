@@ -1,8 +1,8 @@
 package com.example.happymeals;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -212,6 +212,11 @@ public class User{
         return list;
     }
 
+    /**
+     * Used to fetch all Meals for current user.
+     * @param meals
+     * @param dialog
+     */
     public void getAllUserMeals(List<Meal> meals, LoadingDialog dialog) {
         CollectionReference ref=  conn.collection("user_meals");
         ref
@@ -287,6 +292,65 @@ public class User{
     }
 
     /**
+     * Used to fetch all MealPlans for current user.
+     * @param adapter
+     * @param dialog
+     */
+    public CollectionReference getAllUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+        CollectionReference ref=  conn.collection("user_mealplans");
+        ref
+                .whereEqualTo("user", getUsername())
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d("USER", document.toString());
+//                            }
+//                            dialog.dismissDialog();
+//                        }
+//                    }
+//                });
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALPLANS", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve mealplans", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc:value) {
+                            Log.d("USER", String.valueOf(doc.getData().get("Province Name")));
+                            String ump_id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Integer> amounts = (List<Integer>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = (Integer) data.get("num_servings");
+                            Integer preparation_time = (Integer) data.get("preparation_time");
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+        return ref;
+    }
+
+    /**
      * Used to add Meal plans to user's database.
      * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
@@ -342,6 +406,67 @@ public class User{
                     }
                 });
 
+    }
+
+    /**
+     * Used to fetch all Recipes for current user. Attaches an event listener to the returned Collection
+     * Reference in this function and update their respective ArrayAdapter and notify them for future real time updates.
+     * @param adapter
+     * @param dialog
+     */
+    public CollectionReference getAllUserRecipes(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+        CollectionReference ref=  conn.collection("user_recipes");
+        ref
+                .whereEqualTo("user", getUsername())
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d("USER", document.toString());
+//                            }
+//                            dialog.dismissDialog();
+//                        }
+//                    }
+//                });
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc:value) {
+                            Log.d("USER", String.valueOf(doc.getData().get("Province Name")));
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Integer> amounts = (List<Integer>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = (Integer) data.get("num_servings");
+                            Integer preparation_time = (Integer) data.get("preparation_time");
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+        return ref;
     }
 
     public void addRecipe(Recipe recipe, Context context) {

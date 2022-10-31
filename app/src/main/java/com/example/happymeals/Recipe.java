@@ -50,6 +50,8 @@ public class Recipe implements Storable {
         return this.r_id;
     }
 
+    public void setR_id(String id) {this.r_id = id;}
+
     @Override
     public HashMap<String, Object> getStorable() {
 

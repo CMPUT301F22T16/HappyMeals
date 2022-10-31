@@ -8,6 +8,7 @@ public class Ingredient {
     private Integer cost;
     private Date date;
     private String loc;
+    private String description;
     private String id;
 
     public Ingredient(Integer amount, Integer cost, Date date, String locRef) {
@@ -16,6 +17,11 @@ public class Ingredient {
         this.date = date;
         this.loc = locRef;
         this.id = UUID.randomUUID().toString();
+    }
+
+    public Ingredient(Integer amount, String description) {
+        this.amount = amount;
+        this.description = description;
     }
 
     public Integer getAmount() {
