@@ -14,6 +14,10 @@ public class Storage implements Storable {
         this.ingredients = ingredients;
     }
 
+    public Storage(String storeName) {
+        this.storeName = storeName;
+    }
+
     public String getStoreName() {
         return storeName;
     }
@@ -21,6 +25,10 @@ public class Storage implements Storable {
     public String getId() { return id; }
 
     public void setId(String id) { this.id = id; }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient.getId());
+    }
 
     @Override
     public HashMap<String, Object> getStorable() {

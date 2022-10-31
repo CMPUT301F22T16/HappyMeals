@@ -144,7 +144,6 @@ public class User{
      * @return List of Objects of class Storage.
      */
     public List<Storage> getStorages() {
-        //while (this.storages.size() == 0);
         return this.storages;
     }
 
@@ -200,8 +199,8 @@ public class User{
                                 Integer cost = document.getLong("cost").intValue();
                                 Date date = document.getDate("date");
                                 String locRef = document.getString("location");
-                                Ingredient ingredient = new Ingredient(amount, cost, date, locRef);
-                                list.add(ingredient);
+                                //Ingredient ingredient = new Ingredient(amount, cost, date, locRef);
+                                //list.add(ingredient);
                             }
                             Log.d("gStor", "Documents successfully queried", task.getException());
                         } else {

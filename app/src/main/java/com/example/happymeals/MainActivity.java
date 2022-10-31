@@ -18,43 +18,28 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-    Button addUButton;
-    Button addStorButton;
-    //ListView view;
+    Button testButton;
     Context context = this;
     List<Storage> nice = new ArrayList<>();
-    //ArrayAdapter<Storage> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //FOR TESTING PURPOSES
         User user = new User();
         nice = user.getStorages();
-        Log.d("Storagesd", nice.toString());
+        Log.d("test", nice.toString());
 
-        addUButton = findViewById(R.id.add_user_button);
-        addUButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("gStor", String.valueOf(nice.size()));
-                }
-            });
 
-        addStorButton = findViewById(R.id.add_stor_button);
-        addStorButton.setOnClickListener(new View.OnClickListener() {
+        testButton = findViewById(R.id.test_button);
+        testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Date date = new Date();
-                //Storage storage = new Storage("Cabinet");
-                //Ingredient ing = new Ingredient(2, 2, date, storage);
-                //user.newIngredient(context, ing);
-                //user.getIngredients(context);
-                Log.d("Storagesd", nice.toString());
+                Log.d("test", nice.toString());
             }
         });
-
-        //view = findViewById(R.id.city_list);
-        //adapter = new ArrayAdapter<>(this, R.layout.content, user.getStorages());
     }
 }
