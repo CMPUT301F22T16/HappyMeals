@@ -170,15 +170,16 @@ public class User {
                 else {
                     storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
+                        List<Ingredient> storageIngredients = new ArrayList<>();
                         List<String> ingIds = (List<String>) doc.get("ingredients");
                         for (int i=0; i<ingIds.size(); i++) {
                             for (int j=0; j<ingredients.size(); i++) {
                                 if (ingIds.get(i) == ingredients.get(j).getId()) {
-                                    ingredients.get(j).setLoc(doc.getString("type"));
+                                    storageIngredients.add(ingredients.get(i));
                                 }
                             }
                         }
-                        Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
+                        Storage storage = new Storage(doc.getString("type"), doc.getId(), storageIngredients);
                         storages.add(storage);
                     }
                     Log.d("uStor", "local storages updated successfully!");
