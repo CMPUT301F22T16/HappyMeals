@@ -40,13 +40,33 @@ public class Ingredient implements Storable{
         return loc;
     }
 
-    void setLoc(String loc) {
+    public void setLoc(String loc) {
         this.loc = loc;
     }
 
     public String getId() { return id; }
 
     public void setId(String id) { this.id = id; }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public void setCost(Integer cost) {
+        this.cost = cost;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     @Override
     public HashMap<String, Object> getStorable() {

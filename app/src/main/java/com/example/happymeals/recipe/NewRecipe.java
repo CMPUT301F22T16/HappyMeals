@@ -33,6 +33,7 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
     ArrayList<Ingredient> ingredient_data_list;
     Button pick_new_ingredient_btn;
     Uri selected_img;
+    int selection = -1;
 
     ActivityResultLauncher<Intent> add_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -133,10 +134,18 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
     public void handleEditIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
-//            String descExtra = result.getData().getStringExtra("desc");
-//            String categoryExtra = result.getData().getStringExtra("category");
-//            ingredient_data_list.add(new Ingredient(categoryExtra, descExtra, 1, 1, null));
-//            recipe_ingredient_list.setAdapter(ingredient_adapter);
+            String desc = result.getData().getStringExtra("desc");
+            String loc = result.getData().getStringExtra("loc");
+            String category = result.getData().getStringExtra("category");
+            int amount = result.getData().getIntExtra("amount", 0);
+            int cost = result.getData().getIntExtra("cost", 0);
+            Ingredient item = ingredient_data_list.get(selection);
+            item.setDescription(desc);
+            item.setLoc(loc);
+            item.setCategory(category);
+            item.setAmount(amount);
+            item.setCost(cost);
+            recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(NewRecipe.this, "Failed to edit ingredient", Toast.LENGTH_SHORT).show();
         }
@@ -153,11 +162,12 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
             ingredient_data_list.remove(position);
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
+            selection = position;  // This variable stores the index position of the ingredient being edited
             Intent intent = new Intent(NewRecipe.this, RecipeEditIngredient.class);
             Ingredient item = ingredient_data_list.get(position);
             intent.putExtra("desc", item.getDescription());
             intent.putExtra("loc", item.getLoc());
-            intent.putExtra("date", item.getDate().getTime());
+//            intent.putExtra("date", item.getDate().getTime());
             intent.putExtra("category", item.getCategory());
             intent.putExtra("amount", item.getAmount());
             intent.putExtra("cost", item.getCost());
