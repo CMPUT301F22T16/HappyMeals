@@ -41,7 +41,7 @@ import java.util.Map;
  * 6. user_mealplans: {@link MealPlan} is the model class for this.
  *
  */
-public class User{
+public class User {
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -95,22 +95,62 @@ public class User{
                 });
     }
 
-    private void store(CollectionReference ref, String collType, HashMap data, Context context) {
+    private String store(CollectionReference ref, HashMap data, String collType, Context context) {
         String id;
-        ref
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        DocumentReference doc = ref.document();
+        doc
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void unused) {
                         Log.d("store", "Data has been added successfully!");
-                        //id = documentReference.getId();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("store", "Data could not be added!" + e.toString());
-                        Toast.makeText(context, collType + " not be added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Error: " + collType + "could not be added", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        return doc.getId();
+    }
+
+    private void delete(CollectionReference ref, String id, String collType, Context context) {
+        ref
+                .document(id)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("delete", "Data has been deleted successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("delete", "Data could not be deleted!" + e.toString());
+                        Toast.makeText(context, "Error: " + collType + " not be deleted", Toast.LENGTH_SHORT);
+                    }
+                });
+    }
+
+    private void update(CollectionReference ref, String id, HashMap<String, Object> data, String collType, Context context) {
+        ref
+                .document(id)
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("update", "Data has been updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("update", "Data could not be updated!" + e.toString());
+                        Toast.makeText(context, "Error: " + collType + " not be updated", Toast.LENGTH_SHORT);
                     }
                 });
     }
@@ -119,23 +159,29 @@ public class User{
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
      */
-
     private void storagesListenAndUpdate() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    Log.d("uStor", "An error has occured while trying to update storages");
+                    Log.d("uStor", "An error has occured while trying to update local storages");
                 }
                 else {
                     storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
-                        List<String> ingredients = (List<String>) doc.get("ingredients");
+                        List<String> ingIds = (List<String>) doc.get("ingredients");
+                        for (int i=0; i<ingIds.size(); i++) {
+                            for (int j=0; j<ingredients.size(); i++) {
+                                if (ingIds.get(i) == ingredients.get(j).getId()) {
+                                    ingredients.get(j).setLoc(doc.getString("type"));
+                                }
+                            }
+                        }
                         Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
                         storages.add(storage);
                     }
-                    Log.d("uStor", "Storages updated successfully!");
+                    Log.d("uStor", "local storages updated successfully!");
                 }
             }
         });
@@ -146,50 +192,65 @@ public class User{
      * @return List of Objects of class Storage.
      */
     public List<Storage> getStorages() {
-        //while (this.storages.size() == 0);
         return this.storages;
     }
 
-    public void newStorage(Context context, Storage storage) {
+    /**
+     * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
+     * @param storage : Object of type {@link Storage} that will be stored in the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void newStorage(Storage storage, Context context) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("storages");
-        store(ref, "Storage", data, context);
+        String id = store(ref, data, "Storage", context);
+        storage.setId(id);
     }
 
-    public void deleteStorage(Storage storage) {
+    /**
+     * Deletes the entry of a {@link Storage} object from the database.
+     * @param storage : Object of type {@link Storage} that will be removed from the database
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void deleteStorage(Storage storage, Context context) {
         CollectionReference ref = conn.collection("storages");
-        ref
-                .document(storage.getId())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("dStor", "Document successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("dStor", "Error deleting document", e);
-                    }
-                });
+        delete(ref, storage.getId(), "Storage", context);
     }
 
-    public void newIngredient(Context context, Ingredient ingredient) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("amount", ingredient.getAmount());
-        data.put("cost", ingredient.getCost());
-        data.put("date", ingredient.getDate());
-        data.put("location", ingredient.getLoc());
+    /**
+     * Updates the entry of {@link Storage} object in the database.
+     * @param storage : Object of type {@link Storage} to be updated in the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void updateStorage(Storage storage, Context context) {
+        CollectionReference ref = conn.collection("storages");
+        update(ref, storage.getId(), storage.getStorable(), "Storage", context);
+    }
+
+    //-------------------------------------------------Ingredient Methods-------------------------------------------------//
+
+    /**
+     * Stores a {@link Ingredient} object in the database, and attaches the database ID of the entry to the object.
+     * @param ingredient : Object of type {@link Storage} that will be added to the database
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void newIngredient(Ingredient ingredient, Context context) {
+        HashMap<String, Object> data  = ingredient.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("user_ingredients");
-        store(ref, "Ingredient", data, context);
+        String id = store(ref, data, "Ingredient", context);
+        ingredient.setId(id);
     }
 
-    public List<Ingredient> getIngredients(Context context) {
-        List<Ingredient> list = new ArrayList<Ingredient>(){};
+    /**
+     * Deletes the entry of a {@link Ingredient} object from the database.
+     * @param ingredient : Object of type {@link Ingredient} that will be removed from the database
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void deleteIngredient(Ingredient ingredient, Context context) {
         CollectionReference ref = conn.collection("user_ingredients");
+
         ref
                 .whereEqualTo("user", getUsername())
                 .get()
@@ -211,24 +272,68 @@ public class User{
                         } else {
                             Log.d("gStor", "Error getting documents: ", task.getException());
                         }
+
+                        delete(ref, ingredient.getId(), "Ingredient", context);
                     }
                 });
-        return list;
+    }
+
+    /**
+     * Updates the entry of {@link Ingredient} object in the database.
+     *
+     * @param ingredient : Object of type {@link Ingredient} to be updated in the database.
+     * @param context    : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void updateIngredient(Ingredient ingredient, Context context) {
+        CollectionReference ref = conn.collection("user_ingredients");
+        update(ref, ingredient.getId(), ingredient.getStorable(), "Ingredient", context);
+    }
+
+    /**
+     * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
+     */
+    private void ingredientListenAndUpdate() {
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uIng", "An error has occured while trying to update the local ingredients");
+                } else {
+                    ingredients.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String category = doc.getString("category");
+                        String description = doc.getString("description");
+                        Integer amount = 1; //COME BACK TO THIS LATER
+                        Integer cost = 1;
+                        Date date = new Date();
+                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
+                        ingredients.add(ingredient);
+                    }
+                    storagesListenAndUpdate();
+                    Log.d("uIng", "Local ingredients updated successfully!");
+                }
+            }
+        });
+    }
+
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
     }
 
 
-
-
+    //-------------------------------------------------Recipe Methods-------------------------------------------------//
 
     /**
      * Used to fetch either all Recipes for current user.
      * Attaches an event listener to the user's recipe documents in user_recipes Collection update their respective
      * ArrayAdapter and notify them for future real time updates.
+     *
      * @param adapter
      * @param dialog
      */
     public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
-        CollectionReference ref=  conn.collection("user_recipes");
+        CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername());
 
         query
@@ -242,7 +347,7 @@ public class User{
                         }
 
                         adapter.clear();
-                        for (QueryDocumentSnapshot doc:value) {
+                        for (QueryDocumentSnapshot doc : value) {
                             String id = doc.getId();
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
@@ -271,12 +376,13 @@ public class User{
 
     /**
      * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes in the recipes {@link List<Recipe>}
+     *
      * @param recipes
      * @param context
      * @param recipe_ids
      */
     private void getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
-        CollectionReference ref=  conn.collection("user_recipes");
+        CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -289,7 +395,7 @@ public class User{
                         }
 
                         recipes.clear();
-                        for (QueryDocumentSnapshot doc:value) {
+                        for (QueryDocumentSnapshot doc : value) {
                             String id = doc.getId();
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
@@ -316,62 +422,36 @@ public class User{
 
     public void addRecipe(Recipe recipe, Context context) {
         HashMap<String, Object> data = recipe.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_recipes = this.getConn().collection("user_recipes");
-        store(user_recipes, "Recipes", data, context);
-
+        data.put("user", getUsername());
+        CollectionReference user_recipes = getConn().collection("user_recipes");
+        String id = store(user_recipes, data, "Recipes", context);
+        recipe.setR_id(id);
     }
 
-    public void modifyRecipe(Recipe new_recipe, Context context) {
+    public void updateRecipe(Recipe new_recipe, Context context) {
         HashMap<String, Object> data = new_recipe.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_recipes = this.getConn().collection("user_recipes");
-        DocumentReference doc = user_recipes.document(new_recipe.get_r_id());
-        doc.update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("USER","Recipe updated successfully.");
-                        Toast.makeText(context, "Recipe updated successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("USER",e.toString());
-                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        data.put("user", getUsername());
+        CollectionReference user_recipes = getConn().collection("user_recipes");
+        String id = new_recipe.get_r_id();
+        update(user_recipes, id, data, "user_recipes", context);
     }
 
     public void removeRecipe(Recipe recipe, Context context) {
-        CollectionReference user_recipes = this.getConn().collection("user_recipes");
-        user_recipes
-                .document(recipe.get_r_id())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("USER","Recipe deleted successfully.");
-                        Toast.makeText(context, "Recipe deleted successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("USER",e.toString());
-                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        CollectionReference user_recipes = getConn().collection("user_recipes");
+        String id = recipe.get_r_id();
+        delete(user_recipes, id, "user_recipes", context);
     }
+
+    //-------------------------------------------------Meal Methods-------------------------------------------------//
 
     /**
      * Used to fetch all Meals for current user.
+     *
      * @param meals
      * @param dialog
      */
-    private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog , Context context, List<String> meal_ids) {
-        CollectionReference ref=  conn.collection("user_meals");
+    private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog, Context context, List<String> meal_ids) {
+        CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
                 .whereIn(com.google.firebase.firestore.FieldPath.documentId(), meal_ids)
@@ -385,7 +465,7 @@ public class User{
                         }
 
                         meals.clear();
-                        for (QueryDocumentSnapshot doc:value) {
+                        for (QueryDocumentSnapshot doc : value) {
                             List<String> recipe_ids = (List<String>) doc.get("recipes");
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
@@ -400,12 +480,13 @@ public class User{
 
     /**
      * Used to fetch all Meals for current user.
+     *
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMeals(ArrayAdapter adapter, LoadingDialog dialog , Context context) {
+    public CollectionReference getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
 
-        CollectionReference ref=  conn.collection("user_meals");
+        CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -418,7 +499,7 @@ public class User{
                         }
 
                         adapter.clear();
-                        for (QueryDocumentSnapshot doc:value) {
+                        for (QueryDocumentSnapshot doc : value) {
                             List<String> recipe_ids = (List<String>) doc.get("recipes");
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
@@ -437,68 +518,42 @@ public class User{
 
     /**
      * Used to add Meals to user's database
-     * @param meal : A meal of type {@link Meal} containing information to be added to the database.
+     *
+     * @param meal    : A meal of type {@link Meal} containing information to be added to the database.
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
     public void addMeal(Meal meal, Context context) {
         HashMap<String, Object> data = meal.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_meals = this.getConn().collection("user_meals");
-        store(user_meals, "Meal", data, context);
+        data.put("user", getUsername());
+        CollectionReference user_meals = getConn().collection("user_meals");
+        String id = store(user_meals, data, "Meal", context);
+        meal.setM_id(id);
     }
 
     public void modifyMeal(Meal new_meal, Context context) {
         HashMap<String, Object> data = new_meal.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_meals = this.getConn().collection("user_meals");
-        DocumentReference doc = user_meals.document(new_meal.getM_id());
-        doc.update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("USER","Meal updated successfully.");
-                        Toast.makeText(context, "Meal updated successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("USER",e.toString());
-                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        data.put("user", getUsername());
+        CollectionReference user_meals = getConn().collection("user_meals");
+        String id = new_meal.getM_id();
+        update(user_meals, id, data, "user_meals", context);
     }
 
     public void removeMeal(Meal meal, Context context) {
-        CollectionReference user_meals = this.getConn().collection("user_meals");
-        user_meals
-                .document(meal.getM_id())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("USER","Meal deleted successfully.");
-                        Toast.makeText(context, "Meal deleted successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("USER",e.toString());
-                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+        CollectionReference user_meals = getConn().collection("user_meals");
+        String id = meal.getM_id();
+        delete(user_meals, id, "user_meals", context);
     }
 
+    //-------------------------------------------------MealPlan Methods-------------------------------------------------//
 
     /**
      * Used to fetch all MealPlans for current user.
+     *
      * @param adapter
      * @param dialog
      */
     public CollectionReference getUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
-        CollectionReference ref=  conn.collection("user_mealplans");
+        CollectionReference ref = conn.collection("user_mealplans");
         ref
                 .whereEqualTo("user", getUsername())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -511,7 +566,7 @@ public class User{
                         }
 
                         adapter.clear();
-                        for (QueryDocumentSnapshot doc:value) {
+                        for (QueryDocumentSnapshot doc : value) {
                             String ump_id = doc.getId();
                             Map<String, Object> data = doc.getData();
                             List<Meal> breakfast = new ArrayList<>();
@@ -540,59 +595,32 @@ public class User{
 
     /**
      * Used to add Meal plans to user's database.
+     *
      * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     * @param context  : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
     public void addMealPlan(MealPlan mealplan, Context context) {
-        // TODO Do we need to check a unique constraint for this?
         HashMap<String, Object> data = mealplan.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-        store(user_mealplans, "Meal Plan", data, context);
+        data.put("user", getUsername());
+        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        String id = store(user_mealplans, data, "Meal Plan", context);
+        mealplan.setUmp_id(id);
     }
 
-    public void modifyMealPlan(MealPlan mealPlan, Context context) {
+    public void updateMealPlan(MealPlan mealPlan, Context context) {
 
         HashMap<String, Object> data = mealPlan.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-        DocumentReference doc = user_mealplans.document(mealPlan.get_ump_id());
-        doc.update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("USER","Mealplan updated successfully.");
-                        Toast.makeText(context, "Mealplan updated successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("USER",e.toString());
-                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        data.put("user", getUsername());
+        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        String id = mealPlan.get_ump_id();
+        update(user_mealplans, id, data, "user_mealplans", context);
     }
 
     public void removeMealPlan(MealPlan mealPlan, Context context) {
-        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-        user_mealplans
-                .document(mealPlan.get_ump_id())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("USER","MealPlan deleted successfully.");
-                        Toast.makeText(context, "MealPlan deleted successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("USER",e.toString());
-                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        String id = mealPlan.get_ump_id();
+        delete(user_mealplans, id, "user_mealplans", context);
     }
+
+
 }

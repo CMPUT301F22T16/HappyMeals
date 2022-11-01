@@ -2,7 +2,6 @@ package com.example.happymeals;
 
 import java.util.Date;
 
-import java.util.UUID;
 import java.util.HashMap;
 
 
@@ -15,8 +14,8 @@ public class Ingredient implements Storable{
     private String loc;
     private String id;
 
-
     public Ingredient(String category, String description, Integer amount, Integer cost, Date date, String locRef) {
+
         this.category = category;
         this.description = description;
         this.amount = amount;
@@ -30,7 +29,6 @@ public class Ingredient implements Storable{
         this.amount = amount;
         this.description = description;
     }
-
 
     public String getCategory() { return  category; }
 
@@ -52,7 +50,13 @@ public class Ingredient implements Storable{
         return loc;
     }
 
+    void setLoc(String loc) {
+        this.loc = loc;
+    }
+
     public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     @Override
     public HashMap<String, Object> getStorable() {
