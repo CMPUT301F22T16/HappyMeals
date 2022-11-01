@@ -49,11 +49,13 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
         TextView desc;
         ImageButton deleteBtn;
+        ImageButton editBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             desc = itemView.findViewById(R.id.recipe_ingredient_desc);
             deleteBtn = itemView.findViewById(R.id.delete_recipe_ingredient_btn);
+            editBtn = itemView.findViewById(R.id.edit_recipe_ingredient_btn);
 
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,10 +63,12 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
                     if (recyclerViewInterface != null) {
                         if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
 
-                        recyclerViewInterface.onItemClick(getAdapterPosition());
+                        recyclerViewInterface.onItemClick(getAdapterPosition(), "delete");
                     }
                 }
             });
+
+
         }
     }
 }

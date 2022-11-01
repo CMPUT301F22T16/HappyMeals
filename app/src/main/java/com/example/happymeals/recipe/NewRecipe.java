@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 import com.example.happymeals.Ingredient;
 import com.example.happymeals.R;
@@ -84,6 +85,11 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
         });
     }
 
+    /**
+     * This method handles the return value from the RecipeAddIngredient class
+     * @param result the returned values from the RecipeAddIngredient class.
+     *               The return values consists of the ingredient description and category
+     */
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
@@ -96,6 +102,10 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
         }
     }
 
+    /**
+     * This method handles the return value after the user selects an image from the gallery
+     * @param result the Uri object after the user picks an image from the gallery
+     */
     public void handleAddImgForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() != null) {
@@ -108,9 +118,16 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
         }
     }
 
+    /**
+     * This method removes the ingredient from the recipe after the user presses the delete button
+     * @param position the index position of the ingredient in ingredient_data_list
+     * @param op a string denoting the operation to perform. Here the operation is either delete or edit.
+     */
     @Override
-    public void onItemClick(int position) {
-        ingredient_data_list.remove(position);
-        recipe_ingredient_list.setAdapter(ingredient_adapter);
+    public void onItemClick(int position, String op) {
+        if (Objects.equals(op, "delete")) {
+            ingredient_data_list.remove(position);
+            recipe_ingredient_list.setAdapter(ingredient_adapter);
+        }
     }
 }

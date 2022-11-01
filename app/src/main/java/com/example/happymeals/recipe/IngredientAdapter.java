@@ -80,7 +80,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                         selection = getAdapterPosition();
                         notifyItemChanged(selection);
 
-                        recyclerViewInterface.onItemClick(selection);
+                        recyclerViewInterface.onItemClick(selection, "");
                     }
                 }
             });

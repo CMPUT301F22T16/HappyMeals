@@ -72,7 +72,7 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int position, String op) {
         // ----- This code changes the item color upon selection ----- //
 //        for (Ingredient i : data_list) {
 //            i.setSelected(false);
