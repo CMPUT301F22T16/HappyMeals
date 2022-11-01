@@ -44,7 +44,7 @@ public class Storage implements Storable {
         }
         HashMap<String, Object> data = new HashMap();
         data.put("type", this.storeName);
-        data.put("ingredients", ingredients);
+        data.put("ingredients", ingredientsStrs);
         return data;
     }
 }

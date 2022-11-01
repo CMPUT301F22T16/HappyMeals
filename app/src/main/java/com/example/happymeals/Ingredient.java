@@ -12,13 +12,12 @@ public class Ingredient implements Storable{
     private String loc;
     private String id;
 
-    public Ingredient(String category, String description, Integer amount, Integer cost, Date date, String locRef) {
+    public Ingredient(String category, String description, Integer amount, Integer cost, Date date) {
         this.category = category;
         this.description = description;
         this.amount = amount;
         this.cost = cost;
         this.date = date;
-        this.loc = locRef;
     }
 
     public String getCategory() { return  category; }
@@ -39,6 +38,10 @@ public class Ingredient implements Storable{
 
     public String getLoc() {
         return loc;
+    }
+
+    void setLoc(String loc) {
+        this.loc = loc;
     }
 
     public String getId() { return id; }

@@ -162,16 +162,23 @@ public class User{
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    Log.d("uStor", "An error has occured while trying to update storages");
+                    Log.d("uStor", "An error has occured while trying to update local storages");
                 }
                 else {
                     storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
-                        //List<String> ingredients = (List<String>) doc.get("ingredients");
-                        //Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
-                        //storages.add(storage);
+                        List<String> ingIds = (List<String>) doc.get("ingredients");
+                        for (int i=0; i<ingIds.size(); i++) {
+                            for (int j=0; j<ingredients.size(); i++) {
+                                if (ingIds.get(i) == ingredients.get(j).getId()) {
+                                    ingredients.get(j).setLoc(doc.getString("type"));
+                                }
+                            }
+                        }
+                        Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
+                        storages.add(storage);
                     }
-                    Log.d("uStor", "Storages updated successfully!");
+                    Log.d("uStor", "local storages updated successfully!");
                 }
             }
         });
@@ -186,7 +193,7 @@ public class User{
     }
 
     /**
-     * Stores a Storage object in the database, and attaches the database ID of the entry to the object.
+     * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
      * @param storage : Object of type {@link Storage} that will be stored in the database.
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
@@ -210,7 +217,7 @@ public class User{
 
     /**
      * Updates the entry of {@link Storage} object in the database.
-     * @param storage : Object of type storage to be updated in the database.
+     * @param storage : Object of type {@link Storage} to be updated in the database.
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
     public void updateStorage(Storage storage, Context context) {
@@ -218,47 +225,76 @@ public class User{
         update(ref, storage.getId(), storage.getStorable(), "Storage", context);
     }
 
+    //-------------------------------------------------Ingredient Methods-------------------------------------------------//
 
-
-
-
-    public void newIngredient(Context context, Ingredient ingredient) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("amount", ingredient.getAmount());
-        data.put("cost", ingredient.getCost());
-        data.put("date", ingredient.getDate());
-        data.put("location", ingredient.getLoc());
+    /**
+     * Stores a {@link Ingredient} object in the database, and attaches the database ID of the entry to the object.
+     * @param ingredient : Object of type {@link Storage} that will be added to the database
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void newIngredient(Ingredient ingredient, Context context) {
+        HashMap<String, Object> data  = ingredient.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("user_ingredients");
-        //store(ref, "Ingredient", data, context);
+        String id = store(ref, data, "Ingredient", context);
+        ingredient.setId(id);
     }
 
-    public List<Ingredient> getIngredients(Context context) {
-        List<Ingredient> list = new ArrayList<Ingredient>(){};
+    /**
+     * Deletes the entry of a {@link Ingredient} object from the database.
+     * @param ingredient : Object of type {@link Ingredient} that will be removed from the database
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void deleteIngredient(Ingredient ingredient, Context context) {
         CollectionReference ref = conn.collection("user_ingredients");
-        ref
-                .whereEqualTo("user", getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Integer amount = document.getLong("amount").intValue();
-                                Integer cost = document.getLong("cost").intValue();
-                                Date date = document.getDate("date");
-                                String locRef = document.getString("location");
-                                //Ingredient ingredient = new Ingredient(amount, cost, date, locRef);
-                                //list.add(ingredient);
-                            }
-                            Log.d("gStor", "Documents successfully queried", task.getException());
-                        } else {
-                            Log.d("gStor", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-        return list;
+        delete(ref, ingredient.getId(), "Ingredient", context);
     }
+
+    /**
+     * Updates the entry of {@link Ingredient} object in the database.
+     * @param ingredient : Object of type {@link Ingredient} to be updated in the database.
+     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     */
+    public void updateIngredient(Ingredient ingredient, Context context) {
+        CollectionReference ref = conn.collection("user_ingredients");
+        update(ref, ingredient.getId(), ingredient.getStorable(), "Ingredient", context);
+    }
+
+    /**
+     * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
+     */
+    private void ingredientListenAndUpdate() {
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uIng", "An error has occured while trying to update the local ingredients");
+                }
+                else {
+                    ingredients.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String category = doc.getString("category");
+                        String description = doc.getString("description");
+                        Integer amount = 1; //COME BACK TO THIS LATER
+                        Integer cost = 1;
+                        Date date = new Date();
+                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
+                        ingredients.add(ingredient);
+                    }
+                    storagesListenAndUpdate();
+                    Log.d("uIng", "Local ingredients updated successfully!");
+                }
+            }
+        });
+    }
+
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    //-------------------------------------------------Meal Methods-------------------------------------------------//
+
 
     /**
      * Used to add Meals to user's database
@@ -269,26 +305,18 @@ public class User{
         HashMap<String, Object> data = meal.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_meals = this.getConn().collection("user_meals");
-        store(user_meals, data,"Meal", context);
+        String id = store(user_meals, data,"Meal", context);
+        meal.setM_id(id);
     }
 
-    public void modifyMeal(Meal new_meal, Context context) {
-        HashMap<String, Object> data = new_meal.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_meals = this.getConn().collection("user_meals");
-
-        try {
-            DocumentReference doc = user_meals.document(new_meal.getM_id());
-            doc.update(data);
-            Toast.makeText(context, "Meal updated successfully", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
+    public void updateMeal(Meal new_meal, Context context) {
+        CollectionReference ref = conn.collection("user_meals");
+        update(ref, new_meal.getM_id(), new_meal.getStorable(), "Meal", context);
     }
 
     public void removeMeal(Meal meal, Context context) {
-
+        CollectionReference ref = conn.collection("user_mealplans");
+        delete(ref, meal.getM_id(), "Meal", context);
     }
 
     /**
@@ -301,28 +329,19 @@ public class User{
         HashMap<String, Object> data = mealplan.getStorable();
         data.put("user", this.getUsername());
         CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-        store(user_mealplans, data,"Meal Plan", context);
+        String id = store(user_mealplans, data,"Meal Plan", context);
+        mealplan.setUmp_id(id);
     }
 
-    public void modifyMealPlan(MealPlan mealPlan, Context context) {
+    public void updateMealPlan(MealPlan mealPlan, Context context) {
 
-        HashMap<String, Object> data = mealPlan.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
+        CollectionReference ref = conn.collection("user_mealplans");
+        update(ref, mealPlan.get_ump_id(), mealPlan.getStorable(), "user_mealplans", context);        }
 
-        try {
-            DocumentReference doc = user_mealplans.document(mealPlan.get_ump_id());
-            doc.update(data);
-            Toast.makeText(context, "Mealplan updated successfully", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     public void removeMealPlan(MealPlan mealPlan, Context context) {
-
+        CollectionReference ref = conn.collection("user_mealplans");
+        delete(ref, mealPlan.get_ump_id(), "Meal Plan", context);
     }
 
     public void addRecipe(Recipe recipe, Context context) {
