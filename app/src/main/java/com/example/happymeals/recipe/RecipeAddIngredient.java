@@ -19,6 +19,7 @@ import com.example.happymeals.Ingredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RecipeAddIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener, RecyclerViewInterface {
 
@@ -44,11 +45,11 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
         ingredient_list = findViewById(R.id.recipe_add_ingredient_recyclerview);
 
         data_list = new ArrayList<>();
-        data_list.add(new Ingredient("Vegetable", "Carrot", 1, 1, null, null));
-        data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1, null, null));
-        data_list.add(new Ingredient("Meat", "Chicken", 1, 1, null, null));
-        data_list.add(new Ingredient("Dairy", "Milk", 1, 1, null, null));
-        data_list.add(new Ingredient("Meat", "Eggs", 1, 1, null, null));
+        data_list.add(new Ingredient("Vegetable", "Carrot", 1, 1, new Date()));
+        data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1, new Date()));
+        data_list.add(new Ingredient("Meat", "Chicken", 1, 1, new Date()));
+        data_list.add(new Ingredient("Dairy", "Milk", 1, 1, new Date()));
+        data_list.add(new Ingredient("Meat", "Eggs", 1, 1, new Date()));
 
         adapter = new IngredientAdapter(this, data_list, this);
 

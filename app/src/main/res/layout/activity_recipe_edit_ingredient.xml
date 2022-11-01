@@ -8,10 +8,10 @@
     tools:context=".recipe.RecipeEditIngredient">
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="48sp"
+        android:gravity="center"
         android:text="Edit Ingredient" />
 
     <EditText
@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:ems="20"
         android:inputType="textPersonName"
         android:hint="Description" />
@@ -28,24 +29,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Location" />
 
     <EditText
-        android:id="@+id/recipe_edit_ingredient_best_before_date"
+        android:id="@+id/recipe_edit_ingredient_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:ems="10"
         android:inputType="date"
-        android:hint="Best Before Date" />
+        android:hint="Date" />
 
     <EditText
         android:id="@+id/recipe_edit_ingredient_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Category" />
@@ -55,18 +59,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:ems="10"
         android:inputType="number"
         android:hint="Amount" />
 
     <EditText
-        android:id="@+id/recipe_edit_ingredient_unit_price"
+        android:id="@+id/recipe_edit_ingredient_cost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:hint="Unit Price" />
+        android:hint="Cost" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,6 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:text="Clear" />
 
         <Button
@@ -85,6 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:text="Save" />
     </LinearLayout>
 </LinearLayout>
