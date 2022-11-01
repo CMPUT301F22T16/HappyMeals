@@ -26,7 +26,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     @Override
     public void onBindViewHolder(@NonNull MPMealRecipeListAdapter.MRLViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        holder.binding.mpMealRecipeListContentTitle.setText(recipe.getname());
+        holder.binding.mpMealRecipeListContentTitle.setText(recipe.getTitle());
 
     }
 

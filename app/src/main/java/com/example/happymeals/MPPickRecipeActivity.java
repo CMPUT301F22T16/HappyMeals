@@ -2,14 +2,17 @@ package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MPPickRecipeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
     ListView recipe_list;
@@ -25,10 +28,15 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
         confirmButton = findViewById(R.id.confirm_recipe_selection_button);
         // mocking recipe list
-        Recipe r1 = new Recipe("Greedy recipe");
-        Recipe r2 = new Recipe("fine recipe");
-        Recipe r3 = new Recipe("tasty recipe");
-        Recipe r4 = new Recipe("ta");
+        Ingredient ind = new Ingredient(3,"carrot");
+        List<String> comments = new ArrayList<>();
+        comments.add("LGTM!");
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(ind);
+        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
+        Recipe r2 = new Recipe("fine recipe",1,1,"vst", comments, ingredients);
+        Recipe r3 = new Recipe("tasty recipe",1,1,"vst", comments, ingredients);
+        Recipe r4 = new Recipe("ta",1,1,"vst", comments, ingredients);
         dataList = new ArrayList<Recipe>();
         dataList.add(r1);
         dataList.add(r2);
@@ -44,6 +52,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         recipe_search_bar.setOnQueryTextListener(this);
 
         setOnConfirmButtonListener();
+        setOnListViewItemListener();
     }
 
 
@@ -74,6 +83,8 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: sync check box:https://stackoverflow.com/questions/5417339/android-listview-with-checkbox-and-all-clickable
                 // TODO: add selected recipes to a buffer list
+                CheckBox checkBox = view.findViewById(R.id.checkBox);
+                checkBox.toggle();
             }
         });
 

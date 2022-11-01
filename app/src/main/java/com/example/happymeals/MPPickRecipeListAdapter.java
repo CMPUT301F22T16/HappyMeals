@@ -53,7 +53,7 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
 
 
         // Populate the data into the template view using the data object
-        recipeText.setText(recipe.getname());
+        recipeText.setText(recipe.getTitle());
         return v;
     }
 
@@ -68,7 +68,7 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
             recipes.addAll(arraylist);
         } else {
             for (Recipe r : arraylist) {
-                if (r.getname().toLowerCase(Locale.getDefault()).contains(charText)) {
+                if (r.getTitle().toLowerCase(Locale.getDefault()).contains(charText)) {
                     recipes.add(r);
                 }
             }
