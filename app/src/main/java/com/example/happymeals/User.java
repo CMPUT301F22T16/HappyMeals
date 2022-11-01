@@ -251,32 +251,7 @@ public class User {
      */
     public void deleteIngredient(Ingredient ingredient, Context context) {
         CollectionReference ref = conn.collection("user_ingredients");
-
-        ref
-                .whereEqualTo("user", getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String category = document.getString("category");
-                                Integer amount = document.getLong("amount").intValue();
-                                Integer cost = document.getLong("cost").intValue();
-                                Date date = document.getDate("date");
-                                String locRef = document.getString("location");
-                                String description = document.getString("description");
-                                Ingredient ingredient = new Ingredient(description, category, amount, cost, date, locRef);
-                                list.add(ingredient);
-                            }
-                            Log.d("gStor", "Documents successfully queried", task.getException());
-                        } else {
-                            Log.d("gStor", "Error getting documents: ", task.getException());
-                        }
-
-                        delete(ref, ingredient.getId(), "Ingredient", context);
-                    }
-                });
+        delete(ref, ingredient.getId(), "Ingredient", context);
     }
 
     /**
@@ -305,10 +280,11 @@ public class User {
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = 1; //COME BACK TO THIS LATER
-                        Integer cost = 1;
-                        Date date = new Date();
-                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
+                        Integer amount = (Integer) doc.get("amount");
+                        Integer cost = (Integer)  doc.get("cost");
+                        Date date = (Date) doc.get("date");
+                        String location = doc.getString("location");
+                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
                         ingredients.add(ingredient);
                     }
                     storagesListenAndUpdate();
