@@ -1,7 +1,10 @@
 package com.example.happymeals;
 
 import java.util.Date;
+
+import java.util.UUID;
 import java.util.HashMap;
+
 
 public class Ingredient implements Storable{
     private String category;
@@ -12,6 +15,7 @@ public class Ingredient implements Storable{
     private String loc;
     private String id;
 
+
     public Ingredient(String category, String description, Integer amount, Integer cost, Date date, String locRef) {
         this.category = category;
         this.description = description;
@@ -19,7 +23,14 @@ public class Ingredient implements Storable{
         this.cost = cost;
         this.date = date;
         this.loc = locRef;
+        this.id = null;
     }
+
+    public Ingredient(Integer amount, String description) {
+        this.amount = amount;
+        this.description = description;
+    }
+
 
     public String getCategory() { return  category; }
 
