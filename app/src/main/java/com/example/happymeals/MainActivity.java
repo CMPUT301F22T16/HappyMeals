@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         User user = new User();
         // testing out
-        Intent intent = new Intent(this,MPMealRecipeList.class);
+        Intent intent = new Intent(this,MPMealPlanActivity.class);
         startActivity(intent);
 
 

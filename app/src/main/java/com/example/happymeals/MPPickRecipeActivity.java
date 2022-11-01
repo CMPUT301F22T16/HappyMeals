@@ -33,6 +33,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         List<String> comments = new ArrayList<>();
         comments.add("LGTM!");
         List<Ingredient> ingredients = new ArrayList<>();
+        recipes_buffer = new ArrayList<>();
         ingredients.add(ind);
         Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
         Recipe r2 = new Recipe("fine recipe",1,1,"vst", comments, ingredients);
@@ -89,8 +90,10 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
                 if(checkBox.isChecked()){
                     recipes_buffer.add(dataList.get(i));
                 } else {
+
                     recipes_buffer.remove(dataList.get(i));
                 }
+
             }
         });
     }

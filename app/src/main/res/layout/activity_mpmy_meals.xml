@@ -24,6 +24,7 @@
             android:padding="1dp"
             android:textAlignment="center"
             android:textSize="34sp"
+            android:text="@string/my_meal_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/my_meals_add_button"
             app:layout_constraintHorizontal_bias="0.5"

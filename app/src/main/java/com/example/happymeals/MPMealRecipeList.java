@@ -23,6 +23,8 @@ public class MPMealRecipeList extends AppCompatActivity {
 
     ArrayList<Recipe> recipes;
     Button addRecipButton;
+    Button cancelButton;
+    Button finishButton;
     Intent intent;
     RecyclerView recyclerView;
 
@@ -45,6 +47,8 @@ public class MPMealRecipeList extends AppCompatActivity {
         recipes.add(r1);
 
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
+        finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
+        cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
         intent = new Intent(this,MPPickRecipeActivity.class);
 
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
@@ -65,6 +69,9 @@ public class MPMealRecipeList extends AppCompatActivity {
             }
         });
         setOnAddButtonListener();
+        setOnCancelButtonListener();
+        setOnFinishButtonListener();
+
         mpMealRecipeListAdapter.notifyDataSetChanged();
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
@@ -74,6 +81,22 @@ public class MPMealRecipeList extends AppCompatActivity {
             // pass user id, mealplan index(or which day it is)
 //            intent.putExtra();
             startActivity(intent);
+
+        });
+    }
+
+    private void setOnCancelButtonListener() {
+        cancelButton.setOnClickListener(v -> {
+            // TODO: maybe a confirmation dialog to confirm cancel action?
+            finish();
+
+        });
+    }
+
+    private void setOnFinishButtonListener() {
+        finishButton.setOnClickListener(v -> {
+            // TODO: add all the recipes to the meal,(modify meal), or insert the newly created meal
+            finish();
 
         });
     }

@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MPMyMealsActivity extends AppCompatActivity {
 
@@ -23,12 +24,28 @@ public class MPMyMealsActivity extends AppCompatActivity {
     Button finish_button;
     Button add_button;
     Intent intent;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_mpmy_meals);
+        recyclerView = findViewById(R.id.my_meals_recyclerview);
+
+        //Testing
+        Ingredient ind = new Ingredient(3,"carrot");
+        List<String> comments = new ArrayList<>();
+        comments.add("LGTM!");
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(ind);
+        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
+        List<Recipe> recipes = new ArrayList<>();
+        recipes.add(r1);
+        List<Double> scalings = new ArrayList<>();
+        scalings.add(1.11);
+        meals = new ArrayList<>();
+        meals.add(new Meal(recipes,scalings,3.4));
 
         cancel_button = findViewById(R.id.my_meals_cancel);
         finish_button = findViewById(R.id.my_meals_finish);
@@ -36,8 +53,8 @@ public class MPMyMealsActivity extends AppCompatActivity {
         intent = new Intent(this,MPMealRecipeList.class);
 
         myMealsAdapter = new MPMyMealsAdapter(this, meals);
-        activityMpmyMealsBinding.myMealsRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMpmyMealsBinding.myMealsRecyclerview.setAdapter(myMealsAdapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        recyclerView.setAdapter(myMealsAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -51,7 +68,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
                 // TODO: delete mealPlan
             }
         });
-        itemTouchHelper.attachToRecyclerView(activityMpmyMealsBinding.myMealsRecyclerview);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         setOnCancelButtonListener();
         setOnFinishButtonListener();

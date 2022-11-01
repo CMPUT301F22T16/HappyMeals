@@ -10,4 +10,5 @@
     <string name="pick_recipe_confirm_button">Confirm</string>
     <string name="mp_meal_recipe_list">All Recipes</string>
     <string name="mp_add_recipe_text">recipes</string>
+    <string name="my_meal_title">My Meals</string>
 </resources>

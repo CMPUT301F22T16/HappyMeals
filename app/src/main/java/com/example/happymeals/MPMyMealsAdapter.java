@@ -1,12 +1,15 @@
 package com.example.happymeals;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
 
 import java.util.ArrayList;
@@ -14,13 +17,32 @@ import java.util.ArrayList;
 public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMealViewHolder> {
 
     private ArrayList<Meal> meals;
+    private Intent intent;
+    private Context mContext;
+    private ActivityMpmyMealsBinding activityMpmyMealsBinding;
 
-    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals) { this.meals = meals;}
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
+            intent = new Intent(mContext,MPMealRecipeList.class);
+            intent.putExtra("Meal-Index",index);
+            mContext.startActivity(intent);
+        }
+    };
+
+    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals) {
+        this.meals = meals;
+        activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(LayoutInflater.from(context));
+        mContext = context;
+    }
 
     @NonNull
     @Override
     public MyMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MPMyMealsAdapter.MyMealViewHolder(MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        MealPlanListContentBinding binding = MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
+        binding.getRoot().setOnClickListener(mOnClickListener);
+        return new MyMealViewHolder(binding);
     }
 
     @Override

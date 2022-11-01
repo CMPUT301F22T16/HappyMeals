@@ -36,7 +36,6 @@ public class MPMealListActivity extends AppCompatActivity {
         addMealsButton = findViewById(R.id.meal_plan_add_button);
         nextDayButton = findViewById(R.id.mp_fab_next_day);
         finishButton = findViewById(R.id.mp_fab_finish);
-        intent = new Intent(this, MPMyMealsActivity.class);
 
         //Testing
         Ingredient ind = new Ingredient(3,"carrot");
@@ -71,6 +70,7 @@ public class MPMealListActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(activityMpmealListBinding.mpMealListRecyclerview);
 
         setOnAddButtonListener();
+        setOnFinishButtonListener();
 
     }
 
@@ -78,7 +78,16 @@ public class MPMealListActivity extends AppCompatActivity {
         addMealsButton.setOnClickListener(v -> {
             // pass user id, mealplan index(or which day it is)
 //            intent.putExtra();
+            intent = new Intent(this, MPMyMealsActivity.class);
             startActivity(intent);
+
+        });
+    }
+
+    private void setOnFinishButtonListener() {
+        finishButton.setOnClickListener(v -> {
+            // TODO:add this modified, or new meal Plan
+            finish();
 
         });
     }
