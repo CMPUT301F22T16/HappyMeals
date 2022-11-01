@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MPMealListActivity extends AppCompatActivity {
 
@@ -28,12 +29,28 @@ public class MPMealListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityMpmealListBinding = ActivityMpmealListBinding.inflate(getLayoutInflater());
+
         setContentView(R.layout.activity_mpmeal_list);
 
         addMealsButton = findViewById(R.id.meal_plan_add_button);
         nextDayButton = findViewById(R.id.mp_fab_next_day);
         finishButton = findViewById(R.id.mp_fab_finish);
         intent = new Intent(this, MPMyMealsActivity.class);
+
+        //Testing
+        Ingredient ind = new Ingredient(3,"carrot");
+        List<String> comments = new ArrayList<>();
+        comments.add("LGTM!");
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(ind);
+        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
+        List<Recipe> recipes = new ArrayList<>();
+        recipes.add(r1);
+        List<Double> scalings = new ArrayList<>();
+        scalings.add(1.11);
+        meals = new ArrayList<>();
+        meals.add(new Meal(recipes,scalings,3.4));
 
         mpMealListAdapter = new MPMealListAdapter(this, meals);
         activityMpmealListBinding.mpMealListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));

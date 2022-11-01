@@ -2,6 +2,7 @@ package com.example.happymeals;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         User user = new User();
+        // testing out
+        Intent intent = new Intent(this,MPMealRecipeList.class);
+        startActivity(intent);
 
 
     }

@@ -7,6 +7,6 @@
     <TextView
         android:id="@+id/mp_meal_recipe_list_content_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:text="TextView" />
 </LinearLayout>

@@ -27,6 +27,8 @@ public class MPMealPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityMpmealPlanBinding = ActivityMpmealPlanBinding.inflate(getLayoutInflater());
+
         setContentView(R.layout.activity_mpmeal_plan);
 
         new_mp_button = findViewById(R.id.my_meals_add_button);
@@ -34,6 +36,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
 
         mpAdapter = new MPListAdapter(this, mealPlans);
         activityMpmealPlanBinding.mpRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        activityMpmealPlanBinding.mpRecyclerview.setHasFixedSize(true);
         activityMpmealPlanBinding.mpRecyclerview.setAdapter(mpAdapter);
 
 

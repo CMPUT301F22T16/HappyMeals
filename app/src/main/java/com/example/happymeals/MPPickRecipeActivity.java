@@ -18,6 +18,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     ListView recipe_list;
     MPPickRecipeListAdapter recipe_adapter;
     ArrayList<Recipe> dataList;
+    ArrayList<Recipe> recipes_buffer;
     SearchView recipe_search_bar;
     Button confirmButton;
 
@@ -85,8 +86,12 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
                 // TODO: add selected recipes to a buffer list
                 CheckBox checkBox = view.findViewById(R.id.checkBox);
                 checkBox.toggle();
+                if(checkBox.isChecked()){
+                    recipes_buffer.add(dataList.get(i));
+                } else {
+                    recipes_buffer.remove(dataList.get(i));
+                }
             }
         });
-
     }
 }

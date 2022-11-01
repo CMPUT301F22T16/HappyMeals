@@ -27,6 +27,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_mpmy_meals);
 
         cancel_button = findViewById(R.id.my_meals_cancel);
