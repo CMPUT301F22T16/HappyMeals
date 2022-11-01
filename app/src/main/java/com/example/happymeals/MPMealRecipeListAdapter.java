@@ -23,10 +23,10 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
-            Intent intent = new Intent(mContext,MPPickRecipeActivity.class);
-            intent.putExtra("recipe_index",itemPosition);
-            mContext.startActivity(intent);
-
+            // TODO: should start activity: View Recipe
+//            Intent intent = new Intent(mContext,MPPickRecipeActivity.class);
+//            intent.putExtra("recipe_index",itemPosition);
+//            mContext.startActivity(intent);
         }
     };
 
@@ -34,6 +34,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     public MPMealRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         this.recipes = recipes;
         this.mContext = context;
+        activityMpmealRecipeListBinding = ActivityMpmealRecipeListBinding.inflate(LayoutInflater.from(context));
     }
     @NonNull
     @Override

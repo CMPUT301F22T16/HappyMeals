@@ -24,6 +24,8 @@ public class MPMealRecipeList extends AppCompatActivity {
     ArrayList<Recipe> recipes;
     Button addRecipButton;
     Intent intent;
+    RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class MPMealRecipeList extends AppCompatActivity {
         setContentView(R.layout.activity_mpmeal_recipe_list);
 
         // for testing
+        recyclerView = findViewById(R.id.mp_recipe_list_recyclerview);
         Ingredient ind = new Ingredient(3,"carrot");
         List<String> comments = new ArrayList<>();
         comments.add("LGTM!");
@@ -45,9 +48,9 @@ public class MPMealRecipeList extends AppCompatActivity {
         intent = new Intent(this,MPPickRecipeActivity.class);
 
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
-        activityMpmealRecipeListBinding.mpRecipeListRecyclerview.setAdapter(mpMealRecipeListAdapter);
+        recyclerView.setAdapter(mpMealRecipeListAdapter);
 
-        activityMpmealRecipeListBinding.mpRecipeListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -63,7 +66,7 @@ public class MPMealRecipeList extends AppCompatActivity {
         });
         setOnAddButtonListener();
         mpMealRecipeListAdapter.notifyDataSetChanged();
-        itemTouchHelper.attachToRecyclerView(activityMpmealRecipeListBinding.mpRecipeListRecyclerview);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void setOnAddButtonListener() {
