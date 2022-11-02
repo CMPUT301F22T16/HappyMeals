@@ -55,7 +55,7 @@ public class User {
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
-        storagesListenAndUpdate();
+        ingredientListenAndUpdate();
     }
 
     public User(String username) {
@@ -173,8 +173,8 @@ public class User {
                         List<Ingredient> storageIngredients = new ArrayList<>();
                         List<String> ingIds = (List<String>) doc.get("ingredients");
                         for (int i=0; i<ingIds.size(); i++) {
-                            for (int j=0; j<ingredients.size(); i++) {
-                                if (ingIds.get(i) == ingredients.get(j).getId()) {
+                            for (int j=0; j<ingredients.size(); j++) {
+                                if (ingIds.get(i).equals(ingredients.get(j).getId())) {
                                     storageIngredients.add(ingredients.get(i));
                                 }
                             }
@@ -280,11 +280,12 @@ public class User {
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = (Integer) doc.get("amount");
-                        Integer cost = (Integer)  doc.get("cost");
-                        Date date = (Date) doc.get("date");
+                        Integer amount = doc.getLong("amount").intValue();
+                        Integer cost = doc.getLong("cost").intValue();
+                        Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
+                        ingredient.setId(doc.getId());
                         ingredients.add(ingredient);
                     }
                     storagesListenAndUpdate();

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 List<Ingredient> strs = user.getStorages().get(0).getIngredients();
                 for (int i=0; i<strs.size(); i++) {
-                    //Log.d("GetTest", strs.get(i).getId());
+                    Log.d("GetTest", strs.get(i).getId());
                 }
             }
         });
