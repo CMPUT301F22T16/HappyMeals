@@ -21,8 +21,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -266,7 +264,8 @@ public class User {
                                 String locRef = document.getString("location");
                                 String description = document.getString("description");
                                 Ingredient ingredient = new Ingredient(description, category, amount, cost, date, locRef);
-                                list.add(ingredient);
+                                /////
+//                                list.add(ingredient);
                             }
                             Log.d("gStor", "Documents successfully queried", task.getException());
                         } else {
@@ -307,8 +306,9 @@ public class User {
                         Integer amount = 1; //COME BACK TO THIS LATER
                         Integer cost = 1;
                         Date date = new Date();
-                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
-                        ingredients.add(ingredient);
+                        /////
+//                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
+//                        ingredients.add(ingredient);
                     }
                     storagesListenAndUpdate();
                     Log.d("uIng", "Local ingredients updated successfully!");

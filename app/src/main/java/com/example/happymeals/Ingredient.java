@@ -1,11 +1,13 @@
 package com.example.happymeals;
 
+import com.example.happymeals.Storable;
+
 import java.util.Date;
 
 import java.util.HashMap;
 
 
-public class Ingredient implements Storable{
+public class Ingredient implements Storable {
     private String category;
     private String description;
     private Integer amount;
