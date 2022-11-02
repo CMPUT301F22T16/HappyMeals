@@ -32,6 +32,10 @@ public class Meal implements Storable {
         return this.m_id;
     }
 
+    public void setM_id(String id) {
+        this.m_id = id;
+    }
+
     @Override
     public HashMap<String, Object> getStorable() {
         HashMap<String, Object> data = new HashMap<>();

@@ -36,6 +36,10 @@ public class MealPlan implements Storable{
 
     public String get_ump_id() {return this.ump_id;};
 
+    public void setUmp_id(String id) {
+        this.ump_id = id;
+    }
+
     @Override
     public HashMap<String, Object> getStorable() {
         List<Meal> breakfast = this.getBreakfast();
