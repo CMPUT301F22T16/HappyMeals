@@ -33,7 +33,7 @@ public class RecipeListActivity extends AppCompatActivity {
         recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                
+                System.out.println("Clicked");
             }
         });
     }
