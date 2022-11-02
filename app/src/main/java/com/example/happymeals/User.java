@@ -49,13 +49,10 @@ public class User {
      */
     private String username;
     private FirebaseFirestore conn;
-    private List<Storage> storages = new ArrayList<>();
-    private List<Ingredient> ingredients = new ArrayList<>();
 
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
-        ingredientListenAndUpdate();
     }
 
     public User(String username) {
@@ -156,9 +153,10 @@ public class User {
     }
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
+
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
-     */
+
     private void storagesListenAndUpdate() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -168,18 +166,18 @@ public class User {
                     Log.d("uStor", "An error has occured while trying to update local storages");
                 }
                 else {
-                    storages.clear();
+                    //storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
-                        List<Ingredient> storageIngredients = new ArrayList<>();
+                        Storage storage = new Storage(doc.getString("type"));
+                        storage.setId(doc.getId());
                         List<String> ingIds = (List<String>) doc.get("ingredients");
                         for (int i=0; i<ingIds.size(); i++) {
                             for (int j=0; j<ingredients.size(); j++) {
                                 if (ingIds.get(i).equals(ingredients.get(j).getId())) {
-                                    storageIngredients.add(ingredients.get(i));
+                                    storage.addIngredient(ingredients.get(i));
                                 }
                             }
                         }
-                        Storage storage = new Storage(doc.getString("type"), doc.getId(), storageIngredients);
                         storages.add(storage);
                     }
                     Log.d("uStor", "local storages updated successfully!");
@@ -187,14 +185,7 @@ public class User {
             }
         });
     }
-
-    /**
-     * Gets the storages associated with the current user.
-     * @return List of Objects of class Storage.
      */
-    public List<Storage> getStorages() {
-        return this.storages;
-    }
 
     /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
@@ -268,7 +259,7 @@ public class User {
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    private void ingredientListenAndUpdate() {
+    private void getIngredients(ArrayAdapter adapter) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -276,7 +267,7 @@ public class User {
                 if (error != null) {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
-                    ingredients.clear();
+                    List<Ingredient> ingredients = new ArrayList<>();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
@@ -288,17 +279,11 @@ public class User {
                         ingredient.setId(doc.getId());
                         ingredients.add(ingredient);
                     }
-                    storagesListenAndUpdate();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
         });
     }
-
-    public List<Ingredient> getIngredients() {
-        return this.ingredients;
-    }
-
 
     //-------------------------------------------------Recipe Methods-------------------------------------------------//
 
