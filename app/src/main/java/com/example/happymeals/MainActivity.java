@@ -2,6 +2,7 @@ package com.example.happymeals;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     Button testButton;
+    Button ingredientButton;
     Context context = this;
     List<Storage> nice = new ArrayList<>();
     List<Meal> databasemeals = new ArrayList<>();
@@ -50,5 +52,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ingredientButton = findViewById(R.id.ingredient_test);
+        ingredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(MainActivity.this, IngredientActivity.class);
+                startActivity(intent1);
+            }
+        });
+
+
     }
 }
