@@ -1,5 +1,8 @@
 package com.example.happymeals;
 
+import com.example.happymeals.Storable;
+import com.example.happymeals.Recipe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

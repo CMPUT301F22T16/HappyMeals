@@ -1,20 +1,25 @@
 package com.example.happymeals;
 
+
+import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+
 
 import java.util.HashMap;
 
 
-public class Ingredient implements Storable{
+public class Ingredient implements Storable, Serializable {
+
     private String category;
     private String description;
     private Integer amount;
-    private Integer cost;
+    private Double cost;
     private Date date;
     private String loc;
     private String id;
 
-    public Ingredient(String category, String description, Integer amount, Integer cost, Date date, String locRef) {
+    public Ingredient(String category, String description, Integer amount, Double cost, Date date, String locRef) {
 
         this.category = category;
         this.description = description;
@@ -38,7 +43,7 @@ public class Ingredient implements Storable{
         return amount;
     }
 
-    public Integer getCost() {
+    public Double getCost() {
         return cost;
     }
 
@@ -50,13 +55,57 @@ public class Ingredient implements Storable{
         return loc;
     }
 
-    void setLoc(String loc) {
+    public String getId() { return id; }
+
+    public int getYear(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.date);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public int getMonth(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.date);
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getDay(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.date);
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public void setDate(int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        this.date = cal.getTime();
+    }
+
+    public void setLoc(String loc) {
         this.loc = loc;
     }
 
-    public String getId() { return id; }
-
     public void setId(String id) { this.id = id; }
+
+
 
     @Override
     public HashMap<String, Object> getStorable() {
