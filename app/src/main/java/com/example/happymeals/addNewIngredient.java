@@ -1,10 +1,7 @@
 package com.example.happymeals;
 
 import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
