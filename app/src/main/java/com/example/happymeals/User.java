@@ -47,13 +47,10 @@ public class User {
      */
     private String username;
     private FirebaseFirestore conn;
-    private List<Storage> storages = new ArrayList<>();
-    private List<Ingredient> ingredients = new ArrayList<>();
 
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
-        storagesListenAndUpdate();
     }
 
     public User(String username) {
@@ -154,9 +151,10 @@ public class User {
     }
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
+
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
-     */
+
     private void storagesListenAndUpdate() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -166,17 +164,18 @@ public class User {
                     Log.d("uStor", "An error has occured while trying to update local storages");
                 }
                 else {
-                    storages.clear();
+                    //storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
+                        Storage storage = new Storage(doc.getString("type"));
+                        storage.setId(doc.getId());
                         List<String> ingIds = (List<String>) doc.get("ingredients");
                         for (int i=0; i<ingIds.size(); i++) {
-                            for (int j=0; j<ingredients.size(); i++) {
-                                if (ingIds.get(i) == ingredients.get(j).getId()) {
-                                    ingredients.get(j).setLoc(doc.getString("type"));
+                            for (int j=0; j<ingredients.size(); j++) {
+                                if (ingIds.get(i).equals(ingredients.get(j).getId())) {
+                                    storage.addIngredient(ingredients.get(i));
                                 }
                             }
                         }
-                        Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
                         storages.add(storage);
                     }
                     Log.d("uStor", "local storages updated successfully!");
@@ -184,14 +183,7 @@ public class User {
             }
         });
     }
-
-    /**
-     * Gets the storages associated with the current user.
-     * @return List of Objects of class Storage.
      */
-    public List<Storage> getStorages() {
-        return this.storages;
-    }
 
     /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
@@ -248,33 +240,7 @@ public class User {
      */
     public void deleteIngredient(Ingredient ingredient, Context context) {
         CollectionReference ref = conn.collection("user_ingredients");
-
-        ref
-                .whereEqualTo("user", getUsername())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String category = document.getString("category");
-                                Integer amount = document.getLong("amount").intValue();
-                                Double cost = document.getDouble("cost");
-                                Date date = document.getDate("date");
-                                String locRef = document.getString("location");
-                                String description = document.getString("description");
-                                Ingredient ingredient = new Ingredient(description, category, amount, cost, date, locRef);
-                                /////
-//                                list.add(ingredient);
-                            }
-                            Log.d("gStor", "Documents successfully queried", task.getException());
-                        } else {
-                            Log.d("gStor", "Error getting documents: ", task.getException());
-                        }
-
-                        delete(ref, ingredient.getId(), "Ingredient", context);
-                    }
-                });
+        delete(ref, ingredient.getId(), "Ingredient", context);
     }
 
     /**
@@ -291,7 +257,7 @@ public class User {
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    private void ingredientListenAndUpdate() {
+    private void getIngredients(ArrayAdapter adapter) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -299,28 +265,23 @@ public class User {
                 if (error != null) {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
-                    ingredients.clear();
+                    List<Ingredient> ingredients = new ArrayList<>();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = 1; //COME BACK TO THIS LATER
-                        Integer cost = 1;
-                        Date date = new Date();
-                        /////
-//                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
-//                        ingredients.add(ingredient);
+                        Integer amount = doc.getLong("amount").intValue();
+                        Double cost = doc.getDouble("cost");
+                        Date date = doc.getDate("date");
+                        String location = doc.getString("location");
+                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
+                        ingredient.setId(doc.getId());
+                        ingredients.add(ingredient);
                     }
-                    storagesListenAndUpdate();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
         });
     }
-
-    public List<Ingredient> getIngredients() {
-        return this.ingredients;
-    }
-
 
     //-------------------------------------------------Recipe Methods-------------------------------------------------//
 

@@ -10,11 +10,6 @@ public class Storage implements Storable {
     private String id;
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    public Storage(String storeName, String id, List<Ingredient> ingredients) {
-        this.storeName = storeName;
-        this.ingredients = ingredients;
-    }
-
     public Storage(String storeName) {
         this.storeName = storeName;
     }
@@ -23,7 +18,7 @@ public class Storage implements Storable {
         return storeName;
     }
 
-    public void setStoreName(String storeName) { this.storeName = storeName; }
+    public void updateStoreName(String storeName) { this.storeName = storeName; }
 
     public String getId() { return id; }
 

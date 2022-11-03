@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
@@ -26,6 +28,5 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         Intent intent = new Intent(this, RecipeListActivity.class);
         startActivity(intent);
-
     }
 }
