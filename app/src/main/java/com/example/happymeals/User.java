@@ -311,17 +311,17 @@ public class User {
                             String id = doc.getId();
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
-                            List<String> comments = doc.get("comments", List.class);
+                            List<String> comments = (List<String>) doc.get("comments");
                             List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Integer> amounts = (List<Integer>) data.get("amounts");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
                             List<Ingredient> ingredients = new ArrayList<>();
                             for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i), ingredientDescs.get(i));
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
                                 ingredients.add(ingredient);
                             }
 
-                            Integer num_servings = (Integer) data.get("num_servings");
-                            Integer preparation_time = (Integer) data.get("preparation_time");
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
