@@ -42,9 +42,7 @@ public class RecipeListActivity extends AppCompatActivity {
         recipeAdapter.add(new Recipe());
 
         // Populate the recipe list
-        //TODO
-
-
+        curUser.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
 
     }
 
