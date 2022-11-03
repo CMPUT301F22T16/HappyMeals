@@ -1,12 +1,16 @@
 package com.example.happymeals;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +30,33 @@ public class RecipeListActivity extends AppCompatActivity {
         String username = (String) bundle.getSerializable("USER");
         User curUser = new User(username);
 
+        // Add back button to action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
         RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, curUser);
         recipe_list_view.setAdapter(recipeAdapter);
-//        Recipe recipe = new Recipe();
-//        recipeAdapter.add(recipe);
-//        recipeAdapter.add(new Recipe());
-//        recipeAdapter.add(new Recipe());
+        Recipe recipe = new Recipe();
+        recipeAdapter.add(recipe);
+        recipeAdapter.add(new Recipe());
+        recipeAdapter.add(new Recipe());
 
         // Populate the recipe list
         //TODO
 
+
+
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
