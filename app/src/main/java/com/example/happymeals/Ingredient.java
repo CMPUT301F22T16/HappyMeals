@@ -11,12 +11,12 @@ public class Ingredient implements Storable {
     private String category;
     private String description;
     private Integer amount;
-    private Integer cost;
+    private Double cost;
     private Date date;
     private String loc;
     private String id;
 
-    public Ingredient(String category, String description, Integer amount, Integer cost, Date date, String locRef) {
+    public Ingredient(String category, String description, Integer amount, Double cost, Date date, String locRef) {
 
         this.category = category;
         this.description = description;
@@ -40,7 +40,7 @@ public class Ingredient implements Storable {
         return amount;
     }
 
-    public Integer getCost() {
+    public Double getCost() {
         return cost;
     }
 

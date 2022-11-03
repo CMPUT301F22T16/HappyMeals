@@ -259,7 +259,7 @@ public class User {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String category = document.getString("category");
                                 Integer amount = document.getLong("amount").intValue();
-                                Integer cost = document.getLong("cost").intValue();
+                                Double cost = document.getDouble("cost");
                                 Date date = document.getDate("date");
                                 String locRef = document.getString("location");
                                 String description = document.getString("description");

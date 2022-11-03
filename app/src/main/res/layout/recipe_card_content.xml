@@ -12,11 +12,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFF8D"
+        android:background="#DEE4E4"
         android:clickable="true"
         android:elevation="@dimen/cardview_default_elevation"
         android:fadingEdge="horizontal|vertical"
-        android:fadingEdgeLength="2dp">
+        android:fadingEdgeLength="2dp"
+        android:scrollbarStyle="outsideOverlay">
 
         <TextView
             android:id="@+id/recipe_card_title"
@@ -59,9 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view_recipe_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_image">
 
@@ -74,11 +75,11 @@
             android:layout_marginVertical="5dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view_recipe_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_category"></TextView>
 
@@ -112,6 +113,19 @@
             app:layout_constraintStart_toEndOf="@+id/recipe_card_title"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <Button
+            android:id="@+id/view_recipe_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            android:text="View"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipe_card_image" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
