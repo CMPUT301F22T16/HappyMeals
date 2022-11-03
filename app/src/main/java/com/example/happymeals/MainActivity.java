@@ -2,10 +2,6 @@ package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< HEAD
-import android.content.Context;
-=======
->>>>>>> 6bcb18b16bdd4b8e402a35d35f81f4a7a1b8ddda
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
