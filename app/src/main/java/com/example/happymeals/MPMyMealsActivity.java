@@ -25,6 +25,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     Button add_button;
     Intent intent;
     RecyclerView recyclerView;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,11 @@ public class MPMyMealsActivity extends AppCompatActivity {
         myMealsAdapter = new MPMyMealsAdapter(this, meals);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(myMealsAdapter);
+
+        // testing with firebase
+        user = new User();
+        LoadingDialog dialog = new LoadingDialog(this);
+        user.getUserMeals(myMealsAdapter,dialog,this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override

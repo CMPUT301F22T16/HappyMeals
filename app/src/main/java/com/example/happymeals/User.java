@@ -2,11 +2,13 @@ package com.example.happymeals;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -447,7 +449,7 @@ public class User {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+    public CollectionReference getUserMeals(RecyclerView.Adapter adapter, LoadingDialog dialog, Context context) {
 
         CollectionReference ref = conn.collection("user_meals");
         ref
