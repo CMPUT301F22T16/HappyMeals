@@ -22,21 +22,19 @@ public class RecipeListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_list);
 
         // Get the current user
-        Bundle bundle = getIntent().getExtras();
-        String username = (String) bundle.getSerializable("USER");
-        User curUser = new User(username);
-
-        recipe_list_view = findViewById(R.id.recipe_list);
+//        Bundle bundle = getIntent().getExtras();
+//        String username = (String) bundle.getSerializable("USER");
+//        User curUser = new User(username);
         recipes = new ArrayList<>();
+        User curUser = new User();
+        recipe_list_view = findViewById(R.id.recipe_list);
         RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, curUser);
         recipe_list_view.setAdapter(recipeAdapter);
-//        Recipe recipe = new Recipe();
-//        recipeAdapter.add(recipe);
-//        recipeAdapter.add(new Recipe());
-//        recipeAdapter.add(new Recipe());
+        LoadingDialog dialog = new LoadingDialog(this);
+        curUser.getUserRecipes(recipeAdapter,dialog,this);
+
 
         // Populate the recipe list
         //TODO
-
     }
 }

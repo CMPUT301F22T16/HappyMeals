@@ -25,21 +25,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        Bundle bundle = new Bundle();
-//        Intent intent = new Intent(this, RecipeListActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, RecipeListActivity.class);
+        startActivity(intent);
 
 
         //FOR TESTING PURPOSES
-        User user = new User();
-
-        ingredientButton = findViewById(R.id.ingredient_test);
-        ingredientButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
-                startActivity(intent);
-            }
-        });
+//        User user = new User();
+//
+//        ingredientButton = findViewById(R.id.ingredient_test);
+//        ingredientButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
 
