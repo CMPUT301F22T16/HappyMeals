@@ -266,7 +266,7 @@ public class User {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
                         Integer amount = doc.getLong("amount").intValue();
-                        Double cost = doc.getLong("cost").doubleValue();
+                        Double cost = doc.getDouble("cost");
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
