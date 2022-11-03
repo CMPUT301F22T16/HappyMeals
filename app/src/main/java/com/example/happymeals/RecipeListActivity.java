@@ -1,6 +1,5 @@
 package com.example.happymeals;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -36,15 +35,12 @@ public class RecipeListActivity extends AppCompatActivity {
         recipes = new ArrayList<>();
         RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, curUser);
         recipe_list_view.setAdapter(recipeAdapter);
-        Recipe recipe = new Recipe();
-        recipeAdapter.add(recipe);
-        recipeAdapter.add(new Recipe());
-        recipeAdapter.add(new Recipe());
+        LoadingDialog dialog = new LoadingDialog(this);
+        curUser.getUserRecipes(recipeAdapter,dialog,this);
+
 
         // Populate the recipe list
         //TODO
-
-
 
     }
 
