@@ -66,11 +66,11 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
         recipe_ingredient_list = findViewById(R.id.recipe_ingredient_recyclerview);
 
         ingredient_data_list = new ArrayList<>();
-        ingredient_data_list.add(new Ingredient("Vegetable","Carrot", 1, 1, new Date()));
-        ingredient_data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1, new Date()));
-        ingredient_data_list.add(new Ingredient("Meat", "Chicken", 1, 1, new Date()));
-        ingredient_data_list.add(new Ingredient("Dairy", "Milk", 1, 1, new Date()));
-        ingredient_data_list.add(new Ingredient("Meat", "Eggs", 1, 1, new Date()));
+        ingredient_data_list.add(new Ingredient("Vegetable","Carrot", 1, 1.00, new Date(), "somewhere"));
+        ingredient_data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1.00, new Date(), "somewhere"));
+        ingredient_data_list.add(new Ingredient("Meat", "Chicken", 1, 1.00, new Date(), "somewhere"));
+        ingredient_data_list.add(new Ingredient("Dairy", "Milk", 1, 1.00, new Date(), "somewhere"));
+        ingredient_data_list.add(new Ingredient("Meat", "Eggs", 1, 1.00, new Date(), "somewhere"));
 
         ingredient_adapter = new RecipeIngredientAdapter(this, ingredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
@@ -104,7 +104,10 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
             if (result.getData() == null) return;
             String descExtra = result.getData().getStringExtra("desc");
             String categoryExtra = result.getData().getStringExtra("category");
-            ingredient_data_list.add(new Ingredient(categoryExtra, descExtra, 1, 1, new Date()));
+            int amountExtra = result.getData().getIntExtra("amount", 0);
+            double costExtra = result.getData().getDoubleExtra("cost", 0.00);
+            String locRefExtra = result.getData().getStringExtra("locRef");
+            ingredient_data_list.add(new Ingredient(categoryExtra, descExtra, amountExtra, costExtra, new Date(), locRefExtra));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(NewRecipe.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();
@@ -138,7 +141,7 @@ public class NewRecipe extends AppCompatActivity implements RecyclerViewInterfac
             String loc = result.getData().getStringExtra("loc");
             String category = result.getData().getStringExtra("category");
             int amount = result.getData().getIntExtra("amount", 0);
-            int cost = result.getData().getIntExtra("cost", 0);
+            double cost = result.getData().getDoubleExtra("cost", 0.00);
             Ingredient item = ingredient_data_list.get(selection);
             item.setDescription(desc);
             item.setLoc(loc);

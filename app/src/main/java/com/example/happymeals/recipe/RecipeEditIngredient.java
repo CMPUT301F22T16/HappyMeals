@@ -29,7 +29,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
     Date date = new Date();
     String category = null;
     Integer amount = null;
-    Integer cost = null;
+    Double cost = null;
 
 
     @Override
@@ -53,14 +53,14 @@ public class RecipeEditIngredient extends AppCompatActivity {
 //        date.setTime(date_long);
         category = intent.getStringExtra("category");
         amount = intent.getIntExtra("amount", 0);
-        cost = intent.getIntExtra("cost", 0);
+        cost = intent.getDoubleExtra("cost", 0.00);
 
         desc_edit_text.setText(desc);
         loc_edit_text.setText(loc);
         date_edit_text.setText(date.toString());
         category_edit_text.setText(category);
         amount_edit_text.setText(getString(R.string.integer_to_string, amount));
-        cost_edit_text.setText(getString(R.string.integer_to_string, cost));
+        cost_edit_text.setText(getString(R.string.double_to_string, cost));
 
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +71,8 @@ public class RecipeEditIngredient extends AppCompatActivity {
 //                intent.putExtra("date", )
                 intent.putExtra("category", category_edit_text.getText().toString());
                 intent.putExtra("amount", Integer.parseInt(amount_edit_text.getText().toString()));
-                intent.putExtra("cost", Integer.parseInt(cost_edit_text.getText().toString()));
+                intent.putExtra("cost", Double.parseDouble(cost_edit_text.getText().toString()));
+                // intent.putExtra("date", );
                 setResult(RESULT_OK, intent);
                 finish();
             }

@@ -45,11 +45,11 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
         ingredient_list = findViewById(R.id.recipe_add_ingredient_recyclerview);
 
         data_list = new ArrayList<>();
-        data_list.add(new Ingredient("Vegetable", "Carrot", 1, 1, new Date()));
-        data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1, new Date()));
-        data_list.add(new Ingredient("Meat", "Chicken", 1, 1, new Date()));
-        data_list.add(new Ingredient("Dairy", "Milk", 1, 1, new Date()));
-        data_list.add(new Ingredient("Meat", "Eggs", 1, 1, new Date()));
+        data_list.add(new Ingredient("Vegetable", "Carrot", 1, 1.00, new Date(), "somewhere"));
+        data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1.00, new Date(), "somewhere"));
+        data_list.add(new Ingredient("Meat", "Chicken", 1, 1.00, new Date(), "somewhere"));
+        data_list.add(new Ingredient("Dairy", "Milk", 1, 1.00, new Date(), "somewhere"));
+        data_list.add(new Ingredient("Meat", "Eggs", 1, 1.00, new Date(), "somewhere"));
 
         adapter = new IngredientAdapter(this, data_list, this);
 
@@ -89,6 +89,10 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
                 Ingredient item = data_list.get(position);
                 intent.putExtra("desc", item.getDescription());
                 intent.putExtra("category", item.getCategory());
+                intent.putExtra("amount", item.getAmount());
+                intent.putExtra("cost", item.getCost());
+//                intent.putExtra("date", );
+                intent.putExtra("locFef", item.getLoc());
                 setResult(RESULT_OK, intent);
                 finish();
             }
