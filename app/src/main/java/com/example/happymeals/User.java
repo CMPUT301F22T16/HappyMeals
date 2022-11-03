@@ -1,8 +1,8 @@
 package com.example.happymeals;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,10 +21,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -38,7 +41,7 @@ import java.util.List;
  * 6. user_mealplans: {@link MealPlan} is the model class for this.
  *
  */
-public class User{
+public class User {
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -46,13 +49,10 @@ public class User{
      */
     private String username;
     private FirebaseFirestore conn;
-    private List<Storage> storages = new ArrayList<>();
-    private List<Ingredient> ingredients = new ArrayList<>();
 
     public User() {
         username = "Guest"; // This is temporary
         conn = FirebaseFirestore.getInstance();
-        storagesListenAndUpdate();
     }
 
     public User(String username) {
@@ -153,9 +153,10 @@ public class User{
     }
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
+
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
-     */
+
     private void storagesListenAndUpdate() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -165,17 +166,18 @@ public class User{
                     Log.d("uStor", "An error has occured while trying to update local storages");
                 }
                 else {
-                    storages.clear();
+                    //storages.clear();
                     for (QueryDocumentSnapshot doc : value) {
+                        Storage storage = new Storage(doc.getString("type"));
+                        storage.setId(doc.getId());
                         List<String> ingIds = (List<String>) doc.get("ingredients");
                         for (int i=0; i<ingIds.size(); i++) {
-                            for (int j=0; j<ingredients.size(); i++) {
-                                if (ingIds.get(i) == ingredients.get(j).getId()) {
-                                    ingredients.get(j).setLoc(doc.getString("type"));
+                            for (int j=0; j<ingredients.size(); j++) {
+                                if (ingIds.get(i).equals(ingredients.get(j).getId())) {
+                                    storage.addIngredient(ingredients.get(i));
                                 }
                             }
                         }
-                        Storage storage = new Storage(doc.getString("type"), doc.getId(), ingredients);
                         storages.add(storage);
                     }
                     Log.d("uStor", "local storages updated successfully!");
@@ -183,14 +185,7 @@ public class User{
             }
         });
     }
-
-    /**
-     * Gets the storages associated with the current user.
-     * @return List of Objects of class Storage.
      */
-    public List<Storage> getStorages() {
-        return this.storages;
-    }
 
     /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
@@ -252,8 +247,9 @@ public class User{
 
     /**
      * Updates the entry of {@link Ingredient} object in the database.
+     *
      * @param ingredient : Object of type {@link Ingredient} to be updated in the database.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
+     * @param context    : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
     public void updateIngredient(Ingredient ingredient, Context context) {
         CollectionReference ref = conn.collection("user_ingredients");
@@ -263,111 +259,331 @@ public class User{
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    private void ingredientListenAndUpdate() {
+    private void getIngredients(ArrayAdapter adapter) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
-                }
-                else {
-                    ingredients.clear();
+                } else {
+                    List<Ingredient> ingredients = new ArrayList<>();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = 1; //COME BACK TO THIS LATER
-                        Integer cost = 1;
-                        Date date = new Date();
-                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date);
+                        Integer amount = doc.getLong("amount").intValue();
+                        Integer cost = doc.getLong("cost").intValue();
+                        Date date = doc.getDate("date");
+                        String location = doc.getString("location");
+                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
+                        ingredient.setId(doc.getId());
                         ingredients.add(ingredient);
                     }
-                    storagesListenAndUpdate();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
         });
     }
 
-    public List<Ingredient> getIngredients() {
-        return this.ingredients;
+    //-------------------------------------------------Recipe Methods-------------------------------------------------//
+
+    /**
+     * Used to fetch either all Recipes for current user.
+     * Attaches an event listener to the user's recipe documents in user_recipes Collection update their respective
+     * ArrayAdapter and notify them for future real time updates.
+     *
+     * @param adapter
+     * @param dialog
+     */
+    public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername());
+
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Integer> amounts = (List<Integer>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = (Integer) data.get("num_servings");
+                            Integer preparation_time = (Integer) data.get("preparation_time");
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes in the recipes {@link List<Recipe>}
+     *
+     * @param recipes
+     * @param context
+     * @param recipe_ids
+     */
+    private void getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes with ID", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        recipes.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            recipes.add(recipe); // Adding the recipe from FireStore
+                        }
+                    }
+                });
+    }
+
+    public void addRecipe(Recipe recipe, Context context) {
+        HashMap<String, Object> data = recipe.getStorable();
+        data.put("user", getUsername());
+        CollectionReference user_recipes = getConn().collection("user_recipes");
+        String id = store(user_recipes, data, "Recipes", context);
+        recipe.setR_id(id);
+    }
+
+    public void updateRecipe(Recipe new_recipe, Context context) {
+        HashMap<String, Object> data = new_recipe.getStorable();
+        data.put("user", getUsername());
+        CollectionReference user_recipes = getConn().collection("user_recipes");
+        String id = new_recipe.get_r_id();
+        update(user_recipes, id, data, "user_recipes", context);
+    }
+
+    public void removeRecipe(Recipe recipe, Context context) {
+        CollectionReference user_recipes = getConn().collection("user_recipes");
+        String id = recipe.get_r_id();
+        delete(user_recipes, id, "user_recipes", context);
     }
 
     //-------------------------------------------------Meal Methods-------------------------------------------------//
 
+    /**
+     * Used to fetch all Meals for current user.
+     *
+     * @param meals
+     * @param dialog
+     */
+    private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog, Context context, List<String> meal_ids) {
+        CollectionReference ref = conn.collection("user_meals");
+        ref
+                .whereEqualTo("user", getUsername())
+                .whereIn(com.google.firebase.firestore.FieldPath.documentId(), meal_ids)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALS", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve meals", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        meals.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            List<String> recipe_ids = (List<String>) doc.get("recipes");
+                            Double cost = (Double) doc.getDouble("cost");
+                            List<Double> scalings = (List<Double>) doc.get("scalings");
+                            List<Recipe> recipes = new ArrayList<>();
+                            getUserRecipesWithID(recipes, context, recipe_ids);
+                            Meal meal = new Meal(recipes, scalings, cost);
+                            meals.add(meal);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Used to fetch all Meals for current user.
+     *
+     * @param adapter
+     * @param dialog
+     */
+    public CollectionReference getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+
+        CollectionReference ref = conn.collection("user_meals");
+        ref
+                .whereEqualTo("user", getUsername())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALS", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve meals", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            List<String> recipe_ids = (List<String>) doc.get("recipes");
+                            Double cost = (Double) doc.getDouble("cost");
+                            List<Double> scalings = (List<Double>) doc.get("scalings");
+                            List<Recipe> recipes = new ArrayList<>();
+                            getUserRecipesWithID(recipes, context, recipe_ids);
+                            Meal meal = new Meal(recipes, scalings, cost);
+                            adapter.add(meal);
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+        return ref;
+    }
 
     /**
      * Used to add Meals to user's database
-     * @param meal : A meal of type {@link Meal} containing information to be added to the database.
+     *
+     * @param meal    : A meal of type {@link Meal} containing information to be added to the database.
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
     public void addMeal(Meal meal, Context context) {
         HashMap<String, Object> data = meal.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_meals = this.getConn().collection("user_meals");
-        String id = store(user_meals, data,"Meal", context);
+        data.put("user", getUsername());
+        CollectionReference user_meals = getConn().collection("user_meals");
+        String id = store(user_meals, data, "Meal", context);
         meal.setM_id(id);
     }
 
-    public void updateMeal(Meal new_meal, Context context) {
-        CollectionReference ref = conn.collection("user_meals");
-        update(ref, new_meal.getM_id(), new_meal.getStorable(), "Meal", context);
+    public void modifyMeal(Meal new_meal, Context context) {
+        HashMap<String, Object> data = new_meal.getStorable();
+        data.put("user", getUsername());
+        CollectionReference user_meals = getConn().collection("user_meals");
+        String id = new_meal.getM_id();
+        update(user_meals, id, data, "user_meals", context);
     }
 
     public void removeMeal(Meal meal, Context context) {
+        CollectionReference user_meals = getConn().collection("user_meals");
+        String id = meal.getM_id();
+        delete(user_meals, id, "user_meals", context);
+    }
+
+    //-------------------------------------------------MealPlan Methods-------------------------------------------------//
+
+    /**
+     * Used to fetch all MealPlans for current user.
+     *
+     * @param adapter
+     * @param dialog
+     */
+    public CollectionReference getUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
         CollectionReference ref = conn.collection("user_mealplans");
-        delete(ref, meal.getM_id(), "Meal", context);
+        ref
+                .whereEqualTo("user", getUsername())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALPLANS", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve mealplans", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String ump_id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            List<Meal> breakfast = new ArrayList<>();
+                            List<Meal> lunch = new ArrayList<>();
+                            List<Meal> dinner = new ArrayList<>();
+
+                            List<String> breakfast_ids = (List<String>) data.get("breakfast");
+                            List<String> lunch_ids = (List<String>) data.get("lunch");
+                            List<String> dinner_ids = (List<String>) data.get("dinner");
+
+                            getUserMealsWithID(breakfast, dialog, context, breakfast_ids);
+                            getUserMealsWithID(lunch, dialog, context, lunch_ids);
+                            getUserMealsWithID(dinner, dialog, context, dinner_ids);
+
+                            Integer num_days = ((Long) data.get("num_days")).intValue();
+
+                            MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+                            adapter.add(mealPlan);
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+        return ref;
     }
 
     /**
      * Used to add Meal plans to user's database.
+     *
      * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
+     * @param context  : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
     public void addMealPlan(MealPlan mealplan, Context context) {
-        // TODO Do we need to check a unique constraint for this?
         HashMap<String, Object> data = mealplan.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_mealplans = this.getConn().collection("user_mealplans");
-        String id = store(user_mealplans, data,"Meal Plan", context);
+        data.put("user", getUsername());
+        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        String id = store(user_mealplans, data, "Meal Plan", context);
         mealplan.setUmp_id(id);
     }
 
     public void updateMealPlan(MealPlan mealPlan, Context context) {
 
-        CollectionReference ref = conn.collection("user_mealplans");
-        update(ref, mealPlan.get_ump_id(), mealPlan.getStorable(), "user_mealplans", context);        }
-
+        HashMap<String, Object> data = mealPlan.getStorable();
+        data.put("user", getUsername());
+        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        String id = mealPlan.get_ump_id();
+        update(user_mealplans, id, data, "user_mealplans", context);
+    }
 
     public void removeMealPlan(MealPlan mealPlan, Context context) {
-        CollectionReference ref = conn.collection("user_mealplans");
-        delete(ref, mealPlan.get_ump_id(), "Meal Plan", context);
+        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        String id = mealPlan.get_ump_id();
+        delete(user_mealplans, id, "user_mealplans", context);
     }
 
-    public void addRecipe(Recipe recipe, Context context) {
-        HashMap<String, Object> data = recipe.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_recipes = this.getConn().collection("user_recipes");
-        store(user_recipes, data,"Recipes", context);
-    }
-
-    public void modifyRecipe(Recipe new_recipe, Context context) {
-        HashMap<String, Object> data = new_recipe.getStorable();
-        data.put("user", this.getUsername());
-        CollectionReference user_recipes = this.getConn().collection("user_recipes");
-
-        try {
-            DocumentReference doc = user_recipes.document(new_recipe.get_r_id());
-            doc.update(data);
-            Toast.makeText(context, "Recipe updated successfully", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void removeRecipe(Recipe recipe, Context context) {
-
-    }
 
 }

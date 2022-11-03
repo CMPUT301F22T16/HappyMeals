@@ -35,6 +35,7 @@ public class MealPlan implements Storable{
     }
 
     public String get_ump_id() {return this.ump_id;};
+    public void set_ump_id(String id) {this.ump_id = id;}
 
     public void setUmp_id(String id) {
         this.ump_id = id;
