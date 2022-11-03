@@ -3,22 +3,32 @@ package com.example.happymeals;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MealPlan implements Storable{
-    private final Map<String, List<Meal>> meal_plans;
+    private final List<Meal> breakfast;
+    private final List<Meal> lunch;
+    private final List<Meal> dinner;
     private final int num_days;
     private String ump_id = null; // ids' null by default if not fetched
 
-    public MealPlan(Map<String, List<Meal>> meal_plans, int num_days) {
-        this.meal_plans = meal_plans;
+    public MealPlan(List<Meal> breakfast, List<Meal> lunch, List<Meal> dinner, int num_days) {
+        this.breakfast = breakfast;
+        this.lunch = lunch;
+        this.dinner = dinner;
         this.num_days = num_days;
     }
 
-    public Map<String, List<Meal>> getMealPlans(){
-        return this.meal_plans;
+    public List<Meal> getBreakfast() {
+        return breakfast;
     }
 
+    public List<Meal> getLunch() {
+        return lunch;
+    }
+
+    public List<Meal> getDinner() {
+        return dinner;
+    }
 
     public int getNum_days() {
         return num_days;
@@ -54,9 +64,5 @@ public class MealPlan implements Storable{
         data.put("num_days", num_days);
 
         return data;
-    }
-
-    public Map<String, List<Meal>> getMeal_plans() {
-        return meal_plans;
     }
 }
