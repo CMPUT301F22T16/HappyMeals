@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import static java.sql.DriverManager.println;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -55,6 +57,21 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     @Override
     public int getItemCount() {
         return meals.size();
+    }
+
+    /**
+     * clear meals
+     */
+    public void clear() {
+        meals.clear();
+    }
+
+    /**
+     * adds a meal to meals
+     * @param meal
+     */
+    public void add(Meal meal) {
+        meals.add(meal);
     }
 
     public class MyMealViewHolder extends RecyclerView.ViewHolder {

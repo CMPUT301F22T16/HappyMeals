@@ -449,7 +449,7 @@ public class User {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMeals(RecyclerView.Adapter adapter, LoadingDialog dialog, Context context) {
+    public CollectionReference getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog, Context context) {
 
         CollectionReference ref = conn.collection("user_meals");
         ref

@@ -60,7 +60,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         // testing with firebase
         user = new User();
         LoadingDialog dialog = new LoadingDialog(this);
-        user.getUserMeals(myMealsAdapter,dialog,this);
+        user.getUserMeals((MPMyMealsAdapter) myMealsAdapter,dialog,this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
