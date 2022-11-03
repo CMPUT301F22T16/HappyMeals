@@ -4,14 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -20,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -257,7 +252,7 @@ public class User {
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    private void getIngredients(ArrayAdapter adapter) {
+    public void getIngredients(ArrayAdapter adapter) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -266,17 +261,20 @@ public class User {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
                     List<Ingredient> ingredients = new ArrayList<>();
+                    adapter.clear();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
                         Integer amount = doc.getLong("amount").intValue();
-                        Double cost = doc.getDouble("cost");
+                        Double cost = doc.getLong("cost").doubleValue();
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
                         ingredient.setId(doc.getId());
                         ingredients.add(ingredient);
+                        adapter.add(ingredient);
                     }
+                    adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
