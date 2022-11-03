@@ -3,6 +3,7 @@ package com.example.happymeals;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,21 +21,22 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_list);
 
+        // Get the current user
+        Bundle bundle = getIntent().getExtras();
+        String username = (String) bundle.getSerializable("USER");
+        User curUser = new User(username);
+
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
-        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes);
+        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, curUser);
         recipe_list_view.setAdapter(recipeAdapter);
-        Recipe recipe = new Recipe();
-        recipeAdapter.add(recipe);
-        recipeAdapter.add(new Recipe());
-        recipeAdapter.add(new Recipe());
+//        Recipe recipe = new Recipe();
+//        recipeAdapter.add(recipe);
+//        recipeAdapter.add(new Recipe());
+//        recipeAdapter.add(new Recipe());
 
+        // Populate the recipe list
+        //TODO
 
-        recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("Clicked");
-            }
-        });
     }
 }
