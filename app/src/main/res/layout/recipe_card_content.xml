@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="15dp"
     android:padding="16dp"
     app:cardCornerRadius="15dp"
@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="428dp"
         android:background="#DEE4E4"
         android:clickable="true"
         android:elevation="@dimen/cardview_default_elevation"
@@ -19,22 +19,22 @@
         android:fadingEdgeLength="2dp"
         android:scrollbarStyle="outsideOverlay">
 
+
         <TextView
             android:id="@+id/recipe_card_title"
-            android:layout_width="0dp"
-            android:layout_height="26dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="170dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:paddingLeft="5dp"
             android:text="Title"
+            android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/recipe_card_image"
             app:layout_constraintEnd_toStartOf="@+id/recipe_card_delete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
-
 
         <ImageView
             android:id="@+id/recipe_card_image"
@@ -61,7 +61,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:textColor="@android:color/tab_indicator_text"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/recipe_card_prep_time"
             app:layout_constraintEnd_toStartOf="@+id/recipe_card_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_image">
@@ -74,12 +76,13 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
+            android:textColor="@android:color/tab_indicator_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/recipe_card_view"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_category"></TextView>
 
@@ -103,7 +106,7 @@
             android:id="@+id/recipe_card_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:clickable="true"
@@ -123,6 +126,7 @@
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
             android:text="View"
+            android:textColor="@android:color/tab_indicator_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_image" />
