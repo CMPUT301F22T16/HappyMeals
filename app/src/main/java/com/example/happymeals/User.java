@@ -268,17 +268,20 @@ public class User {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
                     List<Ingredient> ingredients = new ArrayList<>();
+                    adapter.clear();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
                         Integer amount = doc.getLong("amount").intValue();
-                        Integer cost = doc.getLong("cost").intValue();
+                        Double cost = doc.getLong("cost").doubleValue();
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
                         ingredient.setId(doc.getId());
                         ingredients.add(ingredient);
+                        adapter.add(ingredient);
                     }
+                    adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }

@@ -9,19 +9,19 @@ public class Ingredient implements Storable{
     private String category;
     private String description;
     private Integer amount;
-    private Integer cost;
+    private double cost;
     private Date date;
-    private String loc;
+    private String location;
     private String id;
 
-    public Ingredient(String category, String description, Integer amount, Integer cost, Date date, String locRef) {
+    public Ingredient(String category, String description, Integer amount, double cost, Date date, String location) {
 
         this.category = category;
         this.description = description;
         this.amount = amount;
         this.cost = cost;
         this.date = date;
-        this.loc = locRef;
+        this.location = location;
         this.id = null;
     }
 
@@ -38,7 +38,7 @@ public class Ingredient implements Storable{
         return amount;
     }
 
-    public Integer getCost() {
+    public double getCost() {
         return cost;
     }
 
@@ -47,11 +47,11 @@ public class Ingredient implements Storable{
     }
 
     public String getLoc() {
-        return loc;
+        return location;
     }
 
     void setLoc(String loc) {
-        this.loc = loc;
+        this.location = loc;
     }
 
     public String getId() { return id; }
@@ -66,7 +66,7 @@ public class Ingredient implements Storable{
         data.put("amount", this.amount);
         data.put("cost", this.cost);
         data.put("date", this.date);
-        data.put("location", this.loc);
+        data.put("location", this.location);
         return data;
     }
 }
