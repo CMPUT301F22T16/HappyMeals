@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +20,14 @@ public class MainActivity extends AppCompatActivity {
     LoadingDialog loadingDialog = new LoadingDialog(MainActivity.this);
     List<Storage> storages;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        Bundle bundle = new Bundle();
+//        Intent intent = new Intent(this, RecipeListActivity.class);
+//        startActivity(intent);
+
 
         //FOR TESTING PURPOSES
         User user = new User();
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
 
     }

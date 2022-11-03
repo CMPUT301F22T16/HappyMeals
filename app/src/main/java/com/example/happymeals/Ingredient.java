@@ -1,5 +1,6 @@
 package com.example.happymeals;
 
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 
 
 public class Ingredient implements Storable, Serializable {
+
     private String category;
     private String description;
     private Integer amount;

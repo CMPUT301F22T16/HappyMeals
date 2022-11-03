@@ -16,7 +16,17 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login"/>
+
+            android:label="@string/title_activity_login">
+        </activity>
+        <activity
+            android:name=".RecipeListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true" >

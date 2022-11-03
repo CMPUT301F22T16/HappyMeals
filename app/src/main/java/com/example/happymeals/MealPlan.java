@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MealPlan implements Storable{
+public class MealPlan implements Storable {
     private final List<Meal> breakfast;
     private final List<Meal> lunch;
     private final List<Meal> dinner;
@@ -35,7 +35,6 @@ public class MealPlan implements Storable{
     }
 
     public String get_ump_id() {return this.ump_id;};
-    public void set_ump_id(String id) {this.ump_id = id;}
 
     public void setUmp_id(String id) {
         this.ump_id = id;

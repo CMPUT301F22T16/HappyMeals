@@ -1,6 +1,7 @@
 package com.example.happymeals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +13,15 @@ public class Recipe implements Storable {
     private String category;
     private List<String> comments;
     private List<Ingredient> ingredients;
+
+    public Recipe() {
+        this.title = "New Recipe";
+        this.preparation_time = 0;
+        this.num_servings = 0;
+        this.category = "New Category";
+        this.comments = new ArrayList<>(Arrays.asList("Nice!", "Awesome!"));
+        this.ingredients = new ArrayList<>();
+    }
 
     public Recipe(String title, int preparation_time, int num_servings, String category, List<String> comments, List<Ingredient> ingredients) {
         this.title = title;
