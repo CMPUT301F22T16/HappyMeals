@@ -19,7 +19,7 @@ import java.util.List;
 public class MPMealRecipeList extends AppCompatActivity {
 
     ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
-    RecyclerView.Adapter mpMealRecipeListAdapter;
+    MPMealRecipeListAdapter mpMealRecipeListAdapter;
 
     ArrayList<Recipe> recipes;
     Button addRecipButton;
@@ -27,6 +27,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Button finishButton;
     Intent intent;
     RecyclerView recyclerView;
+    User user;
 
 
     @Override
@@ -37,24 +38,35 @@ public class MPMealRecipeList extends AppCompatActivity {
 
         // for testing
         recyclerView = findViewById(R.id.mp_recipe_list_recyclerview);
-        Ingredient ind = new Ingredient(3,"carrot");
-        List<String> comments = new ArrayList<>();
-        comments.add("LGTM!");
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(ind);
-        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
+//        Ingredient ind = new Ingredient(3,"carrot");
+//        List<String> comments = new ArrayList<>();
+//        comments.add("LGTM!");
+//        List<Ingredient> ingredients = new ArrayList<>();
+//        ingredients.add(ind);
+//        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
         recipes = new ArrayList<>();
-        recipes.add(r1);
+//        recipes.add(r1);
+        user = new User();
 
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
         intent = new Intent(this,MPPickRecipeActivity.class);
+        Intent i = getIntent();
+        String m_id = i.getStringExtra("Meal-ID");
+        if (m_id == ""){
+            Meal empty_meal = new Meal();
+            m_id = user.addMeal(empty_meal,this);
 
+        }
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
+        mpMealRecipeListAdapter.setMid(m_id);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        LoadingDialog dialog = new LoadingDialog(this);
+        user.getRecipesForMeal((MPMealRecipeListAdapter) mpMealRecipeListAdapter,dialog,this);
+
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -64,8 +76,7 @@ public class MPMealRecipeList extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                final Recipe recipe = recipes.get(viewHolder.getAdapterPosition());
-                // delete recipe
+                mpMealRecipeListAdapter.delete(viewHolder.getAdapterPosition());
             }
         });
         setOnAddButtonListener();
@@ -78,8 +89,7 @@ public class MPMealRecipeList extends AppCompatActivity {
 
     private void setOnAddButtonListener() {
         addRecipButton.setOnClickListener(v -> {
-            // pass user id, mealplan index(or which day it is)
-//            intent.putExtra();
+            intent.putExtra("Meal_ID",mpMealRecipeListAdapter.getMid());
             startActivity(intent);
 
         });

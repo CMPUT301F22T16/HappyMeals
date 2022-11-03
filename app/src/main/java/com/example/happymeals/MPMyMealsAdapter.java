@@ -27,8 +27,9 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         @Override
         public void onClick(View v) {
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
+            Meal meal = meals.get(index);
             intent = new Intent(mContext,MPMealRecipeList.class);
-            intent.putExtra("Meal-Index",index);
+            intent.putExtra("Meal-ID",meal.getM_id());
             mContext.startActivity(intent);
         }
     };
@@ -50,8 +51,10 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     @Override
     public void onBindViewHolder(@NonNull MyMealViewHolder holder, int position) {
         Meal meal = meals.get(position);
-        holder.binding.mpMealListTextView1.setText("meal name here");
-        holder.binding.mpMealListTextView2.setText("#of recipes here");
+        double meal_cost = meal.getCost();
+        holder.binding.mpMealListTextView1.setText("meal cost: "+meal_cost);
+        int number_of_recipes = meal.getRecipes().size();
+        holder.binding.mpMealListTextView2.setText(Integer.toString(number_of_recipes)+" recipes");
     }
 
     @Override

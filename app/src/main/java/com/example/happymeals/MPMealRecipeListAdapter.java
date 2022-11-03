@@ -19,14 +19,16 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     private ArrayList<Recipe> recipes;
     private ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     private Context mContext;
+    private String m_id ="";
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
             // TODO: should start activity: View Recipe
-//            Intent intent = new Intent(mContext,MPPickRecipeActivity.class);
-//            intent.putExtra("recipe_index",itemPosition);
-//            mContext.startActivity(intent);
+
+            Intent intent = new Intent(mContext,MPPickRecipeActivity.class);
+            intent.putExtra("Meal_ID",getMid());
+            mContext.startActivity(intent);
         }
     };
 
@@ -50,6 +52,27 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         Recipe recipe = recipes.get(position);
         holder.binding.mpMealRecipeListContentTitle.setText(recipe.getTitle());
 
+    }
+    public void delete(int index){
+        recipes.remove(index);
+    }
+
+
+    public String getMid(){
+        return this.m_id;
+    }
+
+    public void setMid(String m_id){
+        this.m_id = m_id;
+
+    }
+
+    public void clear(){
+        recipes.clear();
+    }
+
+    public void add(Recipe recipe){
+        recipes.add(recipe);
     }
 
     @Override

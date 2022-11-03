@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,11 +17,13 @@ import java.util.Locale;
 public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> recipes;
     private ArrayList<Recipe> arraylist;
+    private ArrayList<Recipe> recipes_buffer;
     private Context context;
     LayoutInflater inflater;
 
     public MPPickRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
+        this.recipes_buffer = new ArrayList<Recipe>(recipes);
         this.recipes = new ArrayList<Recipe>(recipes);
         this.arraylist = new ArrayList<Recipe>(recipes);
         inflater = LayoutInflater.from(this.context);
@@ -29,6 +32,18 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return recipes.size();
+    }
+
+    public void clear(){recipes.clear(); arraylist.clear();}
+
+    public void add(Recipe recipe){recipes.add(recipe); arraylist.add(recipe);}
+
+    public void addToBuffer(int position){
+        recipes_buffer.add(recipes.get(position));
+    }
+
+    public void removeFromBuffer(int position){
+        recipes_buffer.remove(recipes.get(position));
     }
 
     @Override
@@ -50,7 +65,16 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         }
         // Lookup view for data population
         TextView recipeText = v.findViewById(R.id.ml_recipe_list_textView);
-
+        CheckBox checkBox = v.findViewById(R.id.checkBox);
+        if (recipes_buffer.contains(recipes.get(position))){
+            if (!checkBox.isChecked()){
+                checkBox.toggle();
+            }
+        } else{
+            if(checkBox.isChecked()){
+                checkBox.toggle();
+            }
+        }
 
         // Populate the data into the template view using the data object
         recipeText.setText(recipe.getTitle());

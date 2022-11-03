@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
@@ -34,19 +35,26 @@ public class MPMyMealsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mpmy_meals);
         recyclerView = findViewById(R.id.my_meals_recyclerview);
 
+        // back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // User
+        Bundle bundle = getIntent().getExtras();
+        String username = (String) bundle.getSerializable("USER");
+        user = new User(username);
+
+
         //Testing
-        Ingredient ind = new Ingredient(3,"carrot");
-        List<String> comments = new ArrayList<>();
-        comments.add("LGTM!");
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(ind);
-        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
-        List<Recipe> recipes = new ArrayList<>();
-        recipes.add(r1);
-        List<Double> scalings = new ArrayList<>();
-        scalings.add(1.11);
+//        Recipe r1 = new Recipe();
+//        user.addRecipe(r1,this);
+//        List<Recipe> recipes = new ArrayList<>();
+//        recipes.add(r1);
+//        List<Double> scalings = new ArrayList<>();
+//        scalings.add(1.11);
         meals = new ArrayList<>();
-        meals.add(new Meal(recipes,scalings,3.4));
+//        Meal meal = new Meal(recipes,scalings,3.4);
+//        user.addMeal(meal,this);
+//        meals.add(new Meal(recipes,scalings,3.4));
 
         cancel_button = findViewById(R.id.my_meals_cancel);
         finish_button = findViewById(R.id.my_meals_finish);
@@ -57,8 +65,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(myMealsAdapter);
 
-        // testing with firebase
-        user = new User();
         LoadingDialog dialog = new LoadingDialog(this);
         user.getUserMeals((MPMyMealsAdapter) myMealsAdapter,dialog,this);
 
@@ -89,6 +95,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     private void setOnAddButtonListener() {
         add_button.setOnClickListener(v -> {
             // TODO: pass user id, indexed meal
+            intent.putExtra("Meal-ID","");
             startActivity(intent);
 
         });
@@ -99,5 +106,17 @@ public class MPMyMealsActivity extends AppCompatActivity {
             finish();
 
         });
+    }
+
+    // https://stackoverflow.com/questions/14545139/android-back-button-in-the-title-bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

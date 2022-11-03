@@ -2,6 +2,7 @@ package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -18,33 +19,24 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     ListView recipe_list;
     MPPickRecipeListAdapter recipe_adapter;
     ArrayList<Recipe> dataList;
-    ArrayList<Recipe> recipes_buffer;
     SearchView recipe_search_bar;
     Button confirmButton;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mppick_recipe);
+        Intent i = getIntent();
+        String m_id = i.getStringExtra("Meal_ID");
 
         confirmButton = findViewById(R.id.confirm_recipe_selection_button);
-        // mocking recipe list
-        Ingredient ind = new Ingredient(3,"carrot");
-        List<String> comments = new ArrayList<>();
-        comments.add("LGTM!");
-        List<Ingredient> ingredients = new ArrayList<>();
-        recipes_buffer = new ArrayList<>();
-        ingredients.add(ind);
-        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
-        Recipe r2 = new Recipe("fine recipe",1,1,"vst", comments, ingredients);
-        Recipe r3 = new Recipe("tasty recipe",1,1,"vst", comments, ingredients);
-        Recipe r4 = new Recipe("ta",1,1,"vst", comments, ingredients);
-        dataList = new ArrayList<Recipe>();
-        dataList.add(r1);
-        dataList.add(r2);
-        dataList.add(r3);
-        dataList.add(r4);
 
+        dataList = new ArrayList<Recipe>();
+
+
+
+        user = new User();
 
         recipe_list = findViewById(R.id.mp_recipe_list);
         recipe_adapter = new MPPickRecipeListAdapter(this,dataList);
@@ -52,7 +44,8 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         recipe_list.setAdapter(recipe_adapter);
         recipe_search_bar = findViewById(R.id.searchview_recipe);
         recipe_search_bar.setOnQueryTextListener(this);
-
+        LoadingDialog dialog = new LoadingDialog(this);
+        user.getUserRecipesForMeals(recipe_adapter,dialog,this);
         setOnConfirmButtonListener();
         setOnListViewItemListener();
     }
@@ -88,10 +81,9 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
                 CheckBox checkBox = view.findViewById(R.id.checkBox);
                 checkBox.toggle();
                 if(checkBox.isChecked()){
-                    recipes_buffer.add(dataList.get(i));
+                    recipe_adapter.addToBuffer(i);
                 } else {
-
-                    recipes_buffer.remove(dataList.get(i));
+                    recipe_adapter.removeFromBuffer(i);
                 }
 
             }

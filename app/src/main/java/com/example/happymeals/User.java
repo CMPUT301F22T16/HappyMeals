@@ -334,6 +334,74 @@ public class User {
                 });
     }
 
+    public void getUserRecipesForMeals(MPPickRecipeListAdapter adapter, LoadingDialog dialog, Context context) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername());
+
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) doc.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    public void getRecipesForMeal(MPMealRecipeListAdapter adapter, LoadingDialog dialog, Context context) {
+        CollectionReference ref = conn.collection("user_meals");
+        ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("m_id",adapter.getMid())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALS", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve meals", Toast.LENGTH_SHORT);
+                            return;
+                        }
+                        for (QueryDocumentSnapshot doc : value) {
+                            List<String> recipe_ids = (List<String>) doc.get("recipes");
+                            Double cost = (Double) doc.getDouble("cost");
+                            List<Double> scalings = (List<Double>) doc.get("scalings");
+                            List<Recipe> recipes = new ArrayList<>();
+                            getUserRecipesByMeal(recipes, context, recipe_ids,adapter);
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
     /**
      * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes in the recipes {@link List<Recipe>}
      *
@@ -341,7 +409,7 @@ public class User {
      * @param context
      * @param recipe_ids
      */
-    private void getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
+    private List<Recipe> getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
@@ -375,6 +443,55 @@ public class User {
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
                             recipe.setR_id(id);
                             recipes.add(recipe); // Adding the recipe from FireStore
+                        }
+                    }
+                });
+        return recipes;
+    }
+
+    /**
+     * Used to get user recipes with ids in the recipe_ids {@link List<String>}.
+     * Update the recipes through adapter
+     *
+     * @param recipes
+     * @param context
+     * @param recipe_ids
+     * @param adapter
+     */
+    private void getUserRecipesByMeal(List<Recipe> recipes, Context context, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes with ID", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            adapter.add(recipe); // Adding the recipe from FireStore
                         }
                     }
                 });
@@ -430,8 +547,7 @@ public class User {
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
-                            getUserRecipesWithID(recipes, context, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            Meal meal = new Meal(getUserRecipesWithID(recipes, context, recipe_ids), scalings, cost);
                             meals.add(meal);
                         }
                     }
@@ -464,11 +580,10 @@ public class User {
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
-                            getUserRecipesWithID(recipes, context, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            List<Recipe> r = getUserRecipesWithID(recipes, context, recipe_ids);
+                            Meal meal = new Meal(r, scalings, cost);
                             adapter.add(meal);
                         }
-
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -482,12 +597,13 @@ public class User {
      * @param meal    : A meal of type {@link Meal} containing information to be added to the database.
      * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
-    public void addMeal(Meal meal, Context context) {
+    public String addMeal(Meal meal, Context context) {
         HashMap<String, Object> data = meal.getStorable();
         data.put("user", getUsername());
         CollectionReference user_meals = getConn().collection("user_meals");
         String id = store(user_meals, data, "Meal", context);
         meal.setM_id(id);
+        return id;
     }
 
     public void modifyMeal(Meal new_meal, Context context) {

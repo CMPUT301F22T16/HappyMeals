@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", user.getUsername());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

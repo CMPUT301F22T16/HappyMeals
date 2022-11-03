@@ -19,6 +19,12 @@ public class Meal implements Storable {
         this.cost = cost;
     }
 
+    public Meal(){
+        this.recipes = new ArrayList<>();
+        scalings = new ArrayList<>();
+        cost = 0;
+    }
+
     public List<Recipe> getRecipes() {
         return this.recipes;
     }
@@ -37,6 +43,10 @@ public class Meal implements Storable {
 
     public void setM_id(String id) {
         this.m_id = id;
+    }
+
+    public void add_recipes(Recipe r){
+        recipes.add(r);
     }
 
     @Override
