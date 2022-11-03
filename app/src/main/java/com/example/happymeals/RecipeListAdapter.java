@@ -71,7 +71,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         view_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //TODO start ViewRecipeActivity
             }
         });
 
