@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MealPlan implements Storable{
+public class MealPlan implements Storable {
     private final List<Meal> breakfast;
     private final List<Meal> lunch;
     private final List<Meal> dinner;
