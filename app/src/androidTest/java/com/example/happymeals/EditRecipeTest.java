@@ -31,6 +31,8 @@ public class EditRecipeTest {
     @Before
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        solo.assertCurrentActivity("Wrong Activity", IngredientActivity.class);
+
     }
     /**
      * Gets the Activity

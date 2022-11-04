@@ -35,7 +35,7 @@ public class addNewIngredient extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_ingredient);
 
-        this.setTitle("Add/Edit ingredient");
+        this.setTitle("Add ingredient");
 
         // This line sets the return button to home screen.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
