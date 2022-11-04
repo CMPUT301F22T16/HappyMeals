@@ -43,7 +43,6 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     EditText recipePrepTimeEditText;
     EditText recipeNumServEditText;
     EditText recipeCategoryEditText;
-//    EditText recipeCommentEditText;
 
     ActivityResultLauncher<Intent> add_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -85,12 +84,13 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         recipePrepTimeEditText = findViewById(R.id.recipe_prep_time_edit_text);
         recipeNumServEditText = findViewById(R.id.recipe_num_serv_edit_text);
         recipeCategoryEditText = findViewById(R.id.recipe_category_edit_text);
-//
-        String r_id = intent.getStringExtra("id");
+
         recipeTitleEditText.setText(intent.getStringExtra("title"));
         recipePrepTimeEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("preparation_time", 0)));
         recipeNumServEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("num_servings", 0)));
         recipeCategoryEditText.setText(intent.getStringExtra("category"));
+
+
 
         ingredient_data_list = (ArrayList<Ingredient>) intent.getSerializableExtra("ingredients");
 
@@ -123,7 +123,6 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("id", r_id);
                 intent.putExtra("title", recipeTitleEditText.getText().toString());
                 intent.putExtra("prep_time", Integer.parseInt(recipePrepTimeEditText.getText().toString()));
                 intent.putExtra("num_serv", Integer.parseInt(recipeNumServEditText.getText().toString()));
@@ -143,18 +142,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
-//            String descExtra = result.getData().getStringExtra("desc");
-//            String categoryExtra = result.getData().getStringExtra("category");
-//            int amountExtra = result.getData().getIntExtra("amount", 0);
-//            double costExtra = result.getData().getDoubleExtra("cost", 0.00);
-//            String locRefExtra = result.getData().getStringExtra("locRef");
-            String categoryExtra = result.getData().getStringExtra("category");
             String descriptionExtra = result.getData().getStringExtra("description");
             Integer amountExtra = result.getData().getIntExtra("amount", 0);
-            Double costExtra = result.getData().getDoubleExtra("cost", 0.00);
-            Date dateExtra = new Date(result.getData().getLongExtra("date", -1));
-            String loc = result.getData().getStringExtra("loc");
-            ingredient_data_list.add(new Ingredient(categoryExtra, descriptionExtra, amountExtra, costExtra, dateExtra, loc));
+            ingredient_data_list.add(new Ingredient(amountExtra, descriptionExtra));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(EditRecipe.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();
@@ -217,7 +207,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             Ingredient item = ingredient_data_list.get(position);
             intent.putExtra("desc", item.getDescription());
             intent.putExtra("loc", item.getLoc());
-//            intent.putExtra("date", item.getDate().getTime());
+            intent.putExtra("date", item.getDate().getTime());
             intent.putExtra("category", item.getCategory());
             intent.putExtra("amount", item.getAmount());
             intent.putExtra("cost", item.getCost());

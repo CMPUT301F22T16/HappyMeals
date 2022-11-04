@@ -26,7 +26,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
 
     String desc = null;
     String loc = null;
-    Date date = new Date();
+    Date date;
     String category = null;
     Integer amount = null;
     Double cost = null;
@@ -49,8 +49,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
         Intent intent = getIntent();
         desc = intent.getStringExtra("desc");
         loc = intent.getStringExtra("loc");
-//        long date_long = intent.getLongExtra("date", new Date().getTime());
-//        date.setTime(date_long);
+        date = new Date(intent.getLongExtra("date", -1));
         category = intent.getStringExtra("category");
         amount = intent.getIntExtra("amount", 0);
         cost = intent.getDoubleExtra("cost", 0.00);

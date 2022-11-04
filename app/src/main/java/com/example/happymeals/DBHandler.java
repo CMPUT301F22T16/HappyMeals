@@ -45,7 +45,7 @@ public class DBHandler {
 
     //TEMPORARY CONSTRUCTOR USED ONLY FOR HALFWAY CHECKPOINT
     public DBHandler() {
-        username = "Guest"; //
+        username = "junye"; //
         conn = FirebaseFirestore.getInstance();
     }
 
