@@ -21,7 +21,7 @@ import java.util.Arrays;
  * and it will return the newly added/edited parameters back to MainActivity.
  */
 public class addNewIngredient extends AppCompatActivity {
-    Spinner ingredientLocationSpinner;
+    EditText ingredientLocation;
     Button confirmAdd;
     Spinner ingredientCategorySpinner;
     EditText ingredientDescription;
@@ -45,16 +45,17 @@ public class addNewIngredient extends AppCompatActivity {
         ingredientCount = findViewById(R.id.ingredientCount);
         ingredientUnitCost = findViewById(R.id.ingredientUnitCost);
         ingredientBestBefore = findViewById(R.id.ingredientBestbefore);
-        ingredientLocationSpinner = findViewById(R.id.ingredientLocation);
+        ingredientLocation = findViewById(R.id.ingredientLocation);
         confirmAdd = findViewById(R.id.confirm_button);
 
+
+//        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Pantry", "Freezer", "Fridge"));
+//        ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, locations);
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
-        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Pantry", "Freezer", "Fridge"));
-        ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, locations);
         ArrayAdapter<String> categoryAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, categories);
 
-        ingredientLocationSpinner.setAdapter(locationAdapt);
-        ingredientLocationSpinner.setPrompt("Ingredient location");
+//        ingredientLocationSpinner.setAdapter(locationAdapt);
+//        ingredientLocationSpinner.setPrompt("Ingredient location");
         ingredientCategorySpinner.setAdapter(categoryAdapt);
         ingredientCategorySpinner.setPrompt("Ingredient category");
 
@@ -66,7 +67,7 @@ public class addNewIngredient extends AppCompatActivity {
             String category = intent.getStringExtra("category");
             String description = intent.getStringExtra("description");
             int count = intent.getIntExtra("count", -1);
-            int unitCost = intent.getIntExtra("unit cost", -1);
+            double unitCost = intent.getDoubleExtra("unit cost", -1);
             int year = intent.getIntExtra("year", -1);
             int month = intent.getIntExtra("month", -1);
             int day = intent.getIntExtra("day", -1);
@@ -76,8 +77,8 @@ public class addNewIngredient extends AppCompatActivity {
             ingredientDescription.setText(description);
             ingredientCount.setText(String.valueOf(count));
             ingredientUnitCost.setText(String.valueOf(unitCost));
-            ingredientLocationSpinner.setSelection(locations.indexOf(location));
-            ingredientBestBefore.updateDate(year, month - 1, day);
+            ingredientLocation.setText(location);
+            ingredientBestBefore.updateDate(year, month, day);
         }
         confirmAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,13 +92,18 @@ public class addNewIngredient extends AppCompatActivity {
                 double unitCost = -1;
 
                 int year = ingredientBestBefore.getYear();
-                int month = ingredientBestBefore.getMonth() + 1;
+                int month = ingredientBestBefore.getMonth();
                 int day = ingredientBestBefore.getDayOfMonth();
-                String location = ingredientLocationSpinner.getSelectedItem().toString();
+                String location = ingredientLocation.getText().toString();
 
                 if (description.isEmpty()) {
                     ingredientDescription.requestFocus();
                     ingredientDescription.setError("Please provide the ingredient description.");
+                }
+
+                if (location.isEmpty()){
+                    ingredientLocation.requestFocus();
+                    ingredientLocation.setError("Please provide the ingredient location.");
                 }
 
                 // Set corresponding error messages if a text box is empty.
@@ -123,7 +129,7 @@ public class addNewIngredient extends AppCompatActivity {
                     }
                 }
 
-                if (countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
+                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
                     Intent intent = new Intent(addNewIngredient.this, MainActivity.class);
 
                     intent.putExtra("mode", mode);
