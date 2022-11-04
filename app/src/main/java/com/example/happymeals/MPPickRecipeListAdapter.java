@@ -14,6 +14,7 @@ import java.util.Locale;
 
 /**
  * Custom adapter for recipe lists
+ * It keeps the pick recipe list up to date
  */
 public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> recipes;
