@@ -34,6 +34,7 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
             intent = new Intent(mContext, MPMyMealsActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("MEALPLAN", mealPlan);
+            bundle.putSerializable("Is-From-MealPlan",true);
             bundle.putSerializable("MEAL", itemPosition);
             bundle.putSerializable("DAY", dayIndex);
             bundle.putSerializable("USER", userName);

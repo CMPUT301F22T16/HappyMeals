@@ -128,7 +128,7 @@ public class MPMealListActivity extends AppCompatActivity {
             mealIndex++;
             intent = new Intent(this, MPMyMealsActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("Is-From-MealPan",true);
+            bundle.putSerializable("Is-From-MealPlan",true);
             bundle.putSerializable("MEALPLAN", mealPlan);
             bundle.putSerializable("MEAL", mealIndex);
             bundle.putSerializable("DAY", dayIndex);

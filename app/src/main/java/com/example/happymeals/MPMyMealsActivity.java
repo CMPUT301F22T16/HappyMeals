@@ -62,7 +62,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         // User
         Bundle bundle = getIntent().getExtras();
         userName = (String) bundle.getSerializable("USER");
-        Boolean is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPan");
+        Boolean is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPlan");
         if (is_from_meal_plan) {
             mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
             dayIndex = (int) bundle.getSerializable("DAY");
