@@ -5,7 +5,7 @@ public class User {
 
     //TEMPORARY TO BE ONLY USED FOR HALFWAY CHECKPOINT
     public User() {
-        this.username = "Zoey";
+        this.username = "Guest";
     }
 
     public User(String username) {
