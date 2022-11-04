@@ -28,22 +28,75 @@ import com.example.happymeals.Ingredient;
 import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
 
+/**
+ * This class creates the EditRecipe Activity for the user to edit a recipe
+ * @author John Yu
+ */
 public class EditRecipe extends AppCompatActivity implements RecyclerViewInterface {
 
+    /**
+     * This variable stores the button to pick a new image for the recipe
+     */
     Button recipe_img_picker_btn;
+
+    /**
+     * This variable stores the recyclerview that displays the ingredients contained in the recipe
+     */
     RecyclerView recipe_ingredient_list;
+
+    /**
+     * This variable stores the RecyclerView Adapter to displays the ingredients in the RecyclerView
+     */
     RecipeIngredientAdapter ingredient_adapter;
+
+    /**
+     * This variable stores the data list of ingredients
+     */
     ArrayList<Ingredient> ingredient_data_list;
+
+    /**
+     * This is a button for the user to pick a new ingredient
+     */
     Button pick_new_ingredient_btn;
+
+    /**
+     * This is a button to submit the changes back to the parent activity which is {@link com.example.happymeals.RecipeListActivity}
+     */
     Button recipe_submit_btn;
+
+    /**
+     * This variable stores the photograph of the recipe
+     */
     Uri selected_img;
+
+    /**
+     * This variable keeps track of the ingredient index position that the user has selected
+     */
     int selection = -1;
 
+    /**
+     * This is an EditText where the user can edit the title of their recipe
+     */
     EditText recipeTitleEditText;
+
+    /**
+     * This is an EditText where the user can edit the preparation time of their recipe
+     */
     EditText recipePrepTimeEditText;
+
+    /**
+     * This is an EditText where the user can edit the number of servings of their recipe
+     */
     EditText recipeNumServEditText;
+
+    /**
+     * This is an EditText where the user can edit the category of their recipe
+     */
     EditText recipeCategoryEditText;
 
+    /**
+     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeAddIngredient} class.
+     */
     ActivityResultLauncher<Intent> add_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -51,6 +104,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         }
     });
 
+    /**
+     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeEditIngredient} class
+     */
     ActivityResultLauncher<Intent> edit_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -58,6 +114,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         }
     });
 
+    /**
+     * This creates an ActivityResultLauncher when launched will open a gallery for the user to select their image.
+     */
     ActivityResultLauncher<Intent> add_img_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {

@@ -28,10 +28,25 @@ import com.example.happymeals.RecipeListAdapter;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * This class creates an Activity that allows the user to add an ingredient to their recipe
+ * @author John Yu
+ */
 public class RecipeAddIngredient extends AppCompatActivity {
 
+    /**
+     * This EditText lets the user specify the ingredient description
+     */
     EditText recipe_add_ingredient_desc;
+
+    /**
+     * This EditText lets the user specify the ingredient amount
+     */
     EditText recipe_add_ingredient_amount;
+
+    /**
+     * This button lets the user submit their new ingredient
+     */
     Button submit_btn;
 
     @Override

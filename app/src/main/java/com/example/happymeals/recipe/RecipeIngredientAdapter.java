@@ -15,10 +15,26 @@ import com.example.happymeals.R;
 
 import java.util.ArrayList;
 
+/**
+ * This class is the RecyclerViewAdapter that displays Ingredients in the {@link EditRecipe} class.
+ * @author John Yu
+ */
 public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientAdapter.MyViewHolder> {
 
+    /**
+     * This interface is here so that I can invoke the OnItemClick method in the {@link RecipeIngredientAdapter} class
+     * and define the implementation in the {@link EditRecipe} class.
+     */
     private final RecyclerViewInterface recyclerViewInterface;
+
+    /**
+     * This stores the context
+     */
     private Context context;
+
+    /**
+     * This stores an arraylist of ingredients
+     */
     private ArrayList<Ingredient> ingredients;
 
     public RecipeIngredientAdapter(Context context, ArrayList<Ingredient> ingredients, RecyclerViewInterface recyclerViewInterface) {
@@ -47,8 +63,19 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * This TextView displays the ingredient description
+         */
         TextView desc;
+
+        /**
+         * This ImageButton allows the user to delete the ingredient
+         */
         ImageButton deleteBtn;
+
+        /**
+         * This ImageButton allows the user to edit the ingredient
+         */
         ImageButton editBtn;
 
         public MyViewHolder(@NonNull View itemView) {
