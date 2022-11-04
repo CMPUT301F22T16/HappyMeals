@@ -110,7 +110,7 @@ public class ViewIngredientFragment extends DialogFragment {
         return builder
                 .setView(view)
                 .setTitle("Food detail")
-                .setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String category = thisCategory.getSelectedItem().toString();
@@ -186,7 +186,7 @@ public class ViewIngredientFragment extends DialogFragment {
                         //startActivity(intent);
                     }
                 })
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         user.deleteIngredient(thisIngredient, context);

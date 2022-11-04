@@ -36,17 +36,17 @@ public class IngredientAdaptor extends ArrayAdapter<Ingredient> {
         int month = ingredient.getMonth()+1;
         int day = ingredient.getDay();
         // Set the values for display.
-        description.setText("Name: " + ingredient.getDescription());
+        description.setText(ingredient.getDescription());
         if (ingredient.getMonth() < 9){
             if (ingredient.getDay() < 9){
-                bestbefore.setText("Bestbefore date: " + ingredient.getYear() + "-0" + month + "-0" + day);
+                bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-0" + month + "-0" + day);
             } else {
-                bestbefore.setText("Bestbefore date: " + ingredient.getYear() + "-0" + month + "-" + day);
+                bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-0" + month + "-" + day);
             }
         } else {
-            bestbefore.setText("Bestbefore date: " + ingredient.getYear() + "-" + month + "-" + day);
+            bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-" + month + "-" + day);
         }
-        count.setText("Count: " + String.valueOf(ingredient.getAmount()));
+        count.setText("Amount: " + String.valueOf(ingredient.getAmount()));
 
         System.out.println("Here");
         System.out.println(ingredient.getCost());

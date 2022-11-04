@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
 
 
     <LinearLayout
@@ -16,12 +18,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Category"
-            android:paddingLeft="24dp"
+
             android:textSize="20dp" />
 
         <Spinner
             android:id="@+id/category"
-            android:layout_width="220dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:spinnerMode="dropdown" />
@@ -37,11 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Description"
-            android:paddingLeft="24dp"
             android:textSize="20dp" />
         <EditText
             android:id="@+id/description"
-            android:layout_width="220dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="EditText"
             android:textSize="20dp" />
@@ -58,11 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Location"
-            android:paddingLeft="24dp"
             android:textSize="20dp" />
         <EditText
             android:id="@+id/location"
-            android:layout_width="220dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="EditText"
             android:textSize="20dp" />
@@ -78,13 +78,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="24dp"
             android:text="Amount"
             android:textSize="20dp" />
 
         <EditText
             android:id="@+id/count"
-            android:layout_width="220dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="EditText"
             android:textSize="20dp"
@@ -101,11 +100,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Unit cost"
-            android:paddingLeft="24dp"
             android:textSize="20dp" />
         <EditText
             android:id="@+id/unitcost"
-            android:layout_width="220dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="EditText"
             android:textSize="20dp"
@@ -122,7 +120,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Bestbefore date"
-            android:paddingLeft="24dp"
             android:textSize="20dp" />
 
     </LinearLayout>
