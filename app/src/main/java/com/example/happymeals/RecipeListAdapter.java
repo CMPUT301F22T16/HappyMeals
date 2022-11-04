@@ -52,13 +52,20 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         category_text.setText("Category: " + category);
 
         // Adding on click listeners
-
+        FloatingActionButton deleteButton = convertView.findViewById(R.id.recipe_card_delete);
         Button viewButton = convertView.findViewById(R.id.recipe_card_view);
 
         viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 recipeListInterface.onItemClick(position, "view");
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeListInterface.onItemClick(position, "delete");
             }
         });
 

@@ -20,6 +20,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
     private ListView recipe_list_view;
     private List<Recipe> recipes;
     private RecipeListAdapter recipeAdapter;
+    DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         // Get the current user
         Bundle bundle = getIntent().getExtras();
         String username = (String) bundle.getSerializable("USER");
-        DBHandler db = new DBHandler(username);
+        db = new DBHandler(username);
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,6 +69,11 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             bundle.putSerializable("RECIPE", recipes.get(position));
             intent.putExtras(bundle);
             startActivity(intent);
+        }
+
+        if (op == "delete") {
+            db.removeRecipe(recipeAdapter.getItem(position), this);
+            recipeAdapter.notifyDataSetChanged();
         }
     }
 }
