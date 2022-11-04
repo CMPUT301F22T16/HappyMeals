@@ -19,6 +19,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This Activity allows user to pick recipes to add to the meal
+ */
 public class MPPickRecipeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
     ListView recipe_list;
     MPPickRecipeListAdapter recipe_adapter;
@@ -101,12 +104,14 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         });
     }
 
+    /**
+     * Set an listener on the items of the list
+     * When clicked, either add or remove from the buffer
+     */
     private void setOnListViewItemListener() {
         recipe_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: sync check box:https://stackoverflow.com/questions/5417339/android-listview-with-checkbox-and-all-clickable
-                // TODO: add selected recipes to a buffer list
                 CheckBox checkBox = view.findViewById(R.id.checkBox);
                 checkBox.toggle();
                 if(checkBox.isChecked()){

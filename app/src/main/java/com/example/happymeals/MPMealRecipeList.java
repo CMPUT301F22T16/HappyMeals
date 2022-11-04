@@ -21,6 +21,10 @@ import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity allows user to view all the recipes from the meal,
+ * and also allows user to add new recipes
+ */
 public class MPMealRecipeList extends AppCompatActivity {
 
     ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;

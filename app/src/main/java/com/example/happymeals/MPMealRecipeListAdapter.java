@@ -15,7 +15,11 @@ import com.example.happymeals.databinding.MealRecipeListContentBinding;
 
 import java.util.ArrayList;
 
-
+/**
+ * This custom adapter keeps meal recipe list up to date
+ * It is also responsible for reacting to item click
+ * within the list
+ */
 public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeListAdapter.MRLViewHolder>{
     private ArrayList<Recipe> recipes;
     private ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
