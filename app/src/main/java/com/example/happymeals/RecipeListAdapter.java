@@ -55,9 +55,10 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         delete_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                curUser.removeRecipe(recipes.get(position), context);
                 recipes.remove(position);
                 notifyDataSetChanged();
-                curUser.removeRecipe(recipes.get(position), context);
+
             }
         });
 
