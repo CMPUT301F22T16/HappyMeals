@@ -79,10 +79,10 @@ public class ViewIngredientFragment extends DialogFragment {
 //        cityName = view.findViewById(R.id.city_name_editText);
 //        provinceName = view.findViewById(R.id.province_editText);
         thisCategory = view.findViewById(R.id.category);
-        thisDescription = view.findViewById(R.id.description);
-        thisLocation = view.findViewById(R.id.location);
-        thisAmount = view.findViewById(R.id.count);
-        thisUnitCost = view.findViewById(R.id.unitcost);
+        thisDescription = view.findViewById(R.id.description_frag);
+        thisLocation = view.findViewById(R.id.location_frag);
+        thisAmount = view.findViewById(R.id.count_frag);
+        thisUnitCost = view.findViewById(R.id.unitcost_frag);
         thisBestBefore = view.findViewById(R.id.ingredientBestbefore);
 
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));

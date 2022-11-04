@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1111111111111111" />
+        <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/activity_ingredient.xml" value="0.22916666666666666" />
+        <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/view_ingredient_fragment_layout.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/drawable/dotted.xml" value="0.303" />
         <entry key="app/src/main/res/drawable/ic_chevron_left_48px.xml" value="0.4435" />
         <entry key="app/src/main/res/layout/activity_edit_recipe.xml" value="0.11770157553290084" />
