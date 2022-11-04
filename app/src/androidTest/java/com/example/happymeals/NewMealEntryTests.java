@@ -34,6 +34,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class NewMealEntryTests {
@@ -86,9 +87,8 @@ public class NewMealEntryTests {
     }
 
     /**
-     * This test ensure that clicking on
-     * Add button direct user to the right
-     * activity
+     * This test ensure that user be able to create
+     * a new meal with selecting meal to it
      */
     @Test
     public void testCreateNewMeal() throws InterruptedException {
@@ -114,23 +114,27 @@ public class NewMealEntryTests {
         solo.waitForText("Testing Recipe");
 
         // ensure the meal was added to meal list
-        Button finishButton = (Button) solo.getView(R.id.mpmeal_recipe_list_finish);
-        solo.clickOnView(finishButton);
-        solo.waitForActivity(MPMyMealsActivity.class);
         CollectionReference user_meals = conn.collection("user_meals");
-
-        Query query = user_meals.whereEqualTo("title","Testing Recipe" );
+        List<String> recipe_ids = new ArrayList<>();
+        recipe_ids.add(recipe_id);
+        Query query = user_meals.whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 assertTrue(task.isSuccessful());
                 for (DocumentSnapshot document : task.getResult()) {
-                    meal_id = document.getId();
                     assertTrue(document.exists());
                 }
 
             }
         });
+        Button cancelButton = (Button) solo.getView(R.id.mpmeal_recipe_list_cancel);
+        solo.clickOnView(cancelButton);
+        solo.clickOnText("OK");
+        solo.waitForActivity(MPMyMealsActivity.class);
+
+        Button finishButton = (Button) solo.getView(R.id.my_meals_finish);
+        solo.clickOnView(finishButton);
     }
 
     @After
@@ -155,20 +159,6 @@ public class NewMealEntryTests {
                         Log.d("delete", "Data could not be deleted!" + e.toString());
                     }
                 });
-//        user_meals.document(meal_id)
-//                .delete()
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//                        Log.d("delete", "Data has been deleted successfully!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d("delete", "Data could not be deleted!" + e.toString());
-//                    }
-//                });
     }
 
 }
