@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import static java.sql.Types.NULL;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -45,17 +47,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
 
         //Testing
-//        Recipe r1 = new Recipe();
-//        user.addRecipe(r1,this);
-//        List<Recipe> recipes = new ArrayList<>();
-//        recipes.add(r1);
-//        List<Double> scalings = new ArrayList<>();
-//        scalings.add(1.11);
         meals = new ArrayList<>();
-//        Meal meal = new Meal(recipes,scalings,3.4);
-//        user.addMeal(meal,this);
-//        meals.add(new Meal(recipes,scalings,3.4));
-
         cancel_button = findViewById(R.id.my_meals_cancel);
         finish_button = findViewById(R.id.my_meals_finish);
         add_button = findViewById(R.id.my_meals_add_button);
@@ -89,15 +81,17 @@ public class MPMyMealsActivity extends AppCompatActivity {
     private void setOnCancelButtonListener() {
         cancel_button.setOnClickListener(v -> {
             // maybe pop up that all changes will not be saved. sure to exist? pop up alert
-            finish();
+            myMealsAdapter.notifyDataSetChanged();
+//            finish();
         });
     }
     private void setOnAddButtonListener() {
         add_button.setOnClickListener(v -> {
             // TODO: pass user id, indexed meal
-            intent.putExtra("Meal-ID","");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("MEAL", NULL);
+            intent.putExtras(bundle);
             startActivity(intent);
-
         });
     }
     private void setOnFinishButtonListener() {
