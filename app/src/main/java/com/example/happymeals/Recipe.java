@@ -1,11 +1,12 @@
 package com.example.happymeals;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Recipe implements Storable {
+public class Recipe implements Storable, Serializable {
     private String r_id = null; // All ids' are null if not fetched
     private String title;
     private int preparation_time;
@@ -74,7 +75,7 @@ public class Recipe implements Storable {
 
         List<String> ingredient_ids = new ArrayList<>();
         for (Ingredient ingredient : this.ingredients) {
-            ingredient_ids.add("/user_ingredients/" + ingredient.getId());
+            ingredient_ids.add(ingredient.getId());
         }
 
         data.put("ingredients", ingredient_ids);

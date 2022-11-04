@@ -3,11 +3,12 @@ package com.example.happymeals;
 import com.example.happymeals.Storable;
 import com.example.happymeals.Recipe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Meal implements Storable {
+public class Meal implements Storable, Serializable {
     private final List<Recipe> recipes;
     private final List<Double> scalings;
     private final double cost;

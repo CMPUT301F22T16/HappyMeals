@@ -443,7 +443,7 @@ public class User {
      * @param adapter
      * @param dialog
      */
-    public void getUserMeals(List<Meal> adapter, LoadingDialog dialog, Context context) {
+    public void getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
 
         CollectionReference ref = conn.collection("user_meals");
         ref
@@ -459,17 +459,19 @@ public class User {
 
                         adapter.clear();
                         for (QueryDocumentSnapshot doc : value) {
+                            String m_id = doc.getId();
+
                             List<String> recipe_ids = (List<String>) doc.get("recipes");
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
-                            System.out.println("Recipe IDS: " + recipe_ids);
                             getUserRecipesWithID(recipes, context, recipe_ids);
                             Meal meal = new Meal(recipes, scalings, cost);
+                            meal.setM_id(m_id);
                             adapter.add(meal);
                         }
 
-//                        adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }
@@ -542,6 +544,7 @@ public class User {
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+                            mealPlan.setUmp_id(ump_id);
                             adapter.add(mealPlan);
                         }
 

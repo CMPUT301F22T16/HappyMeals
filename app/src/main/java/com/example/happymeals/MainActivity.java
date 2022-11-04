@@ -30,11 +30,6 @@ public class MainActivity extends AppCompatActivity {
         mealButton = findViewById(R.id.meal_button);
         mealplanButton = findViewById(R.id.mealplan_button);
         recipeButton = findViewById(R.id.recipe_button);
-
-        List<Meal> testlist=  new ArrayList<>();
-        user.getUserMeals(testlist, new LoadingDialog(MainActivity.this), MainActivity.this);
-
-
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,12 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(testlist);
-                Meal meal = testlist.get(0);
-                List<Recipe> recipes = meal.getRecipes();
-                Recipe recipe = recipes.get(0);
-                System.out.println(recipe.getTitle());
-                System.out.println(recipes);
+
             }
         });
 

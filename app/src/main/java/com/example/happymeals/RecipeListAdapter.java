@@ -1,6 +1,7 @@
 package com.example.happymeals;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -69,12 +70,14 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             }
         });
 
-        view_recipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO start ViewRecipeActivity
-            }
-        });
+//        view_recipe.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //TODO start ViewRecipeActivity
+//                Intent intent = new Intent(context, ViewRecipeActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         return convertView;
     }
