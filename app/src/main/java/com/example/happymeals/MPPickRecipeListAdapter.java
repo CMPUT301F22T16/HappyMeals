@@ -20,28 +20,8 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> arraylist;
     private ArrayList<Recipe> recipes_buffer;
     private ArrayList<Recipe> existing_recipes;
-    private double meal_cost;
     private Context context;
     LayoutInflater inflater;
-    private List<Double> meal_scalings;
-
-
-    public List<Double> getMeal_scalings() {
-        return meal_scalings;
-    }
-
-    public void setMeal_scalings(List<Double> meal_scalings) {
-        this.meal_scalings = meal_scalings;
-    }
-
-
-    public double getMeal_cost() {
-        return meal_cost;
-    }
-
-    public void setMeal_cost(double meal_cost) {
-        this.meal_cost = meal_cost;
-    }
 
 
     /**
@@ -51,10 +31,9 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
      */
     public MPPickRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
-        this.recipes_buffer = new ArrayList<>();
+        this.recipes_buffer = new ArrayList<Recipe>(recipes);
         this.recipes = new ArrayList<>();
         this.existing_recipes = new ArrayList<Recipe>(recipes);
-        this.meal_scalings = new ArrayList<Double>();
         this.arraylist = new ArrayList<Recipe>(recipes);
         inflater = LayoutInflater.from(this.context);
     }
@@ -72,9 +51,6 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
      */
     public ArrayList<Recipe> getAllRecipes(){
         ArrayList<Recipe> all_recipes = new ArrayList<>();
-        for (Recipe r :existing_recipes){
-            all_recipes.add(r);
-        }
         for (Recipe r : recipes_buffer) {
             all_recipes.add(r);
         }
@@ -94,7 +70,15 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     }
 
     public void removeFromBuffer(int position){
-        recipes_buffer.remove(recipes.get(position));
+        Recipe r = recipes.get(position);
+        int i = 0;
+        for (Recipe recipe : recipes_buffer){
+            if(recipe.get_r_id().equals(r.get_r_id())){
+                break;
+            }
+            i++;
+        }
+        recipes_buffer.remove(i);
     }
 
     @Override
@@ -117,7 +101,7 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         // Lookup view for data population
         TextView recipeText = v.findViewById(R.id.ml_recipe_list_textView);
         CheckBox checkBox = v.findViewById(R.id.checkBox);
-        if (recipes_buffer.contains(recipes.get(position)) || existing_recipes.contains(recipes.get(position))){
+        if (isAlreadyInBuffer(recipe)){
             if (!checkBox.isChecked()){
                 checkBox.toggle();
             }
@@ -130,6 +114,24 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         // Populate the data into the template view using the data object
         recipeText.setText(recipe.getTitle());
         return v;
+    }
+
+    /**
+     * Determines if recipe already exist in the meal's
+     * recipe list
+     * @param r
+     * @return ture if this recipe is already added to the meal
+     * false otherwise
+     */
+    public boolean isAlreadyInBuffer(Recipe r){
+        for (Recipe recipe :recipes_buffer) {
+            String a = recipe.get_r_id();
+            String b = r.get_r_id();
+            if (a.equals(b)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -150,8 +152,5 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         }
         notifyDataSetChanged();
     }
-
-
-
 
 }

@@ -1,19 +1,20 @@
 package com.example.happymeals;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 
@@ -26,6 +27,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     MPMealRecipeListAdapter mpMealRecipeListAdapter;
 
     List<Recipe> recipes;
+    List<Recipe> recipes_old;
     Button addRecipButton;
     Button cancelButton;
     Button finishButton;
@@ -35,6 +37,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Meal meal;
     Context context;
     ActivityResultLauncher<Intent> activityLauncher;
+    boolean is_new_meal;
 
 
     @Override
@@ -50,26 +53,30 @@ public class MPMealRecipeList extends AppCompatActivity {
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
 
         recipes = new ArrayList<>();
+        recipes_old = new ArrayList<>();
 
         // set up users
         dbHandler = new DBHandler();
 
 
-
         // get the meal object passed in
-        Bundle bundle  = getIntent().getExtras();
-        boolean is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
+        Bundle bundle = getIntent().getExtras();
+        is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
 
-        if (is_new_meal){
+        if (is_new_meal) {
             meal = new Meal();
-            dbHandler.addMeal(meal,this);
+            dbHandler.addMeal(meal, this);
         } else {
             meal = (Meal) bundle.getSerializable("MEAL");
             recipes = meal.getRecipes();
         }
+        // keeps a copy of the recipes
+        for (Recipe r : recipes){
+            recipes_old.add(r);
+        }
 
         // set up adapter
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes,dbHandler);
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes, dbHandler);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         LoadingDialog dialog = new LoadingDialog(this);
@@ -85,8 +92,7 @@ public class MPMealRecipeList extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int item_index = viewHolder.getAdapterPosition();
                 mpMealRecipeListAdapter.delete(item_index);
-                meal.removeRecipe(item_index); // Be catious of this when implement sort feature
-                dbHandler.modifyMeal(meal,context);
+                dbHandler.modifyMeal(meal, context);
             }
         });
 
@@ -119,7 +125,7 @@ public class MPMealRecipeList extends AppCompatActivity {
 
     private void setOnAddButtonListener() {
         addRecipButton.setOnClickListener(v -> {
-            intent = new Intent(this,MPPickRecipeActivity.class);
+            intent = new Intent(this, MPPickRecipeActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("MEAL", meal);
             intent.putExtras(bundle);
@@ -128,17 +134,53 @@ public class MPMealRecipeList extends AppCompatActivity {
         });
     }
 
+    /**
+     * On cancel, we discard the changes we made
+     */
     private void setOnCancelButtonListener() {
         cancelButton.setOnClickListener(v -> {
-            // TODO: do we need this?
-//            finish();
-            mpMealRecipeListAdapter.notifyDataSetChanged();
+            if(recipes.isEmpty() && is_new_meal) {
+                dbHandler.removeMeal(meal, context);
+                finish();
+            }
+            showAlertOnCancel();
         });
+    }
+
+    /**
+     * build an alert dialog on cancel
+     * code taken from David Hedlund's answer from here:
+     * https://stackoverflow.com/questions/2115758/how-do-i-display-an-alert-dialog-on-android
+     */
+    public void showAlertOnCancel(){
+        new AlertDialog.Builder(context)
+                .setTitle("Discard changes")
+                .setMessage("Changes will not be saved. Are you sure to proceed?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        if (is_new_meal){
+                            dbHandler.removeMeal(meal,context);
+                        } else {
+                            meal.setRecipes(recipes_old);
+                            dbHandler.modifyMeal(meal,context);
+                        }
+                        mpMealRecipeListAdapter.notifyDataSetChanged();
+                        finish();
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
-            // TODO: add all the recipes to the meal,(modify meal), or insert the newly created meal
             finish();
 
         });
