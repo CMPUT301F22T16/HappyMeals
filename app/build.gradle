@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation platform('com.google.firebase:firebase-bom:31.0.1')
     implementation 'com.google.firebase:firebase-analytics'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
 
 }
