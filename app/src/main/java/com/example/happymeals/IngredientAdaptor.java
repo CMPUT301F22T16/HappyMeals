@@ -33,19 +33,24 @@ public class IngredientAdaptor extends ArrayAdapter<Ingredient> {
         TextView count = (TextView) convertView.findViewById(R.id.count);
         TextView unitcost = (TextView) convertView.findViewById(R.id.unitcost);
 
+        int month = ingredient.getMonth()+1;
+        int day = ingredient.getDay();
         // Set the values for display.
-        description.setText("Name: " + ingredient.getDescription());
-        if (ingredient.getMonth() < 10){
-            if (ingredient.getDay() < 10){
-                bestbefore.setText("Bestbefore date: " + ingredient.getYear() + "-0" + ingredient.getMonth() + "-0" + ingredient.getDay());
+        description.setText(ingredient.getDescription());
+        if (ingredient.getMonth() < 9){
+            if (ingredient.getDay() < 9){
+                bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-0" + month + "-0" + day);
             } else {
-                bestbefore.setText("Bestbefore date: " + ingredient.getYear() + "-0" + ingredient.getMonth() + "-" + ingredient.getDay());
+                bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-0" + month + "-" + day);
             }
         } else {
-            bestbefore.setText("Bestbefore date: " + ingredient.getYear() + "-" + ingredient.getMonth() + "-" + ingredient.getDay());
+            bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-" + month + "-" + day);
         }
-        count.setText("Count: " + String.valueOf(ingredient.getAmount()));
-        unitcost.setText("Unit cost: $" + String.valueOf(ingredient.getCost()));
+        count.setText("Amount: " + String.valueOf(ingredient.getAmount()));
+
+        System.out.println("Here");
+        System.out.println(ingredient.getCost());
+        unitcost.setText("Unit cost: $" + Double.toString(ingredient.getCost()));
 
         return convertView;
     }
