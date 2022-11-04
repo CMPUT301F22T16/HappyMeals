@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">HappyMeals</string>
+
     <string name="meal_plan_activity">Manage Your Meal Plan</string>
     <string name="meal_plan_day">Day 1</string>
     <string name="add_meal_text">ADD MEAL</string>
@@ -13,6 +14,15 @@
     <string name="mp_meal_recipe_list">All Recipes For Meal</string>
     <string name="mp_add_recipe_text">recipes</string>
     <string name="my_meal_title">My Meals</string>
+    <string-array name="sort_category">
+        <item>Description</item>
+        <item>Best Before Date</item>
+        <item>Location</item>
+        <item>Ingredient Category</item>
+    </string-array>
+    <string name="integer_to_string">%1$d</string>
+    <string name="double_to_string">%.2f</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -22,5 +32,9 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
     <string name="confirm_warning_text">You have not selected anything</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>

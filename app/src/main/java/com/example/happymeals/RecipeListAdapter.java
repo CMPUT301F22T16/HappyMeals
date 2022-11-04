@@ -6,11 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
 import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,12 +24,15 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     Context context;
     List<Recipe> recipes;
     DBHandler db;
+    RecipeListInterface recipeListInterface;
 
-    RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user) {
+    RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user, RecipeListInterface recipeListInterface) {
         super(context, 0, recipes);
         this.context = context;
         this.recipes = recipes;
         this.db = user;
+        this.recipeListInterface = recipeListInterface;
+
     }
 
     @NonNull
@@ -45,11 +53,34 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         TextView category_text = convertView.findViewById(R.id.recipe_card_category);
 
         title_text.setText(title);
-        preparation_text.setText("Preparation time: " + prep_time);
+        preparation_text.setText("Preparation time: " + prep_time + " min/s");
         category_text.setText("Category: " + category);
-
         // Adding on click listeners
-//        Button view_recipe = (Button) convertView.findViewById(R.id.recipe_card_view);
+        FloatingActionButton editButton = convertView.findViewById(R.id.recipe_card_edit);
+        FloatingActionButton deleteButton = convertView.findViewById(R.id.recipe_card_delete);
+        Button viewButton = convertView.findViewById(R.id.recipe_card_view);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeListInterface.onItemClick(position, "edit");
+            }
+        });
+
+        viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeListInterface.onItemClick(position, "view");
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeListInterface.onItemClick(position, "delete");
+            }
+        });
+
 
         return convertView;
     }

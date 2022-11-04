@@ -156,7 +156,7 @@ public class DBHandler {
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
 
-    private void storagesListenAndUpdate() {
+    public void getStorages() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -319,15 +319,16 @@ public class DBHandler {
                             List<String> comments = (List<String>) doc.get("comments");
                             List<String> ingredientDescs = (List<String>) data.get("ingredients");
                             List<Long> amounts = (List<Long>) data.get("amounts");
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
                             List<Ingredient> ingredients = new ArrayList<>();
                             for (int i = 0; i < ingredientDescs.size(); i++) {
                                 Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
                                 ingredients.add(ingredient);
                             }
 
-                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
-                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
-                            String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
                             recipe.setR_id(id);
@@ -543,8 +544,8 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog, Context context) {
 
+    public void getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog, Context context) {
         CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
@@ -571,8 +572,6 @@ public class DBHandler {
                         adapter.notifyDataSetChanged();
                     }
                 });
-
-        return ref;
     }
 
     /**
@@ -611,8 +610,10 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
+
     // TODO: if the user doesnt have any MealPlan the app crashes
-    public CollectionReference getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog, Context context) {
+
         CollectionReference ref = conn.collection("user_mealplans");
         ref
                 .whereEqualTo("user", getUsername())
@@ -653,7 +654,6 @@ public class DBHandler {
                         adapter.notifyDataSetChanged();
                     }
                 });
-        return ref;
     }
 
     /**
