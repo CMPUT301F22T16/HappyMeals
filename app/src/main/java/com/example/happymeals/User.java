@@ -443,7 +443,7 @@ public class User {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserMeals(List<Meal> adapter, LoadingDialog dialog, Context context) {
 
         CollectionReference ref = conn.collection("user_meals");
         ref
@@ -463,16 +463,15 @@ public class User {
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
+                            System.out.println("Recipe IDS: " + recipe_ids);
                             getUserRecipesWithID(recipes, context, recipe_ids);
                             Meal meal = new Meal(recipes, scalings, cost);
                             adapter.add(meal);
                         }
 
-                        adapter.notifyDataSetChanged();
+//                        adapter.notifyDataSetChanged();
                     }
                 });
-
-        return ref;
     }
 
     /**
