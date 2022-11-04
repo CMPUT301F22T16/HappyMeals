@@ -2,10 +2,12 @@ package com.example.happymeals;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,18 +23,32 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
     private Intent intent;
     private Context mContext;
     private String userName;
+    private int dayIndex;
+    private MealPlan mealPlan;
+    private ActivityResultLauncher<Intent> activityLauncher;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int itemPosition = activityMpmealListBinding.mpMealListRecyclerview.getChildLayoutPosition(v);
-            // TODO: start new activity
+            intent = new Intent(mContext, MPMyMealsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("MEALPLAN", mealPlan);
+            bundle.putSerializable("MEAL", itemPosition);
+            bundle.putSerializable("DAY", dayIndex);
+            bundle.putSerializable("USER", userName);
+            intent.putExtras(bundle);
+//            startActivity(intent);
+            activityLauncher.launch(intent);
         }
     };
 
-    public MPMealListAdapter(Context context, ArrayList<Meal> meals, String userName) {
+    public MPMealListAdapter(Context context, ArrayList<Meal> meals, String userName, int dayIndex, MealPlan mealPlan, ActivityResultLauncher activityLauncher) {
         this.userName = userName;
+        this.dayIndex = dayIndex;
+        this.mealPlan = mealPlan;
         this.meals = meals;
+        this.activityLauncher = activityLauncher;
         this.mContext = context;
         activityMpmealListBinding = ActivityMpmealListBinding.inflate(LayoutInflater.from(context));
     }

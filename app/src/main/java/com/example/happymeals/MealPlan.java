@@ -27,7 +27,7 @@ public class MealPlan implements Storable, Serializable {
         this.num_days = num_days;
     }
 
-    public void increaseDays() {this.num_days++;}
+    public void setDays(int days) {this.num_days = days;}
 
     public List<Meal> getBreakfast() {
         return breakfast;
