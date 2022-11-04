@@ -8,12 +8,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ *
+ */
 public class Meal implements Storable, Serializable {
     private List<Recipe> recipes;
     private final List<Double> scalings;
     private final double cost;
     private String m_id = null;
 
+    /**
+     *
+     * @param recipes
+     * @param scalings
+     * @param cost
+     */
     // TODO: needs a title field
     public Meal(List<Recipe> recipes, List<Double> scalings, double cost) {
         this.recipes = recipes;
@@ -21,39 +30,75 @@ public class Meal implements Storable, Serializable {
         this.cost = cost;
     }
 
+    /**
+     *
+     */
     public Meal(){
         this.recipes = new ArrayList<>();
         scalings = new ArrayList<>();
         cost = 0;
     }
+
+    /**
+     *
+     * @param index
+     */
     public void removeRecipe(int index){
         this.recipes.remove(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Recipe> getRecipes() {
         return this.recipes;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Double> getScalings() {
         return this.scalings;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getCost() {
         return this.cost;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getM_id() {
         return this.m_id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setM_id(String id) {
         this.m_id = id;
     }
 
+    /**
+     *
+     * @param recipes
+     */
     public void setRecipes(List<Recipe> recipes){
         this.recipes = recipes;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public HashMap<String, Object> getStorable() {
         HashMap<String, Object> data = new HashMap<>();

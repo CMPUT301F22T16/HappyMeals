@@ -81,7 +81,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
         meal_plan_list.setAdapter(mpAdapter);
 
         LoadingDialog dialog = new LoadingDialog(this);
-        db.getUserMealPlans((MPListAdapter) mpAdapter, dialog, activityMpmealPlanBinding.getRoot().getContext());
+        db.getUserMealPlans((MPListAdapter) mpAdapter, dialog);
 
         setOnAddButtonListener();
 
@@ -95,7 +95,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 final MealPlan mealPlan = mealPlans.get(viewHolder.getAdapterPosition());
                 // delete mealPlan
-                db.removeMealPlan(mealPlan, activityMpmealPlanBinding.getRoot().getContext());
+                db.removeMealPlan(mealPlan);
             }
         });
         itemTouchHelper.attachToRecyclerView(meal_plan_list);

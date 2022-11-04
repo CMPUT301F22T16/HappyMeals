@@ -159,7 +159,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
      * @param index
      */
     public void remove(int index) {
-        db.removeMeal(meals.get(index),mContext);
+        db.removeMeal(meals.get(index));
         meals.remove(index);
         notifyDataSetChanged();
     }

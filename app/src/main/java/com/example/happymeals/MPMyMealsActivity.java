@@ -88,7 +88,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         recyclerView.setAdapter(myMealsAdapter);
 
         LoadingDialog dialog = new LoadingDialog(this);
-        dbHandler.getUserMeals((MPMyMealsAdapter) myMealsAdapter,dialog,this);
+        dbHandler.getUserMeals((MPMyMealsAdapter) myMealsAdapter,dialog);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
