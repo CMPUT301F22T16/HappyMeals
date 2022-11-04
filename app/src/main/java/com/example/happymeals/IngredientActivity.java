@@ -47,7 +47,7 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
         Context context = this;
-        getSupportActionBar().setTitle("Ingredient");
+        getSupportActionBar().setTitle("Ingredients");
         // this.setTitle("My ingredient list");
 
         ingredientList = new ArrayList<Ingredient>();
