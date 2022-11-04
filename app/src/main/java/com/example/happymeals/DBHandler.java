@@ -156,7 +156,7 @@ public class DBHandler {
     /**
      * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
 
-    private void storagesListenAndUpdate() {
+    public void getStorages() {
         Query query = conn.collection("storages").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
