@@ -23,7 +23,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         super(context, 0, recipes);
         this.context = context;
         this.recipes = recipes;
-        this.db = db;
+        this.db = user;
     }
 
     @NonNull

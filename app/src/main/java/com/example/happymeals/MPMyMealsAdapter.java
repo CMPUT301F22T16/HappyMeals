@@ -25,6 +25,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     private Context mContext;
     private Intent intent;
     private ActivityMpmyMealsBinding activityMpmyMealsBinding;
+    private DBHandler db;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -40,10 +41,11 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         }
     };
 
-    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals) {
+    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals,DBHandler db) {
         this.meals = meals;
         activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(LayoutInflater.from(context));
         mContext = context;
+        this.db = db;
     }
 
     @NonNull
@@ -82,6 +84,13 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     public void add(Meal meal) {
         meals.add(meal);
     }
+
+    public void remove(int index) {
+        db.removeMeal(meals.get(index),mContext);
+        meals.remove(index);
+        notifyDataSetChanged();
+    }
+
 
     public class MyMealViewHolder extends RecyclerView.ViewHolder {
 

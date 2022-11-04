@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -7,6 +9,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -29,6 +33,8 @@ public class MPMealRecipeList extends AppCompatActivity {
     RecyclerView recyclerView;
     DBHandler dbHandler;
     Meal meal;
+    Context context;
+    ActivityResultLauncher<Intent> activityLauncher;
 
 
     @Override
@@ -36,23 +42,19 @@ public class MPMealRecipeList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMpmealRecipeListBinding = ActivityMpmealRecipeListBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_mpmeal_recipe_list);
+        context = this;
 
-        // for testing
         recyclerView = findViewById(R.id.mp_recipe_list_recyclerview);
-//        Ingredient ind = new Ingredient(3,"carrot");
-//        List<String> comments = new ArrayList<>();
-//        comments.add("LGTM!");
-//        List<Ingredient> ingredients = new ArrayList<>();
-//        ingredients.add(ind);
-//        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
-        recipes = new ArrayList<>();
-//        recipes.add(r1);
-        dbHandler = new DBHandler();
-
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
-        intent = new Intent(this,MPPickRecipeActivity.class);
+
+        recipes = new ArrayList<>();
+
+        // set up users
+        dbHandler = new DBHandler();
+
+
 
         // get the meal object passed in
         Bundle bundle  = getIntent().getExtras();
@@ -65,11 +67,10 @@ public class MPMealRecipeList extends AppCompatActivity {
             meal = (Meal) bundle.getSerializable("MEAL");
             recipes = meal.getRecipes();
         }
-        // TODO: change to meal instead of using m_id
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
-        recyclerView.setAdapter(mpMealRecipeListAdapter);
-//        mpMealRecipeListAdapter.setMid(m_id);
 
+        // set up adapter
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes,dbHandler);
+        recyclerView.setAdapter(mpMealRecipeListAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         LoadingDialog dialog = new LoadingDialog(this);
 
@@ -82,28 +83,54 @@ public class MPMealRecipeList extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                mpMealRecipeListAdapter.delete(viewHolder.getAdapterPosition());
+                int item_index = viewHolder.getAdapterPosition();
+                mpMealRecipeListAdapter.delete(item_index);
+                meal.removeRecipe(item_index); // Be catious of this when implement sort feature
+                dbHandler.modifyMeal(meal,context);
             }
         });
+
         setOnAddButtonListener();
         setOnCancelButtonListener();
         setOnFinishButtonListener();
+        setUpActivityLauncher();
 
         mpMealRecipeListAdapter.notifyDataSetChanged();
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    public void setUpActivityLauncher() {
+        // this activity launcher was modified from Misha Akopov's answer(May 3, 2020) to this question:
+        // https://stackoverflow.com/questions/61455381/how-to-replace-startactivityforresult-with-activity-result-apis
+        activityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        Bundle bundle = data.getExtras();
+                        meal = (Meal) bundle.getSerializable("Modified-Meal");
+                        recipes = meal.getRecipes();
+                        mpMealRecipeListAdapter.setRecipesList((ArrayList<Recipe>) recipes);
+                        mpMealRecipeListAdapter.notifyDataSetChanged();
+                    }
+                });
+
+    }
+
     private void setOnAddButtonListener() {
         addRecipButton.setOnClickListener(v -> {
-            intent.putExtra("Meal_ID",mpMealRecipeListAdapter.getMid());
-            startActivity(intent);
+            intent = new Intent(this,MPPickRecipeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("MEAL", meal);
+            intent.putExtras(bundle);
+            activityLauncher.launch(intent);
 
         });
     }
 
     private void setOnCancelButtonListener() {
         cancelButton.setOnClickListener(v -> {
-            // TODO: maybe a confirmation dialog to confirm cancel action?
+            // TODO: do we need this?
 //            finish();
             mpMealRecipeListAdapter.notifyDataSetChanged();
         });

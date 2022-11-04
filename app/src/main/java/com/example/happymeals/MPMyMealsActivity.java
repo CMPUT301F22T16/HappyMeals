@@ -21,7 +21,7 @@ import java.util.List;
 public class MPMyMealsActivity extends AppCompatActivity {
 
     ActivityMpmyMealsBinding activityMpmyMealsBinding;
-    RecyclerView.Adapter myMealsAdapter;
+    MPMyMealsAdapter myMealsAdapter;
     ArrayList<Meal> meals;
     Button cancel_button;
     Button finish_button;
@@ -53,7 +53,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         add_button = findViewById(R.id.my_meals_add_button);
         intent = new Intent(this,MPMealRecipeList.class);
 
-        myMealsAdapter = new MPMyMealsAdapter(this, meals);
+        myMealsAdapter = new MPMyMealsAdapter(this, meals,dbHandler);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(myMealsAdapter);
 
@@ -68,8 +68,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                final Meal meal = meals.get(viewHolder.getAdapterPosition());
-                // TODO: delete mealPlan
+                myMealsAdapter.remove(viewHolder.getAdapterPosition());
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -80,6 +79,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     }
     private void setOnCancelButtonListener() {
         cancel_button.setOnClickListener(v -> {
+            // TODO: do we need this?
             // maybe pop up that all changes will not be saved. sure to exist? pop up alert
             myMealsAdapter.notifyDataSetChanged();
 //            finish();
@@ -87,7 +87,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
     }
     private void setOnAddButtonListener() {
         add_button.setOnClickListener(v -> {
-            // TODO: pass user id, indexed meal
             Bundle bundle = new Bundle();
             bundle.putSerializable("IsNewMeal", true);
             intent.putExtras(bundle);
@@ -96,9 +95,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     }
     private void setOnFinishButtonListener() {
         finish_button.setOnClickListener(v -> {
-            // TODO:update the meal plan at the passed in index day
             finish();
-
         });
     }
 

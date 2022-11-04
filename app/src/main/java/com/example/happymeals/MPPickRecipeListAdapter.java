@@ -22,7 +22,6 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> existing_recipes;
     private double meal_cost;
     private Context context;
-    private String m_id;
     LayoutInflater inflater;
     private List<Double> meal_scalings;
 
@@ -45,14 +44,17 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     }
 
 
-
+    /**
+     * This is the constructor for MPPickPrecipeListAdapter
+     * @param context
+     * @param recipes existing recipes for the meal
+     */
     public MPPickRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
-        this.recipes_buffer = new ArrayList<Recipe>(recipes);
-        this.recipes = new ArrayList<Recipe>(recipes);
-        this.existing_recipes = new ArrayList<>();
+        this.recipes_buffer = new ArrayList<>();
+        this.recipes = new ArrayList<>();
+        this.existing_recipes = new ArrayList<Recipe>(recipes);
         this.meal_scalings = new ArrayList<Double>();
-        this.m_id = "";
         this.arraylist = new ArrayList<Recipe>(recipes);
         inflater = LayoutInflater.from(this.context);
     }
@@ -80,22 +82,12 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     }
 
 
-    public String getMid(){
-        return this.m_id;
-    }
-
-    public void setMid(String m_id){
-        this.m_id = m_id;
-
-    }
 
     public void clear(){recipes.clear(); arraylist.clear();}
 
     public void add(Recipe recipe){recipes.add(recipe); arraylist.add(recipe);}
 
-    public void clearExistingRecipes(){existing_recipes.clear();}
-
-    public void addToExistingRecipes(Recipe recipe){existing_recipes.add(recipe);}
+    public List<Recipe> getRecipesSelected() { return this.recipes_buffer;}
 
     public void addToBuffer(int position){
         recipes_buffer.add(recipes.get(position));
