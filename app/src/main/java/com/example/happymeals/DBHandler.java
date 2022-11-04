@@ -616,6 +616,7 @@ public class DBHandler {
      * @param dialog
      */
     private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog, Context context, List<String> meal_ids) {
+        if(meal_ids.isEmpty()) {return;}
         CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
@@ -719,6 +720,7 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
+    // TODO: if the user doesnt have any MealPlan the app crashes
     public CollectionReference getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog, Context context) {
         CollectionReference ref = conn.collection("user_mealplans");
         ref

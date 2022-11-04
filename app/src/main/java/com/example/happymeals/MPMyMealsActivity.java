@@ -39,6 +39,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("My Meals");
 
         // User
         Bundle bundle = getIntent().getExtras();

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
@@ -27,6 +28,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
     FloatingActionButton new_mp_button;
     RecyclerView meal_plan_list;
     Intent intent_mpl;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +37,19 @@ public class MPMealPlanActivity extends AppCompatActivity {
 
         setContentView(activityMpmealPlanBinding.getRoot());
 
-        DBHandler db = new DBHandler();
-        mealPlans = new ArrayList<>();
         meal_plan_list = activityMpmealPlanBinding.mpRecyclerview;
         new_mp_button = activityMpmealPlanBinding.myMealsAddButton;
+
+        // Add back button to action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Meal Plans");
+
+        // get user name
+        Bundle bundle = getIntent().getExtras();
+        userName = (String) bundle.getSerializable("USER");
+        DBHandler db = new DBHandler(userName);
+
+        mealPlans = new ArrayList<>();
 
 //        //Testing
 //        Ingredient ind = new Ingredient(3,"carrot");
@@ -65,7 +76,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
 //        user.addMealPlan(mealPlan, this);
 //        user.addMealPlan(mealPlan2, this);
 
-        mpAdapter = new MPListAdapter(this, mealPlans);
+        mpAdapter = new MPListAdapter(this, mealPlans, userName);
         meal_plan_list.setLayoutManager(new GridLayoutManager(this, 1));
         meal_plan_list.setAdapter(mpAdapter);
 
@@ -95,11 +106,21 @@ public class MPMealPlanActivity extends AppCompatActivity {
         new_mp_button.setOnClickListener(v -> {
             intent_mpl = new Intent(this, MPMealListActivity.class);
             Bundle bundle = new Bundle();
+            bundle.putSerializable("USER", userName);
             bundle.putSerializable("IsNewMP", true);
             intent_mpl.putExtras(bundle);
             startActivity(intent_mpl);
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
 }

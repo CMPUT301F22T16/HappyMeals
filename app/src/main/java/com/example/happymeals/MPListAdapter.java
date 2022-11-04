@@ -21,6 +21,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
     private Context mContext;
     private ActivityMpmealPlanBinding activityMpmealPlanBinding;
     private Intent intent;
+    private String userName;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -29,6 +30,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
             MealPlan mealPlan = mealPlans.get(index);
             intent = new Intent(mContext, MPMealListActivity.class);
             Bundle bundle = new Bundle();
+            bundle.putSerializable("USER", userName);
             bundle.putSerializable("IsNewMP", false);
             bundle.putSerializable("MEALPLAN", mealPlan);
             intent.putExtras(bundle);
@@ -37,7 +39,8 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
     };
 
 
-    public MPListAdapter(Context context, ArrayList<MealPlan> mealPlans) {
+    public MPListAdapter(Context context, ArrayList<MealPlan> mealPlans, String userName) {
+        this.userName = userName;
         this.mealPlans = mealPlans;
         mContext = context;
         activityMpmealPlanBinding = ActivityMpmealPlanBinding.inflate(LayoutInflater.from(context));

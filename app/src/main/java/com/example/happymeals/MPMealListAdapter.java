@@ -20,6 +20,7 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
     private ActivityMpmealListBinding activityMpmealListBinding;
     private Intent intent;
     private Context mContext;
+    private String userName;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -29,7 +30,8 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
         }
     };
 
-    public MPMealListAdapter(Context context, ArrayList<Meal> meals) {
+    public MPMealListAdapter(Context context, ArrayList<Meal> meals, String userName) {
+        this.userName = userName;
         this.meals = meals;
         this.mContext = context;
         activityMpmealListBinding = ActivityMpmealListBinding.inflate(LayoutInflater.from(context));
