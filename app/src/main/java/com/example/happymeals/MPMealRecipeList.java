@@ -28,6 +28,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Intent intent;
     RecyclerView recyclerView;
     DBHandler dbHandler;
+    Meal meal;
 
 
     @Override
@@ -55,10 +56,14 @@ public class MPMealRecipeList extends AppCompatActivity {
 
         // get the meal object passed in
         Bundle bundle  = getIntent().getExtras();
-        Meal meal = (Meal) bundle.getSerializable("MEAL");
-        if (meal == null){
-            Meal empty_meal = new Meal();
-            dbHandler.addMeal(empty_meal,this);
+        boolean is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
+
+        if (is_new_meal){
+            meal = new Meal();
+            dbHandler.addMeal(meal,this);
+        } else {
+            meal = (Meal) bundle.getSerializable("MEAL");
+            recipes = meal.getRecipes();
         }
         // TODO: change to meal instead of using m_id
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
@@ -67,7 +72,6 @@ public class MPMealRecipeList extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         LoadingDialog dialog = new LoadingDialog(this);
-        dbHandler.getRecipesForMeal((MPMealRecipeListAdapter) mpMealRecipeListAdapter,dialog,this);
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

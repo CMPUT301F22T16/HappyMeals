@@ -22,8 +22,8 @@ import java.util.List;
 public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMealViewHolder> {
 
     private List<Meal> meals;
-    private Intent intent;
     private Context mContext;
+    private Intent intent;
     private ActivityMpmyMealsBinding activityMpmyMealsBinding;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -31,7 +31,9 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         public void onClick(View v) {
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
             Meal meal = meals.get(index);
+            intent = new Intent(mContext,MPMealRecipeList.class);
             Bundle bundle = new Bundle();
+            bundle.putSerializable("IsNewMeal", false);
             bundle.putSerializable("MEAL", meal);
             intent.putExtras(bundle);
             mContext.startActivity(intent);

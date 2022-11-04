@@ -89,7 +89,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         add_button.setOnClickListener(v -> {
             // TODO: pass user id, indexed meal
             Bundle bundle = new Bundle();
-            bundle.putSerializable("MEAL", NULL);
+            bundle.putSerializable("IsNewMeal", true);
             intent.putExtras(bundle);
             startActivity(intent);
         });

@@ -451,6 +451,7 @@ public class DBHandler {
      * @param recipe_ids
      */
     private void getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
+        if (recipe_ids.isEmpty()){return;}
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
