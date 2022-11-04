@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This is the custom adapter
+ * It is responsible to keep the meal list
+ * up-to-date
+ */
 public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMealViewHolder> {
 
     private List<Meal> meals;
@@ -30,6 +35,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     private DBHandler db;
     private AtomicBoolean isEdit;
     private MealPlan mealPlan;
+    private boolean is_from_meal_plan;
     private int dayIndex;
     private int mealIndex;
 
@@ -39,7 +45,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
             Meal meal = meals.get(index);
 
-            if(isEdit.get()) {
+            if(isEdit.get() ||!is_from_meal_plan) {
                 intent = new Intent(mContext,MPMealRecipeList.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("IsNewMeal", false);
@@ -67,6 +73,19 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         }
     };
 
+    /**
+     * Constructor for this activity
+     * Will be used if activity is started
+     * from MPMealList
+     * @param context
+     * @param meals this is the meal object
+     * @param db this is our db controller
+     * @param isEdit indicates if this is editing mode
+     * @param dayIndex the index of the day in mealPlan
+     * @param mealIndex the index of the meal in mealist array,
+     *                  which is from MPMealList activity
+     * @param mealPlan this is the mealPlan object
+     */
     public MPMyMealsAdapter(Context context, ArrayList<Meal> meals, DBHandler db, AtomicBoolean isEdit, int dayIndex, int mealIndex, MealPlan mealPlan) {
         this.meals = meals;
         this.isEdit = isEdit;
@@ -76,6 +95,26 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(LayoutInflater.from(context));
         mContext = context;
         this.db = db;
+        this.is_from_meal_plan = true;
+    }
+
+    /**
+     * Constructor for this activity
+     * Will be used if activity is started
+     * from MPMealList
+     * @param context
+     * @param meals this is the meal object
+     * @param db this is our db controller
+     * @param isEdit inditates if this is editing mode.
+     *               Will always be false in this case
+     */
+    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals, DBHandler db,AtomicBoolean isEdit) {
+        this.meals = meals;
+        this.isEdit = isEdit;
+        activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(LayoutInflater.from(context));
+        mContext = context;
+        this.db = db;
+        this.is_from_meal_plan = false;
     }
 
     @NonNull
@@ -115,6 +154,10 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         meals.add(meal);
     }
 
+    /**
+     * remove the meal from meal list
+     * @param index
+     */
     public void remove(int index) {
         db.removeMeal(meals.get(index),mContext);
         meals.remove(index);
