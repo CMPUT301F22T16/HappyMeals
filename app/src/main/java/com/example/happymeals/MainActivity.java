@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.happymeals.databinding.ActivityMainBinding;
+import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    ActivityMainBinding activityMainBinding;
     Button ingredientButton;
     Button mealButton;
     Button recipeButton;
@@ -21,10 +25,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
+        setContentView(activityMainBinding.getRoot());
 
-        DBHandler db = new DBHandler();
+        DBHandler db = new DBHandler("Zoey");
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
@@ -41,14 +46,23 @@ public class MainActivity extends AppCompatActivity {
         mealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("Is-From-MealPlan",false);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
         mealplanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, MPMealPlanActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", db.getUsername());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

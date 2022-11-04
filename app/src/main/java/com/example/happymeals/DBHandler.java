@@ -340,6 +340,48 @@ public class DBHandler {
                 });
     }
 
+    public void getUserRecipesForMeals(MPPickRecipeListAdapter adapter, LoadingDialog dialog, Context context) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername());
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes", Toast.LENGTH_SHORT);
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) doc.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+
     /**
      * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes in the recipes {@link List<Recipe>}
      *
@@ -348,6 +390,7 @@ public class DBHandler {
      * @param recipe_ids
      */
     private void getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
+        if (recipe_ids.isEmpty()){return;}
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
@@ -385,6 +428,52 @@ public class DBHandler {
                     }
                 });
     }
+    /**
+     * Used to get user recipes with ids in the recipe_ids {@link List<String>}.
+     * Update the recipes through adapter
+     *
+     * @param recipes
+     * @param context
+     * @param recipe_ids
+     * @param adapter
+     */
+    private void getUserRecipesByMeal(List<Recipe> recipes, Context context, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            Toast.makeText(context, "Error cannot retrieve recipes with ID", Toast.LENGTH_SHORT);
+                            return;
+                        }
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) data.get("comments");
+                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
+                            List<Ingredient> ingredients = new ArrayList<>();
+                            for (int i = 0; i < ingredientDescs.size(); i++) {
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
+                                ingredients.add(ingredient);
+                            }
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            recipe.setR_id(id);
+                            adapter.add(recipe); // Adding the recipe from FireStore
+                        }
+                    }
+                });
+    }
+
 
     public void addRecipe(Recipe recipe, Context context) {
         HashMap<String, Object> data = recipe.getStorable();
@@ -419,6 +508,7 @@ public class DBHandler {
      * @param dialog
      */
     private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog, Context context, List<String> meal_ids) {
+        if(meal_ids.isEmpty()) {return;}
         CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
@@ -454,8 +544,8 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public void getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
 
+    public void getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog, Context context) {
         CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
@@ -467,7 +557,6 @@ public class DBHandler {
                             Toast.makeText(context, "Error cannot retrieve meals", Toast.LENGTH_SHORT);
                             return;
                         }
-
                         adapter.clear();
                         for (QueryDocumentSnapshot doc : value) {
                             String m_id = doc.getId();
@@ -480,7 +569,6 @@ public class DBHandler {
                             meal.setM_id(m_id);
                             adapter.add(meal);
                         }
-
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -522,7 +610,10 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public void getUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+
+    // TODO: if the user doesnt have any MealPlan the app crashes
+    public void getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog, Context context) {
+
         CollectionReference ref = conn.collection("user_mealplans");
         ref
                 .whereEqualTo("user", getUsername())
@@ -554,7 +645,9 @@ public class DBHandler {
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+
                             mealPlan.setUmp_id(ump_id);
+
                             adapter.add(mealPlan);
                         }
 

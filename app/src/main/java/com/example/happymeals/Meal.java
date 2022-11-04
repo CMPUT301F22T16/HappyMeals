@@ -9,15 +9,25 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Meal implements Storable, Serializable {
-    private final List<Recipe> recipes;
+    private List<Recipe> recipes;
     private final List<Double> scalings;
     private final double cost;
     private String m_id = null;
 
+    // TODO: needs a title field
     public Meal(List<Recipe> recipes, List<Double> scalings, double cost) {
         this.recipes = recipes;
         this.scalings = scalings;
         this.cost = cost;
+    }
+
+    public Meal(){
+        this.recipes = new ArrayList<>();
+        scalings = new ArrayList<>();
+        cost = 0;
+    }
+    public void removeRecipe(int index){
+        this.recipes.remove(index);
     }
 
     public List<Recipe> getRecipes() {
@@ -40,6 +50,10 @@ public class Meal implements Storable, Serializable {
         this.m_id = id;
     }
 
+    public void setRecipes(List<Recipe> recipes){
+        this.recipes = recipes;
+    }
+
     @Override
     public HashMap<String, Object> getStorable() {
         HashMap<String, Object> data = new HashMap<>();
@@ -52,7 +66,6 @@ public class Meal implements Storable, Serializable {
         for (Recipe recipe: recipes) {
             recipe_ids.add(recipe.get_r_id());
         }
-
         data.put("recipes", recipe_ids);
 
         return data;
