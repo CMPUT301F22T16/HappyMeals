@@ -2,6 +2,7 @@ package com.example.happymeals;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,12 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
         @Override
         public void onClick(View v) {
             int index = activityMpmealPlanBinding.mpRecyclerview.getChildLayoutPosition(v);
+            MealPlan mealPlan = mealPlans.get(index);
             intent = new Intent(mContext, MPMealListActivity.class);
-            intent.putExtra("Meal-Plan-Index", index);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("IsNewMP", false);
+            bundle.putSerializable("MEALPLAN", mealPlan);
+            intent.putExtras(bundle);
             mContext.startActivity(intent);
         }
     };
@@ -49,8 +54,8 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
     @Override
     public void onBindViewHolder(@NonNull MPViewHolder holder, int position) {
         MealPlan mealPlan = mealPlans.get(position);
-        holder.binding.mpMealListTextView1.setText("mealplan name here");
-        holder.binding.mpMealListTextView2.setText("#of days here");
+        holder.binding.mpMealListTextView1.setText("MealPlanTitle");
+        holder.binding.mpMealListTextView2.setText(Integer.toString(mealPlan.getNum_days()));
     }
 
     @Override
@@ -58,15 +63,22 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
         return mealPlans.size();
     }
 
+    /**
+     * clear mealPlans
+     */
     public void clear() {
         mealPlans.clear();
     }
 
+    /**
+     * adds mealPlan to mealPlans
+     * @param mealPlan
+     */
     public void add(MealPlan mealPlan) {
         mealPlans.add(mealPlan);
     }
 
-    public static class MPViewHolder extends RecyclerView.ViewHolder {
+    public class MPViewHolder extends RecyclerView.ViewHolder {
 
         MealPlanListContentBinding binding;
 

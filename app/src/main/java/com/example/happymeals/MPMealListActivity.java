@@ -18,12 +18,17 @@ import java.util.List;
 public class MPMealListActivity extends AppCompatActivity {
 
     ActivityMpmealListBinding activityMpmealListBinding;
+    RecyclerView meal_list;
     RecyclerView.Adapter mpMealListAdapter;
+    MealPlan mealPlan;
+    int dayIndex = 0;
+    String Ump_id;
     ArrayList<Meal> meals;
     Button addMealsButton;
     Button nextDayButton;
     Button finishButton;
     Intent intent;
+    DBHandler db;
 
 
     @Override
@@ -31,29 +36,47 @@ public class MPMealListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMpmealListBinding = ActivityMpmealListBinding.inflate(getLayoutInflater());
 
-        setContentView(R.layout.activity_mpmeal_list);
+        setContentView(activityMpmealListBinding.getRoot());
 
-        addMealsButton = findViewById(R.id.meal_plan_add_button);
-        nextDayButton = findViewById(R.id.mp_fab_next_day);
-        finishButton = findViewById(R.id.mp_fab_finish);
+        db = new DBHandler();
+
+        addMealsButton = activityMpmealListBinding.mealPlanAddButton;
+        nextDayButton = activityMpmealListBinding.mpFabNextDay;
+        finishButton = activityMpmealListBinding.mpFabFinish;
+        meal_list = activityMpmealListBinding.mpMealListRecyclerview;
+
+        Bundle bundle = getIntent().getExtras();
+        meals = new ArrayList<>();
+
+        if((boolean) bundle.getSerializable("IsNewMP")) {
+            mealPlan = new MealPlan();
+            db.addMealPlan(mealPlan, this);
+        } else {
+            meals.clear();
+            mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
+            meals.add(mealPlan.getBreakfast().get(dayIndex));
+            meals.add(mealPlan.getLunch().get(dayIndex));
+            meals.add(mealPlan.getDinner().get(dayIndex));
+        }
+
 
         //Testing
-        Ingredient ind = new Ingredient(3,"carrot");
-        List<String> comments = new ArrayList<>();
-        comments.add("LGTM!");
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(ind);
-        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
-        List<Recipe> recipes = new ArrayList<>();
-        recipes.add(r1);
-        List<Double> scalings = new ArrayList<>();
-        scalings.add(1.11);
-        meals = new ArrayList<>();
-        meals.add(new Meal(recipes,scalings,3.4));
+//        Ingredient ind = new Ingredient(3,"carrot");
+//        List<String> comments = new ArrayList<>();
+//        comments.add("LGTM!");
+//        List<Ingredient> ingredients = new ArrayList<>();
+//        ingredients.add(ind);
+//        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
+//        List<Recipe> recipes = new ArrayList<>();
+//        recipes.add(r1);
+//        List<Double> scalings = new ArrayList<>();
+//        scalings.add(1.11);
+//        meals = new ArrayList<>();
+//        meals.add(new Meal(recipes,scalings,3.4));
 
         mpMealListAdapter = new MPMealListAdapter(this, meals);
-        activityMpmealListBinding.mpMealListRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMpmealListBinding.mpMealListRecyclerview.setAdapter(mpMealListAdapter);
+        meal_list.setLayoutManager(new GridLayoutManager(this, 1));
+        meal_list.setAdapter(mpMealListAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -86,9 +109,10 @@ public class MPMealListActivity extends AppCompatActivity {
 
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
-            // TODO:add this modified, or new meal Plan
+            if(mealPlan.getBreakfast().isEmpty()) {
+                db.removeMealPlan(mealPlan, activityMpmealListBinding.getRoot().getContext());
+            }
             finish();
-
         });
     }
 }

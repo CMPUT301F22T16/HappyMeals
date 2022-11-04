@@ -747,6 +747,7 @@ public class DBHandler {
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+                            mealPlan.set_ump_id(ump_id);
                             adapter.add(mealPlan);
                         }
 

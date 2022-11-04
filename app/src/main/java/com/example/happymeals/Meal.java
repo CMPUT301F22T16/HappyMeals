@@ -14,6 +14,7 @@ public class Meal implements Storable, Serializable {
     private final double cost;
     private String m_id = null;
 
+    // TODO: needs a title field
     public Meal(List<Recipe> recipes, List<Double> scalings, double cost) {
         this.recipes = recipes;
         this.scalings = scalings;

@@ -33,13 +33,12 @@ public class MPMealPlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMpmealPlanBinding = ActivityMpmealPlanBinding.inflate(getLayoutInflater());
 
-        setContentView(R.layout.activity_mpmeal_plan);
+        setContentView(activityMpmealPlanBinding.getRoot());
 
         DBHandler db = new DBHandler();
         mealPlans = new ArrayList<>();
-
-
-//        meal_plan_list = findViewById(R.id.mp_recyclerview);
+        meal_plan_list = activityMpmealPlanBinding.mpRecyclerview;
+        new_mp_button = activityMpmealPlanBinding.myMealsAddButton;
 
 //        //Testing
 //        Ingredient ind = new Ingredient(3,"carrot");
@@ -67,16 +66,13 @@ public class MPMealPlanActivity extends AppCompatActivity {
 //        user.addMealPlan(mealPlan2, this);
 
         mpAdapter = new MPListAdapter(this, mealPlans);
-        activityMpmealPlanBinding.mpRecyclerview.setLayoutManager(new GridLayoutManager(this, 1));
-        activityMpmealPlanBinding.mpRecyclerview.setAdapter(mpAdapter);
+        meal_plan_list.setLayoutManager(new GridLayoutManager(this, 1));
+        meal_plan_list.setAdapter(mpAdapter);
 
-        new_mp_button = activityMpmealPlanBinding.myMealsAddButton;
-        setOnAddButtonListener();
         LoadingDialog dialog = new LoadingDialog(this);
         db.getUserMealPlans((MPListAdapter) mpAdapter, dialog, activityMpmealPlanBinding.getRoot().getContext());
 
-//        meal_plan_list.setLayoutManager(new GridLayoutManager(this, 1));
-//        meal_plan_list.setAdapter(mpAdapter);
+        setOnAddButtonListener();
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -98,6 +94,9 @@ public class MPMealPlanActivity extends AppCompatActivity {
     private void setOnAddButtonListener() {
         new_mp_button.setOnClickListener(v -> {
             intent_mpl = new Intent(this, MPMealListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("IsNewMP", true);
+            intent_mpl.putExtras(bundle);
             startActivity(intent_mpl);
         });
     }
