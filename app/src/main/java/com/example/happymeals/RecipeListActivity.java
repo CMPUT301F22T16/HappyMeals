@@ -15,10 +15,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeListActivity extends AppCompatActivity {
+public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface{
 
     private ListView recipe_list_view;
     private List<Recipe> recipes;
+    private RecipeListAdapter recipeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class RecipeListActivity extends AppCompatActivity {
 
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
-        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, db);
+        recipeAdapter = new RecipeListAdapter(this, recipes, db, this);
         recipe_list_view.setAdapter(recipeAdapter);
         LoadingDialog dialog = new LoadingDialog(this);
         db.getUserRecipes(recipeAdapter,dialog,this);
@@ -46,12 +47,6 @@ public class RecipeListActivity extends AppCompatActivity {
         // Populate the recipe list
         db.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
 
-//        recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                System.out.println("SELECTED");
-//            }
-//        });
     }
 
     @Override
@@ -65,4 +60,14 @@ public class RecipeListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemClick(int position, String op) {
+        if (op == "view") {
+            Intent intent = new Intent(RecipeListActivity.this, ViewRecipeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("RECIPE", recipes.get(position));
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    }
 }
