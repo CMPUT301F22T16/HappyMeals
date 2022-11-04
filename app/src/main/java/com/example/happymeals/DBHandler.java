@@ -46,7 +46,7 @@ public class DBHandler {
 
     public DBHandler() {
         User user = new User();
-        username = user.getUsername(); //
+        username = user.getUsername();
         conn = FirebaseFirestore.getInstance();
     }
 

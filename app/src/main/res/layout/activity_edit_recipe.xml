@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".recipe.EditRecipe">
+
+    <Button
+        android:id="@+id/recipe_img_picker_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="Add Image" />
+
+    <EditText
+        android:id="@+id/recipe_title_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Recipe Title" />
+
+    <EditText
+        android:id="@+id/recipe_prep_time_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Preparation Time" />
+
+    <EditText
+        android:id="@+id/recipe_num_serv_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Number of Servings" />
+
+    <EditText
+        android:id="@+id/recipe_category_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Category" />
+
+    <EditText
+        android:id="@+id/recipe_comment_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:hint="Comment"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recipe_ingredient_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/recipe_pick_new_ingredient_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Pick a new ingredient" />
+
+        <Button
+            android:id="@+id/recipe_submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="Submit" />
+    </LinearLayout>
+
+
+</LinearLayout>
