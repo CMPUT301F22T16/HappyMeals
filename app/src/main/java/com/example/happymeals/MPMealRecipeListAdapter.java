@@ -25,16 +25,16 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     private ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     private Context mContext;
     private DBHandler db;
+    private Intent intent;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
-            // TODO: should start activity: View Recipe
-//            intent = new Intent(mContext,MPPickRecipeActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("RECIPE", recipes.get(itemPosition));
-//            intent.putExtras(bundle);
-//            mContext.startActivity(intent);
+            intent = new Intent(mContext,ViewRecipeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("RECIPE", recipes.get(itemPosition));
+            intent.putExtras(bundle);
+            mContext.startActivity(intent);
 
         }
     };

@@ -24,7 +24,7 @@ import java.util.Map;
 
 
 /**
- * Represents a User object. User class maintains a username and also has a database connection established that it can use to add/modify/delete
+ * Represents a DBHandler object. This class maintains a username and also has a database connection established that it can use to add/modify/delete
  * content of following collections in Firestore
  * 1. user_ingredients: {@link Ingredient} is model class for this.
  * 2. users: {@link User} is model class for this.
@@ -44,6 +44,9 @@ public class DBHandler {
     private FirebaseFirestore conn;
 
 
+    /**
+     * Guest login constructor
+     */
     public DBHandler() {
         User user = new User();
         username = user.getUsername(); //
@@ -65,30 +68,13 @@ public class DBHandler {
         return this.conn;
     }
 
-    //FOR FINAL CHECKPOINT
-    /*
-    public void newUser(String username) {
-        HashMap<String, String> data = new HashMap<>();
-        data.put("pass", "");
-        CollectionReference ref = conn.collection("users");
-        ref //Did not use the store method because adding a new user requires a different set of methods.
-                .document(username)
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("Stor", "Data has been added successfully!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Stor", "Data could not be added!" + e.toString());
-                    }
-                });
-    }
+    /**
+     * Generic store method that can be used to store data to firestore.
+     * @param ref {@link CollectionReference} reference to the firestore collection.
+     * @param data {@link HashMap<String, Object>} data to be stored as keys and values.
+     * @param collType {@link String} the type of the collection.
+     * @return {@link String} the document id of the newly stored object in Firestore.
      */
-
     private String store(CollectionReference ref, HashMap data, String collType) {
         String id;
         DocumentReference doc = ref.document();
@@ -110,6 +96,12 @@ public class DBHandler {
         return doc.getId();
     }
 
+    /**
+     * Generic delete method used to delete any document with the provided id.
+     * @param ref A {@link CollectionReference} reference to the collection in which the document is to be deleted.
+     * @param id {@link String} id of the document to be deleted.
+     * @param collType {@link String} Collection type.
+     */
     private void delete(CollectionReference ref, String id, String collType) {
         ref
                 .document(id)
@@ -128,6 +120,13 @@ public class DBHandler {
                 });
     }
 
+    /**
+     * Generic update method used to update/edit any document with the provided id.
+     * @param ref A {@link CollectionReference} reference to the collection in which the document is to be updated.
+     * @param id {@link String} id of the document to be updated.
+     * @param data {@link HashMap<String, Object>} is new data to be changed at documents place.
+     * @param collType {@link String} Collection type.
+     */
     private void update(CollectionReference ref, String id, HashMap<String, Object> data, String collType) {
         ref
                 .document(id)
@@ -147,39 +146,6 @@ public class DBHandler {
     }
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
-
-    /**
-     * Keeps checking for changes in a user's query for storages and updates their storages if change is found.
-
-    public void getStorages() {
-        Query query = conn.collection("storages").whereEqualTo("user", getUsername());
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.d("uStor", "An error has occured while trying to update local storages");
-                }
-                else {
-                    //storages.clear();
-                    for (QueryDocumentSnapshot doc : value) {
-                        Storage storage = new Storage(doc.getString("type"));
-                        storage.setId(doc.getId());
-                        List<String> ingIds = (List<String>) doc.get("ingredients");
-                        for (int i=0; i<ingIds.size(); i++) {
-                            for (int j=0; j<ingredients.size(); j++) {
-                                if (ingIds.get(i).equals(ingredients.get(j).getId())) {
-                                    storage.addIngredient(ingredients.get(i));
-                                }
-                            }
-                        }
-                        storages.add(storage);
-                    }
-                    Log.d("uStor", "local storages updated successfully!");
-                }
-            }
-        });
-    }
-     */
 
     /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
@@ -283,8 +249,8 @@ public class DBHandler {
      * Attaches an event listener to the user's recipe documents in user_recipes Collection update their respective
      * ArrayAdapter and notify them for future real time updates.
      *
-     * @param adapter
-     * @param dialog
+     * @param adapter {@link ArrayAdapter} in which data is to be populated
+     * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
      */
     public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
@@ -328,6 +294,11 @@ public class DBHandler {
                 });
     }
 
+    /**
+     * Get all recipes for the user associated to their meals
+     * @param adapter {@link ArrayAdapter} in which data is to be populated
+     * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
+     */
     public void getUserRecipesForMeals(MPPickRecipeListAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername());
@@ -370,10 +341,11 @@ public class DBHandler {
 
 
     /**
-     * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes in the recipes {@link List<Recipe>}
+     * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes
+     * in the recipes {@link List<Recipe>}
      *
-     * @param recipes
-     * @param recipe_ids
+     * @param recipes A {@link List<Recipe>} to which recipes have to be added.
+     * @param recipe_ids Fetched recipes have to be contained in {@link List<String>} ids.
      */
     private void getUserRecipesWithID(List<Recipe> recipes, List<String> recipe_ids) {
         if (recipe_ids.isEmpty()){return;}
@@ -458,6 +430,10 @@ public class DBHandler {
     }
 
 
+    /**
+     * Add a recipe to database
+     * @param recipe {@link Recipe} to be added.
+     */
     public void addRecipe(Recipe recipe) {
         HashMap<String, Object> data = recipe.getStorable();
         data.put("user", getUsername());
@@ -466,6 +442,10 @@ public class DBHandler {
         recipe.setR_id(id);
     }
 
+    /**
+     * Update/edit a recipe in database
+     * @param new_recipe {@link Recipe} to be updated.
+     */
     public void updateRecipe(Recipe new_recipe) {
         HashMap<String, Object> data = new_recipe.getStorable();
         data.put("user", getUsername());
@@ -474,6 +454,10 @@ public class DBHandler {
         update(user_recipes, id, data, "user_recipes");
     }
 
+    /**
+     * Delete a recipe in database
+     * @param recipe {@link Recipe} to be deleted.
+     */
     public void removeRecipe(Recipe recipe) {
         System.out.println("Reached");
         CollectionReference user_recipes = getConn().collection("user_recipes");
@@ -523,8 +507,8 @@ public class DBHandler {
     /**
      * Used to fetch all Meals for current user.
      *
-     * @param adapter
-     * @param dialog
+     * @param adapter Adapter to which the meals have to be added.
+     * @param dialog {@link LoadingDialog} to be suspended when done fetching.
      */
 
     public void getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog) {
@@ -556,9 +540,8 @@ public class DBHandler {
     }
 
     /**
-     * Used to add Meals to user's database
-     *
-     * @param meal    : A meal of type {@link Meal} containing information to be added to the database.
+     * Add a meal to database
+     * @param meal {@link Meal} to be added.
      */
     public void addMeal(Meal meal) {
         HashMap<String, Object> data = meal.getStorable();
@@ -568,6 +551,10 @@ public class DBHandler {
         meal.setM_id(id);
     }
 
+    /**
+     * Update/edit a meal in database
+     * @param new_meal {@link Meal} to be updated.
+     */
     public void modifyMeal(Meal new_meal) {
         HashMap<String, Object> data = new_meal.getStorable();
         data.put("user", getUsername());
@@ -576,6 +563,10 @@ public class DBHandler {
         update(user_meals, id, data, "user_meals");
     }
 
+    /**
+     * Delte a meal in database
+     * @param meal {@link Meal} to be deleted.
+     */
     public void removeMeal(Meal meal) {
         CollectionReference user_meals = getConn().collection("user_meals");
         String id = meal.getM_id();
@@ -636,9 +627,8 @@ public class DBHandler {
     }
 
     /**
-     * Used to add Meal plans to user's database.
-     *
-     * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
+     * Add a meal plan to database
+     * @param mealplan {@link MealPlan} to be added.
      */
     public void addMealPlan(MealPlan mealplan) {
         HashMap<String, Object> data = mealplan.getStorable();
@@ -648,6 +638,10 @@ public class DBHandler {
         mealplan.setUmp_id(id);
     }
 
+    /**
+     * Update/edit a meal plan in database
+     * @param mealPlan {@link MealPlan} to be updated.
+     */
     public void updateMealPlan(MealPlan mealPlan) {
 
         HashMap<String, Object> data = mealPlan.getStorable();
@@ -657,6 +651,10 @@ public class DBHandler {
         update(user_mealplans, id, data, "user_mealplans");
     }
 
+    /**
+     * Delet a meal plan in database
+     * @param mealPlan {@link MealPlan} to be deleted.
+     */
     public void removeMealPlan(MealPlan mealPlan) {
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
         String id = mealPlan.get_ump_id();

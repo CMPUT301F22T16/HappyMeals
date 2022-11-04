@@ -52,7 +52,6 @@ public class EditRecipeTest {
 //        solo.clickOnButton("RECIPES");
 //        solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class
 //        solo.clickOnButton();
-        //Asserts that the current activity is the EditRecipe Activity. Otherwise, show “Wrong Activity”
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.clickOnButton("PICK A NEW INGREDIENT"); // Click PICK A NEW INGREDIENT Button
         // Assert that the current activity is the RecipeAddIngredient Activity
@@ -69,7 +68,6 @@ public class EditRecipeTest {
      */
     @Test
     public void testDelete() {
-        //Asserts that the current activity is the EditRecipe Activity. Otherwise, show “Wrong Activity”
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.clickOnButton("PICK A NEW INGREDIENT"); // Click PICK A NEW INGREDIENT Button
         // Assert that the current activity is the RecipeAddIngredient Activity
