@@ -714,7 +714,7 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+    public CollectionReference getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog, Context context) {
         CollectionReference ref = conn.collection("user_mealplans");
         ref
                 .whereEqualTo("user", getUsername())

@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", user.getUsername());
+                bundle.putSerializable("USER", db.getUsername());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

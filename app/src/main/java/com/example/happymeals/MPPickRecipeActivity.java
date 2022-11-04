@@ -71,7 +71,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
             Meal new_meal = new Meal(r,s,recipe_adapter.getMeal_cost());
             new_meal.setM_id(recipe_adapter.getMid());
-            user.modifyMeal(new_meal,this);
+            dbHandler.modifyMeal(new_meal,this);
             finish(); // get back to caller activity which is meal recipe list
 
         });

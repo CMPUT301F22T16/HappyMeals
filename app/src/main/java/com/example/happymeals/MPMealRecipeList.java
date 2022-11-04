@@ -52,28 +52,16 @@ public class MPMealRecipeList extends AppCompatActivity {
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
         intent = new Intent(this,MPPickRecipeActivity.class);
-<<<<<<< HEAD
-        Intent i = getIntent();
-        String m_id = i.getStringExtra("Meal-ID");
-        if (m_id == ""){
-            Meal empty_meal = new Meal();
-            dbHandler.addMeal(empty_meal,this);
-        }
-        // TODO: change to meal instead of using m_id
-//        recipes = meal.getRecipes();
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
-=======
 
         // get the meal object passed in
         Bundle bundle  = getIntent().getExtras();
         Meal meal = (Meal) bundle.getSerializable("MEAL");
         if (meal == null){
             Meal empty_meal = new Meal();
-//            m_id = user.addMeal(empty_meal,this);
+            dbHandler.addMeal(empty_meal,this);
         }
         // TODO: change to meal instead of using m_id
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
->>>>>>> f19bac6 (shifting to seariliable)
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
 //        mpMealRecipeListAdapter.setMid(m_id);
 
