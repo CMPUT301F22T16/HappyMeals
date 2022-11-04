@@ -49,6 +49,8 @@ public class NewMealEntryTests {
 
     /**
      * Runs before all tests and creates solo instance.
+     * Create a recipe and insert it to firebase
+     * so that it can be used in the tests
      * @throws Exception
      */
     @Before
@@ -137,6 +139,12 @@ public class NewMealEntryTests {
         solo.clickOnView(finishButton);
     }
 
+    /**
+     * runs after all tests
+     * delete the test recipes we added before
+     * from firebase
+     * @throws Exception
+     */
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
