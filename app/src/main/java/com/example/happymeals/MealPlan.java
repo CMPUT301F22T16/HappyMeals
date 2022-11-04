@@ -1,15 +1,24 @@
 package com.example.happymeals;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MealPlan implements Storable{
+public class MealPlan implements Storable, Serializable {
     private final List<Meal> breakfast;
     private final List<Meal> lunch;
     private final List<Meal> dinner;
     private final int num_days;
     private String ump_id = null; // ids' null by default if not fetched
+
+    // TODO: needs a title field
+    public MealPlan() {
+        this.breakfast = new ArrayList<>();
+        this.lunch = new ArrayList<>();
+        this.dinner = new ArrayList<>();
+        this.num_days = 0;
+    }
 
     public MealPlan(List<Meal> breakfast, List<Meal> lunch, List<Meal> dinner, int num_days) {
         this.breakfast = breakfast;

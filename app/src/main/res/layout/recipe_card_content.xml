@@ -7,6 +7,7 @@
     android:layout_margin="15dp"
     android:padding="16dp"
     app:cardCornerRadius="15dp"
+    android:descendantFocusability="blocksDescendants"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,6 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/recipe_card_image"
-            app:layout_constraintEnd_toStartOf="@+id/recipe_card_delete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -64,7 +64,6 @@
             android:textColor="@android:color/tab_indicator_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/recipe_card_prep_time"
-            app:layout_constraintEnd_toStartOf="@+id/recipe_card_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_image">
 
@@ -81,55 +80,23 @@
             android:textColor="@android:color/tab_indicator_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/recipe_card_view"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_card_category"></TextView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recipe_card_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:backgroundTint="@color/cardview_light_background"
-            app:layout_constraintBottom_toTopOf="@+id/recipe_card_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/recipe_card_delete"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recipe_card_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:backgroundTint="@color/cardview_light_background"
-            app:layout_constraintBottom_toTopOf="@+id/recipe_card_image"
-            app:layout_constraintEnd_toStartOf="@+id/recipe_card_edit"
-            app:layout_constraintStart_toEndOf="@+id/recipe_card_title"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
-
-        <Button
-            android:id="@+id/recipe_card_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/transparent"
-            android:text="View"
-            android:textColor="@android:color/tab_indicator_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_card_image" />
+<!--        <Button-->
+<!--            android:id="@+id/recipe_card_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:text="View"-->
+<!--            android:textColor="@android:color/tab_indicator_text"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/recipe_card_image" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

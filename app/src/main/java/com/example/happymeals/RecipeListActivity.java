@@ -2,6 +2,7 @@ package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +32,9 @@ public class RecipeListActivity extends AppCompatActivity {
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Recipes");
+
+
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
         RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, db);
@@ -40,8 +44,14 @@ public class RecipeListActivity extends AppCompatActivity {
 
 
         // Populate the recipe list
-        //TODO
+        db.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
 
+//        recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                System.out.println("SELECTED");
+//            }
+//        });
     }
 
     @Override

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:id="@+id/meal_plan_list_content_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="4"
-    >
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:weightSum="4">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_weight="3"
+        android:orientation="vertical"
         android:weightSum="5">
 
         <TextView
@@ -33,9 +34,10 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_weight="1"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_weight="1"
+
         app:srcCompat="@drawable/ic_chevron_right_48px" />
 </LinearLayout>
