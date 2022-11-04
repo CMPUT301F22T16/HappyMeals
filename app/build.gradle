@@ -45,5 +45,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation platform('com.google.firebase:firebase-bom:31.0.1')
     implementation 'com.google.firebase:firebase-analytics'
-
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 }
