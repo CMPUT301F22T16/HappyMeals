@@ -21,7 +21,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     MPMealRecipeListAdapter mpMealRecipeListAdapter;
 
-    ArrayList<Recipe> recipes;
+    List<Recipe> recipes;
     Button addRecipButton;
     Button cancelButton;
     Button finishButton;
@@ -58,10 +58,11 @@ public class MPMealRecipeList extends AppCompatActivity {
         Meal meal = (Meal) bundle.getSerializable("MEAL");
         if (meal == null){
             Meal empty_meal = new Meal();
-//            m_id = user.addMeal(empty_meal,this);
+            user.addMeal(empty_meal,this);
         }
         // TODO: change to meal instead of using m_id
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
+        recipes = meal.getRecipes();
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
 //        mpMealRecipeListAdapter.setMid(m_id);
 
