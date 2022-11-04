@@ -1,12 +1,9 @@
 package com.example.happymeals;
 
-<<<<<<< HEAD
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-=======
->>>>>>> main
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -47,27 +44,15 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
-<<<<<<< HEAD
-        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, curUser, this);
-        recipe_list_view.setAdapter(recipeAdapter);
-=======
-        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, db);
+        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, db, this);
         recipe_list_view.setAdapter(recipeAdapter);
         LoadingDialog dialog = new LoadingDialog(this);
         db.getUserRecipes(recipeAdapter,dialog,this);
 
->>>>>>> main
-
         // Populate the recipe list
-        curUser.getUserRecipes(recipeAdapter, ld, context);
-
-<<<<<<< HEAD
     }
 
     public void handleEditRecipeForResultLauncher(ActivityResult result) {
-
-=======
->>>>>>> main
     }
 
     @Override

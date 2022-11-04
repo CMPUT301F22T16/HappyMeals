@@ -22,25 +22,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     Context context;
     List<Recipe> recipes;
-<<<<<<< HEAD
-    User curUser;
+    DBHandler db;
     RecipeListInterface recipeListInterface;
 
-    RecipeListAdapter(Context context, List<Recipe> recipes, User user, RecipeListInterface recipeListInterface) {
-        super(context, 0, recipes);
-        this.context = context;
-        this.recipes = recipes;
-        this.curUser = user;
-        this.recipeListInterface = recipeListInterface;
-=======
-    DBHandler db;
-
-    RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user) {
+    RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user, RecipeListInterface recipeListInterface) {
         super(context, 0, recipes);
         this.context = context;
         this.recipes = recipes;
         this.db = db;
->>>>>>> main
+        this.recipeListInterface = recipeListInterface;
     }
 
     @NonNull
