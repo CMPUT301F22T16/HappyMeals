@@ -27,7 +27,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Button finishButton;
     Intent intent;
     RecyclerView recyclerView;
-    User user;
+    DBHandler dbHandler;
 
 
     @Override
@@ -46,7 +46,7 @@ public class MPMealRecipeList extends AppCompatActivity {
 //        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
         recipes = new ArrayList<>();
 //        recipes.add(r1);
-        user = new User();
+        dbHandler = new DBHandler();
 
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
@@ -56,17 +56,17 @@ public class MPMealRecipeList extends AppCompatActivity {
         String m_id = i.getStringExtra("Meal-ID");
         if (m_id == ""){
             Meal empty_meal = new Meal();
-            user.addMeal(empty_meal,this);
+            dbHandler.addMeal(empty_meal,this);
         }
         // TODO: change to meal instead of using m_id
-        recipes = meal.getRecipes();
+//        recipes = meal.getRecipes();
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
         mpMealRecipeListAdapter.setMid(m_id);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         LoadingDialog dialog = new LoadingDialog(this);
-        user.getRecipesForMeal((MPMealRecipeListAdapter) mpMealRecipeListAdapter,dialog,this);
+        dbHandler.getRecipesForMeal((MPMealRecipeListAdapter) mpMealRecipeListAdapter,dialog,this);
 
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

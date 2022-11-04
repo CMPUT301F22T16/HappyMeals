@@ -26,7 +26,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     Button add_button;
     Intent intent;
     RecyclerView recyclerView;
-    User user;
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         // User
         Bundle bundle = getIntent().getExtras();
         String username = (String) bundle.getSerializable("USER");
-        user = new User(username);
+        dbHandler = new DBHandler(username);
 
 
         //Testing
@@ -66,7 +66,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         recyclerView.setAdapter(myMealsAdapter);
 
         LoadingDialog dialog = new LoadingDialog(this);
-        user.getUserMeals((MPMyMealsAdapter) myMealsAdapter,dialog,this);
+        dbHandler.getUserMeals((MPMyMealsAdapter) myMealsAdapter,dialog,this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override

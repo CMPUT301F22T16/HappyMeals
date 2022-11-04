@@ -21,7 +21,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     ArrayList<Recipe> dataList;
     SearchView recipe_search_bar;
     Button confirmButton;
-    User user;
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
 
 
-        user = new User();
+        dbHandler = new DBHandler();
 
         recipe_list = findViewById(R.id.mp_recipe_list);
         recipe_adapter = new MPPickRecipeListAdapter(this,dataList);
@@ -45,7 +45,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         recipe_search_bar = findViewById(R.id.searchview_recipe);
         recipe_search_bar.setOnQueryTextListener(this);
         LoadingDialog dialog = new LoadingDialog(this);
-        user.getUserRecipesForMeals(recipe_adapter,dialog,this);
+        dbHandler.getUserRecipesForMeals(recipe_adapter,dialog,this);
         setOnConfirmButtonListener();
         setOnListViewItemListener();
     }
