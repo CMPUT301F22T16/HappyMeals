@@ -5,11 +5,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RecipeTest {
 
-    Recipe recipe = new Recipe();
+    Recipe recipe;
+
+    @Before
+    public void mockRecipe() {
+        recipe = new Recipe();
+    }
 
     @Test
     public void testGetTitle() {
@@ -65,6 +71,14 @@ public class RecipeTest {
     @Test
     public void testGetIngredients() {
         Assert.assertEquals(recipe.getIngredients().size(), 0);
+    }
+
+    @Test
+    public void testGetStorable() {
+        HashMap<String, Object> data = recipe.getStorable();
+        Assert.assertEquals((String) data.get("title"), "New Recipe");
+        Assert.assertEquals(data.get("preparation_time"), 0);
+        Assert.assertEquals(data.get("num_servings"), 0);
     }
 
 }
