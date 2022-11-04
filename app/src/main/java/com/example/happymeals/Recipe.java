@@ -6,6 +6,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This is a modal class for user's Recipe. Implements {@link Storable} in order to store it to the database.
+ * Also implements {@link Serializable} in order to pass it between different activities.
+ *
+ * Members:
+ *  1. r_id : A {@link String} id representing document id of the recipe in the database.
+ *  2. title : A {@link String} title for the recipe.
+ *  3. preparation_time : An {@link Integer} time for number of minutes that it takes to cook the recipe.
+ *  4. num_servings : An {@link Integer} representing number of servings for the recipe.
+ *  5. category: A {@link String} representing category of the recipe.
+ *  6. comments: A {@link List<String>} of comments left by User on their own recipe.
+ *  7. ingredients : A {@link List<Ingredient>} for list of ingredients that this recipe has.
+ */
 public class Recipe implements Storable, Serializable {
     private String r_id = null; // All ids' are null if not fetched
     private String title;
@@ -15,6 +28,9 @@ public class Recipe implements Storable, Serializable {
     private List<String> comments;
     private List<Ingredient> ingredients;
 
+    /**
+     * Default constructor for Recipe. Initializes the recipe object with default values.
+     */
     public Recipe() {
         this.title = "New Recipe";
         this.preparation_time = 0;
@@ -24,6 +40,15 @@ public class Recipe implements Storable, Serializable {
         this.ingredients = new ArrayList<>();
     }
 
+    /**
+     * Constructor for Recipe with all the member listed here. {@link Recipe}
+     * @param title
+     * @param preparation_time
+     * @param num_servings
+     * @param category
+     * @param comments
+     * @param ingredients
+     */
     public Recipe(String title, int preparation_time, int num_servings, String category, List<String> comments, List<Ingredient> ingredients) {
         this.title = title;
         this.preparation_time = preparation_time;
@@ -33,56 +58,115 @@ public class Recipe implements Storable, Serializable {
         this.ingredients = ingredients;
     }
 
+    /**
+     * Get the title of the recipe.
+     * @return A {@link String} title of the recipe.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Get the preparation time for the recipe.
+     * @return An {@link Integer} preparation time for the recipe.
+     */
     public int getPreparation_time() {
         return preparation_time;
     }
 
+    /**
+     * Get the number of servings for the recipe.
+     * @return An {@link Integer} number of servings for the recipe.
+     */
     public int getNum_servings() {
         return num_servings;
     }
 
+    /**
+     * Get the category for the recipe.
+     * @return A {@link String} cateory for the recipe.
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Get the comments for the recipe.
+     * @return A {@link List<String>} with all the comments for the recipe.
+     */
     public List<String> getComments() {
         return comments;
     }
 
+    /**
+     * Get the ingredients for the recipe.
+     * @return A {@link List<Ingredient>} with all the ingredients for the recipe.
+     */
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
+    /**
+     * Set the title for the recipe.
+     * @param title The {@link String} title of the recipe to be set.
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Set the preparation time for the recipe.
+     * @param preparation_time The {@link Integer} preparation time for the recipe.
+     */
     public void setPreparation_time(int preparation_time) {
         this.preparation_time = preparation_time;
     }
 
+    /**
+     * Set the number of servings for the recipe.
+     * @param num_servings The {@link Integer} number of servings for the recipe to be set.
+     */
     public void setNum_servings(int num_servings) {
         this.num_servings = num_servings;
     }
 
+    /**
+     * Set the category of the recipe.
+     * @param category The {@link String} category for the recipe to be set.
+     */
     public void setCategory(String category) {
         this.category = category;
     }
 
+    /**
+     * Set the ingredients for the recipe object.
+     * @param ingredients The {@link List<Ingredient>} list of ingredients to be added to the recipe.
+     */
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
+    /**
+     * Get the document id of the current recipe in the user's database.
+     * @return {@link String} document id for the recipe.
+     */
     public String get_r_id() {
         return this.r_id;
     }
 
+    /**
+     * Sets the returned document id from the firestore.
+     * @apiNote Important
+     *          Do not use this function outside DBHandler. Doing so may result in the recipe becoming unreachable in the
+     *          database.
+     * @param id {@link String} id to be set.
+     */
     public void setR_id(String id) {this.r_id = id;}
 
+    /**
+     * Gets a {@link Storable} {@link HashMap<String, Object>} of data corresponding to the contents of the recipe.
+     * @return A {@link Storable} {@link HashMap<String, Object>} of data.
+     */
     @Override
     public HashMap<String, Object> getStorable() {
 
