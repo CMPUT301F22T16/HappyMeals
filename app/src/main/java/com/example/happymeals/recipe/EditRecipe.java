@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+import com.example.happymeals.DBHandler;
 import com.example.happymeals.Ingredient;
+import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
 
 public class EditRecipe extends AppCompatActivity implements RecyclerViewInterface {
@@ -31,6 +35,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     RecipeIngredientAdapter ingredient_adapter;
     ArrayList<Ingredient> ingredient_data_list;
     Button pick_new_ingredient_btn;
+    Button recipe_submit_btn;
     Uri selected_img;
     int selection = -1;
 
@@ -68,6 +73,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
         Intent intent = getIntent();
 
+        Bundle bundle = getIntent().getExtras();
+        String username = (String) bundle.getSerializable("USER");
+        DBHandler db = new DBHandler(username);
+
         recipe_img_picker_btn = findViewById(R.id.recipe_img_picker_btn);
 
         recipe_ingredient_list = findViewById(R.id.recipe_ingredient_recyclerview);
@@ -76,20 +85,14 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         recipePrepTimeEditText = findViewById(R.id.recipe_prep_time_edit_text);
         recipeNumServEditText = findViewById(R.id.recipe_num_serv_edit_text);
         recipeCategoryEditText = findViewById(R.id.recipe_category_edit_text);
-        recipeCategoryEditText = findViewById(R.id.recipe_category_edit_text);
 //
+        String r_id = intent.getStringExtra("id");
         recipeTitleEditText.setText(intent.getStringExtra("title"));
         recipePrepTimeEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("preparation_time", 0)));
         recipeNumServEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("num_servings", 0)));
         recipeCategoryEditText.setText(intent.getStringExtra("category"));
 
-
-        ingredient_data_list = new ArrayList<Ingredient>();
-        ingredient_data_list.add(new Ingredient("Vegetable","Carrot", 1, 1.00, new Date(), "somewhere"));
-        ingredient_data_list.add(new Ingredient("Vegetable", "Broccoli", 1, 1.00, new Date(), "somewhere"));
-        ingredient_data_list.add(new Ingredient("Meat", "Chicken", 1, 1.00, new Date(), "somewhere"));
-        ingredient_data_list.add(new Ingredient("Dairy", "Milk", 1, 1.00, new Date(), "somewhere"));
-        ingredient_data_list.add(new Ingredient("Meat", "Eggs", 1, 1.00, new Date(), "somewhere"));
+        ingredient_data_list = (ArrayList<Ingredient>) intent.getSerializableExtra("ingredients");
 
         ingredient_adapter = new RecipeIngredientAdapter(this, ingredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
@@ -100,6 +103,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(EditRecipe.this, RecipeAddIngredient.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", db.getUsername());
+                intent.putExtras(bundle);
                 add_ingredient_for_result.launch(intent);
             }
         });
@@ -109,6 +115,22 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 add_img_for_result.launch(intent);
+            }
+        });
+
+        recipe_submit_btn = findViewById(R.id.recipe_submit_button);
+        recipe_submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("id", r_id);
+                intent.putExtra("title", recipeTitleEditText.getText().toString());
+                intent.putExtra("prep_time", Integer.parseInt(recipePrepTimeEditText.getText().toString()));
+                intent.putExtra("num_serv", Integer.parseInt(recipeNumServEditText.getText().toString()));
+                intent.putExtra("category", recipeCategoryEditText.getText().toString());
+                intent.putExtra("ingredients", ingredient_data_list);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -121,12 +143,18 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
-            String descExtra = result.getData().getStringExtra("desc");
+//            String descExtra = result.getData().getStringExtra("desc");
+//            String categoryExtra = result.getData().getStringExtra("category");
+//            int amountExtra = result.getData().getIntExtra("amount", 0);
+//            double costExtra = result.getData().getDoubleExtra("cost", 0.00);
+//            String locRefExtra = result.getData().getStringExtra("locRef");
             String categoryExtra = result.getData().getStringExtra("category");
-            int amountExtra = result.getData().getIntExtra("amount", 0);
-            double costExtra = result.getData().getDoubleExtra("cost", 0.00);
-            String locRefExtra = result.getData().getStringExtra("locRef");
-            ingredient_data_list.add(new Ingredient(categoryExtra, descExtra, amountExtra, costExtra, new Date(), locRefExtra));
+            String descriptionExtra = result.getData().getStringExtra("description");
+            Integer amountExtra = result.getData().getIntExtra("amount", 0);
+            Double costExtra = result.getData().getDoubleExtra("cost", 0.00);
+            Date dateExtra = new Date(result.getData().getLongExtra("date", -1));
+            String loc = result.getData().getStringExtra("loc");
+            ingredient_data_list.add(new Ingredient(categoryExtra, descriptionExtra, amountExtra, costExtra, dateExtra, loc));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(EditRecipe.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();

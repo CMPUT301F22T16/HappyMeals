@@ -27,8 +27,14 @@
             android:layout_gravity="end" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recipe_add_ingredient_recyclerview"
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recipe_add_ingredient_recyclerview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"/>-->
+
+    <ListView
+        android:id="@+id/recipe_add_ingredient_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
