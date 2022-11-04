@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         mealButton = findViewById(R.id.meal_button);
         mealplanButton = findViewById(R.id.mealplan_button);
         recipeButton = findViewById(R.id.recipe_button);
-
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

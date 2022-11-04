@@ -95,7 +95,7 @@ public class Recipe implements Storable, Serializable {
 
         List<String> ingredient_ids = new ArrayList<>();
         for (Ingredient ingredient : this.ingredients) {
-            ingredient_ids.add("/user_ingredients/" + ingredient.getId());
+            ingredient_ids.add(ingredient.getId());
         }
 
         data.put("ingredients", ingredient_ids);

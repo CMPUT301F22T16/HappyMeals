@@ -51,7 +51,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Recipes");
-
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
         RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, db, this);
@@ -60,6 +59,14 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         db.getUserRecipes(recipeAdapter,dialog,this);
 
         // Populate the recipe list
+        db.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
+
+//      recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//          @Override
+//          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//              System.out.println("SELECTED");
+//          }
+//      });
     }
 
     public void handleEditRecipeForResultLauncher(ActivityResult result) {
