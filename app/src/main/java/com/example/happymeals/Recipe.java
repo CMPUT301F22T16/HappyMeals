@@ -36,7 +36,7 @@ public class Recipe implements Storable, Serializable {
         this.preparation_time = 0;
         this.num_servings = 0;
         this.category = "New Category";
-        this.comments = new ArrayList<>(Arrays.asList("Nice!", "Awesome!"));
+        this.comments = new ArrayList<>(Arrays.asList("Nice!"));
         this.ingredients = new ArrayList<>();
     }
 
