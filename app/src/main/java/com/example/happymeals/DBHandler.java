@@ -402,8 +402,10 @@ public class DBHandler {
     }
 
     public void removeRecipe(Recipe recipe, Context context) {
+        System.out.println("Reached");
         CollectionReference user_recipes = getConn().collection("user_recipes");
         String id = recipe.get_r_id();
+        System.out.println(id);
         delete(user_recipes, id, "user_recipes", context);
     }
 
@@ -431,12 +433,14 @@ public class DBHandler {
 
                         meals.clear();
                         for (QueryDocumentSnapshot doc : value) {
+                            String m_id = doc.getId();
                             List<String> recipe_ids = (List<String>) doc.get("recipes");
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, context, recipe_ids);
                             Meal meal = new Meal(recipes, scalings, cost);
+                            meal.setM_id(m_id);
                             meals.add(meal);
                         }
                     }
@@ -465,12 +469,14 @@ public class DBHandler {
 
                         adapter.clear();
                         for (QueryDocumentSnapshot doc : value) {
+                            String m_id = doc.getId();
                             List<String> recipe_ids = (List<String>) doc.get("recipes");
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, context, recipe_ids);
                             Meal meal = new Meal(recipes, scalings, cost);
+                            meal.setM_id(m_id);
                             adapter.add(meal);
                         }
 
@@ -549,6 +555,7 @@ public class DBHandler {
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+                            mealPlan.setUmp_id(ump_id);
                             adapter.add(mealPlan);
                         }
 
