@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -18,13 +19,40 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> recipes;
     private ArrayList<Recipe> arraylist;
     private ArrayList<Recipe> recipes_buffer;
+    private ArrayList<Recipe> existing_recipes;
+    private double meal_cost;
     private Context context;
+    private String m_id;
     LayoutInflater inflater;
+    private List<Double> meal_scalings;
+
+
+    public List<Double> getMeal_scalings() {
+        return meal_scalings;
+    }
+
+    public void setMeal_scalings(List<Double> meal_scalings) {
+        this.meal_scalings = meal_scalings;
+    }
+
+
+    public double getMeal_cost() {
+        return meal_cost;
+    }
+
+    public void setMeal_cost(double meal_cost) {
+        this.meal_cost = meal_cost;
+    }
+
+
 
     public MPPickRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
         this.recipes_buffer = new ArrayList<Recipe>(recipes);
         this.recipes = new ArrayList<Recipe>(recipes);
+        this.existing_recipes = new ArrayList<>();
+        this.meal_scalings = new ArrayList<Double>();
+        this.m_id = "";
         this.arraylist = new ArrayList<Recipe>(recipes);
         inflater = LayoutInflater.from(this.context);
     }
@@ -34,9 +62,40 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         return recipes.size();
     }
 
+    /**
+     *
+     * @return all recipes for this meal
+     * include the existing ones, and also
+     * the new ones user just selected
+     */
+    public ArrayList<Recipe> getAllRecipes(){
+        ArrayList<Recipe> all_recipes = new ArrayList<>();
+        for (Recipe r :existing_recipes){
+            all_recipes.add(r);
+        }
+        for (Recipe r : recipes_buffer) {
+            all_recipes.add(r);
+        }
+        return all_recipes;
+    }
+
+
+    public String getMid(){
+        return this.m_id;
+    }
+
+    public void setMid(String m_id){
+        this.m_id = m_id;
+
+    }
+
     public void clear(){recipes.clear(); arraylist.clear();}
 
     public void add(Recipe recipe){recipes.add(recipe); arraylist.add(recipe);}
+
+    public void clearExistingRecipes(){existing_recipes.clear();}
+
+    public void addToExistingRecipes(Recipe recipe){existing_recipes.add(recipe);}
 
     public void addToBuffer(int position){
         recipes_buffer.add(recipes.get(position));
@@ -66,7 +125,7 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         // Lookup view for data population
         TextView recipeText = v.findViewById(R.id.ml_recipe_list_textView);
         CheckBox checkBox = v.findViewById(R.id.checkBox);
-        if (recipes_buffer.contains(recipes.get(position))){
+        if (recipes_buffer.contains(recipes.get(position)) || existing_recipes.contains(recipes.get(position))){
             if (!checkBox.isChecked()){
                 checkBox.toggle();
             }

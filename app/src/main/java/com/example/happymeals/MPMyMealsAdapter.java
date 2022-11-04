@@ -1,9 +1,11 @@
 package com.example.happymeals;
 
 import static java.sql.DriverManager.println;
+import static java.sql.Types.NULL;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +17,11 @@ import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMealViewHolder> {
 
-    private ArrayList<Meal> meals;
+    private List<Meal> meals;
     private Intent intent;
     private Context mContext;
     private ActivityMpmyMealsBinding activityMpmyMealsBinding;
@@ -28,8 +31,9 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
         public void onClick(View v) {
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
             Meal meal = meals.get(index);
-            intent = new Intent(mContext,MPMealRecipeList.class);
-            intent.putExtra("Meal-ID",meal.getM_id());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("MEAL", meal);
+            intent.putExtras(bundle);
             mContext.startActivity(intent);
         }
     };

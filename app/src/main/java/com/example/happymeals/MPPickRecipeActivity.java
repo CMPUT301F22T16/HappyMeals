@@ -40,12 +40,13 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
         recipe_list = findViewById(R.id.mp_recipe_list);
         recipe_adapter = new MPPickRecipeListAdapter(this,dataList);
-
+        recipe_adapter.setMid(m_id);
         recipe_list.setAdapter(recipe_adapter);
         recipe_search_bar = findViewById(R.id.searchview_recipe);
         recipe_search_bar.setOnQueryTextListener(this);
         LoadingDialog dialog = new LoadingDialog(this);
         user.getUserRecipesForMeals(recipe_adapter,dialog,this);
+        user.getExistingRecipesForMeal(recipe_adapter,dialog,this);
         setOnConfirmButtonListener();
         setOnListViewItemListener();
     }
@@ -66,7 +67,12 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     private void setOnConfirmButtonListener() {
         confirmButton.setOnClickListener(v -> {
             // TODO:should add all selection to meal recipe list
-            // update firebase
+            List<Recipe> r = recipe_adapter.getAllRecipes();
+            List<Double> s = recipe_adapter.getMeal_scalings();
+
+            Meal new_meal = new Meal(r,s,recipe_adapter.getMeal_cost());
+            new_meal.setM_id(recipe_adapter.getMid());
+            user.modifyMeal(new_meal,this);
             finish(); // get back to caller activity which is meal recipe list
 
         });

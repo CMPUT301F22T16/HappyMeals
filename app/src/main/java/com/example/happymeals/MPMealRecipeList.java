@@ -52,16 +52,18 @@ public class MPMealRecipeList extends AppCompatActivity {
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
         intent = new Intent(this,MPPickRecipeActivity.class);
-        Intent i = getIntent();
-        String m_id = i.getStringExtra("Meal-ID");
-        if (m_id == ""){
-            Meal empty_meal = new Meal();
-            m_id = user.addMeal(empty_meal,this);
 
+        // get the meal object passed in
+        Bundle bundle  = getIntent().getExtras();
+        Meal meal = (Meal) bundle.getSerializable("MEAL");
+        if (meal == null){
+            Meal empty_meal = new Meal();
+//            m_id = user.addMeal(empty_meal,this);
         }
+        // TODO: change to meal instead of using m_id
         mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, recipes);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
-        mpMealRecipeListAdapter.setMid(m_id);
+//        mpMealRecipeListAdapter.setMid(m_id);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         LoadingDialog dialog = new LoadingDialog(this);
@@ -98,8 +100,8 @@ public class MPMealRecipeList extends AppCompatActivity {
     private void setOnCancelButtonListener() {
         cancelButton.setOnClickListener(v -> {
             // TODO: maybe a confirmation dialog to confirm cancel action?
-            finish();
-
+//            finish();
+            mpMealRecipeListAdapter.notifyDataSetChanged();
         });
     }
 
