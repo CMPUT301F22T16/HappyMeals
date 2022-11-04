@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".addNewIngredient"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp">
+    tools:context=".addNewIngredient">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        >
+        app:layout_constraintVertical_bias="0.0">
 
 
         <TextView
@@ -26,8 +23,7 @@
             android:layout_height="wrap_content"
             android:text="Please provide the following details"
             android:textSize="24dp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,7 +41,7 @@
                 android:id="@+id/ingredientDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="8"
+                android:ems="9"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:hint="Description"
@@ -58,14 +54,12 @@
             android:layout_height="100dp"
             android:orientation="horizontal">
 
-            <EditText
+            <Spinner
                 android:id="@+id/ingredientLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ems="10"
-                android:hint="Location"
-                />
+                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/ingredientCount"
@@ -73,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Amount"
+                android:hint="Count"
                 android:inputType="number" />
 
             <EditText
@@ -92,8 +86,7 @@
             android:layout_height="wrap_content"
             android:text="Bestbefore date"
             android:textSize="24dp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -17,13 +17,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     Context context;
     List<Recipe> recipes;
-    DBHandler db;
+    User curUser;
 
-    RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user) {
+    RecipeListAdapter(Context context, List<Recipe> recipes, User user) {
         super(context, 0, recipes);
         this.context = context;
         this.recipes = recipes;
-        this.db = db;
+        this.curUser = user;
     }
 
     @NonNull
@@ -55,7 +55,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         delete_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.removeRecipe(recipes.get(position), context);
+                curUser.removeRecipe(recipes.get(position), context);
                 recipes.remove(position);
                 notifyDataSetChanged();
 

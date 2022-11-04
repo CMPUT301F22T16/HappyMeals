@@ -43,7 +43,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
     public MPViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MealPlanListContentBinding binding = MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         binding.getRoot().setOnClickListener(mOnClickListener);
-        return new MPViewHolder(binding);
+        return new MPListAdapter.MPViewHolder(binding);
     }
 
     @Override
@@ -58,15 +58,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
         return mealPlans.size();
     }
 
-    public void clear() {
-        mealPlans.clear();
-    }
-
-    public void add(MealPlan mealPlan) {
-        mealPlans.add(mealPlan);
-    }
-
-    public static class MPViewHolder extends RecyclerView.ViewHolder {
+    public class MPViewHolder extends RecyclerView.ViewHolder {
 
         MealPlanListContentBinding binding;
 

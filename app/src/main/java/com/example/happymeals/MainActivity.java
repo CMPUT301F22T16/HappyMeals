@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DBHandler db = new DBHandler();
+        User user = new User();
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USER", user.getUsername());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

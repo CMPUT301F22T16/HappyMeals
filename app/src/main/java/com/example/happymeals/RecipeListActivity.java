@@ -27,16 +27,16 @@ public class RecipeListActivity extends AppCompatActivity {
         // Get the current user
         Bundle bundle = getIntent().getExtras();
         String username = (String) bundle.getSerializable("USER");
-        DBHandler db = new DBHandler(username);
+        User curUser = new User(username);
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
-        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, db);
+        RecipeListAdapter recipeAdapter = new RecipeListAdapter(this, recipes, curUser);
         recipe_list_view.setAdapter(recipeAdapter);
         LoadingDialog dialog = new LoadingDialog(this);
-        db.getUserRecipes(recipeAdapter,dialog,this);
+        curUser.getUserRecipes(recipeAdapter,dialog,this);
 
 
         // Populate the recipe list
