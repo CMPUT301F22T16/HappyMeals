@@ -105,8 +105,6 @@ public class Ingredient implements Storable, Serializable {
 
     public void setId(String id) { this.id = id; }
 
-
-
     @Override
     public HashMap<String, Object> getStorable() {
         HashMap<String, Object> data = new HashMap();

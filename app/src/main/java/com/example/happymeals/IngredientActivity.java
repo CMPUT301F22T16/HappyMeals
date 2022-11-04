@@ -33,9 +33,6 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
     ArrayList<Ingredient> ingredientList;
     ArrayAdapter ingredientAdaptor;
     ListView ingredientListView;
-//    Button deleteIngredient;
-//    Button addIngredient;
-//    Button editIngredient;
     TextView totalCost;
     FloatingActionButton floatingAdd;
 
@@ -48,7 +45,6 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
         setContentView(R.layout.activity_ingredient);
         Context context = this;
         getSupportActionBar().setTitle("Ingredients");
-        // this.setTitle("My ingredient list");
 
         ingredientList = new ArrayList<Ingredient>();
 
@@ -59,9 +55,6 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
 
 
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
-//        deleteIngredient = (Button) findViewById(R.id.deletebutton);
-//        addIngredient = (Button) findViewById(R.id.addbutton);
-//        editIngredient = (Button) findViewById(R.id.editbutton);
         totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
 
@@ -131,39 +124,6 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
 
                 ViewIngredientFragment.newInstance(ingredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
-                // Two actions can be invoked after clicking a ingredient, delete or edit.
-//                deleteIngredient.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        if (ingredientPosition != -1){
-//                            user.deleteIngredient(ingredient, context);
-//                            //ingredientList.remove(ingredient);
-//                            updateCost();
-//                            ingredientListView.setAdapter(ingredientAdaptor);
-//                            ingredientPosition = -1;
-//                        }
-//
-//                    }
-//                });
-//
-//                editIngredient.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        if (ingredientPosition != -1 && ingredientList.contains(ingredient)) {
-//                            Intent intent = new Intent(IngredientActivity.this, addNewIngredient.class);
-//                            intent.putExtra("mode", "Edit");
-//                            intent.putExtra("category", ingredient.getCategory());
-//                            intent.putExtra("description", ingredient.getDescription());
-//                            intent.putExtra("count", ingredient.getAmount());
-//                            intent.putExtra("unit cost", ingredient.getCost());
-//                            intent.putExtra("year", ingredient.getYear());
-//                            intent.putExtra("month", ingredient.getMonth());
-//                            intent.putExtra("day", ingredient.getDay());
-//                            intent.putExtra("location", ingredient.getLoc());
-//                            addIngredientActivityResultLauncher.launch(intent);
-//                        }
-//                    }
-//                });
             }
         });
 
