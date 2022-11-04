@@ -75,7 +75,7 @@ public class ViewIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.view_ingredient_fragment_layout, null);
 
         Context context = getContext();
-        User user = new User();
+        DBHandler db = new DBHandler();
 //        cityName = view.findViewById(R.id.city_name_editText);
 //        provinceName = view.findViewById(R.id.province_editText);
         thisCategory = view.findViewById(R.id.category);
@@ -179,7 +179,7 @@ public class ViewIngredientFragment extends DialogFragment {
                             thisIngredient.setCost(unitCost);
                             thisIngredient.setDate(year, month, day);
                             thisIngredient.setLoc(location);
-                            user.updateIngredient(thisIngredient, context);
+                            db.updateIngredient(thisIngredient, context);
 
                         }
 
@@ -189,7 +189,7 @@ public class ViewIngredientFragment extends DialogFragment {
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        user.deleteIngredient(thisIngredient, context);
+                        db.deleteIngredient(thisIngredient, context);
 
                     }
                 }).create();
