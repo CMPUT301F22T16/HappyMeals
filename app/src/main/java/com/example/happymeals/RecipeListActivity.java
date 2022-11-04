@@ -30,6 +30,10 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
     private int position;
     DBHandler db;
 
+    /**
+     * This is an ActivityResultLauncher that launches an activity that opens the EditRecipe Activity
+     * @author John Yu
+     */
     ActivityResultLauncher<Intent> edit_recipe_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -70,6 +74,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
     /**
      * This method handles the result after the user returns from the EditRecipe Activity
+     * @author John Yu
      * @param result contains the data that gets returned from the EditRecipe Activity
      */
     public void handleEditRecipeForResultLauncher(ActivityResult result) {
@@ -112,6 +117,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
     /**
      * This method is invoked in the RecipeListAdapter class when the user presses on the Edit Recipe button
      * This method defines the functionality that happens after the Edit Recipe button is pressed
+     * @author John Yu
      * @param position This is an integer that stores the index position of the Recipe that was clicked. The
      *                 index position can be used to retrive the recipe from the recipes list
      * @param op This is a string that defines the type of operation to perform. When the user clicks on the Edit
