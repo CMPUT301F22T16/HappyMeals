@@ -57,6 +57,26 @@ public class Recipe implements Storable, Serializable {
         return ingredients;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPreparation_time(int preparation_time) {
+        this.preparation_time = preparation_time;
+    }
+
+    public void setNum_servings(int num_servings) {
+        this.num_servings = num_servings;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public String get_r_id() {
         return this.r_id;
     }
