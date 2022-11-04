@@ -454,7 +454,7 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserMeals(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
 
         CollectionReference ref = conn.collection("user_meals");
         ref
@@ -484,8 +484,6 @@ public class DBHandler {
                         adapter.notifyDataSetChanged();
                     }
                 });
-
-        return ref;
     }
 
     /**
@@ -524,7 +522,7 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public CollectionReference getUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserMealPlans(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
         CollectionReference ref = conn.collection("user_mealplans");
         ref
                 .whereEqualTo("user", getUsername())
@@ -563,7 +561,6 @@ public class DBHandler {
                         adapter.notifyDataSetChanged();
                     }
                 });
-        return ref;
     }
 
     /**

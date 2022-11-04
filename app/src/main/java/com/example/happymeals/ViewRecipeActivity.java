@@ -56,7 +56,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Setting the page details
         for (Ingredient ingredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(ingredient.getDescription() + " " + ingredient.getAmount() + "\n\n");
+            ingredientListAdapter.add(String.format("%-25s %50s", ingredient.getDescription(), ingredient.getAmount() + " uts"));
         }
 
         for (String comment: recipe.getComments()) {
@@ -65,7 +65,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         category.setText(recipe.getCategory());
         servings.setText("Servings: " + recipe.getNum_servings());
-        prep_time.setText(recipe.getPreparation_time() + " mins");
+        prep_time.setText(recipe.getPreparation_time() + " min/s");
     }
 
     @Override

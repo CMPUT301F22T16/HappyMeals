@@ -48,7 +48,7 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         TextView category_text = convertView.findViewById(R.id.recipe_card_category);
 
         title_text.setText(title);
-        preparation_text.setText("Preparation time: " + prep_time);
+        preparation_text.setText("Preparation time: " + prep_time + " min/s");
         category_text.setText("Category: " + category);
 
         // Adding on click listeners
