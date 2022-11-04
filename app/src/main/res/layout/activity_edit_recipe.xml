@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".recipe.NewRecipe">
+    tools:context=".recipe.EditRecipe">
 
     <Button
         android:id="@+id/recipe_img_picker_btn"

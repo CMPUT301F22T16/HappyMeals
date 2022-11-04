@@ -1,10 +1,15 @@
 package com.example.happymeals;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
@@ -18,12 +23,14 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     Context context;
     List<Recipe> recipes;
     User curUser;
+    RecipeListInterface recipeListInterface;
 
-    RecipeListAdapter(Context context, List<Recipe> recipes, User user) {
+    RecipeListAdapter(Context context, List<Recipe> recipes, User user, RecipeListInterface recipeListInterface) {
         super(context, 0, recipes);
         this.context = context;
         this.recipes = recipes;
         this.curUser = user;
+        this.recipeListInterface = recipeListInterface;
     }
 
     @NonNull
@@ -65,6 +72,8 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
             @Override
             public void onClick(View view) {
                 // TODO add john's code here
+                if (recipeListInterface == null) return;
+                recipeListInterface.onItemClick(position, "edit");
             }
         });
 

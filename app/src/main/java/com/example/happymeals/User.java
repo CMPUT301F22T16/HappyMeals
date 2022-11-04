@@ -310,7 +310,7 @@ public class User {
                             String id = doc.getId();
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
-                            List<String> comments = doc.get("comments", List.class);
+                            List<String> comments = (List<String>) doc.get("comments");
                             List<String> ingredientDescs = (List<String>) data.get("ingredients");
                             List<Integer> amounts = (List<Integer>) data.get("amounts");
                             List<Ingredient> ingredients = new ArrayList<>();
