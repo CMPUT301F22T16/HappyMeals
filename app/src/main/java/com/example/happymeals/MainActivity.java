@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("Is-From-MealPan",false);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

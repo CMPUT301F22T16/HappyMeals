@@ -70,18 +70,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
+            app:icon="@drawable/ic_chevron_right_48px"
             android:layout_margin="16dp"
             android:text="@string/meal_plan_finish" />
 
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/my_meals_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/meal_plan_next_day"
-            android:text="@string/meal_plan_cancel" />
     </FrameLayout>
 
 </LinearLayout>
