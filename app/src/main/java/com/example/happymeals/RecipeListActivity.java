@@ -46,12 +46,12 @@ public class RecipeListActivity extends AppCompatActivity {
         // Populate the recipe list
         db.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
 
-        recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("SELECTED");
-            }
-        });
+//        recipe_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                System.out.println("SELECTED");
+//            }
+//        });
     }
 
     @Override
