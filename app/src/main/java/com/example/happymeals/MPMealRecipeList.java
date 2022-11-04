@@ -1,15 +1,20 @@
 package com.example.happymeals;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 
@@ -22,6 +27,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     MPMealRecipeListAdapter mpMealRecipeListAdapter;
 
     List<Recipe> recipes;
+    List<Recipe> recipes_old;
     Button addRecipButton;
     Button cancelButton;
     Button finishButton;
@@ -29,6 +35,9 @@ public class MPMealRecipeList extends AppCompatActivity {
     RecyclerView recyclerView;
     DBHandler dbHandler;
     Meal meal;
+    Context context;
+    ActivityResultLauncher<Intent> activityLauncher;
+    boolean is_new_meal;
 
 
     @Override
@@ -36,40 +45,39 @@ public class MPMealRecipeList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMpmealRecipeListBinding = ActivityMpmealRecipeListBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_mpmeal_recipe_list);
+        context = this;
 
-        // for testing
         recyclerView = findViewById(R.id.mp_recipe_list_recyclerview);
-//        Ingredient ind = new Ingredient(3,"carrot");
-//        List<String> comments = new ArrayList<>();
-//        comments.add("LGTM!");
-//        List<Ingredient> ingredients = new ArrayList<>();
-//        ingredients.add(ind);
-//        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
-        recipes = new ArrayList<>();
-//        recipes.add(r1);
-        dbHandler = new DBHandler();
-
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
-        intent = new Intent(this,MPPickRecipeActivity.class);
+
+        recipes = new ArrayList<>();
+        recipes_old = new ArrayList<>();
+
+        // set up users
+        dbHandler = new DBHandler();
+
 
         // get the meal object passed in
-        Bundle bundle  = getIntent().getExtras();
-        boolean is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
+        Bundle bundle = getIntent().getExtras();
+        is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
 
-        if (is_new_meal){
+        if (is_new_meal) {
             meal = new Meal();
-            dbHandler.addMeal(meal,this);
+            dbHandler.addMeal(meal, this);
         } else {
             meal = (Meal) bundle.getSerializable("MEAL");
             recipes = meal.getRecipes();
         }
-        // TODO: change to meal instead of using m_id
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes);
-        recyclerView.setAdapter(mpMealRecipeListAdapter);
-//        mpMealRecipeListAdapter.setMid(m_id);
+        // keeps a copy of the recipes
+        for (Recipe r : recipes){
+            recipes_old.add(r);
+        }
 
+        // set up adapter
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes, dbHandler);
+        recyclerView.setAdapter(mpMealRecipeListAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         LoadingDialog dialog = new LoadingDialog(this);
 
@@ -82,36 +90,97 @@ public class MPMealRecipeList extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                mpMealRecipeListAdapter.delete(viewHolder.getAdapterPosition());
+                int item_index = viewHolder.getAdapterPosition();
+                mpMealRecipeListAdapter.delete(item_index);
+                dbHandler.modifyMeal(meal, context);
             }
         });
+
         setOnAddButtonListener();
         setOnCancelButtonListener();
         setOnFinishButtonListener();
+        setUpActivityLauncher();
 
         mpMealRecipeListAdapter.notifyDataSetChanged();
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    public void setUpActivityLauncher() {
+        // this activity launcher was modified from Misha Akopov's answer(May 3, 2020) to this question:
+        // https://stackoverflow.com/questions/61455381/how-to-replace-startactivityforresult-with-activity-result-apis
+        activityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        Bundle bundle = data.getExtras();
+                        meal = (Meal) bundle.getSerializable("Modified-Meal");
+                        recipes = meal.getRecipes();
+                        mpMealRecipeListAdapter.setRecipesList((ArrayList<Recipe>) recipes);
+                        mpMealRecipeListAdapter.notifyDataSetChanged();
+                    }
+                });
+
+    }
+
     private void setOnAddButtonListener() {
         addRecipButton.setOnClickListener(v -> {
-            intent.putExtra("Meal_ID",mpMealRecipeListAdapter.getMid());
-            startActivity(intent);
+            intent = new Intent(this, MPPickRecipeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("MEAL", meal);
+            intent.putExtras(bundle);
+            activityLauncher.launch(intent);
 
         });
     }
 
+    /**
+     * On cancel, we discard the changes we made
+     */
     private void setOnCancelButtonListener() {
         cancelButton.setOnClickListener(v -> {
-            // TODO: maybe a confirmation dialog to confirm cancel action?
-//            finish();
-            mpMealRecipeListAdapter.notifyDataSetChanged();
+            if(recipes.isEmpty() && is_new_meal) {
+                dbHandler.removeMeal(meal, context);
+                finish();
+            }
+            showAlertOnCancel();
         });
+    }
+
+    /**
+     * build an alert dialog on cancel
+     * code taken from David Hedlund's answer from here:
+     * https://stackoverflow.com/questions/2115758/how-do-i-display-an-alert-dialog-on-android
+     */
+    public void showAlertOnCancel(){
+        new AlertDialog.Builder(context)
+                .setTitle("Discard changes")
+                .setMessage("Changes will not be saved. Are you sure to proceed?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        if (is_new_meal){
+                            dbHandler.removeMeal(meal,context);
+                        } else {
+                            meal.setRecipes(recipes_old);
+                            dbHandler.modifyMeal(meal,context);
+                        }
+                        mpMealRecipeListAdapter.notifyDataSetChanged();
+                        finish();
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
-            // TODO: add all the recipes to the meal,(modify meal), or insert the newly created meal
             finish();
 
         });

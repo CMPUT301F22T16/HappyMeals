@@ -2,15 +2,19 @@ package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,34 +22,46 @@ import java.util.List;
 public class MPPickRecipeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
     ListView recipe_list;
     MPPickRecipeListAdapter recipe_adapter;
-    ArrayList<Recipe> dataList;
+    List<Recipe> dataList; // contains all the existing recipes in the meal
     SearchView recipe_search_bar;
     Button confirmButton;
     DBHandler dbHandler;
+    Meal meal;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mppick_recipe);
-        Intent i = getIntent();
-        String m_id = i.getStringExtra("Meal_ID");
-
-        confirmButton = findViewById(R.id.confirm_recipe_selection_button);
-
         dataList = new ArrayList<Recipe>();
 
+        // back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // set up ui components
+        confirmButton = findViewById(R.id.confirm_recipe_selection_button);
+        recipe_list = findViewById(R.id.mp_recipe_list);
+        recipe_search_bar = findViewById(R.id.searchview_recipe);
 
+        // Set up user here
         dbHandler = new DBHandler();
 
-        recipe_list = findViewById(R.id.mp_recipe_list);
-        recipe_adapter = new MPPickRecipeListAdapter(this,dataList);
-        recipe_adapter.setMid(m_id);
+        // set up adapter
+        intent =  getIntent();
+        Bundle bundle  = intent.getExtras();
+        meal = (Meal) bundle.getSerializable("MEAL");
+        dataList = meal.getRecipes();
+        recipe_adapter = new MPPickRecipeListAdapter(this, (ArrayList<Recipe>) dataList);
+
+        // set up search bar
         recipe_list.setAdapter(recipe_adapter);
-        recipe_search_bar = findViewById(R.id.searchview_recipe);
         recipe_search_bar.setOnQueryTextListener(this);
+
+        // get user's recipes
         LoadingDialog dialog = new LoadingDialog(this);
         dbHandler.getUserRecipesForMeals(recipe_adapter,dialog,this);
+
+        // set up all the button listeners
         setOnConfirmButtonListener();
         setOnListViewItemListener();
     }
@@ -65,14 +81,22 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
     private void setOnConfirmButtonListener() {
         confirmButton.setOnClickListener(v -> {
-            // TODO:should add all selection to meal recipe list
-            List<Recipe> r = recipe_adapter.getAllRecipes();
-            List<Double> s = recipe_adapter.getMeal_scalings();
+            // update recipes for the meal
+            if (recipe_adapter.getRecipesSelected().size()<1){
+                createPopup("You haven't select anything yet");
+            } else {
 
-            Meal new_meal = new Meal(r,s,recipe_adapter.getMeal_cost());
-            new_meal.setM_id(recipe_adapter.getMid());
-            dbHandler.modifyMeal(new_meal,this);
-            finish(); // get back to caller activity which is meal recipe list
+                List<Recipe> r = recipe_adapter.getAllRecipes();
+                meal.setRecipes(r);
+                dbHandler.modifyMeal(meal,this);
+
+                Intent return_intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Modified-Meal", meal);
+                return_intent.putExtras(bundle);
+                setResult(Activity.RESULT_OK,return_intent);
+                this.finish();// get back to caller activity which is meal recipe list
+            }
 
         });
     }
@@ -93,5 +117,33 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
             }
         });
+    }
+
+    /**
+     * This method creates a popup
+     * @param message set the message we want to display
+     * Knowledge from Sumit Saxena's anwser(Apr 22, 2016) to
+     * https://stackoverflow.com/questions/22655599/alertdialog-builder-with-custom-layout-and-edittext-cannot-access-view
+     */
+    public void createPopup(String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final View popupView = getLayoutInflater().inflate(R.layout.popup, null);
+        dialogBuilder.setView((popupView));
+        TextView alertMessage = popupView.findViewById(R.id.textViewAlertMessage);
+        alertMessage.setText(message);
+        dialogBuilder.create();
+        dialogBuilder.show();
+    }
+
+    // https://stackoverflow.com/questions/14545139/android-back-button-in-the-title-bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

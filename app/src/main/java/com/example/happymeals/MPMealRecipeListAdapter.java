@@ -2,6 +2,7 @@ package com.example.happymeals;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +20,24 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     private ArrayList<Recipe> recipes;
     private ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     private Context mContext;
-    private String m_id ="";
+    private DBHandler db;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
             // TODO: should start activity: View Recipe
+//            intent = new Intent(mContext,MPPickRecipeActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("RECIPE", recipes.get(itemPosition));
+//            intent.putExtras(bundle);
+//            mContext.startActivity(intent);
 
-            Intent intent = new Intent(mContext,MPPickRecipeActivity.class);
-            intent.putExtra("Meal_ID",getMid());
-            mContext.startActivity(intent);
         }
     };
 
     // indices needs to be added into the arguments.
-    public MPMealRecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
+    public MPMealRecipeListAdapter(Context context, ArrayList<Recipe> recipes,DBHandler db) {
+        this.db = db;
         this.recipes = recipes;
         this.mContext = context;
         activityMpmealRecipeListBinding = ActivityMpmealRecipeListBinding.inflate(LayoutInflater.from(context));
@@ -53,19 +57,16 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         holder.binding.mpMealRecipeListContentTitle.setText(recipe.getTitle());
 
     }
+
+    public void setRecipesList(ArrayList<Recipe> recipes){
+        this.recipes = recipes;
+    }
+
     public void delete(int index){
         recipes.remove(index);
+        notifyDataSetChanged();
     }
 
-
-    public String getMid(){
-        return this.m_id;
-    }
-
-    public void setMid(String m_id){
-        this.m_id = m_id;
-
-    }
 
     public void clear(){
         recipes.clear();

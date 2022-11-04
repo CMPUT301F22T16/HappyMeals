@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Meal implements Storable, Serializable {
-    private final List<Recipe> recipes;
+    private List<Recipe> recipes;
     private final List<Double> scalings;
     private final double cost;
     private String m_id = null;
@@ -25,6 +25,9 @@ public class Meal implements Storable, Serializable {
         this.recipes = new ArrayList<>();
         scalings = new ArrayList<>();
         cost = 0;
+    }
+    public void removeRecipe(int index){
+        this.recipes.remove(index);
     }
 
     public List<Recipe> getRecipes() {
@@ -47,8 +50,8 @@ public class Meal implements Storable, Serializable {
         this.m_id = id;
     }
 
-    public void add_recipes(Recipe r){
-        recipes.add(r);
+    public void setRecipes(List<Recipe> recipes){
+        this.recipes = recipes;
     }
 
     @Override
