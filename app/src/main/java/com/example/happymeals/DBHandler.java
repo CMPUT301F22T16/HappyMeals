@@ -1,6 +1,40 @@
 package com.example.happymeals;
 
-public class User {
+import android.content.Context;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * Represents a User object. User class maintains a username and also has a database connection established that it can use to add/modify/delete
+ * content of following collections in Firestore
+ * 1. user_ingredients: {@link Ingredient} is model class for this.
+ * 2. users: {@link User} is model class for this.
+ * 3. user_storages: {@link Storage} is the model class for this.
+ * 4. user_recipes: {@link Recipe} is the model class for this.
+ * 5. user_meals: {@link Meal} is the model class for this.
+ * 6. user_mealplans: {@link MealPlan} is the model class for this.
+ *
+ */
+public class DBHandler {
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -9,12 +43,13 @@ public class User {
     private String username;
     private FirebaseFirestore conn;
 
-    public User() {
-        username = "Guest"; // This is temporary
+    //TEMPORARY CONSTRUCTOR USED ONLY FOR HALFWAY CHECKPOINT
+    public DBHandler() {
+        username = "Guest"; //
         conn = FirebaseFirestore.getInstance();
     }
 
-    public User(String username) {
+    public DBHandler(String username) {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
@@ -24,10 +59,12 @@ public class User {
         return this.username;
     }
 
-    public FirebaseFirestore getConn() {
+    private FirebaseFirestore getConn() {
         return this.conn;
     }
 
+    //FOR FINAL CHECKPOINT
+    /*
     public void newUser(Context context, String username) {
         HashMap<String, String> data = new HashMap<>();
         data.put("pass", "");
@@ -50,6 +87,7 @@ public class User {
                     }
                 });
     }
+     */
 
     private String store(CollectionReference ref, HashMap data, String collType, Context context) {
         String id;
@@ -278,15 +316,15 @@ public class User {
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) doc.get("comments");
                             List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Integer> amounts = (List<Integer>) data.get("amounts");
+                            List<Long> amounts = (List<Long>) data.get("amounts");
                             List<Ingredient> ingredients = new ArrayList<>();
                             for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i), ingredientDescs.get(i));
+                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
                                 ingredients.add(ingredient);
                             }
 
-                            Integer num_servings = (Integer) data.get("num_servings");
-                            Integer preparation_time = (Integer) data.get("preparation_time");
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
@@ -546,4 +584,6 @@ public class User {
         String id = mealPlan.get_ump_id();
         delete(user_mealplans, id, "user_mealplans", context);
     }
+
+
 }
