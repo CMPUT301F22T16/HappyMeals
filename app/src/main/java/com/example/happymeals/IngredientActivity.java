@@ -43,7 +43,6 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
-        Context context = this;
         getSupportActionBar().setTitle("Ingredients");
 
         ingredientList = new ArrayList<Ingredient>();
@@ -95,7 +94,7 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
                                 oldIngredient.setDate(year, month, day);
                                 oldIngredient.setLoc(location);
 
-                                db.updateIngredient(oldIngredient, context);
+                                db.updateIngredient(oldIngredient);
                                 ingredientPosition = -1;
                             } else if (mode.equals("Add")) {
                                 Calendar cal = Calendar.getInstance();
@@ -105,7 +104,7 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
                                 Date date = cal.getTime();
                                 Ingredient newIngredient = new Ingredient(category, description, count, unitCost, date, location);
                                 //ingredientList.add(newIngredient);
-                                db.newIngredient(newIngredient, context);
+                                db.newIngredient(newIngredient);
                                 ingredientPosition = -1;
                             }
                             updateCost();

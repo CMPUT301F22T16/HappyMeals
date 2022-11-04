@@ -179,7 +179,7 @@ public class ViewIngredientFragment extends DialogFragment {
                             thisIngredient.setCost(unitCost);
                             thisIngredient.setDate(year, month, day);
                             thisIngredient.setLoc(location);
-                            db.updateIngredient(thisIngredient, context);
+                            db.updateIngredient(thisIngredient);
 
                         }
 
@@ -189,7 +189,7 @@ public class ViewIngredientFragment extends DialogFragment {
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        db.deleteIngredient(thisIngredient, context);
+                        db.deleteIngredient(thisIngredient);
 
                     }
                 }).create();

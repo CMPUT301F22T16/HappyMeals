@@ -69,7 +69,7 @@ public class MPMealRecipeList extends AppCompatActivity {
 
         if (is_new_meal) {
             meal = new Meal();
-            dbHandler.addMeal(meal, this);
+            dbHandler.addMeal(meal);
         } else {
             meal = (Meal) bundle.getSerializable("MEAL");
             recipes = meal.getRecipes();
@@ -96,7 +96,7 @@ public class MPMealRecipeList extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int item_index = viewHolder.getAdapterPosition();
                 mpMealRecipeListAdapter.delete(item_index);
-                dbHandler.modifyMeal(meal, context);
+                dbHandler.modifyMeal(meal);
             }
         });
 
@@ -144,7 +144,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     private void setOnCancelButtonListener() {
         cancelButton.setOnClickListener(v -> {
             if(recipes.isEmpty() && is_new_meal) {
-                dbHandler.removeMeal(meal, context);
+                dbHandler.removeMeal(meal);
                 finish();
             }
             showAlertOnCancel();
@@ -167,10 +167,10 @@ public class MPMealRecipeList extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Continue with delete operation
                         if (is_new_meal){
-                            dbHandler.removeMeal(meal,context);
+                            dbHandler.removeMeal(meal);
                         } else {
                             meal.setRecipes(recipes_old);
-                            dbHandler.modifyMeal(meal,context);
+                            dbHandler.modifyMeal(meal);
                         }
                         mpMealRecipeListAdapter.notifyDataSetChanged();
                         finish();
