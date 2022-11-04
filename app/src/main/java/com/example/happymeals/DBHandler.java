@@ -67,7 +67,7 @@ public class DBHandler {
 
     //FOR FINAL CHECKPOINT
     /*
-    public void newUser(Context context, String username) {
+    public void newUser(String username) {
         HashMap<String, String> data = new HashMap<>();
         data.put("pass", "");
         CollectionReference ref = conn.collection("users");
@@ -78,20 +78,18 @@ public class DBHandler {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d("Stor", "Data has been added successfully!");
-                        Toast.makeText(context,  "New user added successfully", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("Stor", "Data could not be added!" + e.toString());
-                        Toast.makeText(context, "New user could not be added", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
      */
 
-    private String store(CollectionReference ref, HashMap data, String collType, Context context) {
+    private String store(CollectionReference ref, HashMap data, String collType) {
         String id;
         DocumentReference doc = ref.document();
         doc
@@ -106,14 +104,13 @@ public class DBHandler {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("store", "Data could not be added!" + e.toString());
-                        Toast.makeText(context, "Error: " + collType + "could not be added", Toast.LENGTH_SHORT).show();
                     }
                 });
 
         return doc.getId();
     }
 
-    private void delete(CollectionReference ref, String id, String collType, Context context) {
+    private void delete(CollectionReference ref, String id, String collType) {
         ref
                 .document(id)
                 .delete()
@@ -127,12 +124,11 @@ public class DBHandler {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("delete", "Data could not be deleted!" + e.toString());
-                        Toast.makeText(context, "Error: " + collType + " not be deleted", Toast.LENGTH_SHORT);
                     }
                 });
     }
 
-    private void update(CollectionReference ref, String id, HashMap<String, Object> data, String collType, Context context) {
+    private void update(CollectionReference ref, String id, HashMap<String, Object> data, String collType) {
         ref
                 .document(id)
                 .update(data)
@@ -146,7 +142,6 @@ public class DBHandler {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("update", "Data could not be updated!" + e.toString());
-                        Toast.makeText(context, "Error: " + collType + " not be updated", Toast.LENGTH_SHORT);
                     }
                 });
     }
@@ -189,34 +184,31 @@ public class DBHandler {
     /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
      * @param storage : Object of type {@link Storage} that will be stored in the database.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void newStorage(Storage storage, Context context) {
+    public void newStorage(Storage storage) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("storages");
-        String id = store(ref, data, "Storage", context);
+        String id = store(ref, data, "Storage");
         storage.setId(id);
     }
 
     /**
      * Deletes the entry of a {@link Storage} object from the database.
      * @param storage : Object of type {@link Storage} that will be removed from the database
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void deleteStorage(Storage storage, Context context) {
+    public void deleteStorage(Storage storage) {
         CollectionReference ref = conn.collection("storages");
-        delete(ref, storage.getId(), "Storage", context);
+        delete(ref, storage.getId(), "Storage");
     }
 
     /**
      * Updates the entry of {@link Storage} object in the database.
      * @param storage : Object of type {@link Storage} to be updated in the database.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void updateStorage(Storage storage, Context context) {
+    public void updateStorage(Storage storage) {
         CollectionReference ref = conn.collection("storages");
-        update(ref, storage.getId(), storage.getStorable(), "Storage", context);
+        update(ref, storage.getId(), storage.getStorable(), "Storage");
     }
 
     //-------------------------------------------------Ingredient Methods-------------------------------------------------//
@@ -224,35 +216,32 @@ public class DBHandler {
     /**
      * Stores a {@link Ingredient} object in the database, and attaches the database ID of the entry to the object.
      * @param ingredient : Object of type {@link Storage} that will be added to the database
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void newIngredient(Ingredient ingredient, Context context) {
+    public void newIngredient(Ingredient ingredient) {
         HashMap<String, Object> data  = ingredient.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("user_ingredients");
-        String id = store(ref, data, "Ingredient", context);
+        String id = store(ref, data, "Ingredient");
         ingredient.setId(id);
     }
 
     /**
      * Deletes the entry of a {@link Ingredient} object from the database.
      * @param ingredient : Object of type {@link Ingredient} that will be removed from the database
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void deleteIngredient(Ingredient ingredient, Context context) {
+    public void deleteIngredient(Ingredient ingredient) {
         CollectionReference ref = conn.collection("user_ingredients");
-        delete(ref, ingredient.getId(), "Ingredient", context);
+        delete(ref, ingredient.getId(), "Ingredient");
     }
 
     /**
      * Updates the entry of {@link Ingredient} object in the database.
      *
      * @param ingredient : Object of type {@link Ingredient} to be updated in the database.
-     * @param context    : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user on failure.
      */
-    public void updateIngredient(Ingredient ingredient, Context context) {
+    public void updateIngredient(Ingredient ingredient) {
         CollectionReference ref = conn.collection("user_ingredients");
-        update(ref, ingredient.getId(), ingredient.getStorable(), "Ingredient", context);
+        update(ref, ingredient.getId(), ingredient.getStorable(), "Ingredient");
     }
 
     /**
@@ -297,7 +286,7 @@ public class DBHandler {
      * @param adapter
      * @param dialog
      */
-    public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername());
 
@@ -307,7 +296,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH RECIPES", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve recipes", Toast.LENGTH_SHORT);
                             return;
                         }
 
@@ -340,7 +328,7 @@ public class DBHandler {
                 });
     }
 
-    public void getUserRecipesForMeals(MPPickRecipeListAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserRecipesForMeals(MPPickRecipeListAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername());
         query
@@ -349,7 +337,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH RECIPES", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve recipes", Toast.LENGTH_SHORT);
                             return;
                         }
 
@@ -386,10 +373,9 @@ public class DBHandler {
      * Used to get user recipes with ids in the recipe_ids {@link List<String>}. Puts the returned recipes in the recipes {@link List<Recipe>}
      *
      * @param recipes
-     * @param context
      * @param recipe_ids
      */
-    private void getUserRecipesWithID(List<Recipe> recipes, Context context, List<String> recipe_ids) {
+    private void getUserRecipesWithID(List<Recipe> recipes, List<String> recipe_ids) {
         if (recipe_ids.isEmpty()){return;}
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
@@ -399,7 +385,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH RECIPES", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve recipes with ID", Toast.LENGTH_SHORT);
                             return;
                         }
 
@@ -433,11 +418,10 @@ public class DBHandler {
      * Update the recipes through adapter
      *
      * @param recipes
-     * @param context
      * @param recipe_ids
      * @param adapter
      */
-    private void getUserRecipesByMeal(List<Recipe> recipes, Context context, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
+    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
@@ -446,7 +430,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH RECIPES", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve recipes with ID", Toast.LENGTH_SHORT);
                             return;
                         }
                         for (QueryDocumentSnapshot doc : value) {
@@ -475,28 +458,28 @@ public class DBHandler {
     }
 
 
-    public void addRecipe(Recipe recipe, Context context) {
+    public void addRecipe(Recipe recipe) {
         HashMap<String, Object> data = recipe.getStorable();
         data.put("user", getUsername());
         CollectionReference user_recipes = getConn().collection("user_recipes");
-        String id = store(user_recipes, data, "Recipes", context);
+        String id = store(user_recipes, data, "Recipes");
         recipe.setR_id(id);
     }
 
-    public void updateRecipe(Recipe new_recipe, Context context) {
+    public void updateRecipe(Recipe new_recipe) {
         HashMap<String, Object> data = new_recipe.getStorable();
         data.put("user", getUsername());
         CollectionReference user_recipes = getConn().collection("user_recipes");
         String id = new_recipe.get_r_id();
-        update(user_recipes, id, data, "user_recipes", context);
+        update(user_recipes, id, data, "user_recipes");
     }
 
-    public void removeRecipe(Recipe recipe, Context context) {
+    public void removeRecipe(Recipe recipe) {
         System.out.println("Reached");
         CollectionReference user_recipes = getConn().collection("user_recipes");
         String id = recipe.get_r_id();
         System.out.println(id);
-        delete(user_recipes, id, "user_recipes", context);
+        delete(user_recipes, id, "user_recipes");
     }
 
     //-------------------------------------------------Meal Methods-------------------------------------------------//
@@ -507,7 +490,7 @@ public class DBHandler {
      * @param meals
      * @param dialog
      */
-    private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog, Context context, List<String> meal_ids) {
+    private void getUserMealsWithID(List<Meal> meals, LoadingDialog dialog, List<String> meal_ids) {
         if(meal_ids.isEmpty()) {return;}
         CollectionReference ref = conn.collection("user_meals");
         ref
@@ -518,7 +501,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH MEALS", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve meals", Toast.LENGTH_SHORT);
                             return;
                         }
 
@@ -529,7 +511,7 @@ public class DBHandler {
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
-                            getUserRecipesWithID(recipes, context, recipe_ids);
+                            getUserRecipesWithID(recipes, recipe_ids);
                             Meal meal = new Meal(recipes, scalings, cost);
                             meal.setM_id(m_id);
                             meals.add(meal);
@@ -545,7 +527,7 @@ public class DBHandler {
      * @param dialog
      */
 
-    public void getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserMeals(MPMyMealsAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_meals");
         ref
                 .whereEqualTo("user", getUsername())
@@ -554,7 +536,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH MEALS", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve meals", Toast.LENGTH_SHORT);
                             return;
                         }
                         adapter.clear();
@@ -564,7 +545,7 @@ public class DBHandler {
                             Double cost = (Double) doc.getDouble("cost");
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
-                            getUserRecipesWithID(recipes, context, recipe_ids);
+                            getUserRecipesWithID(recipes, recipe_ids);
                             Meal meal = new Meal(recipes, scalings, cost);
                             meal.setM_id(m_id);
                             adapter.add(meal);
@@ -578,28 +559,27 @@ public class DBHandler {
      * Used to add Meals to user's database
      *
      * @param meal    : A meal of type {@link Meal} containing information to be added to the database.
-     * @param context : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
-    public void addMeal(Meal meal, Context context) {
+    public void addMeal(Meal meal) {
         HashMap<String, Object> data = meal.getStorable();
         data.put("user", getUsername());
         CollectionReference user_meals = getConn().collection("user_meals");
-        String id = store(user_meals, data, "Meal", context);
+        String id = store(user_meals, data, "Meal");
         meal.setM_id(id);
     }
 
-    public void modifyMeal(Meal new_meal, Context context) {
+    public void modifyMeal(Meal new_meal) {
         HashMap<String, Object> data = new_meal.getStorable();
         data.put("user", getUsername());
         CollectionReference user_meals = getConn().collection("user_meals");
         String id = new_meal.getM_id();
-        update(user_meals, id, data, "user_meals", context);
+        update(user_meals, id, data, "user_meals");
     }
 
-    public void removeMeal(Meal meal, Context context) {
+    public void removeMeal(Meal meal) {
         CollectionReference user_meals = getConn().collection("user_meals");
         String id = meal.getM_id();
-        delete(user_meals, id, "user_meals", context);
+        delete(user_meals, id, "user_meals");
     }
 
     //-------------------------------------------------MealPlan Methods-------------------------------------------------//
@@ -612,7 +592,7 @@ public class DBHandler {
      */
 
     // TODO: if the user doesnt have any MealPlan the app crashes
-    public void getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog, Context context) {
+    public void getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog) {
 
         CollectionReference ref = conn.collection("user_mealplans");
         ref
@@ -622,7 +602,6 @@ public class DBHandler {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if (error != null) {
                             Log.d("FETCH MEALPLANS", error.toString());
-                            Toast.makeText(context, "Error cannot retrieve mealplans", Toast.LENGTH_SHORT);
                             return;
                         }
 
@@ -638,9 +617,9 @@ public class DBHandler {
                             List<String> lunch_ids = (List<String>) data.get("lunch");
                             List<String> dinner_ids = (List<String>) data.get("dinner");
 
-                            getUserMealsWithID(breakfast, dialog, context, breakfast_ids);
-                            getUserMealsWithID(lunch, dialog, context, lunch_ids);
-                            getUserMealsWithID(dinner, dialog, context, dinner_ids);
+                            getUserMealsWithID(breakfast, dialog, breakfast_ids);
+                            getUserMealsWithID(lunch, dialog, lunch_ids);
+                            getUserMealsWithID(dinner, dialog, dinner_ids);
 
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
@@ -660,29 +639,28 @@ public class DBHandler {
      * Used to add Meal plans to user's database.
      *
      * @param mealplan : A meal plan of type {@link MealPlan} containing information for breakfast, lunch, dinner meals to be added to database.
-     * @param context  : Activity {@link Context} in which this method is called. It is used to display {@link Toast} notification to user about success.
      */
-    public void addMealPlan(MealPlan mealplan, Context context) {
+    public void addMealPlan(MealPlan mealplan) {
         HashMap<String, Object> data = mealplan.getStorable();
         data.put("user", getUsername());
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
-        String id = store(user_mealplans, data, "Meal Plan", context);
+        String id = store(user_mealplans, data, "Meal Plan");
         mealplan.setUmp_id(id);
     }
 
-    public void updateMealPlan(MealPlan mealPlan, Context context) {
+    public void updateMealPlan(MealPlan mealPlan) {
 
         HashMap<String, Object> data = mealPlan.getStorable();
         data.put("user", getUsername());
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
         String id = mealPlan.get_ump_id();
-        update(user_mealplans, id, data, "user_mealplans", context);
+        update(user_mealplans, id, data, "user_mealplans");
     }
 
-    public void removeMealPlan(MealPlan mealPlan, Context context) {
+    public void removeMealPlan(MealPlan mealPlan) {
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
         String id = mealPlan.get_ump_id();
-        delete(user_mealplans, id, "user_mealplans", context);
+        delete(user_mealplans, id, "user_mealplans");
     }
 
 

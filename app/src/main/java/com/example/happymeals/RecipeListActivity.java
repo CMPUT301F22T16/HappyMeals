@@ -62,10 +62,10 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
         recipe_list_view.setAdapter(recipeAdapter);
         LoadingDialog dialog = new LoadingDialog(this);
-        db.getUserRecipes(recipeAdapter,dialog,this);
+        db.getUserRecipes(recipeAdapter,dialog);
 
         // Populate the recipe list
-        db.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
+        db.getUserRecipes(recipeAdapter, new LoadingDialog(this));
 
     }
 
@@ -94,7 +94,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 //            test.add(new Ingredient(3, "Test"));
 //            test.add(new Ingredient(4, "Test 2"));
 //            rec.setIngredients(test);
-            db.updateRecipe(rec, this);
+            db.updateRecipe(rec);
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
         }
@@ -133,7 +133,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         }
 
         if (op == "delete") {
-            db.removeRecipe(recipeAdapter.getItem(position), this);
+            db.removeRecipe(recipeAdapter.getItem(position));
             recipeAdapter.notifyDataSetChanged();
         }
 

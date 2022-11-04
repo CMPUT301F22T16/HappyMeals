@@ -62,7 +62,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
         // get user's recipes
         LoadingDialog dialog = new LoadingDialog(this);
-        dbHandler.getUserRecipesForMeals(recipe_adapter,dialog,this);
+        dbHandler.getUserRecipesForMeals(recipe_adapter,dialog);
 
         // set up all the button listeners
         setOnConfirmButtonListener();
@@ -91,7 +91,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
 
                 List<Recipe> r = recipe_adapter.getAllRecipes();
                 meal.setRecipes(r);
-                dbHandler.modifyMeal(meal,this);
+                dbHandler.modifyMeal(meal);
 
                 Intent return_intent = new Intent();
                 Bundle bundle = new Bundle();

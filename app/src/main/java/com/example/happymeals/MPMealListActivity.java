@@ -66,7 +66,7 @@ public class MPMealListActivity extends AppCompatActivity {
 
         if((boolean) bundle.getSerializable("IsNewMP")) {
             mealIndex = -1;
-            db.addMealPlan(mealPlan, this);
+            db.addMealPlan(mealPlan);
         } else {
             meals.clear();
             if(!mealPlan.getBreakfast().isEmpty()) {
@@ -160,7 +160,7 @@ public class MPMealListActivity extends AppCompatActivity {
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
             mealPlan.setDays(mealPlan.getBreakfast().size());
-            db.updateMealPlan(mealPlan, activityMpmealListBinding.getRoot().getContext());
+            db.updateMealPlan(mealPlan);
             finish();
         });
     }
