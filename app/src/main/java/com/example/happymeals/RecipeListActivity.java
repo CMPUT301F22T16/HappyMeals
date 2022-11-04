@@ -40,12 +40,7 @@ public class RecipeListActivity extends AppCompatActivity {
 
 
         // Populate the recipe list
-<<<<<<< HEAD
         curUser.getUserRecipes(recipeAdapter, new LoadingDialog(this), this);
-=======
-        //TODO
->>>>>>> 4405448db99b3e7378a1f83570222f7c00d27344
-
     }
 
     @Override
