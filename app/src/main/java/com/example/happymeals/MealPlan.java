@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MealPlan implements Storable, Serializable {
-    private final List<Meal> breakfast;
-    private final List<Meal> lunch;
-    private final List<Meal> dinner;
-    private final int num_days;
+    private List<Meal> breakfast;
+    private List<Meal> lunch;
+    private List<Meal> dinner;
+    private int num_days;
     private String ump_id = null; // ids' null by default if not fetched
 
     // TODO: needs a title field
@@ -27,6 +27,8 @@ public class MealPlan implements Storable, Serializable {
         this.num_days = num_days;
     }
 
+    public void increaseDays() {this.num_days++;}
+
     public List<Meal> getBreakfast() {
         return breakfast;
     }
@@ -37,6 +39,30 @@ public class MealPlan implements Storable, Serializable {
 
     public List<Meal> getDinner() {
         return dinner;
+    }
+
+    public void setBreakfastWithIndex(Meal meal, int index) {
+        if(index >= this.breakfast.size()) {
+            this.breakfast.add(meal);
+        } else {
+            this.breakfast.set(index, meal);
+        }
+    }
+
+    public void setLunchWithIndex(Meal meal, int index) {
+        if(index >= this.lunch.size()){
+            this.lunch.add(meal);
+        } else {
+            this.lunch.set(index, meal);
+        }
+    }
+
+    public void setDinnerWithIndex(Meal meal, int index) {
+        if(index >= this.dinner.size()) {
+            this.dinner.add(meal);
+        } else {
+            this.dinner.set(index, meal);
+        }
     }
 
     public int getNum_days() {

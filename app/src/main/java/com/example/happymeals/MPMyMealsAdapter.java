@@ -3,6 +3,7 @@ package com.example.happymeals;
 import static java.sql.DriverManager.println;
 import static java.sql.Types.NULL;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.example.happymeals.databinding.MealPlanListContentBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMealViewHolder> {
 
@@ -26,23 +28,51 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     private Intent intent;
     private ActivityMpmyMealsBinding activityMpmyMealsBinding;
     private DBHandler db;
+    private AtomicBoolean isEdit;
+    private MealPlan mealPlan;
+    private int dayIndex;
+    private int mealIndex;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
             Meal meal = meals.get(index);
-            intent = new Intent(mContext,MPMealRecipeList.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("IsNewMeal", false);
-            bundle.putSerializable("MEAL", meal);
-            intent.putExtras(bundle);
-            mContext.startActivity(intent);
+
+            if(isEdit.get()) {
+                intent = new Intent(mContext,MPMealRecipeList.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("IsNewMeal", false);
+                bundle.putSerializable("MEAL", meal);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            } else {
+                // TODO: fix this when the data structure is fixed
+                intent = new Intent();
+                Bundle bundle = new Bundle();
+                if(mealIndex==0) {
+                    mealPlan.setBreakfastWithIndex(meal, dayIndex);
+                } else if(mealIndex == 1) {
+                    mealPlan.setLunchWithIndex(meal, dayIndex);
+                } else if(mealIndex == 2) {
+                    mealPlan.setDinnerWithIndex(meal, dayIndex);
+                }
+                bundle.putSerializable("M-MEALPLAN", mealPlan);
+                intent.putExtras(bundle);
+                // https://stackoverflow.com/questions/7951936/how-to-finish-an-activity-from-an-adapter
+                ((MPMyMealsActivity)mContext).setResult(Activity.RESULT_OK, intent);
+                ((MPMyMealsActivity)mContext).finish();
+            }
+
         }
     };
 
-    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals,DBHandler db) {
+    public MPMyMealsAdapter(Context context, ArrayList<Meal> meals, DBHandler db, AtomicBoolean isEdit, int dayIndex, int mealIndex, MealPlan mealPlan) {
         this.meals = meals;
+        this.isEdit = isEdit;
+        this.dayIndex = dayIndex;
+        this.mealIndex = mealIndex;
+        this.mealPlan = mealPlan;
         activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(LayoutInflater.from(context));
         mContext = context;
         this.db = db;

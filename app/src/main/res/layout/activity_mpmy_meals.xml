@@ -17,14 +17,14 @@
         app:layout_constraintTop_toBottomOf="@+id/button">
 
 
-        <TextView
-            android:id="@+id/my_meals_textView"
-            android:layout_width="220dp"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/my_meals_edit_addtomp_button"
+            android:layout_width="159dp"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textAlignment="center"
-            android:textSize="34sp"
-            android:text="@string/my_meal_title"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:contentDescription="@string/meal_plan_edit"
+            android:text="@string/meal_plan_edit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/my_meals_add_button"
             app:layout_constraintHorizontal_bias="0.5"
@@ -42,7 +42,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/my_meals_textView"
+            app:layout_constraintStart_toEndOf="@+id/my_meals_edit_addtomp_button"
             app:layout_constraintTop_toTopOf="parent"
             app:icon="@android:drawable/ic_input_add" />
 

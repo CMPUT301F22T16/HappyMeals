@@ -106,6 +106,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
         new_mp_button.setOnClickListener(v -> {
             intent_mpl = new Intent(this, MPMealListActivity.class);
             Bundle bundle = new Bundle();
+            bundle.putSerializable("MEALPLAN", new MealPlan());
             bundle.putSerializable("USER", userName);
             bundle.putSerializable("IsNewMP", true);
             intent_mpl.putExtras(bundle);
