@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/layout/activity_edit_recipe.xml" value="0.11770157553290084" />
         <entry key="app/src/main/res/layout/activity_ingredient.xml" value="0.2659870250231696" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.11770157553290084" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.4609375" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.13558349609374998" />
         <entry key="app/src/main/res/layout/activity_meal_plan.xml" value="0.3962962962962963" />
         <entry key="app/src/main/res/layout/activity_meal_plan_list.xml" value="0.3809082031250001" />
         <entry key="app/src/main/res/layout/activity_meal_plan_meal_list.xml" value="0.1" />
@@ -29,6 +29,7 @@
         <entry key="app/src/main/res/layout/meal_recipe_list_content.xml" value="0.29471733086190915" />
         <entry key="app/src/main/res/layout/pick_recipe_list_content.xml" value="0.39166666666666666" />
         <entry key="app/src/main/res/layout/popup.xml" value="0.4719965797349295" />
+        <entry key="app/src/main/res/layout/recipe_add_ingredient_custom_layout.xml" value="0.30141085934159895" />
         <entry key="app/src/main/res/layout/recipe_card_content.xml" value="0.13438368860055608" />
         <entry key="app/src/main/res/layout/smot.xml" value="0.2912037037037037" />
         <entry key="app/src/main/res/layout/view_ingredient_fragment_layout.xml" value="0.35613510047028646" />
@@ -36,7 +37,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
