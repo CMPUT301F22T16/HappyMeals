@@ -21,8 +21,8 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class MyMealsTest {
     private Solo solo;
-    public ActivityTestRule<MPMyMealsActivity> rule =
-            new ActivityTestRule<>(MPMyMealsActivity.class, true, true);
+    public ActivityTestRule<MainActivity> rule =
+            new ActivityTestRule<>(MainActivity.class, true, true);
 
     /**
      * Runs before all tests and creates solo instance.
@@ -31,6 +31,10 @@ public class MyMealsTest {
     @Before
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.clickOnButton("MEALS");
+        solo.sleep(2000);
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
     }
 
     /**
