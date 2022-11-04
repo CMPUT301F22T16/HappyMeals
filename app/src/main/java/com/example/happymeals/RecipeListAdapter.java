@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.List;
@@ -50,7 +54,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         title_text.setText(title);
         preparation_text.setText("Preparation time: " + prep_time + " min/s");
         category_text.setText("Category: " + category);
-
         // Adding on click listeners
         FloatingActionButton deleteButton = convertView.findViewById(R.id.recipe_card_delete);
         Button viewButton = convertView.findViewById(R.id.recipe_card_view);
