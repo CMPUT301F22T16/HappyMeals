@@ -11,6 +11,14 @@
     <string name="mp_meal_recipe_list">All Recipes For Meal</string>
     <string name="mp_add_recipe_text">recipes</string>
     <string name="my_meal_title">My Meals</string>
+    <string-array name="sort_category">
+        <item>Description</item>
+        <item>Best Before Date</item>
+        <item>Location</item>
+        <item>Ingredient Category</item>
+    </string-array>
+    <string name="integer_to_string">%1$d</string>
+    <string name="double_to_string">%.2f</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
