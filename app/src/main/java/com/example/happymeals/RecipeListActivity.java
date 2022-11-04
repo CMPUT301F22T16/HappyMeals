@@ -68,16 +68,16 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
     @Override
     public void onItemClick(int position, String op) {
-//        if (op.equals("edit")) {
-//            Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
-//            Recipe recipe = recipes.get(position);
-//            intent.putExtra("title", recipe.getTitle());
-//            intent.putExtra("preparation_time", recipe.getPreparation_time());
-//            intent.putExtra("num_servings", recipe.getNum_servings());
-//            intent.putExtra("category", recipe.getCategory());
-//            edit_recipe_for_result.launch(intent);
-//            // TODO create an intent to put comments
-////            intent.putExtra("ingredients", recipe.getIngredients());
-//        }
+        if (op.equals("edit")) {
+            Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
+            Recipe recipe = recipes.get(position);
+            intent.putExtra("title", recipe.getTitle());
+            intent.putExtra("preparation_time", recipe.getPreparation_time());
+            intent.putExtra("num_servings", recipe.getNum_servings());
+            intent.putExtra("category", recipe.getCategory());
+            edit_recipe_for_result.launch(intent);
+            // TODO create an intent to put comments
+//            intent.putExtra("ingredients", recipe.getIngredients());
+        }
     }
 }

@@ -77,10 +77,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         recipeNumServEditText = findViewById(R.id.recipe_num_serv_edit_text);
         recipeCategoryEditText = findViewById(R.id.recipe_category_edit_text);
         recipeCategoryEditText = findViewById(R.id.recipe_category_edit_text);
-
+//
         recipeTitleEditText.setText(intent.getStringExtra("title"));
-        recipePrepTimeEditText.setText(intent.getIntExtra("preparation_time", 0));
-        recipeNumServEditText.setText(intent.getIntExtra("num_servings", 0));
+        recipePrepTimeEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("preparation_time", 0)));
+        recipeNumServEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("num_servings", 0)));
         recipeCategoryEditText.setText(intent.getStringExtra("category"));
 
 
