@@ -1,6 +1,7 @@
 package com.example.happymeals;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -47,34 +48,8 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         preparation_text.setText("Preparation time: " + prep_time);
         category_text.setText("Category: " + category);
 
-        // Adding on click listeners for delete, edit and view
-        FloatingActionButton delete_recipe = (FloatingActionButton) convertView.findViewById(R.id.recipe_card_delete);
-        FloatingActionButton edit_recipe = (FloatingActionButton) convertView.findViewById(R.id.recipe_card_edit);
-        Button view_recipe = (Button) convertView.findViewById(R.id.recipe_card_view);
-
-        delete_recipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                db.removeRecipe(recipes.get(position), context);
-                recipes.remove(position);
-                notifyDataSetChanged();
-
-            }
-        });
-
-        edit_recipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO add john's code here
-            }
-        });
-
-        view_recipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO start ViewRecipeActivity
-            }
-        });
+        // Adding on click listeners
+//        Button view_recipe = (Button) convertView.findViewById(R.id.recipe_card_view);
 
         return convertView;
     }
