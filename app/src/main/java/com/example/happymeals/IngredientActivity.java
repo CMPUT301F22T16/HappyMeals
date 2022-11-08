@@ -18,10 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
+
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,6 +39,7 @@ public class IngredientActivity extends AppCompatActivity{
     ListView ingredientListView;
     TextView totalCost;
     FloatingActionButton floatingAdd;
+    Spinner sortBySelect;
 
     // This integer is used to store the index of the Ingredient object in the list.
     int ingredientPosition;
@@ -47,20 +52,54 @@ public class IngredientActivity extends AppCompatActivity{
 
         ingredientList = new ArrayList<Ingredient>();
 
-
         ingredientAdaptor = new IngredientAdaptor(this, ingredientList);
         DBHandler db = new DBHandler();
         db.getIngredients(ingredientAdaptor);
 
-
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
         totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
+        sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
         ingredientListView.setAdapter(ingredientAdaptor);
         updateCost();
 
         ingredientPosition = -1;
+
+        ArrayList<String> sortBy = new ArrayList<>(Arrays.asList("Name (A-Z)", "Name (Z-A)", "Price (Low - High)", "Price (High - Low)"));
+        ArrayAdapter<String> sortByAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, sortBy);
+
+        sortBySelect.setAdapter(sortByAdapt);
+        sortBySelect.setPrompt("Sort By:");
+
+        // The default sorting is by name a-z
+        sortBySelect.setSelection(0, true);
+
+        sortBySelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Toast.makeText(getApplicationContext(), "Sort by Name (A-Z)", Toast.LENGTH_SHORT).show();
+                    // Do something
+                } else if (position == 1) {
+                    Toast.makeText(getApplicationContext(), "Sort by Name (Z-A)", Toast.LENGTH_SHORT).show();
+                    // Do something
+                } else if (position == 2) {
+                    Toast.makeText(getApplicationContext(), "Sort by Price (Low - High)", Toast.LENGTH_SHORT).show();
+                    // Do something
+                } else if (position == 3) {
+                    Toast.makeText(getApplicationContext(), "Sort by Price (High - Low)", Toast.LENGTH_SHORT).show();
+                    // Do something
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
         /* An ActivityResultLauncher is defined here to handle the two modes for add/edit ingredient. As
            well as handling the results returned.

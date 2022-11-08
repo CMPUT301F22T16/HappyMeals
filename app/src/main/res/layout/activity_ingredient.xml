@@ -7,8 +7,20 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_gravity="right">
+
+        <Spinner
+            android:id="@+id/sortBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="110dp"
+            android:layout_marginBottom="18dp"
+            android:layout_weight="1"
+            android:prompt="@string/material_motion_easing_decelerated"
+            android:spinnerMode="dropdown" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingAdd"
@@ -18,21 +30,21 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="25dp"
             android:clickable="true"
             app:srcCompat="@android:drawable/ic_input_add" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingSort"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="110dp"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/floatingSort"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginRight="110dp"-->
+<!--            android:layout_marginBottom="25dp"-->
+<!--            android:clickable="true"-->
+<!--            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />-->
     </RelativeLayout>
 
 

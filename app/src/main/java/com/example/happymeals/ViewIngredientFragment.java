@@ -76,6 +76,7 @@ public class ViewIngredientFragment extends DialogFragment {
 
         thisCategory.setAdapter(categoryAdapt);
         thisCategory.setPrompt("Ingredient category");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final Bundle ingredient = this.getArguments();
