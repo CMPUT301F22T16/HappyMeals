@@ -29,7 +29,7 @@ import java.util.Date;
  * The MainActivity class defines the actions to takes at the home screen as well as initiating
  * new activities when pressing certain buttons.
  */
-public class IngredientActivity extends AppCompatActivity implements ViewIngredientFragment.OnFragmentInteractionListener{
+public class IngredientActivity extends AppCompatActivity{
     ArrayList<Ingredient> ingredientList;
     ArrayAdapter ingredientAdaptor;
     ListView ingredientListView;
@@ -168,8 +168,5 @@ public class IngredientActivity extends AppCompatActivity implements ViewIngredi
         return true;
     }
 
-    @Override
-    public void onOkPressed(Ingredient ingredient) {
-        int i = 1;
-    }
+
 }
