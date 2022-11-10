@@ -25,8 +25,9 @@ public class Recipe implements Storable, Serializable {
     private int preparation_time;
     private int num_servings;
     private String category;
-    private List<String> comments;
-    private List<Ingredient> ingredients;
+    private List<String> comments = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<Long> amounts = new ArrayList<>();
 
     /**
      * Default constructor for Recipe. Initializes the recipe object with default values.
@@ -177,12 +178,19 @@ public class Recipe implements Storable, Serializable {
         data.put("comments", this.comments);
         data.put("category", this.category);
 
-        List<String> ingredient_ids = new ArrayList<>();
+//        List<String> ingredient_ids = new ArrayList<>();
+//        for (Ingredient ingredient : this.ingredients) {
+//            ingredient_ids.add(ingredient.getId());
+//        }
+        List<String> ingredient_descs = new ArrayList<>();
+        List<Long> ingredient_amounts = new ArrayList<>();
         for (Ingredient ingredient : this.ingredients) {
-            ingredient_ids.add(ingredient.getId());
+            ingredient_descs.add(ingredient.getDescription());
+            ingredient_amounts.add(Long.valueOf(ingredient.getAmount()));
         }
 
-        data.put("ingredients", ingredient_ids);
+        data.put("ingredients", ingredient_descs);
+        data.put("amounts", ingredient_amounts);
 
         return data;
     }

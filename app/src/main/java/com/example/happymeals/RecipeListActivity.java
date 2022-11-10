@@ -72,19 +72,14 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             int prepTime = result.getData().getIntExtra("prep_time", 0);
             int numServ = result.getData().getIntExtra("num_serv", 0);
             String category = result.getData().getStringExtra("category");
-            List<Ingredient> ing = (List<Ingredient>) result.getData().getSerializableExtra("ingredients");
+            List<Ingredient> ing = (ArrayList<Ingredient>) result.getData().getSerializableExtra("ingredients");
             Log.d("Random", ing.toString());
             Recipe rec = recipes.get(position);
             rec.setTitle(title);
             rec.setPreparation_time(prepTime);
             rec.setNum_servings(numServ);
             rec.setCategory(category);
-            // TODO Get the updateRecipe method to work when a Recipe containing ingredients is passed.
-            //  Currently the method crashes when this happens.
-//            List<Ingredient> test = new ArrayList<>();
-//            test.add(new Ingredient(3, "Test"));
-//            test.add(new Ingredient(4, "Test 2"));
-//            rec.setIngredients(test);
+            rec.setIngredients(ing);
             db.updateRecipe(rec);
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
