@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -201,10 +202,6 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
-//            String descriptionExtra = result.getData().getStringExtra("description");
-//            Integer amountExtra = Integer.parseInt(result.getData().getStringExtra("amount"));
-//            ingredient_data_list.add(new Ingredient(amountExtra, descriptionExtra));
-//            recipe_ingredient_list.setAdapter(ingredient_adapter);
             Ingredient item = (Ingredient) result.getData().getSerializableExtra("ingredient");
             ingredient_data_list.add(item);
             recipe_ingredient_list.setAdapter(ingredient_adapter);
@@ -268,11 +265,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             Intent intent = new Intent(EditRecipe.this, RecipeEditIngredient.class);
             Ingredient item = ingredient_data_list.get(position);
             intent.putExtra("desc", item.getDescription());
-            intent.putExtra("loc", item.getLoc());
-            intent.putExtra("date", item.getDate().getTime());
-            intent.putExtra("category", item.getCategory());
             intent.putExtra("amount", item.getAmount());
-            intent.putExtra("cost", item.getCost());
             edit_ingredient_for_result.launch(intent);
         }
     }
