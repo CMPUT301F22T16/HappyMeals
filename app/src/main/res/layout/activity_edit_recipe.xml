@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="5dp"
-            android:text="Pick a new ingredient" />
+            android:text="Pick a new userIngredient" />
 
         <Button
             android:id="@+id/recipe_submit_button"

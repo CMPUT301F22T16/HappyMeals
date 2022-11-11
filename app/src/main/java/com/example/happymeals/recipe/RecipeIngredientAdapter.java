@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.happymeals.Ingredient;
+import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
@@ -35,12 +35,12 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
     /**
      * This stores an arraylist of ingredients
      */
-    private ArrayList<Ingredient> ingredients;
+    private ArrayList<UserIngredient> userIngredients;
 
-    public RecipeIngredientAdapter(Context context, ArrayList<Ingredient> ingredients, RecyclerViewInterface recyclerViewInterface) {
+    public RecipeIngredientAdapter(Context context, ArrayList<UserIngredient> userIngredients, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
-        this.ingredients = ingredients;
+        this.userIngredients = userIngredients;
     }
 
     @NonNull
@@ -53,12 +53,12 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
 
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientAdapter.MyViewHolder holder, int position) {
-        holder.desc.setText(ingredients.get(position).getDescription());
+        holder.desc.setText(userIngredients.get(position).getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return ingredients.size();
+        return userIngredients.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

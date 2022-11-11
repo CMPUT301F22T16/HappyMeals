@@ -4,8 +4,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,10 +16,7 @@ import android.widget.Toast;
 import com.example.happymeals.recipe.EditRecipe;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface{
 
@@ -72,7 +67,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             int prepTime = result.getData().getIntExtra("prep_time", 0);
             int numServ = result.getData().getIntExtra("num_serv", 0);
             String category = result.getData().getStringExtra("category");
-            List<Ingredient> ing = (ArrayList<Ingredient>) result.getData().getSerializableExtra("ingredients");
+            List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
             Log.d("Random", ing.toString());
             Recipe rec = recipes.get(position);
             rec.setTitle(title);
@@ -122,7 +117,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             intent.putExtra("num_servings", recipe.getNum_servings());
             intent.putExtra("category", recipe.getCategory());
             intent.putStringArrayListExtra("comments", (ArrayList<String>) recipe.getComments());
-            intent.putExtra("ingredients", (ArrayList<Ingredient>) recipe.getIngredients());
+            intent.putExtra("ingredients", (ArrayList<RecipeIngredient>) recipe.getIngredients());
             Bundle bundle = new Bundle();
             bundle.putSerializable("USER", db.getUsername());
             intent.putExtras(bundle);

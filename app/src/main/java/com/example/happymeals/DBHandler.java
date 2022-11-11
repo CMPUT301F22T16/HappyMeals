@@ -1,9 +1,8 @@
 package com.example.happymeals;
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,7 +25,7 @@ import java.util.Map;
 /**
  * Represents a DBHandler object. This class maintains a username and also has a database connection established that it can use to add/modify/delete
  * content of following collections in Firestore
- * 1. user_ingredients: {@link Ingredient} is model class for this.
+ * 1. user_ingredients: {@link UserIngredient} is model class for this.
  * 2. users: {@link User} is model class for this.
  * 3. user_storages: {@link Storage} is the model class for this.
  * 4. user_recipes: {@link Recipe} is the model class for this.
@@ -180,34 +179,34 @@ public class DBHandler {
     //-------------------------------------------------Ingredient Methods-------------------------------------------------//
 
     /**
-     * Stores a {@link Ingredient} object in the database, and attaches the database ID of the entry to the object.
-     * @param ingredient : Object of type {@link Storage} that will be added to the database
+     * Stores a {@link UserIngredient} object in the database, and attaches the database ID of the entry to the object.
+     * @param userIngredient : Object of type {@link Storage} that will be added to the database
      */
-    public void newIngredient(Ingredient ingredient) {
-        HashMap<String, Object> data  = ingredient.getStorable();
+    public void newIngredient(UserIngredient userIngredient) {
+        HashMap<String, Object> data  = userIngredient.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("user_ingredients");
         String id = store(ref, data, "Ingredient");
-        ingredient.setId(id);
+        userIngredient.setId(id);
     }
 
     /**
-     * Deletes the entry of a {@link Ingredient} object from the database.
-     * @param ingredient : Object of type {@link Ingredient} that will be removed from the database
+     * Deletes the entry of a {@link UserIngredient} object from the database.
+     * @param userIngredient : Object of type {@link UserIngredient} that will be removed from the database
      */
-    public void deleteIngredient(Ingredient ingredient) {
+    public void deleteIngredient(UserIngredient userIngredient) {
         CollectionReference ref = conn.collection("user_ingredients");
-        delete(ref, ingredient.getId(), "Ingredient");
+        delete(ref, userIngredient.getId(), "Ingredient");
     }
 
     /**
-     * Updates the entry of {@link Ingredient} object in the database.
+     * Updates the entry of {@link UserIngredient} object in the database.
      *
-     * @param ingredient : Object of type {@link Ingredient} to be updated in the database.
+     * @param userIngredient : Object of type {@link UserIngredient} to be updated in the database.
      */
-    public void updateIngredient(Ingredient ingredient) {
+    public void updateIngredient(UserIngredient userIngredient) {
         CollectionReference ref = conn.collection("user_ingredients");
-        update(ref, ingredient.getId(), ingredient.getStorable(), "Ingredient");
+        update(ref, userIngredient.getId(), userIngredient.getStorable(), "Ingredient");
     }
 
     /**
@@ -221,7 +220,7 @@ public class DBHandler {
                 if (error != null) {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
-                    List<Ingredient> ingredients = new ArrayList<>();
+                    List<UserIngredient> userIngredients = new ArrayList<>();
                     adapter.clear();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
@@ -230,10 +229,10 @@ public class DBHandler {
                         Double cost = doc.getDouble("cost");
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
-                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
-                        ingredient.setId(doc.getId());
-                        ingredients.add(ingredient);
-                        adapter.add(ingredient);
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location);
+                        userIngredient.setId(doc.getId());
+                        userIngredients.add(userIngredient);
+                        adapter.add(userIngredient);
                     }
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
@@ -251,6 +250,8 @@ public class DBHandler {
      *
      * @param adapter {@link ArrayAdapter} in which data is to be populated
      * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
+     *
+     * @throws RuntimeException if Recipe has no ingredients
      */
     public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
@@ -271,20 +272,31 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) doc.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
+
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            if (ingredients == null) {
+                                throw new RuntimeException("Ingredients not found");
+                            }
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get("desc");
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
 
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
@@ -317,19 +329,26 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) doc.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get("desc");
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
+
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
@@ -366,19 +385,27 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) data.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get("desc");
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
+
+
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
                             recipes.add(recipe); // Adding the recipe from FireStore
                         }
@@ -409,19 +436,24 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) data.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get("desc");
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }

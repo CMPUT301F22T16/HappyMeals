@@ -55,8 +55,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         comments_list.setAdapter(commentListAdapter);
 
         // Setting the page details
-        for (Ingredient ingredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(String.format("%-25s %50s", ingredient.getDescription(), ingredient.getAmount() + " uts"));
+        for (UserIngredient userIngredient : recipe.getIngredients()) {
+            ingredientListAdapter.add(String.format("%-25s %50s", userIngredient.getDescription(), userIngredient.getAmount() + " uts"));
         }
 
         for (String comment: recipe.getComments()) {
