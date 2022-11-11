@@ -201,9 +201,12 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
-            String descriptionExtra = result.getData().getStringExtra("description");
-            Integer amountExtra = result.getData().getIntExtra("amount", 0);
-            ingredient_data_list.add(new Ingredient(amountExtra, descriptionExtra));
+//            String descriptionExtra = result.getData().getStringExtra("description");
+//            Integer amountExtra = Integer.parseInt(result.getData().getStringExtra("amount"));
+//            ingredient_data_list.add(new Ingredient(amountExtra, descriptionExtra));
+//            recipe_ingredient_list.setAdapter(ingredient_adapter);
+            Ingredient item = (Ingredient) result.getData().getSerializableExtra("ingredient");
+            ingredient_data_list.add(item);
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(EditRecipe.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();

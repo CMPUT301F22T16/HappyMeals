@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(activityMainBinding.getRoot());
 
-        DBHandler db = new DBHandler("Guest");
+        DBHandler db = new DBHandler("junye");
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
