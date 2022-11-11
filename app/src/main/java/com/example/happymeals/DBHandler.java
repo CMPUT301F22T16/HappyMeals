@@ -299,7 +299,7 @@ public class DBHandler {
      * @param adapter {@link ArrayAdapter} in which data is to be populated
      * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
      */
-    public void getUserRecipesForMeals(MPPickRecipeListAdapter adapter, LoadingDialog dialog) {
+    public void getUserRecipesForMeals(MPPickAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername());
         query
