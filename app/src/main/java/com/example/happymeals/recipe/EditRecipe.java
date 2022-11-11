@@ -18,9 +18,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.example.happymeals.DBHandler;
+import com.example.happymeals.Recipe;
+import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
 
@@ -48,7 +51,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     /**
      * This variable stores the data list of ingredients
      */
-    ArrayList<UserIngredient> userIngredient_data_list;
+    ArrayList<RecipeIngredient> userIngredient_data_list;
 
     /**
      * This is a button for the user to pick a new ingredient
@@ -147,7 +150,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
 
 
-        userIngredient_data_list = (ArrayList<UserIngredient>) intent.getSerializableExtra("ingredients");
+        userIngredient_data_list = (ArrayList<RecipeIngredient>) intent.getSerializableExtra("ingredients");
 
         ingredient_adapter = new RecipeIngredientAdapter(this, userIngredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
@@ -201,7 +204,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 //            Integer amountExtra = Integer.parseInt(result.getData().getStringExtra("amount"));
 //            ingredient_data_list.add(new Ingredient(amountExtra, descriptionExtra));
 //            recipe_ingredient_list.setAdapter(ingredient_adapter);
-            UserIngredient item = (UserIngredient) result.getData().getSerializableExtra("ingredient");
+            RecipeIngredient item = (RecipeIngredient) result.getData().getSerializableExtra("ingredient");
             userIngredient_data_list.add(item);
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
@@ -233,11 +236,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
             String desc = result.getData().getStringExtra("desc");
-            String loc = result.getData().getStringExtra("loc");
             String category = result.getData().getStringExtra("category");
             int amount = result.getData().getIntExtra("amount", 0);
             double cost = result.getData().getDoubleExtra("cost", 0.00);
-            UserIngredient item = userIngredient_data_list.get(selection);
+            RecipeIngredient item = userIngredient_data_list.get(selection);
             item.setDescription(desc);
             item.setLoc(loc);
             item.setCategory(category);

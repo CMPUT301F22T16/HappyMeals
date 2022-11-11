@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.Recipe;
+import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
 
@@ -35,9 +37,9 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
     /**
      * This stores an arraylist of ingredients
      */
-    private ArrayList<UserIngredient> userIngredients;
+    private ArrayList<RecipeIngredient> userIngredients;
 
-    public RecipeIngredientAdapter(Context context, ArrayList<UserIngredient> userIngredients, RecyclerViewInterface recyclerViewInterface) {
+    public RecipeIngredientAdapter(Context context, ArrayList<RecipeIngredient> userIngredients, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
         this.userIngredients = userIngredients;

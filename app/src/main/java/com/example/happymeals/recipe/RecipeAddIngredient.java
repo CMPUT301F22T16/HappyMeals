@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.happymeals.DBHandler;
+import com.example.happymeals.Recipe;
+import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.IngredientAdaptor;
 import com.example.happymeals.R;
@@ -52,7 +54,7 @@ public class RecipeAddIngredient extends AppCompatActivity {
         ingredientList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                UserIngredient item = (UserIngredient) adapterView.getItemAtPosition(i);
+                RecipeIngredient item = (RecipeIngredient) adapterView.getItemAtPosition(i);
                 submit_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
