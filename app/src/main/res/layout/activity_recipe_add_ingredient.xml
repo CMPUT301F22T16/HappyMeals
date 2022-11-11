@@ -7,27 +7,53 @@
     android:orientation="vertical"
     tools:context=".recipe.RecipeAddIngredient">
 
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        <androidx.recyclerview.widget.RecyclerView-->
 <!--        android:id="@+id/recipe_add_ingredient_recyclerview"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="0dp"-->
 <!--        android:layout_weight="1"/>-->
 
-    <EditText
-        android:id="@+id/recipe_add_ingredient_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Description" />
 
-    <EditText
-        android:id="@+id/recipe_add_ingredient_amount"
+<!--    <EditText-->
+<!--        android:id="@+id/recipe_add_ingredient_description"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:hint="Description" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/recipe_add_ingredient_amount"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="number"-->
+<!--        android:hint="Amount"/>-->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number"
-        android:hint="Amount"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="Sort"
+            android:textSize="24sp" />
+
+        <Spinner
+            android:id="@+id/recipe_add_ingredient_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/recipe_add_ingredient_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/recipe_add_ingredient_btn"

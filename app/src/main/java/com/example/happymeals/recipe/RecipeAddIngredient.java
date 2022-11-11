@@ -34,15 +34,9 @@ import java.util.Date;
  */
 public class RecipeAddIngredient extends AppCompatActivity {
 
-    /**
-     * This EditText lets the user specify the ingredient description
-     */
-    EditText recipe_add_ingredient_desc;
-
-    /**
-     * This EditText lets the user specify the ingredient amount
-     */
-    EditText recipe_add_ingredient_amount;
+    ArrayList<Ingredient> ingredientDataList;
+    ListView ingredientList;
+    IngredientAdaptor adaptor;
 
     /**
      * This button lets the user submit their new ingredient
@@ -54,18 +48,32 @@ public class RecipeAddIngredient extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_add_ingredient);
 
-        recipe_add_ingredient_desc = findViewById(R.id.recipe_add_ingredient_description);
-        recipe_add_ingredient_amount = findViewById(R.id.recipe_add_ingredient_amount);
+        Intent intent = getIntent();
+
+        Bundle bundle = intent.getExtras();
+        String username = (String) bundle.getSerializable("USER");
+        DBHandler db = new DBHandler(username);
+
+        ingredientDataList = new ArrayList<>();
+        adaptor = new IngredientAdaptor(RecipeAddIngredient.this, ingredientDataList);
+        ingredientList = findViewById(R.id.recipe_add_ingredient_listview);
+        ingredientList.setAdapter(adaptor);
+        db.getIngredients(adaptor);
 
         submit_btn = findViewById(R.id.recipe_add_ingredient_btn);
-        submit_btn.setOnClickListener(new View.OnClickListener() {
+        ingredientList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("description", recipe_add_ingredient_desc.getText().toString());
-                intent.putExtra("amount", recipe_add_ingredient_amount.getText().toString());
-                setResult(RESULT_OK, intent);
-                finish();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Ingredient item = (Ingredient) adapterView.getItemAtPosition(i);
+                submit_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent();
+                        intent.putExtra("ingredient", item);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                });
             }
         });
     }
