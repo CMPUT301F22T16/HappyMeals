@@ -106,30 +106,17 @@ public class RecipeEditIngredient extends AppCompatActivity {
 
         Intent intent = getIntent();
         desc = intent.getStringExtra("desc");
-        loc = intent.getStringExtra("loc");
-        date = new Date(intent.getLongExtra("date", -1));
-        category = intent.getStringExtra("category");
         amount = intent.getIntExtra("amount", 0);
-        cost = intent.getDoubleExtra("cost", 0.00);
 
         desc_edit_text.setText(desc);
-        loc_edit_text.setText(loc);
-        date_edit_text.setText(date.toString());
-        category_edit_text.setText(category);
         amount_edit_text.setText(getString(R.string.integer_to_string, amount));
-        cost_edit_text.setText(getString(R.string.double_to_string, cost));
 
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.putExtra("desc", desc_edit_text.getText().toString());
-                intent.putExtra("loc", loc_edit_text.getText().toString());
-//                intent.putExtra("date", )
-                intent.putExtra("category", category_edit_text.getText().toString());
                 intent.putExtra("amount", Integer.parseInt(amount_edit_text.getText().toString()));
-                intent.putExtra("cost", Double.parseDouble(cost_edit_text.getText().toString()));
-                // intent.putExtra("date", );
                 setResult(RESULT_OK, intent);
                 finish();
             }
