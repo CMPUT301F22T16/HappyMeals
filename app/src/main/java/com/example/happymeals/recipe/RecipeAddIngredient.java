@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.happymeals.DBHandler;
@@ -24,9 +25,9 @@ import java.util.ArrayList;
  */
 public class RecipeAddIngredient extends AppCompatActivity {
 
-    ArrayList<UserIngredient> userIngredientDataList;
-    ListView ingredientList;
-    IngredientAdaptor adaptor;
+    EditText description_edit_text;
+    EditText category_edit_text;
+    EditText amount_edit_text;
 
     /**
      * This button lets the user submit their new ingredient
@@ -40,30 +41,25 @@ public class RecipeAddIngredient extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        Bundle bundle = intent.getExtras();
-        String username = (String) bundle.getSerializable("USER");
-        DBHandler db = new DBHandler(username);
-
-        userIngredientDataList = new ArrayList<>();
-        adaptor = new IngredientAdaptor(RecipeAddIngredient.this, userIngredientDataList);
-        ingredientList = findViewById(R.id.recipe_add_ingredient_listview);
-        ingredientList.setAdapter(adaptor);
-        db.getIngredients(adaptor);
+        description_edit_text = findViewById(R.id.recipe_add_ingredient_description);
+        category_edit_text = findViewById(R.id.recipe_add_ingredient_category);
+        amount_edit_text = findViewById(R.id.recipe_add_ingredient_amount);
 
         submit_btn = findViewById(R.id.recipe_add_ingredient_btn);
-        ingredientList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                RecipeIngredient item = (RecipeIngredient) adapterView.getItemAtPosition(i);
-                submit_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent();
-                        intent.putExtra("ingredient", item);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                });
+            public void onClick(View view) {
+                Intent intent = new Intent();
+
+                String description = description_edit_text.getText().toString();
+                String category = category_edit_text.getText().toString();
+                Integer amount = amount_edit_text.getText().toString().equals("") ? 0 : Integer.parseInt(amount_edit_text.getText().toString());
+
+                intent.putExtra("description", description);
+                intent.putExtra("category", category);
+                intent.putExtra("amount", amount);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }

@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 import com.example.happymeals.DBHandler;
@@ -51,7 +53,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     /**
      * This variable stores the data list of ingredients
      */
-    ArrayList<RecipeIngredient> userIngredient_data_list;
+    ArrayList<RecipeIngredient> recipeIngredient_data_list;
 
     /**
      * This is a button for the user to pick a new ingredient
@@ -150,9 +152,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
 
 
-        userIngredient_data_list = (ArrayList<RecipeIngredient>) intent.getSerializableExtra("ingredients");
+        recipeIngredient_data_list = (ArrayList<RecipeIngredient>) intent.getSerializableExtra("ingredients");
 
-        ingredient_adapter = new RecipeIngredientAdapter(this, userIngredient_data_list, this);
+        ingredient_adapter = new RecipeIngredientAdapter(this, recipeIngredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
         recipe_ingredient_list.setAdapter(ingredient_adapter);
 
@@ -160,10 +162,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         pick_new_ingredient_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EditRecipe.this, RecipeAddIngredient.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
-                intent.putExtras(bundle);
+                Intent intent = new Intent();
                 add_ingredient_for_result.launch(intent);
             }
         });
@@ -185,7 +184,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
                 intent.putExtra("prep_time", Integer.parseInt(recipePrepTimeEditText.getText().toString()));
                 intent.putExtra("num_serv", Integer.parseInt(recipeNumServEditText.getText().toString()));
                 intent.putExtra("category", recipeCategoryEditText.getText().toString());
-                intent.putExtra("ingredients", userIngredient_data_list);
+                intent.putExtra("ingredients", recipeIngredient_data_list);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -200,12 +199,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
-//            String descriptionExtra = result.getData().getStringExtra("description");
-//            Integer amountExtra = Integer.parseInt(result.getData().getStringExtra("amount"));
-//            ingredient_data_list.add(new Ingredient(amountExtra, descriptionExtra));
-//            recipe_ingredient_list.setAdapter(ingredient_adapter);
-            RecipeIngredient item = (RecipeIngredient) result.getData().getSerializableExtra("ingredient");
-            userIngredient_data_list.add(item);
+            String descriptionExtra = result.getData().getStringExtra("description");
+            String categoryExtra = result.getData().getStringExtra("category");
+            Integer amountExtra = result.getData().getIntExtra("amount", 0);
+            recipeIngredient_data_list.add(new RecipeIngredient(descriptionExtra, categoryExtra, amountExtra));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(EditRecipe.this, "Failed to add ingredient", Toast.LENGTH_SHORT).show();
@@ -237,14 +234,11 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             if (result.getData() == null) return;
             String desc = result.getData().getStringExtra("desc");
             String category = result.getData().getStringExtra("category");
-            int amount = result.getData().getIntExtra("amount", 0);
-            double cost = result.getData().getDoubleExtra("cost", 0.00);
-            RecipeIngredient item = userIngredient_data_list.get(selection);
+            Integer amount = result.getData().getIntExtra("amount", 0);
+            RecipeIngredient item = recipeIngredient_data_list.get(selection);
             item.setDescription(desc);
-            item.setLoc(loc);
             item.setCategory(category);
             item.setAmount(amount);
-            item.setCost(cost);
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
             Toast.makeText(EditRecipe.this, "Failed to edit ingredient", Toast.LENGTH_SHORT).show();
@@ -259,18 +253,15 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     @Override
     public void onItemClick(int position, String op) {
         if (Objects.equals(op, "delete")) {
-            userIngredient_data_list.remove(position);
+            recipeIngredient_data_list.remove(position);
             recipe_ingredient_list.setAdapter(ingredient_adapter);
-        } else {
+        } else {  // Edit Ingredient
             selection = position;  // This variable stores the index position of the ingredient being edited
             Intent intent = new Intent(EditRecipe.this, RecipeEditIngredient.class);
-            UserIngredient item = userIngredient_data_list.get(position);
+            RecipeIngredient item = recipeIngredient_data_list.get(position);
             intent.putExtra("desc", item.getDescription());
-            intent.putExtra("loc", item.getLoc());
-            intent.putExtra("date", item.getDate().getTime());
             intent.putExtra("category", item.getCategory());
             intent.putExtra("amount", item.getAmount());
-            intent.putExtra("cost", item.getCost());
             edit_ingredient_for_result.launch(intent);
         }
     }
