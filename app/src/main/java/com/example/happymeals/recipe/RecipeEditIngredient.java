@@ -72,7 +72,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
 
         desc_edit_text.setText(desc);
         category_edit_text.setText(category);
-        amount_edit_text.setText(getString(R.string.integer_to_string, amount));
+        amount_edit_text.setText(getString(R.string.double_to_string, amount));
 
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override

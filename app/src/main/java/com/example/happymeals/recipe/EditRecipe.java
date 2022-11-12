@@ -162,7 +162,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         pick_new_ingredient_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(EditRecipe.this, RecipeAddIngredient.class);
                 add_ingredient_for_result.launch(intent);
             }
         });
