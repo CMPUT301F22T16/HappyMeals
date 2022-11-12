@@ -278,7 +278,9 @@ public class DBHandler {
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-
+                            System.out.println(getUsername());
+                            System.out.println(data.get("ingredients"));
+                            System.out.println(title);
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 

@@ -55,9 +55,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         LoadingDialog dialog = new LoadingDialog(this);
         db.getUserRecipes(recipeAdapter,dialog);
 
-        // Populate the recipe list
-        db.getUserRecipes(recipeAdapter, new LoadingDialog(this));
-
     }
 
     public void handleEditRecipeForResultLauncher(ActivityResult result) {
