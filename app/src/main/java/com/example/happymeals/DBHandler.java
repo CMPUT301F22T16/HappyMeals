@@ -281,6 +281,7 @@ public class DBHandler {
                             System.out.println(getUsername());
                             System.out.println(data.get("ingredients"));
                             System.out.println(title);
+                            System.out.println(id);
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
