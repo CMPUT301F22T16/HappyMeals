@@ -52,7 +52,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
     /**
      * This is an integer that stores the ingredient amount
      */
-    Integer amount = null;
+    Double amount = null;
 
 
     @Override
@@ -68,7 +68,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
         Intent intent = getIntent();
         desc = intent.getStringExtra("desc");
         category = intent.getStringExtra("category");
-        amount = intent.getIntExtra("amount", 0);
+        amount = intent.getDoubleExtra("amount", 0.00);
 
         desc_edit_text.setText(desc);
         category_edit_text.setText(category);
@@ -80,7 +80,7 @@ public class RecipeEditIngredient extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("desc", desc_edit_text.getText().toString());
                 intent.putExtra("category", category_edit_text.getText().toString());
-                intent.putExtra("amount", Integer.parseInt(amount_edit_text.getText().toString()));
+                intent.putExtra("amount", Double.parseDouble(amount_edit_text.getText().toString()));
                 setResult(RESULT_OK, intent);
                 finish();
             }

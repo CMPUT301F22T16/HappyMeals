@@ -53,7 +53,7 @@ public class RecipeAddIngredient extends AppCompatActivity {
 
                 String description = description_edit_text.getText().toString();
                 String category = category_edit_text.getText().toString();
-                Integer amount = amount_edit_text.getText().toString().equals("") ? 0 : Integer.parseInt(amount_edit_text.getText().toString());
+                Double amount = amount_edit_text.getText().toString().equals("") ? 0 : Double.parseDouble(amount_edit_text.getText().toString());
 
                 intent.putExtra("description", description);
                 intent.putExtra("category", category);
