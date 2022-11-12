@@ -46,14 +46,16 @@
         android:inputType="textPersonName"
         android:hint="Category" />
 
-    <EditText
-        android:id="@+id/recipe_comment_edit_text"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recipe_comments_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:hint="Comment"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_ingredient_recyclerview"
@@ -72,7 +74,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="5dp"
-            android:text="Pick a new Ingredient" />
+            android:text="New Ingr" />
+
+        <Button
+            android:id="@+id/recipe_add_new_comment_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="New Cmt" />
 
         <Button
             android:id="@+id/recipe_submit_button"

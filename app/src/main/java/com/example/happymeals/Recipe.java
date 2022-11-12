@@ -149,6 +149,14 @@ public class Recipe implements Storable, Serializable {
     }
 
     /**
+     * Set the comments for the recipe object
+     * @param comments The {@link List<String>} list of comments to be added to the recipe.
+     */
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
+
+    /**
      * Get the document id of the current recipe in the user's database.
      * @return {@link String} document id for the recipe.
      */

@@ -20,6 +20,12 @@
         <item>Location</item>
         <item>Ingredient Category</item>
     </string-array>
+    <string-array name="recipe_sort">
+        <item>Title</item>
+        <item>Preparation Time</item>
+        <item>Number of Servings</item>
+        <item>Recipe Category</item>
+    </string-array>
     <string name="integer_to_string">%1$d</string>
     <string name="double_to_string">%.2f</string>
 
