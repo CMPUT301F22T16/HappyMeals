@@ -290,8 +290,9 @@ public class DBHandler {
                             }
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
-                                Double amount = (Double) info.get("amount");
+                                Map<String, Object> info = ingredients.get(desc);
+                                System.out.println(info);
+                                Double amount = Double.parseDouble((String) info.get("amount"));
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
@@ -338,8 +339,8 @@ public class DBHandler {
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
-                                Double amount = (Double) info.get("amount");
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = Double.parseDouble((String) info.get("amount"));
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
@@ -394,8 +395,8 @@ public class DBHandler {
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
-                                Double amount = (Double) info.get("amount");
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = Double.parseDouble((String) info.get("amount"));
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
@@ -444,8 +445,8 @@ public class DBHandler {
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
-                                Double amount = (Double) info.get("amount");
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = Double.parseDouble((String) info.get("amount"));
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
