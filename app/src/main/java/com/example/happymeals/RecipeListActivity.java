@@ -82,6 +82,11 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", db.getUsername());
+                intent.putExtras(bundle);
+                // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
+                intent.putExtra("operation", "add");
                 add_recipe_for_result.launch(intent);
             }
         });
@@ -116,8 +121,10 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             int prepTime = result.getData().getIntExtra("prep_time", 0);
             int numServ = result.getData().getIntExtra("num_serv", 0);
             String category = result.getData().getStringExtra("category");
+            List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
-//            Recipe newRecipe = new Recipe(title, prepTime, numServ, category, );
+            Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
+            db.addRecipe(newRecipe);
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
         }
@@ -149,7 +156,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             recipeAdapter.notifyDataSetChanged();
         }
 
-
         if (op.equals("edit")) {
             this.position = position;
             Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
@@ -163,6 +169,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             Bundle bundle = new Bundle();
             bundle.putSerializable("USER", db.getUsername());
             intent.putExtras(bundle);
+            // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
+            intent.putExtra("operation", "edit");
             edit_recipe_for_result.launch(intent);
 
         }

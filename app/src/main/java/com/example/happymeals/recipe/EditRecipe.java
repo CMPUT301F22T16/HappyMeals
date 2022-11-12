@@ -178,7 +178,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
         Intent intent = getIntent();
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = intent.getExtras();
         String username = (String) bundle.getSerializable("USER");
         DBHandler db = new DBHandler(username);
 
@@ -193,20 +193,31 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         recipeNumServEditText = findViewById(R.id.recipe_num_serv_edit_text);
         recipeCategoryEditText = findViewById(R.id.recipe_category_edit_text);
 
-        // Set widget text
-        recipeTitleEditText.setText(intent.getStringExtra("title"));
-        recipePrepTimeEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("preparation_time", 0)));
-        recipeNumServEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("num_servings", 0)));
-        recipeCategoryEditText.setText(intent.getStringExtra("category"));
+        // Set data from RecipeListActivity
+        String operation = intent.getStringExtra("operation");
+        if (operation.equals("add")) {
+            recipeTitleEditText.setText("");
+            recipePrepTimeEditText.setText("");
+            recipeNumServEditText.setText("");
+            recipeCategoryEditText.setText("");
+            recipe_comments_data_list = new ArrayList<>();
+            recipeIngredient_data_list = new ArrayList<>();
+        } else if (operation.equals("edit")) {
+            recipeTitleEditText.setText(intent.getStringExtra("title"));
+            recipePrepTimeEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("preparation_time", 0)));
+            recipeNumServEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("num_servings", 0)));
+            recipeCategoryEditText.setText(intent.getStringExtra("category"));
+            recipe_comments_data_list = (ArrayList<String>) intent.getSerializableExtra("comments");
+            recipeIngredient_data_list = (ArrayList<RecipeIngredient>) intent.getSerializableExtra("ingredients");
+        }
+
 
         // Create the RecyclerView to display the Recipe Comments
-        recipe_comments_data_list = (ArrayList<String>) intent.getSerializableExtra("comments");
         comments_adapter = new RecipeCommentsAdapter(this, recipe_comments_data_list, this);
         recipe_comments_list.setLayoutManager(new LinearLayoutManager(this));
         recipe_comments_list.setAdapter(comments_adapter);
 
         // Create the RecyclerView to display the Recipe Ingredients
-        recipeIngredient_data_list = (ArrayList<RecipeIngredient>) intent.getSerializableExtra("ingredients");
         ingredient_adapter = new RecipeIngredientAdapter(this, recipeIngredient_data_list, this);
         recipe_ingredient_list.setLayoutManager(new LinearLayoutManager(this));
         recipe_ingredient_list.setAdapter(ingredient_adapter);
