@@ -288,7 +288,7 @@ public class DBHandler {
 
                             for (String desc : ingredients.keySet()) {
                                 Map<String, Object> info = ingredients.get("desc");
-                                Integer amount = (Integer) info.get("amount");
+                                Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
@@ -336,7 +336,7 @@ public class DBHandler {
 
                             for (String desc : ingredients.keySet()) {
                                 Map<String, Object> info = ingredients.get("desc");
-                                Integer amount = (Integer) info.get("amount");
+                                Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
@@ -392,7 +392,7 @@ public class DBHandler {
 
                             for (String desc : ingredients.keySet()) {
                                 Map<String, Object> info = ingredients.get("desc");
-                                Integer amount = (Integer) info.get("amount");
+                                Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
@@ -442,7 +442,7 @@ public class DBHandler {
 
                             for (String desc : ingredients.keySet()) {
                                 Map<String, Object> info = ingredients.get("desc");
-                                Integer amount = (Integer) info.get("amount");
+                                Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);

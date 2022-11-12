@@ -201,7 +201,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             if (result.getData() == null) return;
             String descriptionExtra = result.getData().getStringExtra("description");
             String categoryExtra = result.getData().getStringExtra("category");
-            Integer amountExtra = result.getData().getIntExtra("amount", 0);
+            Double amountExtra = result.getData().getDoubleExtra("amount", 0.00);
             recipeIngredient_data_list.add(new RecipeIngredient(descriptionExtra, categoryExtra, amountExtra));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {
@@ -234,7 +234,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             if (result.getData() == null) return;
             String desc = result.getData().getStringExtra("desc");
             String category = result.getData().getStringExtra("category");
-            Integer amount = result.getData().getIntExtra("amount", 0);
+            Double amount = result.getData().getDoubleExtra("amount", 0.00);
             RecipeIngredient item = recipeIngredient_data_list.get(selection);
             item.setDescription(desc);
             item.setCategory(category);

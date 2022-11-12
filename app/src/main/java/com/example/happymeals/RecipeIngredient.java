@@ -7,15 +7,15 @@ public class RecipeIngredient extends Ingredient implements Serializable {
 
     private String description;
     private String category;
-    private Integer amount;
+    private Double amount;
 
     public RecipeIngredient() {
         this.description = "";
         this.category = "";
-        this.amount = 0;
+        this.amount = 0.00;
     }
 
-    public RecipeIngredient(String desc, String category, Integer amount) {
+    public RecipeIngredient(String desc, String category, Double amount) {
         this.description = desc;
         this.category = category;
         this.amount = amount;
@@ -39,11 +39,11 @@ public class RecipeIngredient extends Ingredient implements Serializable {
         this.category = category;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 }
