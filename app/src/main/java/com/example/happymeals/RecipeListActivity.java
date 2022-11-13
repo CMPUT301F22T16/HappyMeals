@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -20,9 +21,11 @@ import android.widget.Toast;
 import com.example.happymeals.recipe.EditRecipe;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface{
+public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface, AdapterView.OnItemSelectedListener {
 
     private Button add_recipe_button;
     private Spinner sort_recipe_spinner;
@@ -60,6 +63,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.recipe_sort, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort_recipe_spinner.setAdapter(spinnerAdapter);
+        sort_recipe_spinner.setOnItemSelectedListener(this);
 
         // Get the current user
         Bundle bundle = getIntent().getExtras();
@@ -174,5 +178,32 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             edit_recipe_for_result.launch(intent);
 
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getItemAtPosition(i).toString()) {
+            case "Title":
+                Collections.sort(recipes, (o1, o2) -> (o1.getTitle().compareTo(o2.getTitle())));
+                break;
+            case "Preparation Time":
+                Collections.sort(recipes, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                break;
+            case "Number of Servings":
+                Collections.sort(recipes, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                break;
+            case "Recipe Category":
+                Collections.sort(recipes, (o1, o2) -> (o1.getCategory().compareTo(o2.getCategory())));
+                break;
+            default:
+                Toast.makeText(RecipeListActivity.this, "Error when selecting sort method.", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        recipe_list_view.setAdapter(recipeAdapter);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        ;
     }
 }
