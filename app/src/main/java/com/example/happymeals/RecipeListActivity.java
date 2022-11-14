@@ -6,7 +6,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.happymeals.recipe.EditRecipe;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +30,7 @@ import java.util.List;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface, AdapterView.OnItemSelectedListener {
 
-    private Button add_recipe_button;
+    private FloatingActionButton add_recipe_button;
     private Spinner sort_recipe_spinner;
     private ListView recipe_list_view;
     private List<Recipe> recipes;
@@ -112,7 +115,15 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             rec.setCategory(category);
             rec.setComments(comments);
             rec.setIngredients(ing);
+
+            String uriStr = result.getData().getStringExtra("photo");
+            Uri uri = null;
+            if (uriStr != "") {
+                uri = Uri.parse(uriStr);
+            }
             db.updateRecipe(rec);
+
+            db.uploadImage(uri, rec);
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to edit recipe", Toast.LENGTH_SHORT).show();
         }
@@ -127,8 +138,20 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             String category = result.getData().getStringExtra("category");
             List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
+
+            String uriStr = result.getData().getStringExtra("photo");
+            Uri uri = null;
+            if (uriStr != "") {
+                uri = Uri.parse(uriStr);
+            }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
             db.addRecipe(newRecipe);
+
+//            ContentResolver cR = this.getContentResolver();
+//            String type = cR.getType(uri);
+            db.uploadImage(uri, newRecipe);
+
+
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
         }
@@ -175,6 +198,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             intent.putExtras(bundle);
             // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
             intent.putExtra("operation", "edit");
+            intent.putExtra("photo", recipe.getDownloadUri());
             edit_recipe_for_result.launch(intent);
 
         }

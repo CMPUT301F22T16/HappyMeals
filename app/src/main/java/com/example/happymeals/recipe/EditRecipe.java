@@ -89,7 +89,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     /**
      * This variable stores the photograph of the recipe
      */
-    Uri selected_img;
+    String selected_img = "";
 
     /**
      * This variable keeps track of the comment index position that the user has selected
@@ -120,6 +120,8 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
      * This is an EditText where the user can edit the category of their recipe
      */
     EditText recipeCategoryEditText;
+
+    DBHandler db;
 
     /**
      * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeAddIngredient} class.
@@ -180,7 +182,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
         Bundle bundle = intent.getExtras();
         String username = (String) bundle.getSerializable("USER");
-        DBHandler db = new DBHandler(username);
+        db = new DBHandler(username);
 
         // Initialize widgets
         recipe_img_picker_btn = findViewById(R.id.recipe_img_picker_btn);
@@ -209,6 +211,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             recipeCategoryEditText.setText(intent.getStringExtra("category"));
             recipe_comments_data_list = (ArrayList<String>) intent.getSerializableExtra("comments");
             recipeIngredient_data_list = (ArrayList<RecipeIngredient>) intent.getSerializableExtra("ingredients");
+            selected_img = intent.getStringExtra("photo");
         }
 
 
@@ -263,6 +266,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
                 intent.putExtra("category", recipeCategoryEditText.getText().toString());
                 intent.putExtra("comments", recipe_comments_data_list);
                 intent.putExtra("ingredients", recipeIngredient_data_list);
+                intent.putExtra("photo", selected_img);
+
+
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -305,7 +311,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     public void handleAddImgForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() != null) {
-                selected_img = result.getData().getData();
+                selected_img = result.getData().getData().toString();
             } else {
                 ;
             }
