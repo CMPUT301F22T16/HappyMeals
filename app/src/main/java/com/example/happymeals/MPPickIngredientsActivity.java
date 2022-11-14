@@ -68,11 +68,13 @@ public class MPPickIngredientsActivity extends AppCompatActivity implements Sear
         // Set up user here
         dbHandler = new DBHandler();
 
-        // set up adapter
+        // get meal
         intent =  getIntent();
         Bundle bundle  = intent.getExtras();
         meal = (Meal) bundle.getSerializable("MEAL");
-        dataList = meal.getRecipes(); // get all the existing recipes for the meal first
+
+        // get all the existing recipes for the meal first
+        dataList = meal.getRecipes();
         /*
         TODO: get all the individual ingredients, put then in a list
         as the existing(already selected recipes) for the meal

@@ -17,10 +17,11 @@ package com.example.happymeals;
  * It keeps the pick recipe list up to date
  */
 public class MPPickIngredientsAdapter extends MPPickAdapter {
-    private ArrayList<Ingredient> ingredients;
-    private ArrayList<Ingredient> arraylist;
+    private ArrayList<Ingredient> displayed_ingredients;
+    private ArrayList<Ingredient> all_ingredients;
     private ArrayList<Ingredient> ingredients_buffer;
-    private ArrayList<Ingredient> existing_ingredients;
+    private ArrayList<Recipe> all_recipes;
+    private ArrayList<Recipe> recipes_buffer;
     private Context context;
     LayoutInflater inflater;
 
@@ -33,27 +34,26 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
     public MPPickIngredientsAdapter(Context context, ArrayList<Ingredient> ingredients) {
         this.context = context;
         this.ingredients_buffer = new ArrayList<Ingredient>(ingredients);
-        this.ingredients = new ArrayList<>();
-        this.existing_ingredients = new ArrayList<Ingredient>(ingredients);
-        this.arraylist = new ArrayList<Ingredient>(ingredients);
+        this.displayed_ingredients = new ArrayList<>();
+        this.all_ingredients = new ArrayList<>();
         inflater = LayoutInflater.from(this.context);
     }
 
     @Override
     public int getCount() {
-        return ingredients.size();
+        return displayed_ingredients.size();
     }
 
 
-    public void clear(){ingredients.clear(); arraylist.clear();}
+    public void clear(){displayed_ingredients.clear(); all_ingredients.clear();}
 
-    public void add(Ingredient ingredient){ingredients.add(ingredient); arraylist.add(ingredient);}
+    public void add(Ingredient ingredient){displayed_ingredients.add(ingredient); all_ingredients.add(ingredient);}
 
     public List<Ingredient> getIngredientsSelected() { return this.ingredients_buffer;}
 
 
     public void addToBuffer(int position){
-        ingredients_buffer.add(ingredients.get(position));
+        ingredients_buffer.add(displayed_ingredients.get(position));
     }
 
     public ArrayList<Ingredient> getAllIngredients(){
@@ -63,7 +63,7 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
     }
 
     public void removeFromBuffer(int position){
-        Ingredient r = ingredients.get(position);
+        Ingredient r = displayed_ingredients.get(position);
         int i = 0;
         for (Ingredient ingredient : ingredients_buffer){
             if(ingredient.getId().equals(r.getId())){
@@ -76,7 +76,7 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
 
     @Override
     public Object getItem(int position) {
-        return ingredients.get(position);
+        return displayed_ingredients.get(position);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        Ingredient ingredient = ingredients.get(position);
+        Ingredient ingredient = displayed_ingredients.get(position);
         if (v == null) {
             v = inflater.inflate(R.layout.pick_ingredient_list_content,null);
         }
@@ -133,13 +133,13 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
      */
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-        ingredients.clear();
+        displayed_ingredients.clear();
         if (charText.length() == 0) {
-            ingredients.addAll(arraylist);
+            displayed_ingredients.addAll(all_ingredients);
         } else {
-            for (Ingredient i : arraylist) {
+            for (Ingredient i : all_ingredients) {
                 if (i.getDescription().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    ingredients.add(i);
+                    displayed_ingredients.add(i);
                 }
             }
         }
