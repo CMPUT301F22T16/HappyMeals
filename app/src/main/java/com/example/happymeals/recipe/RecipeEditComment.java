@@ -12,7 +12,14 @@ import com.example.happymeals.R;
 
 public class RecipeEditComment extends AppCompatActivity {
 
+    /**
+     * This is the EditText view for the user to edit their comment.
+     */
     EditText commentEditText;
+
+    /**
+     * This is the Button that the user can submit their newly edited comment.
+     */
     Button submitBtn;
 
     @Override

@@ -15,10 +15,28 @@ import com.example.happymeals.R;
 import java.util.ArrayList;
 
 public class RecipeCommentsAdapter extends RecyclerView.Adapter<RecipeCommentsAdapter.MyViewHolder> {
+    /**
+     * This interface is here because the click listeners for the user to edit and delete a comment are
+     * invoked in this class while their implementation is defined in the {@link EditRecipe} class.
+     */
     private RecyclerViewInterface recyclerViewInterface;
+
+    /**
+     * This stores the context.
+     */
     private Context context;
+
+    /**
+     * This is ArrayList of strings which are the comments for this recipe.
+     */
     private ArrayList<String> comments;
 
+    /**
+     * Constructor
+     * @param context the context. In this case it would be the {@link EditRecipe} activity.
+     * @param comments an arraylist of string which represent the comments for this recipe.
+     * @param recyclerViewInterface the {@link RecyclerViewInterface} interface.
+     */
     public RecipeCommentsAdapter(Context context, ArrayList<String> comments, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;

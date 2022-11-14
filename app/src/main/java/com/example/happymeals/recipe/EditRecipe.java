@@ -150,6 +150,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         @Override
         public void onActivityResult(ActivityResult result) {
             handleAddImgForResultLauncher(result);
+            Toast.makeText(EditRecipe.this, "Successfully added a new image.", Toast.LENGTH_SHORT).show();
         }
     });
 
@@ -276,8 +277,8 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     }
 
     /**
-     * This method handles the return value from the RecipeAddIngredient class
-     * @param result the returned values from the RecipeAddIngredient class.
+     * This method handles the return value from the {@link RecipeAddIngredient} Activity.
+     * @param result the returned values from the {@link RecipeAddIngredient} Activity..
      *               The return values consists of the ingredient description and category
      */
     public void handleAddIngredientForResultLauncher(ActivityResult result) {
@@ -293,6 +294,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         }
     }
 
+    /**
+     * This method handles the return value after the user adds a comment.
+     * @param result the returned value from the {@link RecipeAddComment} Activity
+     */
     public void handleAddCommentForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
             if (result.getData() == null) return;
@@ -322,7 +327,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
     /**
      * This method handles the return value after the user edits an ingredient
-     * @param result the returned value from the RecipeEditIngredient Activity
+     * @param result the returned value from the {@link RecipeEditIngredient} Activity
      */
     public void handleEditIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
@@ -342,7 +347,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
     /**
      * This method handles the return value after the user edits a comment.
-     * @param result the returned value from the RecipeEditComment Activity
+     * @param result the returned value from the {@link RecipeEditComment} Activity
      */
     public void handleEditCommentForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
@@ -357,7 +362,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
     /**
      * This method removes the ingredient from the recipe after the user presses the delete button
-     * @param position the index position of the ingredient in ingredient_data_list
+     * @param position the index position of the ingredient in {@link EditRecipe#recipeIngredient_data_list}
      * @param op a string denoting the operation to perform. Here the operation is either delete or edit.
      */
     @Override

@@ -25,8 +25,19 @@ import java.util.ArrayList;
  */
 public class RecipeAddIngredient extends AppCompatActivity {
 
+    /**
+     * This is the EditText view where the user can add the recipe description.
+     */
     EditText description_edit_text;
+
+    /**
+     * This is the EditText View where the user can add the recipe category.
+     */
     EditText category_edit_text;
+
+    /**
+     * This is the EditText View where the user can add the recipe amount.
+     */
     EditText amount_edit_text;
 
     /**
