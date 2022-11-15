@@ -10,73 +10,74 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.happymeals.Recipe;
-import com.example.happymeals.RecipeIngredient;
-import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
 
-/**
- * This class is the RecyclerViewAdapter that displays Ingredients in the {@link EditRecipe} class.
- * @author John Yu
- */
-public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredientAdapter.MyViewHolder> {
-
+public class RecipeCommentsAdapter extends RecyclerView.Adapter<RecipeCommentsAdapter.MyViewHolder> {
     /**
-     * This interface is here so that I can invoke the OnItemClick method in the {@link RecipeIngredientAdapter} class
-     * and define the implementation in the {@link EditRecipe} class.
+     * This interface is here because the click listeners for the user to edit and delete a comment are
+     * invoked in this class while their implementation is defined in the {@link EditRecipe} class.
      */
-    private final RecyclerViewInterface recyclerViewInterface;
+    private RecyclerViewInterface recyclerViewInterface;
 
     /**
-     * This stores the context
+     * This stores the context.
      */
     private Context context;
 
     /**
-     * This stores an arraylist of ingredients
+     * This is ArrayList of strings which are the comments for this recipe.
      */
-    private ArrayList<RecipeIngredient> userIngredients;
+    private ArrayList<String> comments;
 
-    public RecipeIngredientAdapter(Context context, ArrayList<RecipeIngredient> userIngredients, RecyclerViewInterface recyclerViewInterface) {
+    /**
+     * Constructor
+     * @param context the context. In this case it would be the {@link EditRecipe} activity.
+     * @param comments an arraylist of string which represent the comments for this recipe.
+     * @param recyclerViewInterface the {@link RecyclerViewInterface} interface.
+     */
+    public RecipeCommentsAdapter(Context context, ArrayList<String> comments, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
-        this.userIngredients = userIngredients;
+        this.comments = comments;
     }
 
     @NonNull
     @Override
-    public RecipeIngredientAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeCommentsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
+        /*
+            Yes, I am reusing the custom layout that displays the recipe ingredients.
+         */
         View view = inflater.inflate(R.layout.add_recipe_custom_layout, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeIngredientAdapter.MyViewHolder holder, int position) {
-        holder.desc.setText(userIngredients.get(position).getDescription());
+    public void onBindViewHolder(@NonNull RecipeCommentsAdapter.MyViewHolder holder, int position) {
+        holder.desc.setText(comments.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return userIngredients.size();
+        return this.comments.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         /**
-         * This TextView displays the ingredient description
+         * This TextView displays the comment
          */
         TextView desc;
 
         /**
-         * This ImageButton allows the user to delete the ingredient
+         * This ImageButton allows the user to delete the comment
          */
         ImageButton deleteBtn;
 
         /**
-         * This ImageButton allows the user to edit the ingredient
+         * This ImageButton allows the user to edit the comment
          */
         ImageButton editBtn;
 
@@ -92,7 +93,7 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
                     if (recyclerViewInterface != null) {
                         if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
 
-                        recyclerViewInterface.onItemClick(getAdapterPosition(), "delete");
+                        recyclerViewInterface.onItemClick(getAdapterPosition(), "delete_comment");
                     }
                 }
             });
@@ -103,11 +104,10 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
                     if (recyclerViewInterface != null) {
                         if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
 
-                        recyclerViewInterface.onItemClick(getAdapterPosition(), "edit");
+                        recyclerViewInterface.onItemClick(getAdapterPosition(), "edit_comment");
                     }
                 }
             });
         }
     }
 }
-

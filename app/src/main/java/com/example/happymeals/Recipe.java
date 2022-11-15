@@ -1,10 +1,13 @@
 package com.example.happymeals;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a modal class for user's Recipe. Implements {@link Storable} in order to store it to the database.
@@ -17,7 +20,7 @@ import java.util.List;
  *  4. num_servings : An {@link Integer} representing number of servings for the recipe.
  *  5. category: A {@link String} representing category of the recipe.
  *  6. comments: A {@link List<String>} of comments left by User on their own recipe.
- *  7. ingredients : A {@link List<Ingredient>} for list of ingredients that this recipe has.
+ *  7. ingredients : A {@link List< UserIngredient >} for list of ingredients that this recipe has.
  */
 public class Recipe implements Storable, Serializable {
     private String r_id = null; // All ids' are null if not fetched
@@ -26,8 +29,9 @@ public class Recipe implements Storable, Serializable {
     private int num_servings;
     private String category;
     private List<String> comments = new ArrayList<>();
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
     private List<Long> amounts = new ArrayList<>();
+    private String downloadUri;
 
     /**
      * Default constructor for Recipe. Initializes the recipe object with default values.
@@ -38,7 +42,8 @@ public class Recipe implements Storable, Serializable {
         this.num_servings = 0;
         this.category = "New Category";
         this.comments = new ArrayList<>(Arrays.asList("Nice!"));
-        this.ingredients = new ArrayList<>();
+        this.recipeIngredients = new ArrayList<>();
+        this.downloadUri = null;
     }
 
     /**
@@ -50,13 +55,14 @@ public class Recipe implements Storable, Serializable {
      * @param comments
      * @param ingredients
      */
-    public Recipe(String title, int preparation_time, int num_servings, String category, List<String> comments, List<Ingredient> ingredients) {
+    public Recipe(String title, int preparation_time, int num_servings, String category, List<String> comments, List<RecipeIngredient> ingredients) {
         this.title = title;
         this.preparation_time = preparation_time;
         this.num_servings = num_servings;
         this.category = category;
         this.comments = comments;
-        this.ingredients = ingredients;
+        this.recipeIngredients = ingredients;
+        this.downloadUri = null;
     }
 
     /**
@@ -101,10 +107,10 @@ public class Recipe implements Storable, Serializable {
 
     /**
      * Get the ingredients for the recipe.
-     * @return A {@link List<Ingredient>} with all the ingredients for the recipe.
+     * @return A {@link List< UserIngredient >} with all the ingredients for the recipe.
      */
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public List<RecipeIngredient> getIngredients() {
+        return recipeIngredients;
     }
 
     /**
@@ -141,10 +147,18 @@ public class Recipe implements Storable, Serializable {
 
     /**
      * Set the ingredients for the recipe object.
-     * @param ingredients The {@link List<Ingredient>} list of ingredients to be added to the recipe.
+     * @param ingredients The {@link List< RecipeIngredient >} list of ingredients to be added to the recipe.
      */
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setIngredients(List<RecipeIngredient> ingredients) {
+        this.recipeIngredients = ingredients;
+    }
+
+    /**
+     * Set the comments for the recipe object
+     * @param comments The {@link List<String>} list of comments to be added to the recipe.
+     */
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 
     /**
@@ -165,6 +179,22 @@ public class Recipe implements Storable, Serializable {
     public void setR_id(String id) {this.r_id = id;}
 
     /**
+     * Gets the downloadable URL for the photo of the recipe
+     * @return {@link Uri} URL of the image on Firebase Storage.
+     */
+    public String getDownloadUri() {
+        return downloadUri;
+    }
+
+    /**
+     * Sets the downloadable URL for the photo of the recipe.
+     * @param downloadUri {@link Uri} URL of the image on the Firebase Storage.
+     */
+    public void setDownloadUri(String downloadUri) {
+        this.downloadUri = downloadUri;
+    }
+
+    /**
      * Gets a {@link Storable} {@link HashMap<String, Object>} of data corresponding to the contents of the recipe.
      * @return A {@link Storable} {@link HashMap<String, Object>} of data.
      */
@@ -177,20 +207,18 @@ public class Recipe implements Storable, Serializable {
         data.put("num_servings", this.num_servings);
         data.put("comments", this.comments);
         data.put("category", this.category);
+        data.put("uri", this.downloadUri);
 
-//        List<String> ingredient_ids = new ArrayList<>();
-//        for (Ingredient ingredient : this.ingredients) {
-//            ingredient_ids.add(ingredient.getId());
-//        }
-        List<String> ingredient_descs = new ArrayList<>();
-        List<Long> ingredient_amounts = new ArrayList<>();
-        for (Ingredient ingredient : this.ingredients) {
-            ingredient_descs.add(ingredient.getDescription());
-            ingredient_amounts.add(Long.valueOf(ingredient.getAmount()));
+        Map<String, Map<String, Object>> ingredientsMap = new HashMap<>();
+
+        for (RecipeIngredient ingredient : this.recipeIngredients) {
+            Map<String, Object> info = new HashMap<>();
+            info.put("category", ingredient.getCategory());
+            info.put("amount", ingredient.getAmount());
+            ingredientsMap.put(ingredient.getDescription(), info);
         }
 
-        data.put("ingredients", ingredient_descs);
-        data.put("amounts", ingredient_amounts);
+        data.put("ingredients", ingredientsMap);
 
         return data;
     }

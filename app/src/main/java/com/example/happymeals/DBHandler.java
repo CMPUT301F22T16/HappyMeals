@@ -1,14 +1,23 @@
 package com.example.happymeals;
 
-import android.content.Context;
+import android.content.ContentResolver;
+import android.media.Image;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -17,18 +26,21 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
  * Represents a DBHandler object. This class maintains a username and also has a database connection established that it can use to add/modify/delete
  * content of following collections in Firestore
- * 1. user_ingredients: {@link Ingredient} is model class for this.
+ * 1. user_ingredients: {@link UserIngredient} is model class for this.
  * 2. users: {@link User} is model class for this.
  * 3. user_storages: {@link Storage} is the model class for this.
  * 4. user_recipes: {@link Recipe} is the model class for this.
@@ -41,9 +53,11 @@ public class DBHandler {
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
      *  conn: A {@link FirebaseFirestore} database connection to add/modify/delete/query data upon request.
+     *  storage: A{@link FirebaseStorage} connection to storage where images are to be stored.
      */
     private String username;
     private FirebaseFirestore conn;
+    private FirebaseStorage storage;
 
 
     /**
@@ -53,6 +67,7 @@ public class DBHandler {
         User user = new User();
         username = user.getUsername(); //
         conn = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     //NOT TO BE USED FOR HALFWAY CHECKPOINT
@@ -60,6 +75,7 @@ public class DBHandler {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public String getUsername() {
@@ -182,34 +198,34 @@ public class DBHandler {
     //-------------------------------------------------Ingredient Methods-------------------------------------------------//
 
     /**
-     * Stores a {@link Ingredient} object in the database, and attaches the database ID of the entry to the object.
-     * @param ingredient : Object of type {@link Storage} that will be added to the database
+     * Stores a {@link UserIngredient} object in the database, and attaches the database ID of the entry to the object.
+     * @param userIngredient : Object of type {@link Storage} that will be added to the database
      */
-    public void newIngredient(Ingredient ingredient) {
-        HashMap<String, Object> data  = ingredient.getStorable();
+    public void newIngredient(UserIngredient userIngredient) {
+        HashMap<String, Object> data  = userIngredient.getStorable();
         data.put("user", getUsername());
         CollectionReference ref = conn.collection("user_ingredients");
         String id = store(ref, data, "Ingredient");
-        ingredient.setId(id);
+        userIngredient.setId(id);
     }
 
     /**
-     * Deletes the entry of a {@link Ingredient} object from the database.
-     * @param ingredient : Object of type {@link Ingredient} that will be removed from the database
+     * Deletes the entry of a {@link UserIngredient} object from the database.
+     * @param userIngredient : Object of type {@link UserIngredient} that will be removed from the database
      */
-    public void deleteIngredient(Ingredient ingredient) {
+    public void deleteIngredient(UserIngredient userIngredient) {
         CollectionReference ref = conn.collection("user_ingredients");
-        delete(ref, ingredient.getId(), "Ingredient");
+        delete(ref, userIngredient.getId(), "Ingredient");
     }
 
     /**
-     * Updates the entry of {@link Ingredient} object in the database.
+     * Updates the entry of {@link UserIngredient} object in the database.
      *
-     * @param ingredient : Object of type {@link Ingredient} to be updated in the database.
+     * @param userIngredient : Object of type {@link UserIngredient} to be updated in the database.
      */
-    public void updateIngredient(Ingredient ingredient) {
+    public void updateIngredient(UserIngredient userIngredient) {
         CollectionReference ref = conn.collection("user_ingredients");
-        update(ref, ingredient.getId(), ingredient.getStorable(), "Ingredient");
+        update(ref, userIngredient.getId(), userIngredient.getStorable(), "Ingredient");
     }
 
     /**
@@ -223,6 +239,7 @@ public class DBHandler {
                 if (error != null) {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
+                    List<UserIngredient> userIngredients = new ArrayList<>();
                     Double sum = 0.0;
                     List<Ingredient> ingredients = new ArrayList<>();
                     adapter.clear();
@@ -234,10 +251,10 @@ public class DBHandler {
                         sum += cost * amount;
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
-                        Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
-                        ingredient.setId(doc.getId());
-                        ingredients.add(ingredient);
-                        adapter.add(ingredient);
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location);
+                        userIngredient.setId(doc.getId());
+                        userIngredients.add(userIngredient);
+                        adapter.add(userIngredient);
                     }
                     adapter.notifyDataSetChanged();
                     if (!Objects.isNull(totalCost)) {
@@ -249,13 +266,6 @@ public class DBHandler {
         });
     }
 
-
-    public void sortIngredients(String mode) {
-        if (mode.equals("N_AZ")) {
-            conn.collection("user_ingredients").whereEqualTo("user", getUsername()).orderBy("description");
-        }
-    }
-
     //-------------------------------------------------Recipe Methods-------------------------------------------------//
 
     /**
@@ -265,6 +275,8 @@ public class DBHandler {
      *
      * @param adapter {@link ArrayAdapter} in which data is to be populated
      * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
+     *
+     * @throws RuntimeException if Recipe has no ingredients
      */
     public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
@@ -285,21 +297,40 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) doc.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
+
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+                            System.out.println(getUsername());
+                            System.out.println(data.get("ingredients"));
+                            System.out.println(title);
+                            System.out.println(id);
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            if (ingredients == null) {
+                                throw new RuntimeException("Ingredients not found");
+                            }
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get(desc);
+                                System.out.println(info);
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
 
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
 
@@ -331,20 +362,31 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) doc.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
+
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
 
@@ -380,20 +422,32 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) data.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
+
+
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             recipes.add(recipe); // Adding the recipe from FireStore
                         }
                     }
@@ -423,20 +477,29 @@ public class DBHandler {
                             Map<String, Object> data = doc.getData();
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) data.get("comments");
-                            List<String> ingredientDescs = (List<String>) data.get("ingredients");
-                            List<Long> amounts = (List<Long>) data.get("amounts");
-                            List<Ingredient> ingredients = new ArrayList<>();
-                            for (int i = 0; i < ingredientDescs.size(); i++) {
-                                Ingredient ingredient = new Ingredient(amounts.get(i).intValue(), ingredientDescs.get(i));
-                                ingredients.add(ingredient);
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredients.add(recipeIngredient);
                             }
 
                             Integer num_servings = ((Long) data.get("num_servings")).intValue();
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, ingredients);
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
                     }
@@ -473,12 +536,57 @@ public class DBHandler {
      * @param recipe {@link Recipe} to be deleted.
      */
     public void removeRecipe(Recipe recipe) {
-        System.out.println("Reached");
         CollectionReference user_recipes = getConn().collection("user_recipes");
         String id = recipe.get_r_id();
-        System.out.println(id);
         delete(user_recipes, id, "user_recipes");
+
+        // Removing photo
+        String title = recipe.getTitle();
+        StorageReference rootRef = storage.getReference();
+        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + title + ".jpg");
+        photoRef.delete();
     }
+
+    public void uploadImage(Uri uri, Recipe recipe) {
+
+        if (uri == null) {
+            recipe.setDownloadUri("");
+            return;
+        }
+
+        StorageReference rootRef = storage.getReference();
+
+        // TODO support other file formats
+
+        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + ".jpg");
+
+        UploadTask uploadTask = photoRef.putFile(uri);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return photoRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    recipe.setDownloadUri(downloadUri.toString());
+                    updateRecipe(recipe);
+
+                } else {
+                    Log.d("UPLOAD", "Cannot upload image");
+                }
+            }
+        });
+    }
+
 
     //-------------------------------------------------Meal Methods-------------------------------------------------//
 
@@ -674,6 +782,5 @@ public class DBHandler {
         String id = mealPlan.get_ump_id();
         delete(user_mealplans, id, "user_mealplans");
     }
-
 
 }
