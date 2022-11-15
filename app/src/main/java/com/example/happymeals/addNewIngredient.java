@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.view.View;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,6 +31,7 @@ public class addNewIngredient extends AppCompatActivity {
     EditText ingredientCount;
     EditText ingredientUnitCost;
     DatePicker ingredientBestBefore;
+    Spinner ingredientUnit;
 
 
     @Override
@@ -47,11 +51,14 @@ public class addNewIngredient extends AppCompatActivity {
         ingredientBestBefore = findViewById(R.id.ingredientBestbefore);
         ingredientLocation = findViewById(R.id.ingredientLocation);
         confirmAdd = findViewById(R.id.confirm_button);
+        ingredientUnit = findViewById(R.id.ingredientUnit);
 
 
 //        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Pantry", "Freezer", "Fridge"));
 //        ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, locations);
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
+        ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));
+        ArrayList<String> solidUnit = new ArrayList<>(Arrays.asList("g", "kg"));
         ArrayAdapter<String> categoryAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, categories);
 
 //        ingredientLocationSpinner.setAdapter(locationAdapt);
@@ -62,6 +69,27 @@ public class addNewIngredient extends AppCompatActivity {
         Intent intent = getIntent();
         String mode = intent.getStringExtra("mode");
 
+
+        ingredientCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (categories.get(position) == "Drink") {
+                    Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
+                    ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(addNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                    ingredientUnit.setAdapter(unitAdapt);
+                    // Do something
+                } else {
+                    Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
+                    ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(addNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                    ingredientUnit.setAdapter(unitAdapt);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         // If the mode is edit, population the text boxes with existing values.
         if (mode.equals("Edit")) {
             String category = intent.getStringExtra("category");
