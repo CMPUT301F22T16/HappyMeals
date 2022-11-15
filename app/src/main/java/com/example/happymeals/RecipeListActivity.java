@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface, AdapterView.OnItemSelectedListener {
 
@@ -118,9 +119,10 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (uriStr != "") {
+            if (!Objects.equals(uriStr, "")) {
                 uri = Uri.parse(uriStr);
             }
+            rec.setDownloadUri(uriStr);
             db.updateRecipe(rec);
 
             db.uploadImage(uri, rec);
@@ -141,17 +143,16 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (uriStr != "") {
+            if (!Objects.equals(uriStr, "")) {
                 uri = Uri.parse(uriStr);
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
+            newRecipe.setDownloadUri(uriStr);
             db.addRecipe(newRecipe);
 
 //            ContentResolver cR = this.getContentResolver();
 //            String type = cR.getType(uri);
             db.uploadImage(uri, newRecipe);
-
-
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
         }
