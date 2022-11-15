@@ -71,6 +71,11 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         notifyDataSetChanged();
     }
 
+    public ArrayList<Recipe> getRecipes(){
+        return recipes;
+    }
+
+
 
     public void clear(){
         recipes.clear();

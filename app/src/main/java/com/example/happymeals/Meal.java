@@ -55,6 +55,15 @@ public class Meal implements Storable, Serializable {
     }
 
     /**
+     * Add a new recipe to the meal recipes list
+     * @param recipe An {@link Recipe} new recipe to be added
+     *               to the list
+     */
+    public void addRecipe(Recipe recipe){
+        this.recipes.add(recipe);
+    }
+
+    /**
      * Get the recipes associated with the meal object
      * @return {@link List<Recipe>} A list of recipes.
      */
