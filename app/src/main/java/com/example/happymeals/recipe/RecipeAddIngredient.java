@@ -58,7 +58,7 @@ public class RecipeAddIngredient extends AppCompatActivity {
         adaptor = new IngredientAdaptor(RecipeAddIngredient.this, ingredientDataList);
         ingredientList = findViewById(R.id.recipe_add_ingredient_listview);
         ingredientList.setAdapter(adaptor);
-        db.getIngredients(adaptor);
+        db.getIngredients(adaptor, null);
 
         submit_btn = findViewById(R.id.recipe_add_ingredient_btn);
         ingredientList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -3,6 +3,7 @@ package com.example.happymeals;
 import android.content.Context;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -213,7 +215,7 @@ public class DBHandler {
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    public void getIngredients(ArrayAdapter adapter) {
+    public void getIngredients(ArrayAdapter adapter, @Nullable TextView totalCost) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -221,6 +223,7 @@ public class DBHandler {
                 if (error != null) {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
+                    Double sum = 0.0;
                     List<Ingredient> ingredients = new ArrayList<>();
                     adapter.clear();
                     for (QueryDocumentSnapshot doc : value) {
@@ -228,6 +231,7 @@ public class DBHandler {
                         String description = doc.getString("description");
                         Integer amount = doc.getLong("amount").intValue();
                         Double cost = doc.getDouble("cost");
+                        sum += cost * amount;
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         Ingredient ingredient = new Ingredient(category, description, amount, cost, date, location);
@@ -236,10 +240,20 @@ public class DBHandler {
                         adapter.add(ingredient);
                     }
                     adapter.notifyDataSetChanged();
+                    if (!Objects.isNull(totalCost)) {
+                        totalCost.setText("Total cost: $" + String.valueOf(sum));
+                    }
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
         });
+    }
+
+
+    public void sortIngredients(String mode) {
+        if (mode.equals("N_AZ")) {
+            conn.collection("user_ingredients").whereEqualTo("user", getUsername()).orderBy("description");
+        }
     }
 
     //-------------------------------------------------Recipe Methods-------------------------------------------------//
