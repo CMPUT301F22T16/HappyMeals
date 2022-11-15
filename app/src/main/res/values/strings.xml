@@ -26,6 +26,11 @@
         <item>Number of Servings</item>
         <item>Recipe Category</item>
     </string-array>
+    <string-array name="add_ingredient_amount_unit">
+        <item>qty</item>
+        <item>grams</item>
+        <item>kilograms</item>
+    </string-array>
     <string name="integer_to_string">%1$d</string>
     <string name="double_to_string">%.2f</string>
 

@@ -121,6 +121,9 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
      */
     EditText recipeCategoryEditText;
 
+    /**
+     * This is the database handler that handles all things related to the firebase database.
+     */
     DBHandler db;
 
     /**
@@ -287,6 +290,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             String descriptionExtra = result.getData().getStringExtra("description");
             String categoryExtra = result.getData().getStringExtra("category");
             Double amountExtra = result.getData().getDoubleExtra("amount", 0.00);
+            String amountUnitExtra = result.getData().getStringExtra("amount_unit");
             recipeIngredient_data_list.add(new RecipeIngredient(descriptionExtra, categoryExtra, amountExtra));
             recipe_ingredient_list.setAdapter(ingredient_adapter);
         } else {

@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.happymeals.R;
 
@@ -17,7 +20,7 @@ import java.util.Date;
  * This class opens an Activity to allow the user to edit an ingredient in their recipe
  * @author John Yu
  */
-public class RecipeEditIngredient extends AppCompatActivity {
+public class RecipeEditIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     /**
      * This EditText lets the user edit the ingredient description
@@ -54,6 +57,11 @@ public class RecipeEditIngredient extends AppCompatActivity {
      */
     Double amount = null;
 
+    /**
+     * This is the spinner where the user can select a unit.
+     */
+    Spinner amount_unit_spinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +82,12 @@ public class RecipeEditIngredient extends AppCompatActivity {
         category_edit_text.setText(category);
         amount_edit_text.setText(getString(R.string.double_to_string, amount));
 
+        amount_unit_spinner = findViewById(R.id.recipe_edit_ingredient_amount_spinner);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.add_ingredient_amount_unit, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        amount_unit_spinner.setAdapter(spinnerAdapter);
+        amount_unit_spinner.setOnItemSelectedListener(this);
+
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,5 +100,15 @@ public class RecipeEditIngredient extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        ;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        ;
     }
 }
