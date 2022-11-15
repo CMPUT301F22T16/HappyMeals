@@ -2,7 +2,6 @@ package com.example.happymeals;
 
         import androidx.appcompat.app.AppCompatActivity;
 
-        import android.app.Activity;
         import android.app.AlertDialog;
         import android.content.Intent;
         import android.os.Bundle;
@@ -24,7 +23,8 @@ package com.example.happymeals;
 public class MPPickIngredientsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
     ListView ingredient_list;
     MPPickIngredientsAdapter ingredient_adapter;
-    List<Recipe> dataList; // contains all the existing recipes in the meal
+    List<Recipe> meal_recipe_list; // contains all the existing recipes in the meal
+    List<Ingredient> existing_ingredients;
     SearchView ingredient_search_bar;
     Button confirmButton;
     DBHandler dbHandler;
@@ -38,6 +38,7 @@ public class MPPickIngredientsActivity extends AppCompatActivity implements Sear
             a recipes, fetch the ingredient, and
             add that ingredient(s) to existing_ingredients
             list.
+            1.2. fetch all user ingredients-- should be done by modified the method in DBhandler
         2. After user have selected all the ingredients he
             wants to add, we check each ingredient
             1. fetch all recipes of the user
@@ -55,7 +56,8 @@ public class MPPickIngredientsActivity extends AppCompatActivity implements Sear
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mppick_ingredients);
-        dataList = new ArrayList<Recipe>();
+        meal_recipe_list = new ArrayList<Recipe>();
+        existing_ingredients = new ArrayList<Ingredient>();
 
         // back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,12 +76,16 @@ public class MPPickIngredientsActivity extends AppCompatActivity implements Sear
         meal = (Meal) bundle.getSerializable("MEAL");
 
         // get all the existing recipes for the meal first
-        dataList = meal.getRecipes();
-        /*
-        TODO: get all the individual ingredients, put then in a list
-        as the existing(already selected recipes) for the meal
-        * */
-//        ingredient_adapter = new MPPickRecipeListAdapter(this, (ArrayList<Recipe>) dataList);
+        meal_recipe_list = meal.getRecipes();
+
+        for (Recipe recipe : meal_recipe_list){
+
+            int ingredients_count = recipe.getIngredients().size();
+            if ( ingredients_count == 1){
+                existing_ingredients.add(recipe.getIngredients().get(0));
+            }
+        }
+        ingredient_adapter = new MPPickIngredientsAdapter(this, (ArrayList<Ingredient>) existing_ingredients,(ArrayList<Recipe>) meal_recipe_list);
 
         // set up search bar
         ingredient_list.setAdapter(ingredient_adapter);
@@ -87,6 +93,8 @@ public class MPPickIngredientsActivity extends AppCompatActivity implements Sear
 
         // get user's recipes
         LoadingDialog dialog = new LoadingDialog(this);
+        // TODO: fetch all ingredients
+//        dbHandler
         // TODO: deal with fetch all user's recipe here.
         dbHandler.getUserRecipesForMeals(ingredient_adapter,dialog);
 

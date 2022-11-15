@@ -1,12 +1,14 @@
 package com.example.happymeals;
 
-        import android.content.Context;
+import android.content.Context;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
         import android.widget.CheckBox;
         import android.widget.TextView;
+
+        import org.checkerframework.checker.units.qual.A;
 
         import java.util.ArrayList;
         import java.util.List;
@@ -19,7 +21,8 @@ package com.example.happymeals;
 public class MPPickIngredientsAdapter extends MPPickAdapter {
     private ArrayList<Ingredient> displayed_ingredients;
     private ArrayList<Ingredient> all_ingredients;
-    private ArrayList<Ingredient> ingredients_buffer;
+    private ArrayList<Ingredient> ingredients_buffer; // contains selected ingredients
+    private ArrayList<Ingredient> existing_ingredients; //
     private ArrayList<Recipe> all_recipes;
     private ArrayList<Recipe> recipes_buffer;
     private Context context;
@@ -31,11 +34,13 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
      * @param context
      * @param ingredients existing recipes for the meal
      */
-    public MPPickIngredientsAdapter(Context context, ArrayList<Ingredient> ingredients) {
+    public MPPickIngredientsAdapter(Context context, ArrayList<Ingredient> ingredients,ArrayList<Recipe> meal_recipes) {
         this.context = context;
-        this.ingredients_buffer = new ArrayList<Ingredient>(ingredients);
+        this.ingredients_buffer = new ArrayList<>();
+        this.existing_ingredients = new ArrayList<Ingredient>(ingredients);
         this.displayed_ingredients = new ArrayList<>();
         this.all_ingredients = new ArrayList<>();
+        this.recipes_buffer = new ArrayList<Recipe>(meal_recipes);
         inflater = LayoutInflater.from(this.context);
     }
 
@@ -50,7 +55,10 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
     public void add(Ingredient ingredient){displayed_ingredients.add(ingredient); all_ingredients.add(ingredient);}
 
     public List<Ingredient> getIngredientsSelected() { return this.ingredients_buffer;}
-
+//
+//    public List<Recipe> getAllRecipesForMeal(){
+//
+//    }
 
     public void addToBuffer(int position){
         ingredients_buffer.add(displayed_ingredients.get(position));
@@ -92,9 +100,9 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
             v = inflater.inflate(R.layout.pick_ingredient_list_content,null);
         }
         // Lookup view for data population
-        TextView recipeText = v.findViewById(R.id.ml_recipe_list_textView);
+        TextView ingredientText = v.findViewById(R.id.ml_ingredient_list_textView);
         CheckBox checkBox = v.findViewById(R.id.checkBox_pick_ingredients);
-        if (isAlreadyInBuffer(ingredient)){
+        if (isIngredientAlreadyInList(ingredient,ingredients_buffer)){
             if (!checkBox.isChecked()){
                 checkBox.toggle();
             }
@@ -103,9 +111,14 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
                 checkBox.toggle();
             }
         }
+        if (isIngredientAlreadyInList(ingredient,existing_ingredients)){
+            // user are not allowed to deselect ingredients that exist in the meal
+            // delete action can be performed in MPMealRecipeList.
+            checkBox.setEnabled(false);
+        }
 
         // Populate the data into the template view using the data object
-        recipeText.setText(ingredient.getDescription());
+        ingredientText.setText(ingredient.getDescription());
         return v;
     }
 
@@ -116,8 +129,8 @@ public class MPPickIngredientsAdapter extends MPPickAdapter {
      * @return ture if this recipe is already added to the meal
      * false otherwise
      */
-    public boolean isAlreadyInBuffer(Ingredient i){
-        for (Ingredient ingredient :ingredients_buffer) {
+    public boolean isIngredientAlreadyInList(Ingredient i,ArrayList<Ingredient> list){
+        for (Ingredient ingredient :list) {
             String a = ingredient.getId();
             String b = i.getId();
             if (a.equals(b)) {
