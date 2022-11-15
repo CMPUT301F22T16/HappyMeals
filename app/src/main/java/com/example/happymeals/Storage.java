@@ -12,13 +12,13 @@ import java.util.List;
  * Members:
  *  1. id : A {@link String} id representing document id of the storage in the database.
  *  2. storeName : A {@link String} representing name of the storage.
- *  3. ingredients : A {@link List<Ingredient>} of ingredients to be stored in the storage.
+ *  3. ingredients : A {@link List< UserIngredient >} of ingredients to be stored in the storage.
  */
 public class Storage implements Storable {
 
     private String storeName;
     private String id;
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<UserIngredient> userIngredients = new ArrayList<>();
 
     /**
      * A constructor for storages with a {@link String} storage name provided.
@@ -59,16 +59,16 @@ public class Storage implements Storable {
 
     /**
      * Get the ingredients present in the Storage object.
-     * @return {@link ArrayList<Ingredient>} of ingredients in the storage.
+     * @return {@link ArrayList< UserIngredient >} of ingredients in the storage.
      */
-    public ArrayList<Ingredient> getIngredients() { return (ArrayList<Ingredient>) this.ingredients; }
+    public ArrayList<UserIngredient> getIngredients() { return (ArrayList<UserIngredient>) this.userIngredients; }
 
     /**
      * Add a new ingredient in the storage.
-     * @param ingredient {@link Ingredient} object to be added.
+     * @param userIngredient {@link UserIngredient} object to be added.
      */
-    public void addIngredient(Ingredient ingredient) {
-        ingredients.add(ingredient);
+    public void addIngredient(UserIngredient userIngredient) {
+        userIngredients.add(userIngredient);
     }
 
     /**
@@ -78,8 +78,8 @@ public class Storage implements Storable {
     @Override
     public HashMap<String, Object> getStorable() {
         List<String> ingredientsStrs = new ArrayList<>();
-        for (int i=0 ;i<ingredients.size(); i++) {
-            ingredientsStrs.add(ingredients.get(i).getId());
+        for (int i = 0; i< userIngredients.size(); i++) {
+            ingredientsStrs.add(userIngredients.get(i).getId());
         }
         HashMap<String, Object> data = new HashMap();
         data.put("type", this.storeName);

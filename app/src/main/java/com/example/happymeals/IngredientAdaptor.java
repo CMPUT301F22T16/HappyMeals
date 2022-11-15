@@ -13,15 +13,15 @@ import java.util.ArrayList;
  * The IngredientAdaptor class defines how the an object of the "Ingredient" class will be displayed in a ListView
  */
 // Coding of this adaptor comes from lab example.
-public class IngredientAdaptor extends ArrayAdapter<Ingredient> {
+public class IngredientAdaptor extends ArrayAdapter<UserIngredient> {
 
-    public IngredientAdaptor(Context context, ArrayList<Ingredient> ingredients) {
-        super(context, 0, ingredients);
+    public IngredientAdaptor(Context context, ArrayList<UserIngredient> userIngredients) {
+        super(context, 0, userIngredients);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Ingredient ingredient = getItem(position);
+        UserIngredient userIngredient = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -33,24 +33,24 @@ public class IngredientAdaptor extends ArrayAdapter<Ingredient> {
         TextView count = (TextView) convertView.findViewById(R.id.count);
         TextView unitcost = (TextView) convertView.findViewById(R.id.unitcost);
 
-        int month = ingredient.getMonth()+1;
-        int day = ingredient.getDay();
+        int month = userIngredient.getMonth()+1;
+        int day = userIngredient.getDay();
         // Set the values for display.
-        description.setText(ingredient.getDescription());
-        if (ingredient.getMonth() < 9){
-            if (ingredient.getDay() < 9){
-                bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-0" + month + "-0" + day);
+        description.setText(userIngredient.getDescription());
+        if (userIngredient.getMonth() < 9){
+            if (userIngredient.getDay() < 9){
+                bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-0" + month + "-0" + day);
             } else {
-                bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-0" + month + "-" + day);
+                bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-0" + month + "-" + day);
             }
         } else {
-            bestbefore.setText("Bestbefore: " + ingredient.getYear() + "-" + month + "-" + day);
+            bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-" + month + "-" + day);
         }
-        count.setText("Amount: " + String.valueOf(ingredient.getAmount()));
+        count.setText("Amount: " + String.valueOf(userIngredient.getAmount()));
 
         System.out.println("Here");
-        System.out.println(ingredient.getCost());
-        unitcost.setText("Unit cost: $" + Double.toString(ingredient.getCost()));
+        System.out.println(userIngredient.getCost());
+        unitcost.setText("Unit cost: $" + Double.toString(userIngredient.getCost()));
 
         return convertView;
     }
