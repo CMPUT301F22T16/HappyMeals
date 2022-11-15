@@ -6,7 +6,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
 
@@ -34,7 +32,7 @@ import java.util.Date;
  * new activities when pressing certain buttons.
  */
 public class IngredientActivity extends AppCompatActivity{
-    ArrayList<Ingredient> ingredientList;
+    ArrayList<UserIngredient> userIngredientList;
     ArrayAdapter ingredientAdaptor;
     ListView ingredientListView;
     TextView totalCost;
@@ -50,9 +48,9 @@ public class IngredientActivity extends AppCompatActivity{
         setContentView(R.layout.activity_ingredient);
         getSupportActionBar().setTitle("Ingredients");
 
-        ingredientList = new ArrayList<Ingredient>();
+        userIngredientList = new ArrayList<UserIngredient>();
 
-        ingredientAdaptor = new IngredientAdaptor(this, ingredientList);
+        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
         DBHandler db = new DBHandler();
         db.getIngredients(ingredientAdaptor);
 
@@ -124,16 +122,16 @@ public class IngredientActivity extends AppCompatActivity{
                             String mode = addIngredient.getStringExtra("mode");
 
                             if (mode.equals("Edit") && ingredientPosition != -1) {
-                                Ingredient oldIngredient = ingredientList.get(ingredientPosition);
+                                UserIngredient oldUserIngredient = userIngredientList.get(ingredientPosition);
 
-                                oldIngredient.setCategory(category);
-                                oldIngredient.setDescription(description);
-                                oldIngredient.setAmount(count);
-                                oldIngredient.setCost(unitCost);
-                                oldIngredient.setDate(year, month, day);
-                                oldIngredient.setLoc(location);
+                                oldUserIngredient.setCategory(category);
+                                oldUserIngredient.setDescription(description);
+                                oldUserIngredient.setAmount(count);
+                                oldUserIngredient.setCost(unitCost);
+                                oldUserIngredient.setDate(year, month, day);
+                                oldUserIngredient.setLoc(location);
 
-                                db.updateIngredient(oldIngredient);
+                                db.updateIngredient(oldUserIngredient);
                                 ingredientPosition = -1;
                             } else if (mode.equals("Add")) {
                                 Calendar cal = Calendar.getInstance();
@@ -141,9 +139,9 @@ public class IngredientActivity extends AppCompatActivity{
                                 cal.set(Calendar.MONTH, month);
                                 cal.set(Calendar.DAY_OF_MONTH, day);
                                 Date date = cal.getTime();
-                                Ingredient newIngredient = new Ingredient(category, description, count, unitCost, date, location);
+                                UserIngredient newUserIngredient = new UserIngredient(category, description, count, unitCost, date, location);
                                 //ingredientList.add(newIngredient);
-                                db.newIngredient(newIngredient);
+                                db.newIngredient(newUserIngredient);
                                 ingredientPosition = -1;
                             }
                             updateCost();
@@ -156,11 +154,11 @@ public class IngredientActivity extends AppCompatActivity{
         ingredientListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Ingredient ingredient = (Ingredient) parent.getItemAtPosition(position);
+                UserIngredient userIngredient = (UserIngredient) parent.getItemAtPosition(position);
                 ingredientPosition = position;
 
 
-                ViewIngredientFragment.newInstance(ingredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                ViewIngredientFragment.newInstance(userIngredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
             }
         });
@@ -180,9 +178,9 @@ public class IngredientActivity extends AppCompatActivity{
 
     // A function to update the total cost of the ingredient after edit, add or delete.
     private void updateCost() {
-        Log.d("Mike9122001", "This is the size: "+String.valueOf(ingredientList.size()));
+        Log.d("Mike9122001", "This is the size: "+String.valueOf(userIngredientList.size()));
         double cost = 0;
-        for (Ingredient i : ingredientList) {
+        for (UserIngredient i : userIngredientList) {
             cost = cost + (i.getAmount() * i.getCost());
         }
 

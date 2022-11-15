@@ -3,42 +3,25 @@ package com.example.happymeals;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * The AddCityFragment is used to add a new city, it defines the actions to take once the users
@@ -53,7 +36,7 @@ public class ViewIngredientFragment extends DialogFragment {
     private EditText thisAmount;
     private EditText thisUnitCost;
     private DatePicker thisBestBefore;
-    Ingredient thisIngredient;
+    UserIngredient thisUserIngredient;
 
     @NonNull
     @Override
@@ -82,13 +65,13 @@ public class ViewIngredientFragment extends DialogFragment {
         final Bundle ingredient = this.getArguments();
 
         if (ingredient != null){
-            thisIngredient = (Ingredient) ingredient.getSerializable("ingredient");
-            thisCategory.setSelection(categories.indexOf(thisIngredient.getCategory()));
-            thisDescription.setText(thisIngredient.getDescription());
-            thisLocation.setText(thisIngredient.getLoc());
-            thisAmount.setText(Integer.toString(thisIngredient.getAmount()));
-            thisUnitCost.setText(Double.toString(thisIngredient.getCost()));
-            thisBestBefore.updateDate(thisIngredient.getYear(), thisIngredient.getMonth(), thisIngredient.getDay());
+            thisUserIngredient = (UserIngredient) ingredient.getSerializable("ingredient");
+            thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
+            thisDescription.setText(thisUserIngredient.getDescription());
+            thisLocation.setText(thisUserIngredient.getLoc());
+            thisAmount.setText(Integer.toString(thisUserIngredient.getAmount()));
+            thisUnitCost.setText(Double.toString(thisUserIngredient.getCost()));
+            thisBestBefore.updateDate(thisUserIngredient.getYear(), thisUserIngredient.getMonth(), thisUserIngredient.getDay());
         }
 
 
@@ -158,13 +141,13 @@ public class ViewIngredientFragment extends DialogFragment {
                             Toast.makeText(context, "Incomplete/Invalid input.", Toast.LENGTH_SHORT).show();
                         }
                         if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
-                            thisIngredient.setCategory(category);
-                            thisIngredient.setDescription(description);
-                            thisIngredient.setAmount(count);
-                            thisIngredient.setCost(unitCost);
-                            thisIngredient.setDate(year, month, day);
-                            thisIngredient.setLoc(location);
-                            db.updateIngredient(thisIngredient);
+                            thisUserIngredient.setCategory(category);
+                            thisUserIngredient.setDescription(description);
+                            thisUserIngredient.setAmount(count);
+                            thisUserIngredient.setCost(unitCost);
+                            thisUserIngredient.setDate(year, month, day);
+                            thisUserIngredient.setLoc(location);
+                            db.updateIngredient(thisUserIngredient);
 
                         }
 
@@ -181,7 +164,7 @@ public class ViewIngredientFragment extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(context, "Ingredient deleted", Toast.LENGTH_SHORT).show();
-                                db.deleteIngredient(thisIngredient);
+                                db.deleteIngredient(thisUserIngredient);
                                 dialog.dismiss();
                             }
                         });
@@ -200,9 +183,9 @@ public class ViewIngredientFragment extends DialogFragment {
         }
 
     // This is used to serialize the city object and so it can be passed between activities.
-    static ViewIngredientFragment newInstance(Ingredient ingredient) {
+    static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
         Bundle args = new Bundle();
-        args.putSerializable("ingredient", ingredient);
+        args.putSerializable("ingredient", userIngredient);
 
         ViewIngredientFragment fragment = new ViewIngredientFragment();
         fragment.setArguments(args);
