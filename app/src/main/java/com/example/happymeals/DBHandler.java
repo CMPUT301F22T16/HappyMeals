@@ -1,17 +1,16 @@
 package com.example.happymeals;
 
-import android.content.ContentResolver;
-import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
+import com.example.happymeals.meal.MPMealRecipeListAdapter;
+import com.example.happymeals.meal.MPMyMealsAdapter;
+import com.example.happymeals.meal.MPPickRecipeListAdapter;
+import com.example.happymeals.meal.Meal;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -454,7 +453,7 @@ public class DBHandler {
      * @param recipe_ids
      * @param adapter
      */
-    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
+    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids, MPMealRecipeListAdapter adapter) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
