@@ -75,7 +75,7 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/userWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logged in as: Guest"

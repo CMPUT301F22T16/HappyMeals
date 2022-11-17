@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,6 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivitySignUpBinding binding;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getSupportActionBar().setTitle("Register");
 
+        context = this;
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -44,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button signupButton = binding.signup;
         final ProgressBar loadingProgressBar = binding.loading;
-        Log.d("Momo", "2");
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
@@ -80,7 +82,6 @@ public class SignUpActivity extends AppCompatActivity {
                 finish();
             }
         });
-        Log.d("Momo", "3");
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -116,8 +117,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.register(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString(), context, loadingProgressBar);
             }
         });
     }

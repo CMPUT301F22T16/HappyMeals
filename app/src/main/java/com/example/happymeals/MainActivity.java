@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.happymeals.databinding.ActivityMainBinding;
 import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button mealButton;
     Button recipeButton;
     Button mealplanButton;
+    TextView userWelcome;
 
 
     @Override
@@ -29,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(activityMainBinding.getRoot());
 
-        DBHandler db = new DBHandler();
+        String username = getIntent().getStringExtra("USERNAME");
+        userWelcome = findViewById(R.id.userWelcome);
+        userWelcome.setText("Welcome, " + username + "!");
+        DBHandler db = new DBHandler(username);
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);

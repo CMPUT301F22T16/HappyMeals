@@ -4,7 +4,6 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -22,9 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.happymeals.MainActivity;
 import com.example.happymeals.R;
-import com.example.happymeals.ui.login.LoginViewModel;
-import com.example.happymeals.ui.login.LoginViewModelFactory;
 import com.example.happymeals.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,6 +34,14 @@ private ActivityLoginBinding binding;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Login");
+
+        if (getIntent().getBooleanExtra("REGISTERED", false)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            String username = getIntent().getStringExtra("USERNAME");
+            intent.putExtra("USERNAME", username);
+            finish();
+            startActivity(intent);
+        }
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
      setContentView(binding.getRoot());

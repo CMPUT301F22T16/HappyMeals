@@ -1,6 +1,13 @@
 package com.example.happymeals.data;
 
-import com.example.happymeals.data.model.LoggedInUser;
+import android.app.Application;
+import android.content.Context;
+import android.util.Log;
+import android.widget.ProgressBar;
+
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.data.model.User;
+import com.example.happymeals.ui.login.SignUpActivity;
 
 import java.io.IOException;
 
@@ -9,18 +16,24 @@ import java.io.IOException;
  */
 public class LoginDataSource {
 
-    public Result<LoggedInUser> login(String username, String password) {
+    DBHandler db = new DBHandler();
+    public Result<User> login(String username, String password) {
 
         try {
             // TODO: handle loggedInUser authentication
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            "Jane Doe");
+            User fakeUser = new User("Jane Doe", username);
             return new Result.Success<>(fakeUser);
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }
+    }
+
+    public Result<User> register(String username, String password, Context context, ProgressBar bar) {
+        //DBHandler will handle errors.
+        User user = new User(username, username);
+        db.checkAndAddUser(user, password, context, bar);
+        return new Result.Success<>(user);
+
     }
 
     public void logout() {

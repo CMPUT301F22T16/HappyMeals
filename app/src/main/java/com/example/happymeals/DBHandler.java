@@ -1,17 +1,21 @@
 package com.example.happymeals;
 
-import android.content.ContentResolver;
-import android.media.Image;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
+import com.example.happymeals.data.model.User;
+import com.example.happymeals.ui.login.LoginActivity;
+import com.example.happymeals.ui.login.SignUpActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -28,6 +33,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import android.content.BroadcastReceiver;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,22 +66,22 @@ public class DBHandler {
     private FirebaseStorage storage;
 
 
-    /**
-     * Guest login constructor
-     */
-    public DBHandler() {
-        User user = new User();
-        username = user.getUsername(); //
-        conn = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-    }
 
-    //NOT TO BE USED FOR HALFWAY CHECKPOINT
     public DBHandler(String username) {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
+    }
+
+    public DBHandler() {
+        // Temporary handler for users wanting to register
+        conn = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUsername() {
@@ -161,6 +168,54 @@ public class DBHandler {
                     }
                 });
     }
+    //---------------------------------------------------User Methods--------------------------------------------------//
+
+    private void newUser(DocumentReference doc, User user, String password, Context context, ProgressBar bar) {
+        HashMap<String, Object> data = new HashMap();
+        data.put("display_name", user.getDisplayName());
+        data.put("password", password);
+        doc
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        intent.putExtra("REGISTERED", true);
+                        intent.putExtra("USERNAME", user.getUserName());
+                        ((SignUpActivity) context).startActivity(intent);
+                        ((SignUpActivity) context).finish();
+                        bar.setVisibility(View.GONE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("UError", "User could not be added" + e);
+                        bar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+
+    public void checkAndAddUser(User user, String password, Context context, ProgressBar bar) {
+        DocumentReference doc = conn.collection("users").document(user.getUserName());
+        doc
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot docSnap) {
+                        if (docSnap.getData() == null) {
+                            newUser(doc, user, password, context, bar);
+                        }
+
+                        else {
+                            bar.setVisibility(View.GONE);
+                            Toast.makeText(context, "This username already exists, please try another", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
 
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
