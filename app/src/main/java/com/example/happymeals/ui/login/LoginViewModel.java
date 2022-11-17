@@ -43,8 +43,8 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
-    public void register(String username, String password, Context context, ProgressBar bar) {
-        Result<User> result = loginRepository.register(username, password, context, bar);
+    public void register(String firstName, String lastName, String username, String password, Context context, ProgressBar bar) {
+        Result<User> result = loginRepository.register(firstName, lastName, username, password, context, bar);
 
     }
 

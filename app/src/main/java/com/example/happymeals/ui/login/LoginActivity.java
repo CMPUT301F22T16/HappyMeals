@@ -38,7 +38,9 @@ private ActivityLoginBinding binding;
         if (getIntent().getBooleanExtra("REGISTERED", false)) {
             Intent intent = new Intent(this, MainActivity.class);
             String username = getIntent().getStringExtra("USERNAME");
+            String displayName = getIntent().getStringExtra("DISPLAY_NAME");
             intent.putExtra("USERNAME", username);
+            intent.putExtra("DISPLAY_NAME", displayName);
             finish();
             startActivity(intent);
         }

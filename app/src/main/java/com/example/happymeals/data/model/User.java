@@ -5,12 +5,13 @@ package com.example.happymeals.data.model;
  */
 public class User {
 
-    private String userId;
-    private String displayName;
+    private String firstName;
+    private String lastName;
     private String userName;
 
-    public User(String displayName, String userName) {
-        this.displayName = displayName;
+    public User(String firstName, String lastName, String userName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.userName = userName;
     }
 
@@ -18,15 +19,11 @@ public class User {
         return userName;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getDisplayName() {
-        return displayName;
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

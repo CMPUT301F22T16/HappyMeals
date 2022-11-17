@@ -43,6 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
+        final EditText firstNameEditText = binding.firstName;
+        final EditText lastNameEditText = binding.lastName;
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button signupButton = binding.signup;
@@ -117,7 +119,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.register(usernameEditText.getText().toString(),
+                loginViewModel.register(firstNameEditText.getText().toString(), lastNameEditText.getText().toString(), usernameEditText.getText().toString(),
                         passwordEditText.getText().toString(), context, loadingProgressBar);
             }
         });

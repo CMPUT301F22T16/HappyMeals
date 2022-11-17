@@ -7,7 +7,6 @@ import android.widget.ProgressBar;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.data.model.User;
-import com.example.happymeals.ui.login.SignUpActivity;
 
 import java.io.IOException;
 
@@ -21,16 +20,16 @@ public class LoginDataSource {
 
         try {
             // TODO: handle loggedInUser authentication
-            User fakeUser = new User("Jane Doe", username);
+            User fakeUser = new User("Jane", "Doe", username);
             return new Result.Success<>(fakeUser);
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }
     }
 
-    public Result<User> register(String username, String password, Context context, ProgressBar bar) {
+    public Result<User> register(String firstName, String lastName, String username, String password, Context context, ProgressBar bar) {
         //DBHandler will handle errors.
-        User user = new User(username, username);
+        User user = new User(firstName, lastName, username);
         db.checkAndAddUser(user, password, context, bar);
         return new Result.Success<>(user);
 

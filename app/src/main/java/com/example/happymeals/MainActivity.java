@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     Button recipeButton;
     Button mealplanButton;
     TextView userWelcome;
+    String username;
+    String displayName;
 
 
     @Override
@@ -30,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(activityMainBinding.getRoot());
-
-        String username = getIntent().getStringExtra("USERNAME");
+        username = getIntent().getStringExtra("USERNAME");
+        displayName = getIntent().getStringExtra("DISPLAY_NAME");
         userWelcome = findViewById(R.id.userWelcome);
-        userWelcome.setText("Welcome, " + username + "!");
+        userWelcome.setText("Welcome, " + displayName + "!");
         DBHandler db = new DBHandler(username);
 
         ingredientButton = findViewById(R.id.ingredient_button);

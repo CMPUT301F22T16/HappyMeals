@@ -39,7 +39,9 @@
     <string name="double_to_string">%.2f</string>
 
     <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
+    <string name="prompt_first">First Name</string>
+    <string name="prompt_last">Last Name</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_up">Register</string>
