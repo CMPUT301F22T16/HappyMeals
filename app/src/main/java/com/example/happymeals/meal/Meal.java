@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import com.example.happymeals.Storable;
 import com.example.happymeals.Recipe;
