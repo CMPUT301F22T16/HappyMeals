@@ -164,6 +164,13 @@ public class NewMealEntryTests {
         solo.waitForDialogToOpen();
         solo.clickOnText("Create New Recipe and Add to Meal");
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
+        solo.goBack();
+        solo.assertCurrentActivity("Wrong Activity", MPMealRecipeList.class);
+        Button cancelButton = (Button) solo.getView(R.id.mpmeal_recipe_list_cancel);
+        solo.clickOnView(cancelButton);
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
+
+
     }
 
 
