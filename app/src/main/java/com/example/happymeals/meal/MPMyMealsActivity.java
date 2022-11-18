@@ -1,27 +1,24 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
-import static java.sql.Types.NULL;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.MutableBoolean;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.MealPlan;
+import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -77,7 +74,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         finish_button = activityMpmyMealsBinding.myMealsFinish;
         add_button = activityMpmyMealsBinding.myMealsAddButton;
         edit_addtomp_button = activityMpmyMealsBinding.myMealsEditAddtompButton;
-        intent = new Intent(this,MPMealRecipeList.class);
+        intent = new Intent(this, MPMealRecipeList.class);
 
         if (is_from_meal_plan){
             myMealsAdapter = new MPMyMealsAdapter(this, meals, dbHandler, isEdit, dayIndex, mealIndex, mealPlan);

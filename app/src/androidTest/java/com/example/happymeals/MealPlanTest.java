@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.happymeals.meal.MPMyMealsActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -96,7 +97,7 @@ public class MealPlanTest {
         // breakfast
         solo.clickOnButton("ADD MEAL");
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity",MPMyMealsActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
         solo.clickOnView(solo.getView(R.id.my_meals_recyclerview));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity",MPMealListActivity.class);
