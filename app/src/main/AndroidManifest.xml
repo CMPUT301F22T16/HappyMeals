@@ -13,6 +13,20 @@
         android:theme="@style/Theme.HappyMeals"
         tools:targetApi="31">
         <activity
+            android:name=".recipe.RecipeAddComment"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".recipe.RecipeEditComment"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ViewRecipeActivity"
             android:exported="false" />
         <activity
