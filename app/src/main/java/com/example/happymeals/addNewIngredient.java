@@ -33,7 +33,6 @@ public class addNewIngredient extends AppCompatActivity {
     DatePicker ingredientBestBefore;
     Spinner ingredientUnit;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +73,12 @@ public class addNewIngredient extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (categories.get(position) == "Drink") {
-                    Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
                     ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(addNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
                     ingredientUnit.setAdapter(unitAdapt);
                     // Do something
                 } else {
-                    Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
                     ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(addNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, solidUnit);
                     ingredientUnit.setAdapter(unitAdapt);
                 }
