@@ -55,13 +55,13 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MPPickRecipeActivity"
+            android:name=".meal.MPPickRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".MPMealRecipeList"
+            android:name=".meal.MPMealRecipeList"
             android:exported="false" />
         <activity
-            android:name=".MPMyMealsActivity"
+            android:name=".meal.MPMyMealsActivity"
             android:exported="false" />
         <activity
             android:name=".MPMealListActivity"

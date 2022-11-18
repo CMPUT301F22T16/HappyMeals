@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.Recipe;
+import com.example.happymeals.ViewRecipeActivity;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.databinding.MealRecipeListContentBinding;
 
@@ -30,7 +33,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
-            intent = new Intent(mContext,ViewRecipeActivity.class);
+            intent = new Intent(mContext, ViewRecipeActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("RECIPE", recipes.get(itemPosition));
             intent.putExtras(bundle);
@@ -70,6 +73,11 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         recipes.remove(index);
         notifyDataSetChanged();
     }
+
+    public ArrayList<Recipe> getRecipes(){
+        return recipes;
+    }
+
 
 
     public void clear(){
