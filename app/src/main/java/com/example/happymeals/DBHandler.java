@@ -63,8 +63,6 @@ public class DBHandler {
     private FirebaseFirestore conn;
     private FirebaseStorage storage;
 
-
-
     public DBHandler(String username) {
         // login existing user
         this.username = username;
@@ -76,10 +74,6 @@ public class DBHandler {
         // Temporary handler for users wanting to register
         conn = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getUsername() {
