@@ -50,14 +50,14 @@ public class IngredientActivity extends AppCompatActivity{
 
         userIngredientList = new ArrayList<UserIngredient>();
 
-        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-        DBHandler db = new DBHandler();
-        db.getIngredients(ingredientAdaptor);
-
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
         totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
+
+        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
+        DBHandler db = new DBHandler();
+        db.getIngredients(ingredientAdaptor, totalCost);
 
         ingredientListView.setAdapter(ingredientAdaptor);
 
