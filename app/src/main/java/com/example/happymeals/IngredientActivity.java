@@ -50,17 +50,16 @@ public class IngredientActivity extends AppCompatActivity{
 
         userIngredientList = new ArrayList<UserIngredient>();
 
-        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-        DBHandler db = new DBHandler();
-        db.getIngredients(ingredientAdaptor);
-
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
         totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
+        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
+        DBHandler db = new DBHandler();
+        db.getIngredients(ingredientAdaptor, totalCost);
+
         ingredientListView.setAdapter(ingredientAdaptor);
-        updateCost();
 
         ingredientPosition = -1;
 
@@ -144,7 +143,6 @@ public class IngredientActivity extends AppCompatActivity{
                                 db.newIngredient(newUserIngredient);
                                 ingredientPosition = -1;
                             }
-                            updateCost();
                             ingredientListView.setAdapter(ingredientAdaptor);
 
                         }
@@ -176,18 +174,6 @@ public class IngredientActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    // A function to update the total cost of the ingredient after edit, add or delete.
-    private void updateCost() {
-        Log.d("Mike9122001", "This is the size: "+String.valueOf(userIngredientList.size()));
-        double cost = 0;
-        for (UserIngredient i : userIngredientList) {
-            cost = cost + (i.getAmount() * i.getCost());
-        }
-
-
-        //totalCost.setText("Total cost: $" + String.valueOf(cost));
-        totalCost.setText("");
-    }
 
     // https://stackoverflow.com/questions/14545139/android-back-button-in-the-title-bar
     @Override
