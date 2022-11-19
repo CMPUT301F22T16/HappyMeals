@@ -1,12 +1,22 @@
 package com.example.happymeals;
 
+import android.content.ContentResolver;
+import android.media.Image;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -15,6 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,9 +52,11 @@ public class DBHandler {
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
      *  conn: A {@link FirebaseFirestore} database connection to add/modify/delete/query data upon request.
+     *  storage: A{@link FirebaseStorage} connection to storage where images are to be stored.
      */
     private String username;
     private FirebaseFirestore conn;
+    private FirebaseStorage storage;
 
 
     /**
@@ -50,6 +66,7 @@ public class DBHandler {
         User user = new User();
         username = user.getUsername(); //
         conn = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     //NOT TO BE USED FOR HALFWAY CHECKPOINT
@@ -57,6 +74,7 @@ public class DBHandler {
         // login existing user
         this.username = username;
         conn = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public String getUsername() {
@@ -278,7 +296,10 @@ public class DBHandler {
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-
+                            System.out.println(getUsername());
+                            System.out.println(data.get("ingredients"));
+                            System.out.println(title);
+                            System.out.println(id);
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
@@ -287,7 +308,8 @@ public class DBHandler {
                             }
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
+                                Map<String, Object> info = ingredients.get(desc);
+                                System.out.println(info);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
@@ -298,6 +320,10 @@ public class DBHandler {
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
 
@@ -335,7 +361,7 @@ public class DBHandler {
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
+                                Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
@@ -350,6 +376,10 @@ public class DBHandler {
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
 
@@ -391,7 +421,7 @@ public class DBHandler {
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
+                                Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
@@ -407,6 +437,10 @@ public class DBHandler {
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             recipes.add(recipe); // Adding the recipe from FireStore
                         }
                     }
@@ -441,7 +475,7 @@ public class DBHandler {
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
                             for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get("desc");
+                                Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 
@@ -455,6 +489,10 @@ public class DBHandler {
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
                             recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
                             adapter.add(recipe); // Adding the recipe from FireStore
                         }
                     }
@@ -491,12 +529,57 @@ public class DBHandler {
      * @param recipe {@link Recipe} to be deleted.
      */
     public void removeRecipe(Recipe recipe) {
-        System.out.println("Reached");
         CollectionReference user_recipes = getConn().collection("user_recipes");
         String id = recipe.get_r_id();
-        System.out.println(id);
         delete(user_recipes, id, "user_recipes");
+
+        // Removing photo
+        String title = recipe.getTitle();
+        StorageReference rootRef = storage.getReference();
+        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + title + ".jpg");
+        photoRef.delete();
     }
+
+    public void uploadImage(Uri uri, Recipe recipe) {
+
+        if (uri == null) {
+            recipe.setDownloadUri("");
+            return;
+        }
+
+        StorageReference rootRef = storage.getReference();
+
+        // TODO support other file formats
+
+        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + ".jpg");
+
+        UploadTask uploadTask = photoRef.putFile(uri);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return photoRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    recipe.setDownloadUri(downloadUri.toString());
+                    updateRecipe(recipe);
+
+                } else {
+                    Log.d("UPLOAD", "Cannot upload image");
+                }
+            }
+        });
+    }
+
 
     //-------------------------------------------------Meal Methods-------------------------------------------------//
 
@@ -692,6 +775,5 @@ public class DBHandler {
         String id = mealPlan.get_ump_id();
         delete(user_mealplans, id, "user_mealplans");
     }
-
 
 }

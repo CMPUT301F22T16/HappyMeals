@@ -1,13 +1,19 @@
 package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +61,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         comments_list.setAdapter(commentListAdapter);
 
         // Setting the page details
-        for (UserIngredient userIngredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(String.format("%-25s %50s", userIngredient.getDescription(), userIngredient.getAmount() + " uts"));
+        for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
+            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount() + " uts"));
         }
 
         for (String comment: recipe.getComments()) {
@@ -66,6 +72,24 @@ public class ViewRecipeActivity extends AppCompatActivity {
         category.setText(recipe.getCategory());
         servings.setText("Servings: " + recipe.getNum_servings());
         prep_time.setText(recipe.getPreparation_time() + " min/s");
+
+        // Setting photo
+        String uri = recipe.getDownloadUri();
+        if (uri != null && !uri.equals("")) {
+            Glide.with(this).asBitmap()
+                    .load(uri)
+                    .centerCrop()
+                    .placeholder(R.color.white)
+                    .into(new BitmapImageViewTarget(photo) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(this.getView().getResources(), resource);
+                            circularBitmapDrawable.setCornerRadius(32.0f); // radius for corners
+                            view.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });;
+        }
     }
 
     @Override

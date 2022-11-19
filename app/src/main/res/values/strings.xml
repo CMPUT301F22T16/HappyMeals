@@ -20,6 +20,21 @@
         <item>Location</item>
         <item>Ingredient Category</item>
     </string-array>
+    <string-array name="recipe_sort">
+        <item>Title (A - Z)</item>
+        <item>Title (Z - A)</item>
+        <item>Preparation Time (High to Low)</item>
+        <item>Preparation Time (Low to High)</item>
+        <item>Number of Servings (High to Low)</item>
+        <item>Number of Servings (Low to High)</item>
+        <item>Recipe Category (A - Z)</item>
+        <item>Recipe Category (Z - A)</item>
+    </string-array>
+    <string-array name="add_ingredient_amount_unit">
+        <item>qty</item>
+        <item>grams</item>
+        <item>kilograms</item>
+    </string-array>
     <string name="integer_to_string">%1$d</string>
     <string name="double_to_string">%.2f</string>
 

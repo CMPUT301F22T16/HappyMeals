@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +31,7 @@ public class Recipe implements Storable, Serializable {
     private List<String> comments = new ArrayList<>();
     private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
     private List<Long> amounts = new ArrayList<>();
+    private String downloadUri;
 
     /**
      * Default constructor for Recipe. Initializes the recipe object with default values.
@@ -40,6 +43,7 @@ public class Recipe implements Storable, Serializable {
         this.category = "New Category";
         this.comments = new ArrayList<>(Arrays.asList("Nice!"));
         this.recipeIngredients = new ArrayList<>();
+        this.downloadUri = null;
     }
 
     /**
@@ -58,6 +62,7 @@ public class Recipe implements Storable, Serializable {
         this.category = category;
         this.comments = comments;
         this.recipeIngredients = ingredients;
+        this.downloadUri = null;
     }
 
     /**
@@ -149,6 +154,14 @@ public class Recipe implements Storable, Serializable {
     }
 
     /**
+     * Set the comments for the recipe object
+     * @param comments The {@link List<String>} list of comments to be added to the recipe.
+     */
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
+
+    /**
      * Get the document id of the current recipe in the user's database.
      * @return {@link String} document id for the recipe.
      */
@@ -166,6 +179,22 @@ public class Recipe implements Storable, Serializable {
     public void setR_id(String id) {this.r_id = id;}
 
     /**
+     * Gets the downloadable URL for the photo of the recipe
+     * @return {@link Uri} URL of the image on Firebase Storage.
+     */
+    public String getDownloadUri() {
+        return downloadUri;
+    }
+
+    /**
+     * Sets the downloadable URL for the photo of the recipe.
+     * @param downloadUri {@link Uri} URL of the image on the Firebase Storage.
+     */
+    public void setDownloadUri(String downloadUri) {
+        this.downloadUri = downloadUri;
+    }
+
+    /**
      * Gets a {@link Storable} {@link HashMap<String, Object>} of data corresponding to the contents of the recipe.
      * @return A {@link Storable} {@link HashMap<String, Object>} of data.
      */
@@ -178,6 +207,7 @@ public class Recipe implements Storable, Serializable {
         data.put("num_servings", this.num_servings);
         data.put("comments", this.comments);
         data.put("category", this.category);
+        data.put("uri", this.downloadUri);
 
         Map<String, Map<String, Object>> ingredientsMap = new HashMap<>();
 
