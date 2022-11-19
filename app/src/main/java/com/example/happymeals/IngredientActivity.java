@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -56,8 +58,8 @@ public class IngredientActivity extends AppCompatActivity{
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-        String userId = getIntent().getStringExtra("USERID");
-        DBHandler db = new DBHandler(userId);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
         db.getIngredients(ingredientAdaptor, totalCost);
 
         ingredientListView.setAdapter(ingredientAdaptor);
@@ -157,7 +159,7 @@ public class IngredientActivity extends AppCompatActivity{
                 ingredientPosition = position;
 
 
-                ViewIngredientFragment.newInstance(userIngredient, userId).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                ViewIngredientFragment.newInstance(userIngredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
             }
         });

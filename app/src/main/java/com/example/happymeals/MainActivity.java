@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.happymeals.databinding.ActivityMainBinding;
 import com.example.happymeals.meal.MPMyMealsActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     Button recipeButton;
     Button mealplanButton;
     TextView userWelcome;
-    String userId;
     String displayName;
 
 
@@ -29,12 +30,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         setContentView(activityMainBinding.getRoot());
-        userId = getIntent().getStringExtra("USERID");
-        displayName = getIntent().getStringExtra("DISPLAY_NAME");
+
+        displayName = user.getDisplayName();
+        displayName = displayName.substring(0, displayName.indexOf(' '));
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Welcome, " + displayName + "!");
-        DBHandler db = new DBHandler(userId);
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
@@ -44,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
-                intent.putExtra("USERID", userId);
                 startActivity(intent);
             }
         });
@@ -54,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USERID", userId);
                 bundle.putSerializable("Is-From-MealPlan",false);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMealPlanActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USERID", userId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USERID", userId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
