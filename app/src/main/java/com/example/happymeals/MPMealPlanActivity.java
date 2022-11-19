@@ -28,7 +28,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
     FloatingActionButton new_mp_button;
     RecyclerView meal_plan_list;
     Intent intent_mpl;
-    String userName;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,8 @@ public class MPMealPlanActivity extends AppCompatActivity {
 
         // get user name
         Bundle bundle = getIntent().getExtras();
-        userName = (String) bundle.getSerializable("USER");
-        DBHandler db = new DBHandler(userName);
+        userId = (String) bundle.getSerializable("USERID");
+        DBHandler db = new DBHandler(userId);
 
         mealPlans = new ArrayList<>();
 
@@ -76,7 +76,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
 //        user.addMealPlan(mealPlan, this);
 //        user.addMealPlan(mealPlan2, this);
 
-        mpAdapter = new MPListAdapter(this, mealPlans, userName);
+        mpAdapter = new MPListAdapter(this, mealPlans, userId);
         meal_plan_list.setLayoutManager(new GridLayoutManager(this, 1));
         meal_plan_list.setAdapter(mpAdapter);
 
@@ -107,7 +107,7 @@ public class MPMealPlanActivity extends AppCompatActivity {
             intent_mpl = new Intent(this, MPMealListActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("MEALPLAN", new MealPlan());
-            bundle.putSerializable("USER", userName);
+            bundle.putSerializable("USERID", userId);
             bundle.putSerializable("IsNewMP", true);
             intent_mpl.putExtras(bundle);
             startActivity(intent_mpl);

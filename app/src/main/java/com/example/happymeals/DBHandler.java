@@ -1,17 +1,22 @@
 package com.example.happymeals;
 
-import android.content.ContentResolver;
-import android.media.Image;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
+import com.example.happymeals.meal.MPMealRecipeListAdapter;
+import com.example.happymeals.meal.MPMyMealsAdapter;
+import com.example.happymeals.meal.MPPickRecipeListAdapter;
+import com.example.happymeals.meal.Meal;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -29,11 +35,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -58,18 +66,6 @@ public class DBHandler {
     private FirebaseFirestore conn;
     private FirebaseStorage storage;
 
-
-    /**
-     * Guest login constructor
-     */
-    public DBHandler() {
-        User user = new User();
-        username = user.getUsername(); //
-        conn = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-    }
-
-    //NOT TO BE USED FOR HALFWAY CHECKPOINT
     public DBHandler(String username) {
         // login existing user
         this.username = username;
@@ -230,7 +226,7 @@ public class DBHandler {
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    public void getIngredients(ArrayAdapter adapter) {
+    public void getIngredients(ArrayAdapter adapter, @Nullable TextView totalCost) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -239,12 +235,14 @@ public class DBHandler {
                     Log.d("uIng", "An error has occured while trying to update the local ingredients");
                 } else {
                     List<UserIngredient> userIngredients = new ArrayList<>();
+                    Double sum = 0.0;
                     adapter.clear();
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
                         Integer amount = doc.getLong("amount").intValue();
                         Double cost = doc.getDouble("cost");
+                        sum += cost * amount;
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location);
@@ -253,6 +251,9 @@ public class DBHandler {
                         adapter.add(userIngredient);
                     }
                     adapter.notifyDataSetChanged();
+                    if (!Objects.isNull(totalCost)) {
+                        totalCost.setText("Total cost: $" + String.valueOf(sum));
+                    }
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
@@ -449,7 +450,7 @@ public class DBHandler {
      * @param recipe_ids
      * @param adapter
      */
-    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
+    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids, MPMealRecipeListAdapter adapter) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query

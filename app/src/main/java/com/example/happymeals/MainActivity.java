@@ -1,17 +1,16 @@
 package com.example.happymeals;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.happymeals.databinding.ActivityMainBinding;
-import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.happymeals.meal.MPMyMealsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     Button mealButton;
     Button recipeButton;
     Button mealplanButton;
+    TextView userWelcome;
+    String userId;
+    String displayName;
 
 
     @Override
@@ -28,8 +30,11 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(activityMainBinding.getRoot());
-
-        DBHandler db = new DBHandler();
+        userId = getIntent().getStringExtra("USERID");
+        displayName = getIntent().getStringExtra("DISPLAY_NAME");
+        userWelcome = findViewById(R.id.userWelcome);
+        userWelcome.setText("Welcome, " + displayName + "!");
+        DBHandler db = new DBHandler(userId);
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
+                intent.putExtra("USERID", userId);
                 startActivity(intent);
             }
         });
@@ -48,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USERID", userId);
                 bundle.putSerializable("Is-From-MealPlan",false);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -60,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMealPlanActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USERID", userId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -71,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USERID", userId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

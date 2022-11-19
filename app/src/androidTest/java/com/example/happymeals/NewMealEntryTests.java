@@ -6,14 +6,18 @@ import static org.junit.Assert.assertTrue;
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.happymeals.meal.MPMealRecipeList;
+import com.example.happymeals.meal.MPMyMealsActivity;
+import com.example.happymeals.meal.MPPickRecipeActivity;
+import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -97,15 +101,19 @@ public class NewMealEntryTests {
         // starting from main activity
         solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
         solo.clickOnButton("MEALS");
-        solo.assertCurrentActivity("Wrong Activity",MPMyMealsActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
 
         // click to add a new meal
         Button addButton = (Button) solo.getView(R.id.my_meals_add_button);
         solo.clickOnView(addButton);
+
         // view all recipes for this meal
         solo.assertCurrentActivity("Wrong Activity", MPMealRecipeList.class);
         Button addRecipeButton = (Button) solo.getView(R.id.mp_recipe_add_button);
         solo.clickOnView(addRecipeButton);
+        solo.waitForDialogToOpen();
+        TextView add_new_recipe = (TextView) solo.getView(R.id.add_from_recipe_textview);
+        solo.clickOnView(add_new_recipe);
         solo.assertCurrentActivity("Wrong Activity", MPPickRecipeActivity.class); // within pick
 
         solo.clickOnText("Testing Recipe");
@@ -138,6 +146,35 @@ public class NewMealEntryTests {
         Button finishButton = (Button) solo.getView(R.id.my_meals_finish);
         solo.clickOnView(finishButton);
     }
+
+    @Test
+    public void test_create_new_recipes(){
+        solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
+        solo.clickOnButton("MEALS");
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
+
+        // click to add a new meal
+        Button addButton = (Button) solo.getView(R.id.my_meals_add_button);
+        solo.clickOnView(addButton);
+
+        // view all recipes for this meal
+        solo.assertCurrentActivity("Wrong Activity", MPMealRecipeList.class);
+        Button addRecipeButton = (Button) solo.getView(R.id.mp_recipe_add_button);
+        solo.clickOnView(addRecipeButton);
+        solo.waitForDialogToOpen();
+        solo.clickOnText("Create New Recipe and Add to Meal");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
+        solo.goBack();
+        solo.assertCurrentActivity("Wrong Activity", MPMealRecipeList.class);
+        Button cancelButton = (Button) solo.getView(R.id.mpmeal_recipe_list_cancel);
+        solo.clickOnView(cancelButton);
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
+
+
+    }
+
+
+
 
     /**
      * runs after all tests

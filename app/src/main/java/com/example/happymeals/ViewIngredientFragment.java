@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,14 +38,18 @@ public class ViewIngredientFragment extends DialogFragment {
     private EditText thisUnitCost;
     private DatePicker thisBestBefore;
     UserIngredient thisUserIngredient;
+    String userId;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.view_ingredient_fragment_layout, null);
 
+        final Bundle ingredientAndId = this.getArguments();
+
         Context context = getContext();
-        DBHandler db = new DBHandler();
+        userId = (String) ingredientAndId.getSerializable("USERID");
+        DBHandler db = new DBHandler(userId);
 
         thisCategory = view.findViewById(R.id.category);
         thisDescription = view.findViewById(R.id.description_frag);
@@ -62,10 +67,8 @@ public class ViewIngredientFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        final Bundle ingredient = this.getArguments();
-
-        if (ingredient != null){
-            thisUserIngredient = (UserIngredient) ingredient.getSerializable("ingredient");
+        if (ingredientAndId != null){
+            thisUserIngredient = (UserIngredient) ingredientAndId.getSerializable("ingredient");
             thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
             thisDescription.setText(thisUserIngredient.getDescription());
             thisLocation.setText(thisUserIngredient.getLoc());
@@ -183,9 +186,10 @@ public class ViewIngredientFragment extends DialogFragment {
         }
 
     // This is used to serialize the city object and so it can be passed between activities.
-    static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
+    static ViewIngredientFragment newInstance(UserIngredient userIngredient, String userId) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);
+        args.putSerializable("USERID", userId);
 
         ViewIngredientFragment fragment = new ViewIngredientFragment();
         fragment.setArguments(args);

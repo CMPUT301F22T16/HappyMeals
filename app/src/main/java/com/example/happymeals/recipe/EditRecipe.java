@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -182,6 +183,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe);
+
+        // back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Edit Recipe");
 
         Intent intent = getIntent();
 
@@ -393,5 +398,22 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             intent.putExtra("comment", comment);
             edit_comment_for_result.launch(intent);
         }
+    }
+
+    /**
+     * handles on back button clicked,
+     * returns to home
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to proceed, true to consume it here.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

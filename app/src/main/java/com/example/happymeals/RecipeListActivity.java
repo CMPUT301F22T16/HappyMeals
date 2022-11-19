@@ -80,8 +80,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
         // Get the current user
         Bundle bundle = getIntent().getExtras();
-        String username = (String) bundle.getSerializable("USER");
-        db = new DBHandler(username);
+        String userId = (String) bundle.getSerializable("USERID");
+        db = new DBHandler(userId);
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

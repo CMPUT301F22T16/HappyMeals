@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import com.example.happymeals.meal.Meal;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +38,14 @@ public class MealTest {
         r.add(new Recipe());
         meal.setRecipes(r);
         Assert.assertEquals(meal.getRecipes().size(),2);
+    }
+
+    @Test
+    public void testaddRecipe(){
+        Assert.assertEquals(1,meal.getRecipes().size());
+        meal.addRecipe(recipe);
+        Assert.assertEquals(2,meal.getRecipes().size());
+
     }
 
     @Test
