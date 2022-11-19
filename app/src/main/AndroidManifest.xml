@@ -41,15 +41,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MPPickRecipeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MPMealRecipeList"
-            android:exported="false" />
-        <activity
-            android:name=".MPMyMealsActivity"
-            android:exported="false" />
-        <activity
             android:name=".MPMealListActivity"
             android:exported="false" />
         <activity

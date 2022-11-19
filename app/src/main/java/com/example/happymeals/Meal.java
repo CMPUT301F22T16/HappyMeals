@@ -1,8 +1,5 @@
 package com.example.happymeals;
 
-import com.example.happymeals.Storable;
-import com.example.happymeals.Recipe;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +49,15 @@ public class Meal implements Storable, Serializable {
      */
     public void removeRecipe(int index){
         this.recipes.remove(index);
+    }
+
+    /**
+     * Add a new recipe to the meal recipes list
+     * @param recipe An {@link Recipe} new recipe to be added
+     *               to the list
+     */
+    public void addRecipe(Recipe recipe){
+        this.recipes.add(recipe);
     }
 
     /**

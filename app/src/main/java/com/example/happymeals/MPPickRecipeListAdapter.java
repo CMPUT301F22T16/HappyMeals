@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.happymeals.R;
+import com.example.happymeals.Recipe;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

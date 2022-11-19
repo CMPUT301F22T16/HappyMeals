@@ -30,7 +30,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
-            intent = new Intent(mContext,ViewRecipeActivity.class);
+            intent = new Intent(mContext, ViewRecipeActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("RECIPE", recipes.get(itemPosition));
             intent.putExtras(bundle);
@@ -70,6 +70,11 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         recipes.remove(index);
         notifyDataSetChanged();
     }
+
+    public ArrayList<Recipe> getRecipes(){
+        return recipes;
+    }
+
 
 
     public void clear(){
