@@ -296,10 +296,6 @@ public class DBHandler {
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            System.out.println(getUsername());
-                            System.out.println(data.get("ingredients"));
-                            System.out.println(title);
-                            System.out.println(id);
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
@@ -309,7 +305,6 @@ public class DBHandler {
 
                             for (String desc : ingredients.keySet()) {
                                 Map<String, Object> info = ingredients.get(desc);
-                                System.out.println(info);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
 

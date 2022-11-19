@@ -6,7 +6,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.happymeals.recipe.EditRecipe;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -32,11 +36,12 @@ import java.util.Objects;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface, AdapterView.OnItemSelectedListener {
 
-    private FloatingActionButton add_recipe_button;
+    private ExtendedFloatingActionButton add_recipe_button;
     private Spinner sort_recipe_spinner;
     private ListView recipe_list_view;
     private List<Recipe> recipes;
     private RecipeListAdapter recipeAdapter;
+    private FloatingActionButton sortButton;
     DBHandler db;
     private int position;
 
@@ -70,6 +75,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         sort_recipe_spinner.setAdapter(spinnerAdapter);
         sort_recipe_spinner.setOnItemSelectedListener(this);
 
+        sortButton = findViewById(R.id.sort_recipes);
+
         // Get the current user
         Bundle bundle = getIntent().getExtras();
         String username = (String) bundle.getSerializable("USER");
@@ -96,6 +103,14 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             @Override
             public void onClick(View view) {
                 addRecipeAction(view);
+            }
+        });
+
+        ///////
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RecipeSortFragment.newInstance(recipes).show(getSupportFragmentManager(), "SORTING RECIPES");
             }
         });
 
@@ -164,7 +179,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
             newRecipe.setDownloadUri(uriStr);
             db.addRecipe(newRecipe);
-
+            // TODO pass file extension
 //            ContentResolver cR = this.getContentResolver();
 //            String type = cR.getType(uri);
             db.uploadImage(uri, newRecipe);
@@ -195,8 +210,27 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         }
 
         if (op.equals("delete")) {
-            db.removeRecipe(recipeAdapter.getItem(position));
-            recipeAdapter.notifyDataSetChanged();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm deletion");
+            builder.setMessage("Are you sure you want to delete this recipe?");
+            Context context = this;
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(context, "Recipe deleted", Toast.LENGTH_SHORT).show();
+                    db.removeRecipe(recipeAdapter.getItem(position));
+                    recipeAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
+
         }
 
         if (op.equals("edit")) {

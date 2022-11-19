@@ -62,7 +62,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Setting the page details
         for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount() + " uts"));
+            ingredientListAdapter.add(String.format("%-25s", recipeIngredient.getAmount()+ " uts " + recipeIngredient.getDescription()));
         }
 
         for (String comment: recipe.getComments()) {
@@ -71,7 +71,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         category.setText(recipe.getCategory());
         servings.setText("Servings: " + recipe.getNum_servings());
-        prep_time.setText(recipe.getPreparation_time() + " min/s");
+
+        String timeut = "mins";
+        if (recipe.getPreparation_time() == 1) {
+            timeut = "min";
+        }
+        prep_time.setText(recipe.getPreparation_time() + timeut);
 
         // Setting photo
         String uri = recipe.getDownloadUri();
