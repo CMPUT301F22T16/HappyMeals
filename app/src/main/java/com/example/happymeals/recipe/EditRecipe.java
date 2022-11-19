@@ -30,6 +30,8 @@ import com.example.happymeals.Recipe;
 import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * This class creates the EditRecipe Activity for the user to edit a recipe
@@ -189,9 +191,8 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
         Intent intent = getIntent();
 
-        Bundle bundle = intent.getExtras();
-        String username = (String) bundle.getSerializable("USER");
-        db = new DBHandler(username);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = new DBHandler(user.getUid());
 
         // Initialize widgets
         recipe_img_picker_btn = findViewById(R.id.recipe_img_picker_btn);

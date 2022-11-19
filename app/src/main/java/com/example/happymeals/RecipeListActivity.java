@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,9 +72,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         sort_recipe_spinner.setOnItemSelectedListener(this);
 
         // Get the current user
-        Bundle bundle = getIntent().getExtras();
-        String userId = (String) bundle.getSerializable("USERID");
-        db = new DBHandler(userId);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = new DBHandler(user.getUid());
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -194,9 +195,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             intent.putExtra("category", recipe.getCategory());
             intent.putExtra("comments", (ArrayList<String>) recipe.getComments());
             intent.putExtra("ingredients", (ArrayList<RecipeIngredient>) recipe.getIngredients());
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("USER", db.getUsername());
-            intent.putExtras(bundle);
             // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
             intent.putExtra("operation", "edit");
             intent.putExtra("photo", recipe.getDownloadUri());
