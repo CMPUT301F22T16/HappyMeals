@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
-import java.io.Serializable;
 import java.util.List;
 import android.view.LayoutInflater;
 import android.widget.Button;
@@ -29,7 +28,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class RecipeListAdapter extends ArrayAdapter<Recipe> implements Serializable {
+public class RecipeListAdapter extends ArrayAdapter<Recipe> {
     Context context;
     List<Recipe> recipes;
     DBHandler db;

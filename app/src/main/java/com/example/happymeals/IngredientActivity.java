@@ -21,7 +21,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Arrays;
@@ -37,7 +36,7 @@ public class IngredientActivity extends AppCompatActivity{
     ArrayAdapter ingredientAdaptor;
     ListView ingredientListView;
     TextView totalCost;
-    ExtendedFloatingActionButton floatingAdd;
+    FloatingActionButton floatingAdd;
     Spinner sortBySelect;
 
     // This integer is used to store the index of the Ingredient object in the list.
@@ -53,7 +52,7 @@ public class IngredientActivity extends AppCompatActivity{
 
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
         totalCost = (TextView) findViewById(R.id.costDescription);
-        floatingAdd = (ExtendedFloatingActionButton) findViewById(R.id.floatingAdd);
+        floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
