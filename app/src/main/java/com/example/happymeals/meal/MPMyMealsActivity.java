@@ -17,6 +17,8 @@ import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.MealPlan;
 import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,7 +43,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
     Intent intent;
     RecyclerView recyclerView;
     DBHandler dbHandler;
-    String userId;
     int dayIndex;
     int mealIndex;
     AtomicBoolean isEdit;
@@ -58,7 +59,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // User
         Bundle bundle = getIntent().getExtras();
-        userId = (String) bundle.getSerializable("USERID");
         Boolean is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPlan");
         if (is_from_meal_plan) {
             mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
@@ -66,7 +66,8 @@ public class MPMyMealsActivity extends AppCompatActivity {
             mealIndex = (int) bundle.getSerializable("MEAL");
         }
 
-        dbHandler = new DBHandler(userId);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
         isEdit = new AtomicBoolean(false);
 
         meals = new ArrayList<>();
@@ -110,7 +111,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
         add_button.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("IsNewMeal", true);
-            bundle.putSerializable("USERID", userId);
             intent.putExtras(bundle);
             startActivity(intent);
         });

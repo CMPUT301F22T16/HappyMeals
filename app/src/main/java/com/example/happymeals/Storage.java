@@ -18,7 +18,6 @@ public class Storage implements Storable {
 
     private String storeName;
     private String id;
-
     private List<UserIngredient> userIngredients = new ArrayList<>();
 
     /**

@@ -30,6 +30,8 @@ import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 import java.util.ArrayList;
@@ -57,7 +59,6 @@ public class MPMealRecipeList extends AppCompatActivity {
     Context context;
     boolean is_new_meal;
     boolean is_modified;
-    String userId;
 
     ActivityResultLauncher<Intent> add_recipe_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -90,14 +91,13 @@ public class MPMealRecipeList extends AppCompatActivity {
         recipes_old = new ArrayList<>();
         is_modified = false;
 
-        Bundle bundle = getIntent().getExtras();
-
         // set up users
-        userId = (String) bundle.getSerializable("USERID");
-        dbHandler = new DBHandler(userId);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
 
 
         // get the meal object passed in
+        Bundle bundle = getIntent().getExtras();
         is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
 
         if (is_new_meal) {
@@ -267,7 +267,6 @@ public class MPMealRecipeList extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MEAL", meal);
                 intent.putExtras(bundle);
-                intent.putExtra("USERID", userId);
                 modify_meal_for_result.launch(intent);
                 bottomSheetDialog.dismiss();
             }

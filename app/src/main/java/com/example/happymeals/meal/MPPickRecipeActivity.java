@@ -20,6 +20,8 @@ import com.example.happymeals.DBHandler;
 import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
 import com.example.happymeals.Recipe;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,6 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     DBHandler dbHandler;
     Meal meal;
     Intent intent;
-    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,8 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         intent =  getIntent();
 
         // Set up user here
-        userId = intent.getStringExtra("USERID");
-        dbHandler = new DBHandler(userId);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
 
         // set up adapter
         Bundle bundle  = intent.getExtras();

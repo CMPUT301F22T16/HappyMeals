@@ -21,6 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -38,18 +41,16 @@ public class ViewIngredientFragment extends DialogFragment {
     private EditText thisUnitCost;
     private DatePicker thisBestBefore;
     UserIngredient thisUserIngredient;
-    String userId;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.view_ingredient_fragment_layout, null);
 
-        final Bundle ingredientAndId = this.getArguments();
-
         Context context = getContext();
-        userId = (String) ingredientAndId.getSerializable("USERID");
-        DBHandler db = new DBHandler(userId);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
 
         thisCategory = view.findViewById(R.id.category);
         thisDescription = view.findViewById(R.id.description_frag);
@@ -67,8 +68,9 @@ public class ViewIngredientFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        if (ingredientAndId != null){
-            thisUserIngredient = (UserIngredient) ingredientAndId.getSerializable("ingredient");
+        final Bundle ingredient = this.getArguments();
+        if (ingredient != null){
+            thisUserIngredient = (UserIngredient) ingredient.getSerializable("ingredient");
             thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
             thisDescription.setText(thisUserIngredient.getDescription());
             thisLocation.setText(thisUserIngredient.getLoc());
@@ -186,11 +188,9 @@ public class ViewIngredientFragment extends DialogFragment {
         }
 
     // This is used to serialize the city object and so it can be passed between activities.
-    static ViewIngredientFragment newInstance(UserIngredient userIngredient, String userId) {
+    static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);
-        args.putSerializable("USERID", userId);
-
         ViewIngredientFragment fragment = new ViewIngredientFragment();
         fragment.setArguments(args);
         return fragment;
