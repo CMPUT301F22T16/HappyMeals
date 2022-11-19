@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface, AdapterView.OnItemSelectedListener {
 
@@ -118,9 +119,10 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (uriStr != "") {
+            if (!Objects.equals(uriStr, "")) {
                 uri = Uri.parse(uriStr);
             }
+            rec.setDownloadUri(uriStr);
             db.updateRecipe(rec);
 
             db.uploadImage(uri, rec);
@@ -141,17 +143,16 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (uriStr != "") {
+            if (!Objects.equals(uriStr, "")) {
                 uri = Uri.parse(uriStr);
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
+            newRecipe.setDownloadUri(uriStr);
             db.addRecipe(newRecipe);
 
 //            ContentResolver cR = this.getContentResolver();
 //            String type = cR.getType(uri);
             db.uploadImage(uri, newRecipe);
-
-
         } else {
             Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
         }
@@ -207,17 +208,29 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         switch (adapterView.getItemAtPosition(i).toString()) {
-            case "Title":
-                Collections.sort(recipes, (o1, o2) -> (o1.getTitle().compareTo(o2.getTitle())));
+            case "Title (A - Z)":
+                Collections.sort(recipes, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
                 break;
-            case "Preparation Time":
+            case "Title (Z - A)":
+                Collections.sort(recipes, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                break;
+            case "Preparation Time (High to Low)":
+                Collections.sort(recipes, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                break;
+            case "Preparation Time (Low to High)":
                 Collections.sort(recipes, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
                 break;
-            case "Number of Servings":
+            case "Number of Servings (High to Low)":
+                Collections.sort(recipes, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                break;
+            case "Number of Servings (Low to High)":
                 Collections.sort(recipes, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
                 break;
-            case "Recipe Category":
-                Collections.sort(recipes, (o1, o2) -> (o1.getCategory().compareTo(o2.getCategory())));
+            case "Recipe Category (A - Z)":
+                Collections.sort(recipes, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                break;
+            case "Recipe Category (Z - A)":
+                Collections.sort(recipes, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
                 break;
             default:
                 Toast.makeText(RecipeListActivity.this, "Error when selecting sort method.", Toast.LENGTH_SHORT).show();
