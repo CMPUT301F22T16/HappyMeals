@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface{
 
     private ListView recipe_list_view;
+    private Button addRecipeButton;
     private List<Recipe> recipes;
     private RecipeListAdapter recipeAdapter;
     DBHandler db;
@@ -47,10 +50,11 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Recipes");
+
+        // Setup recipe list
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
         recipeAdapter = new RecipeListAdapter(this, recipes, db, this);
-
         recipe_list_view.setAdapter(recipeAdapter);
         LoadingDialog dialog = new LoadingDialog(this);
         db.getUserRecipes(recipeAdapter,dialog);
@@ -58,6 +62,20 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         // Populate the recipe list
         db.getUserRecipes(recipeAdapter, new LoadingDialog(this));
 
+
+        // Setup add recipe button
+        addRecipeButton = findViewById(R.id.add_recipe_button);
+        addRecipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addRecipeAction(view);
+            }
+        });
+
+    }
+
+    public void addRecipeAction(View view) {
+        // TODO start the AddRecipeActivity here
     }
 
     public void handleEditRecipeForResultLauncher(ActivityResult result) {
