@@ -8,28 +8,11 @@
     android:background="@drawable/gradient_background">
 
 
-    <Spinner
-        android:id="@+id/sort_recipe_spinner"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="200dp"
-        android:layout_marginBottom="16dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="@+id/recipe_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.141"
-        tools:ignore="SpeakableTextPresentCheck" />
-
     <ListView
         android:id="@+id/recipe_list"
 
-        android:layout_width="388dp"
-        android:layout_height="488dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_margin="15dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -42,34 +25,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sort_recipes" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Sort By: "
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_recipe_button"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:text="@string/ADD_RECIPE"
         android:textColor="@color/black"
         app:icon="@android:drawable/ic_input_add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/sort_recipe_spinner"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -77,11 +45,12 @@
         android:id="@+id/sort_recipes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
         android:clickable="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_sort_by_size"
         tools:ignore="SpeakableTextPresentCheck" />
 

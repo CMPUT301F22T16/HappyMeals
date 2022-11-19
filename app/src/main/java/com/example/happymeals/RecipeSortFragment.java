@@ -13,12 +13,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,16 +31,15 @@ import java.util.List;
  */
 public class RecipeSortFragment extends DialogFragment {
 
-    private List<Recipe> listToSort;
+    private List<Recipe> recipes;
     private RadioGroup sortingOptions;
     private RadioGroup orderOptions;
-    private String orderDefault = "lowToHigh";
-    private String sortingDefault = "Title";
 
-    public static RecipeSortFragment newInstance(List<Recipe> recipeList) {
+    public static RecipeSortFragment newInstance(List<Recipe> recipeList, RecipeListAdapter adapter) {
         RecipeSortFragment fragment = new RecipeSortFragment();
         Bundle args = new Bundle();
         args.putSerializable("COLLECTION", (Serializable) recipeList);
+        args.putSerializable("ADAPTER", (Serializable) adapter);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,27 +53,74 @@ public class RecipeSortFragment extends DialogFragment {
 
 
         Bundle bundle = this.getArguments();
-        listToSort = (List<Recipe>) bundle.getSerializable("COLLECTION");
+        recipes = (List<Recipe>) bundle.getSerializable("COLLECTION");
+        RecipeListAdapter adapter = (RecipeListAdapter) bundle.getSerializable("ADAPTER");
         setupView(view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         return builder
                 .setView(view)
-                .setTitle("Sort Recipes By")
+                .setTitle("Sort Recipes")
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        int order = orderOptions.getCheckedRadioButtonId();
+                        boolean isLowtoHigh = orderOptions.getCheckedRadioButtonId() == R.id.recipe_low_to_high;
+
                         int option = sortingOptions.getCheckedRadioButtonId();
-                        System.out.println(option);
+
                         switch(option) {
-                            case 0:
-                                System.out.println("High to Low");
+
+                            case R.id.recipe_prep_radio:
+
+                                if (isLowtoHigh) {
+                                    Collections.sort(recipes, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                                }
+
+                                else {
+                                    Collections.sort(recipes, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                                }
+
                                 break;
+
+                            case R.id.recipe_servings_radio:
+
+                                if (isLowtoHigh) {
+                                    Collections.sort(recipes, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                                }
+
+                                else {
+                                    Collections.sort(recipes, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                                }
+
+                                break;
+
+                            case R.id.recipe_category_radio:
+
+                                if (isLowtoHigh) {
+                                    Collections.sort(recipes, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                                }
+
+                                else {
+                                    Collections.sort(recipes, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
+                                }
+
+                                break;
+
                             default:
+
+                                if (isLowtoHigh) {
+                                    Collections.sort(recipes, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                                }
+
+                                else {
+                                    Collections.sort(recipes, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                                }
+
                                 break;
                         }
+
+                        adapter.notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -89,12 +138,5 @@ public class RecipeSortFragment extends DialogFragment {
         orderOptions = view.findViewById(R.id.sort_order_group);
     }
 
-    public void orderGroupOnClick(View view) {
-
-    }
-
-    public void sortGroupOnClick(View view) {
-
-    }
 
 }
