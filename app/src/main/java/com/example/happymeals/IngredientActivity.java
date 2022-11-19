@@ -21,8 +21,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -37,7 +38,7 @@ public class IngredientActivity extends AppCompatActivity{
     ArrayAdapter ingredientAdaptor;
     ListView ingredientListView;
     TextView totalCost;
-    ExtendedFloatingActionButton floatingAdd;
+    FloatingActionButton floatingAdd;
     Spinner sortBySelect;
 
     // This integer is used to store the index of the Ingredient object in the list.
@@ -51,17 +52,17 @@ public class IngredientActivity extends AppCompatActivity{
 
         userIngredientList = new ArrayList<UserIngredient>();
 
-        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-        DBHandler db = new DBHandler();
-        db.getIngredients(ingredientAdaptor);
-
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
         totalCost = (TextView) findViewById(R.id.costDescription);
-        floatingAdd = (ExtendedFloatingActionButton) findViewById(R.id.floatingAdd);
+        floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
+        ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
+        db.getIngredients(ingredientAdaptor, totalCost);
+
         ingredientListView.setAdapter(ingredientAdaptor);
-        updateCost();
 
         ingredientPosition = -1;
 
@@ -145,7 +146,6 @@ public class IngredientActivity extends AppCompatActivity{
                                 db.newIngredient(newUserIngredient);
                                 ingredientPosition = -1;
                             }
-                            updateCost();
                             ingredientListView.setAdapter(ingredientAdaptor);
 
                         }
@@ -177,18 +177,6 @@ public class IngredientActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    // A function to update the total cost of the ingredient after edit, add or delete.
-    private void updateCost() {
-        Log.d("Mike9122001", "This is the size: "+String.valueOf(userIngredientList.size()));
-        double cost = 0;
-        for (UserIngredient i : userIngredientList) {
-            cost = cost + (i.getAmount() * i.getCost());
-        }
-
-
-        //totalCost.setText("Total cost: $" + String.valueOf(cost));
-        totalCost.setText("");
-    }
 
     // https://stackoverflow.com/questions/14545139/android-back-button-in-the-title-bar
     @Override

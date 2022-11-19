@@ -11,7 +11,7 @@ import java.util.List;
  *
  * Members:
  *  1. ump_id : A {@link String} id representing document id of the meal plan in the database.
- *  2. breakfast : A {@link List<Meal>} of meals associated with the breakfast in meal plan.
+ *  2. breakfast : A {@link List< Meal >} of meals associated with the breakfast in meal plan.
  *  3. lunch : A {@link List<Meal>} of meals associated with the lunch in meal plan.
  *  4. dinner : A {@link List<Meal>} of meals associated with the dinner in meal plan.
  *  5. num_days : An {@link Integer} representing the number of days for which the meal plan is.

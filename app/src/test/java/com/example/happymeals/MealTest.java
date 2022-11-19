@@ -39,6 +39,14 @@ public class MealTest {
     }
 
     @Test
+    public void testaddRecipe(){
+        Assert.assertEquals(1,meal.getRecipes().size());
+        meal.addRecipe(recipe);
+        Assert.assertEquals(2,meal.getRecipes().size());
+
+    }
+
+    @Test
     public void testGetRecipe(){
         List<Recipe> r = meal.getRecipes();
         Assert.assertEquals(r.get(0),recipe);

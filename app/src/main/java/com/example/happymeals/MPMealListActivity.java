@@ -4,7 +4,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,9 +15,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MPMealListActivity extends AppCompatActivity {
 
@@ -34,7 +34,6 @@ public class MPMealListActivity extends AppCompatActivity {
     Button finishButton;
     Intent intent;
     DBHandler db;
-    String userName;
     ActivityResultLauncher<Intent> activityLauncher;
 
     @Override
@@ -55,12 +54,12 @@ public class MPMealListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("One Day Meals");
 
         // get user name
-        Bundle bundle = getIntent().getExtras();
-        userName = (String) bundle.getSerializable("USER");
         dayIndex = 0;
         mealIndex = -1;
-        db = new DBHandler(userName);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = new DBHandler(user.getUid());
 
+        Bundle bundle = getIntent().getExtras();
         meals = new ArrayList<>();
         mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
 
@@ -77,7 +76,7 @@ public class MPMealListActivity extends AppCompatActivity {
             }
         }
 
-        mpMealListAdapter = new MPMealListAdapter(this, meals, userName, dayIndex, mealPlan, activityLauncher);
+        mpMealListAdapter = new MPMealListAdapter(this, meals, user.getUid(), dayIndex, mealPlan, activityLauncher);
         meal_list.setLayoutManager(new GridLayoutManager(this, 1));
         meal_list.setAdapter(mpMealListAdapter);
 
@@ -132,7 +131,6 @@ public class MPMealListActivity extends AppCompatActivity {
             bundle.putSerializable("MEALPLAN", mealPlan);
             bundle.putSerializable("MEAL", mealIndex);
             bundle.putSerializable("DAY", dayIndex);
-            bundle.putSerializable("USER", userName);
             intent.putExtras(bundle);
 //            startActivity(intent);
             activityLauncher.launch(intent);

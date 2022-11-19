@@ -37,7 +37,6 @@ import java.util.Objects;
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface, AdapterView.OnItemSelectedListener {
 
     private ExtendedFloatingActionButton add_recipe_button;
-    private Spinner sort_recipe_spinner;
     private ListView recipe_list_view;
     private List<Recipe> recipes;
     private RecipeListAdapter recipeAdapter;

@@ -96,7 +96,7 @@ public class MealPlanTest {
         // breakfast
         solo.clickOnButton("ADD MEAL");
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity",MPMyMealsActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
         solo.clickOnView(solo.getView(R.id.my_meals_recyclerview));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity",MPMealListActivity.class);
