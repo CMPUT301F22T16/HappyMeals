@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     Button recipeButton;
     Button mealplanButton;
     TextView userWelcome;
-    String username;
+    String userId;
     String displayName;
 
 
@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(activityMainBinding.getRoot());
-        username = getIntent().getStringExtra("USERNAME");
+        userId = getIntent().getStringExtra("USERID");
         displayName = getIntent().getStringExtra("DISPLAY_NAME");
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Welcome, " + displayName + "!");
-        DBHandler db = new DBHandler(username);
+        DBHandler db = new DBHandler(userId);
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
+                intent.putExtra("USERID", userId);
                 startActivity(intent);
             }
         });
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USERID", userId);
                 bundle.putSerializable("Is-From-MealPlan",false);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMealPlanActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USERID", userId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", db.getUsername());
+                bundle.putSerializable("USERID", userId);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

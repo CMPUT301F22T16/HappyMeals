@@ -34,7 +34,7 @@ public class MPMealListActivity extends AppCompatActivity {
     Button finishButton;
     Intent intent;
     DBHandler db;
-    String userName;
+    String userId;
     ActivityResultLauncher<Intent> activityLauncher;
 
     @Override
@@ -56,10 +56,10 @@ public class MPMealListActivity extends AppCompatActivity {
 
         // get user name
         Bundle bundle = getIntent().getExtras();
-        userName = (String) bundle.getSerializable("USER");
+        userId = (String) bundle.getSerializable("USERID");
         dayIndex = 0;
         mealIndex = -1;
-        db = new DBHandler(userName);
+        db = new DBHandler(userId);
 
         meals = new ArrayList<>();
         mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
@@ -77,7 +77,7 @@ public class MPMealListActivity extends AppCompatActivity {
             }
         }
 
-        mpMealListAdapter = new MPMealListAdapter(this, meals, userName, dayIndex, mealPlan, activityLauncher);
+        mpMealListAdapter = new MPMealListAdapter(this, meals, userId, dayIndex, mealPlan, activityLauncher);
         meal_list.setLayoutManager(new GridLayoutManager(this, 1));
         meal_list.setAdapter(mpMealListAdapter);
 
@@ -132,7 +132,7 @@ public class MPMealListActivity extends AppCompatActivity {
             bundle.putSerializable("MEALPLAN", mealPlan);
             bundle.putSerializable("MEAL", mealIndex);
             bundle.putSerializable("DAY", dayIndex);
-            bundle.putSerializable("USER", userName);
+            bundle.putSerializable("USERID", userId);
             intent.putExtras(bundle);
 //            startActivity(intent);
             activityLauncher.launch(intent);

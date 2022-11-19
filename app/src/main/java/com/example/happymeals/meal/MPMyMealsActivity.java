@@ -41,7 +41,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
     Intent intent;
     RecyclerView recyclerView;
     DBHandler dbHandler;
-    String userName;
+    String userId;
     int dayIndex;
     int mealIndex;
     AtomicBoolean isEdit;
@@ -58,7 +58,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // User
         Bundle bundle = getIntent().getExtras();
-        userName = (String) bundle.getSerializable("USER");
+        userId = (String) bundle.getSerializable("USERID");
         Boolean is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPlan");
         if (is_from_meal_plan) {
             mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
@@ -66,7 +66,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
             mealIndex = (int) bundle.getSerializable("MEAL");
         }
 
-        dbHandler = new DBHandler(userName);
+        dbHandler = new DBHandler(userId);
         isEdit = new AtomicBoolean(false);
 
         meals = new ArrayList<>();
@@ -110,6 +110,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         add_button.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("IsNewMeal", true);
+            bundle.putSerializable("USERID", userId);
             intent.putExtras(bundle);
             startActivity(intent);
         });

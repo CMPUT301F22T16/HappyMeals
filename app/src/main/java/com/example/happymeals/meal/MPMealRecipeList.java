@@ -57,6 +57,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Context context;
     boolean is_new_meal;
     boolean is_modified;
+    String userId;
 
     ActivityResultLauncher<Intent> add_recipe_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -89,12 +90,14 @@ public class MPMealRecipeList extends AppCompatActivity {
         recipes_old = new ArrayList<>();
         is_modified = false;
 
+        Bundle bundle = getIntent().getExtras();
+
         // set up users
-        dbHandler = new DBHandler();
+        userId = (String) bundle.getSerializable("USERID");
+        dbHandler = new DBHandler(userId);
 
 
         // get the meal object passed in
-        Bundle bundle = getIntent().getExtras();
         is_new_meal = (boolean) bundle.getSerializable("IsNewMeal");
 
         if (is_new_meal) {
@@ -264,6 +267,7 @@ public class MPMealRecipeList extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("MEAL", meal);
                 intent.putExtras(bundle);
+                intent.putExtra("USERID", userId);
                 modify_meal_for_result.launch(intent);
                 bottomSheetDialog.dismiss();
             }

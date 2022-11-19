@@ -56,7 +56,8 @@ public class IngredientActivity extends AppCompatActivity{
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-        DBHandler db = new DBHandler();
+        String userId = getIntent().getStringExtra("USERID");
+        DBHandler db = new DBHandler(userId);
         db.getIngredients(ingredientAdaptor, totalCost);
 
         ingredientListView.setAdapter(ingredientAdaptor);
@@ -156,7 +157,7 @@ public class IngredientActivity extends AppCompatActivity{
                 ingredientPosition = position;
 
 
-                ViewIngredientFragment.newInstance(userIngredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                ViewIngredientFragment.newInstance(userIngredient, userId).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
             }
         });

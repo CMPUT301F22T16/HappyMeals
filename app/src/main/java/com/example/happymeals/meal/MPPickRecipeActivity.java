@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,6 +36,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     DBHandler dbHandler;
     Meal meal;
     Intent intent;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +52,14 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         recipe_list = findViewById(R.id.mp_recipe_list);
         recipe_search_bar = findViewById(R.id.searchview_recipe);
 
+        // Get data
+        intent =  getIntent();
 
         // Set up user here
-        dbHandler = new DBHandler();
+        userId = intent.getStringExtra("USERID");
+        dbHandler = new DBHandler(userId);
 
         // set up adapter
-        intent =  getIntent();
         Bundle bundle  = intent.getExtras();
         meal = (Meal) bundle.getSerializable("MEAL");
         dataList = meal.getRecipes();
