@@ -11,8 +11,6 @@
         android:id="@+id/recipe_add_ingredient_cardview"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
