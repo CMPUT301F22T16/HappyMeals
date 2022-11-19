@@ -76,9 +76,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void launchMain(FirebaseUser user) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("USERID", user.getUid());
-        String dName = user.getDisplayName();
-        intent.putExtra("DISPLAY_NAME", dName.substring(0, dName.indexOf(' ')));    //Display just first name
         startActivity(intent);
         finish();
     }
