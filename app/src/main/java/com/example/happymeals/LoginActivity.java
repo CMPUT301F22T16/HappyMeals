@@ -34,14 +34,12 @@ public class LoginActivity extends AppCompatActivity {
     // Choose authentication providers
     List<AuthUI.IdpConfig> providers = Arrays.asList(
             new AuthUI.IdpConfig.EmailBuilder().build(),
-            new AuthUI.IdpConfig.PhoneBuilder().build(),
-            new AuthUI.IdpConfig.GoogleBuilder().build(),
-            new AuthUI.IdpConfig.FacebookBuilder().build(),
-            new AuthUI.IdpConfig.TwitterBuilder().build());
+            new AuthUI.IdpConfig.GoogleBuilder().build());
 
     // Create and launch sign-in intent
     Intent signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .build();
 
@@ -56,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         else {
             signInLauncher.launch(signInIntent);
-            finish();
         }
     }
 
