@@ -30,6 +30,7 @@ import com.example.happymeals.Recipe;
 import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -77,12 +78,12 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     /**
      * This is a button for the user to pick a new ingredient
      */
-    Button pick_new_ingredient_btn;
+    ExtendedFloatingActionButton pick_new_ingredient_btn;
 
     /**
      * This is a button for the user to add a new comment
      */
-    Button recipe_new_comment_btn;
+    ExtendedFloatingActionButton recipe_new_comment_btn;
 
     /**
      * This is a button to submit the changes back to the parent activity which is {@link com.example.happymeals.RecipeListActivity}
