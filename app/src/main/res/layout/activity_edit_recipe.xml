@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".recipe.EditRecipe">
+    tools:context=".recipe.EditRecipe"
+    android:background="@drawable/gradient_background">
 
     <Button
         android:id="@+id/recipe_img_picker_btn"
@@ -46,11 +47,33 @@
         android:inputType="textPersonName"
         android:hint="Category" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recipe_comments_recyclerview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipe_comments_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/recipe_add_new_comment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:text="ADD COMMENT"
+            android:textColor="@color/black"
+            app:icon="@android:drawable/ic_input_add"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -68,21 +91,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/recipe_pick_new_ingredient_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="5dp"
-            android:text="New Ingr" />
-
-        <Button
-            android:id="@+id/recipe_add_new_comment_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
-            android:text="New Cmt" />
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:text="ADD INGREDIENT"
+            android:textColor="@color/black"
+            app:icon="@android:drawable/ic_input_add"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"/>
 
         <Button
             android:id="@+id/recipe_submit_button"
@@ -90,6 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_gravity="center_vertical"
             android:text="Submit" />
     </LinearLayout>
 

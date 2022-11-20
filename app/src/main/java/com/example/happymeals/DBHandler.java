@@ -265,7 +265,7 @@ public class DBHandler {
     public void getUserRecipes(ArrayAdapter adapter, LoadingDialog dialog) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername());
-
+        System.out.println(getUsername());
         query
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
