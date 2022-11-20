@@ -28,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         setContentView(activityMainBinding.getRoot());
 
-        displayName = user.getDisplayName();
-        displayName = displayName.substring(0, displayName.indexOf(' '));
+        displayName = "Guest"; //user.getDisplayName();
+//        displayName = displayName.substring(0, displayName.indexOf(' '));
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Welcome, " + displayName + "!");
 
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", "Guest");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

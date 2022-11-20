@@ -191,8 +191,8 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
         Intent intent = getIntent();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        db = new DBHandler(user.getUid());
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = new DBHandler("Guest");
 
         // Initialize widgets
         recipe_img_picker_btn = findViewById(R.id.recipe_img_picker_btn);
