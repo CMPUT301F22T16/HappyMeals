@@ -53,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         else {
             signInLauncher.launch(signInIntent);
-            finish();
         }
     }
 
