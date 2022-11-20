@@ -111,7 +111,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
     }
 
     public void addRecipeAction(View view) {
-        // TODO start the AddRecipeActivity here
 
         Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
         Bundle bundle = new Bundle();
