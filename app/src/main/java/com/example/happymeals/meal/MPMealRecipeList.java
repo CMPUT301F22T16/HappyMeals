@@ -30,6 +30,8 @@ import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 import java.util.ArrayList;
@@ -90,7 +92,8 @@ public class MPMealRecipeList extends AppCompatActivity {
         is_modified = false;
 
         // set up users
-        dbHandler = new DBHandler();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
 
 
         // get the meal object passed in

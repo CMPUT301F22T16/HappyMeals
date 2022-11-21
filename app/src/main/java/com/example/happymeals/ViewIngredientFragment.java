@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +48,9 @@ public class ViewIngredientFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.view_ingredient_fragment_layout, null);
 
         Context context = getContext();
-        DBHandler db = new DBHandler();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
 
         thisCategory = view.findViewById(R.id.category);
         thisDescription = view.findViewById(R.id.description_frag);
@@ -63,7 +69,6 @@ public class ViewIngredientFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         final Bundle ingredient = this.getArguments();
-
         if (ingredient != null){
             thisUserIngredient = (UserIngredient) ingredient.getSerializable("ingredient");
             thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
@@ -186,7 +191,6 @@ public class ViewIngredientFragment extends DialogFragment {
     static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);
-
         ViewIngredientFragment fragment = new ViewIngredientFragment();
         fragment.setArguments(args);
         return fragment;

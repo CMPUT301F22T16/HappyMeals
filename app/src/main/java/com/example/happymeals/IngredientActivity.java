@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -56,7 +58,8 @@ public class IngredientActivity extends AppCompatActivity{
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-        DBHandler db = new DBHandler();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
         db.getIngredients(ingredientAdaptor, totalCost);
 
         ingredientListView.setAdapter(ingredientAdaptor);

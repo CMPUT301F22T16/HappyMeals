@@ -1,12 +1,13 @@
 package com.example.happymeals;
 
-import android.content.ContentResolver;
-import android.media.Image;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,6 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,18 +66,6 @@ public class DBHandler {
     private FirebaseFirestore conn;
     private FirebaseStorage storage;
 
-
-    /**
-     * Guest login constructor
-     */
-    public DBHandler() {
-        User user = new User();
-        username = user.getUsername(); //
-        conn = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-    }
-
-    //NOT TO BE USED FOR HALFWAY CHECKPOINT
     public DBHandler(String username) {
         // login existing user
         this.username = username;
@@ -92,14 +83,12 @@ public class DBHandler {
 
     /**
      * Generic store method that can be used to store data to firestore.
-     * @param ref {@link CollectionReference} reference to the firestore collection.
+     * @param doc {@link DocumentReference} reference to the firestore document.
      * @param data {@link HashMap<String, Object>} data to be stored as keys and values.
      * @param collType {@link String} the type of the collection.
      * @return {@link String} the document id of the newly stored object in Firestore.
      */
-    private String store(CollectionReference ref, HashMap data, String collType) {
-        String id;
-        DocumentReference doc = ref.document();
+    private String store(DocumentReference doc, HashMap data, String collType) {
         doc
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -167,6 +156,15 @@ public class DBHandler {
                 });
     }
 
+    //---------------------------------------------------User Methods--------------------------------------------------//
+
+    public void newUser(String userId) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("ing_sort", "A-Z");
+        DocumentReference doc = conn.collection("users").document(userId);
+        store(doc, data, "User");
+    }
+
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
@@ -176,8 +174,8 @@ public class DBHandler {
     public void newStorage(Storage storage) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
-        CollectionReference ref = conn.collection("storages");
-        String id = store(ref, data, "Storage");
+        DocumentReference doc = conn.collection("storages").document();
+        String id = store(doc, data, "Storage");
         storage.setId(id);
     }
 
@@ -208,8 +206,8 @@ public class DBHandler {
     public void newIngredient(UserIngredient userIngredient) {
         HashMap<String, Object> data  = userIngredient.getStorable();
         data.put("user", getUsername());
-        CollectionReference ref = conn.collection("user_ingredients");
-        String id = store(ref, data, "Ingredient");
+        DocumentReference doc = conn.collection("user_ingredients").document();
+        String id = store(doc, data, "Ingredient");
         userIngredient.setId(id);
     }
 
@@ -464,7 +462,7 @@ public class DBHandler {
      * @param recipe_ids
      * @param adapter
      */
-    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids,MPMealRecipeListAdapter adapter) {
+    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids, MPMealRecipeListAdapter adapter) {
         CollectionReference ref = conn.collection("user_recipes");
         Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
         query
@@ -517,7 +515,7 @@ public class DBHandler {
     public void addRecipe(Recipe recipe) {
         HashMap<String, Object> data = recipe.getStorable();
         data.put("user", getUsername());
-        CollectionReference user_recipes = getConn().collection("user_recipes");
+        DocumentReference user_recipes = getConn().collection("user_recipes").document();
         String id = store(user_recipes, data, "Recipes");
         recipe.setR_id(id);
     }
@@ -671,7 +669,7 @@ public class DBHandler {
     public void addMeal(Meal meal) {
         HashMap<String, Object> data = meal.getStorable();
         data.put("user", getUsername());
-        CollectionReference user_meals = getConn().collection("user_meals");
+        DocumentReference user_meals = getConn().collection("user_meals").document();
         String id = store(user_meals, data, "Meal");
         meal.setM_id(id);
     }
@@ -758,7 +756,7 @@ public class DBHandler {
     public void addMealPlan(MealPlan mealplan) {
         HashMap<String, Object> data = mealplan.getStorable();
         data.put("user", getUsername());
-        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        DocumentReference user_mealplans = getConn().collection("user_mealplans").document();
         String id = store(user_mealplans, data, "Meal Plan");
         mealplan.setUmp_id(id);
     }

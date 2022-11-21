@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,8 @@ import com.example.happymeals.DBHandler;
 import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
 import com.example.happymeals.Recipe;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +53,14 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         recipe_list = findViewById(R.id.mp_recipe_list);
         recipe_search_bar = findViewById(R.id.searchview_recipe);
 
+        // Get data
+        intent =  getIntent();
 
         // Set up user here
-        dbHandler = new DBHandler();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
 
         // set up adapter
-        intent =  getIntent();
         Bundle bundle  = intent.getExtras();
         meal = (Meal) bundle.getSerializable("MEAL");
         dataList = meal.getRecipes();

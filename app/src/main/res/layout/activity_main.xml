@@ -75,12 +75,23 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/userWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Logged in as: Guest"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="13dp"
+        android:text="Logout"
+        android:backgroundTint="@android:color/holo_red_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
