@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
+import com.example.happymeals.R;
 import com.example.happymeals.Recipe;
 import com.example.happymeals.ViewRecipeActivity;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.databinding.MealRecipeListContentBinding;
+import com.example.happymeals.recipe.EditRecipe;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
@@ -33,12 +37,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         @Override
         public void onClick(View view) {
             int itemPosition = activityMpmealRecipeListBinding.mpRecipeListRecyclerview.getChildLayoutPosition(view);
-            intent = new Intent(mContext, ViewRecipeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("RECIPE", recipes.get(itemPosition));
-            intent.putExtras(bundle);
-            mContext.startActivity(intent);
-
+            showBottomSheetDialogOnRecipe(itemPosition);
         }
     };
 
@@ -78,8 +77,6 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         return recipes;
     }
 
-
-
     public void clear(){
         recipes.clear();
     }
@@ -91,6 +88,45 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     @Override
     public int getItemCount() {
         return recipes.size();
+    }
+
+    private void showBottomSheetDialogOnRecipe(int itemPosition) {
+        final BottomSheetDialog bottomSheet = new BottomSheetDialog(mContext);
+        bottomSheet.setContentView(R.layout.meal_recipe_list_bottom_sheet);
+
+        TextView view_recipe = bottomSheet.findViewById(R.id.bottom_sheet_textview1);
+        view_recipe.setText("View Details of Recipe");
+        TextView scale_recipe = bottomSheet.findViewById(R.id.bottom_sheet_textview2);
+        scale_recipe.setText("Adjust Scaling for Recipe");
+        TextView cancel = bottomSheet.findViewById(R.id.bottom_sheet_cancel);
+        view_recipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(mContext, ViewRecipeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("RECIPE", recipes.get(itemPosition));
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+                bottomSheet.dismiss();
+            }
+        });
+
+        scale_recipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // build another dialog here
+                bottomSheet.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheet.dismiss();
+            }
+        });
+        bottomSheet.show();
+
     }
 
     public class MRLViewHolder extends RecyclerView.ViewHolder {

@@ -195,7 +195,7 @@ public class MPMealRecipeList extends AppCompatActivity {
      */
     private void setOnAddButtonListener() {
         addRecipButton.setOnClickListener(v -> {
-            showBottomSheetDialog();
+            showBottomSheetDialogOnAdd();
         });
     }
 
@@ -252,12 +252,12 @@ public class MPMealRecipeList extends AppCompatActivity {
      * or create a new recipe and add to the recipe list
      * for the meal.
      */
-    private void showBottomSheetDialog() {
+    private void showBottomSheetDialogOnAdd() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(R.layout.meal_recipe_list_bottom_sheet);
 
-        TextView add_from_recipe = bottomSheetDialog.findViewById(R.id.add_from_recipe_textview);
-        TextView create_recipe = bottomSheetDialog.findViewById(R.id.create_new_recipe_textview);
+        TextView add_from_recipe = bottomSheetDialog.findViewById(R.id.bottom_sheet_textview1);
+        TextView create_recipe = bottomSheetDialog.findViewById(R.id.bottom_sheet_textview2);
         TextView cancel = bottomSheetDialog.findViewById(R.id.bottom_sheet_cancel);
         add_from_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
