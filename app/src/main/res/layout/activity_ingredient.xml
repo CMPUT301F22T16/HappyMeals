@@ -81,7 +81,7 @@
     <ListView
         android:id="@+id/ingredientList"
         android:layout_width="fill_parent"
-        android:layout_height="573dp"></ListView>
+        android:layout_height="333dp"></ListView>
 
     <TextView
         android:id="@+id/costDescription"
