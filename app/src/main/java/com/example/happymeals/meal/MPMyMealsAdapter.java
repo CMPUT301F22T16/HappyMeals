@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.MealPlan;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
 

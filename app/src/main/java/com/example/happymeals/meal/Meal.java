@@ -1,4 +1,7 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
+
+import com.example.happymeals.Recipe;
+import com.example.happymeals.Storable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.List;
  *
  * Members:
  *  1. m_id : A {@link String} id representing document id of the meal in the database.
- *  2. recipes : A {@link List<Recipe>} of recipes associated with the meal.
+ *  2. recipes : A {@link List< Recipe >} of recipes associated with the meal.
  *  3. scalings : A {@link List<Double>} of scalings for each recipe that the user can adjust.
  *  4. cost : A {@link Double} total cost for the Meal.
  */

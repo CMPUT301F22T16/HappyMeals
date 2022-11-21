@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.happymeals.databinding.ActivityMainBinding;
+
+import com.example.happymeals.meal.MPMyMealsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -22,20 +24,21 @@ public class MainActivity extends AppCompatActivity {
     TextView userWelcome;
     String displayName;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         setContentView(activityMainBinding.getRoot());
 
-        displayName = "Guest"; //user.getDisplayName();
-//        displayName = displayName.substring(0, displayName.indexOf(' '));
+        displayName = user.getDisplayName();
+        displayName = displayName.substring(0, displayName.indexOf(' '));
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Welcome, " + displayName + "!");
+
+        DBHandler db = new DBHandler(user.getUid());
 
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Is-From-MealPlan",false);
+                bundle.putSerializable("Is-From-MealPlan", false);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", "Guest");
+                bundle.putSerializable("USER", user.getUid());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

@@ -13,6 +13,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.happymeals.meal.MPMealRecipeList;
+import com.example.happymeals.meal.MPMyMealsActivity;
+import com.example.happymeals.meal.MPPickRecipeActivity;
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

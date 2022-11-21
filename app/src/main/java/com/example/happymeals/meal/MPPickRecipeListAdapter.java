@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import android.content.Context;
 import android.view.LayoutInflater;

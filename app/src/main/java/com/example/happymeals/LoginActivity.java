@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     // Create and launch sign-in intent
     Intent signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .build();
 
@@ -61,6 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (response.isNewUser()) {
+
+            }
             launchMain(user);
             // ...
         } else {
