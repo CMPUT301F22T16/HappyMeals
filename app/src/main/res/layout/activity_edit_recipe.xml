@@ -67,18 +67,20 @@
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/recipe_view_comments_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:backgroundTint="@color/white"
-                android:text="VIEW COMMENTS"
+                android:text="COMMENTS"
                 android:textColor="@color/black"
                 app:icon="@android:drawable/ic_menu_view" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/recipe_add_new_comment_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:backgroundTint="@color/white"
                 android:clickable="true"
@@ -93,39 +95,48 @@
             android:layout_height="1dp"
             android:background="#000000" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipe_ingredient_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/recipe_ingredient_recyclerview"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="2" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/recipe_submit_button"
-                android:layout_width="wrap_content"
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/recipe_view_ingredients_button"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:text="Submit" />
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                app:icon="@android:drawable/ic_menu_view"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:text="INGREDIENTS"/>
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/recipe_pick_new_ingredient_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:backgroundTint="@color/white"
                 android:clickable="true"
-                android:text="ADD INGREDIENT"
+                android:text="INGREDIENT"
                 android:textColor="@color/black"
                 app:icon="@android:drawable/ic_input_add" />
         </LinearLayout>
+        <Button
+            android:id="@+id/recipe_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:text="Submit" />
     </LinearLayout>
 
 </FrameLayout>

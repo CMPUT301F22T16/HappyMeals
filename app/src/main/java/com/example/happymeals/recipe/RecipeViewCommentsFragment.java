@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.happymeals.R;
@@ -63,13 +62,13 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
     }
 
     public interface OnFragmentInteractionListener {
-        void onOkPressed(ArrayList<String> data_list);
+        void onOkPressed_Comment(ArrayList<String> data_list);
     }
 
     public RecipeViewCommentsFragment(Context context, ArrayList<String> data_list) {
         this.context = context;
         this.recipe_comments_data_list = data_list;
-        comments_adapter = new RecipeCommentsAdapter(this.context, recipe_comments_data_list, this);
+        this.comments_adapter = new RecipeCommentsAdapter(this.context, this.recipe_comments_data_list, this);
     }
 
     @Override
@@ -98,7 +97,7 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        listener.onOkPressed_Comment(recipe_comments_data_list);
                     }
                 }).create();
     }
