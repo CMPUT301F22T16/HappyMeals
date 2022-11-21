@@ -29,13 +29,40 @@ import com.example.happymeals.RecipeIngredient;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * This class creates a dialog fragment that displays the ingredients for the recipe.
+ * @author John Yu
+ */
 public class RecipeViewIngredientsFragment extends DialogFragment implements RecyclerViewInterface {
 
+    /**
+     * This is the context
+     */
     Context context;
+
+    /**
+     * This stores a collection of {@link RecipeIngredient} objects.
+     */
     ArrayList<RecipeIngredient> recipe_ingredients_data_list;
+
+    /**
+     * This is the recyclerview that displays each ingredient.
+     */
     RecyclerView recipe_ingredients_list;
+
+    /**
+     * This is the adapter for the recyclerview.
+     */
     RecipeIngredientAdapter ingredients_adapter;
+
+    /**
+     * Handles the action to take when the user presses OK.
+     */
     OnFragmentInteractionListener listener;
+
+    /**
+     * Stores the ingredient index position the user selected.
+     */
     int selection = -1;
 
     /**
@@ -64,6 +91,9 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
         }
     }
 
+    /**
+     * This interface is used to handle the action to take when the user presses ok.
+     */
     public interface OnFragmentInteractionListener {
         void onOkPressed_Ingredient(ArrayList<RecipeIngredient> data_list);
     }

@@ -24,17 +24,41 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.happymeals.R;
+import com.example.happymeals.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class RecipeViewCommentsFragment extends DialogFragment implements RecyclerViewInterface {
 
+    /**
+     * This is the context
+     */
     Context context;
+
+    /**
+     * This stores a collection of {@link String} objects.
+     */
     ArrayList<String> recipe_comments_data_list;
+
+    /**
+     * This is the recyclerview that displays each comment.
+     */
     RecyclerView recipe_comments_list;
+
+    /**
+     * This is the adapter for the recyclerview.
+     */
     RecipeCommentsAdapter comments_adapter;
+
+    /**
+     * Handles the action to take when the user presses OK.
+     */
     OnFragmentInteractionListener listener;
+
+    /**
+     * Stores the comment index position the user selecte.d
+     */
     int comment_selection = -1;
 
     /**
