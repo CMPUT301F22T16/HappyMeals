@@ -38,7 +38,7 @@ import com.google.firebase.auth.FirebaseUser;
  * This class creates the EditRecipe Activity for the user to edit a recipe
  * @author John Yu
  */
-public class EditRecipe extends AppCompatActivity implements RecyclerViewInterface {
+public class EditRecipe extends AppCompatActivity implements RecyclerViewInterface, RecipeViewCommentsFragment.OnFragmentInteractionListener {
 
     /**
      * This variable stores the button to pick a new image for the recipe
@@ -84,6 +84,8 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
      * This is a button for the user to add a new comment
      */
     ExtendedFloatingActionButton recipe_new_comment_btn;
+
+    ExtendedFloatingActionButton recipe_view_comments_btn;
 
     /**
      * This is a button to submit the changes back to the parent activity which is {@link com.example.happymeals.RecipeListActivity}
@@ -171,16 +173,6 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         }
     });
 
-    /**
-     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeEditComment} class
-     */
-    ActivityResultLauncher<Intent> edit_comment_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            handleEditCommentForResultLauncher(result);
-        }
-    });
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,7 +190,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         // Initialize widgets
         recipe_img_picker_btn = findViewById(R.id.recipe_img_picker_btn);
 
-        recipe_comments_list = findViewById(R.id.recipe_comments_recyclerview);
+//        recipe_comments_list = findViewById(R.id.recipe_comments_recyclerview);
         recipe_ingredient_list = findViewById(R.id.recipe_ingredient_recyclerview);
 
         recipeTitleEditText = findViewById(R.id.recipe_title_edit_text);
@@ -227,9 +219,16 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
 
 
         // Create the RecyclerView to display the Recipe Comments
-        comments_adapter = new RecipeCommentsAdapter(this, recipe_comments_data_list, this);
-        recipe_comments_list.setLayoutManager(new LinearLayoutManager(this));
-        recipe_comments_list.setAdapter(comments_adapter);
+//        comments_adapter = new RecipeCommentsAdapter(this, recipe_comments_data_list, this);
+//        recipe_comments_list.setLayoutManager(new LinearLayoutManager(this));
+//        recipe_comments_list.setAdapter(comments_adapter);
+        recipe_view_comments_btn = findViewById(R.id.recipe_view_comments_button);
+        recipe_view_comments_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new RecipeViewCommentsFragment(EditRecipe.this, recipe_comments_data_list).show(getSupportFragmentManager(), "View Comments");
+            }
+        });
 
         // Create the RecyclerView to display the Recipe Ingredients
         ingredient_adapter = new RecipeIngredientAdapter(this, recipeIngredient_data_list, this);
@@ -314,7 +313,7 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             if (result.getData() == null) return;
             String commentExtra = result.getData().getStringExtra("comment");
             recipe_comments_data_list.add(commentExtra);
-            recipe_comments_list.setAdapter(comments_adapter);
+//            recipe_comments_list.setAdapter(comments_adapter);
         } else {
             Toast.makeText(EditRecipe.this, "Failed to add comment", Toast.LENGTH_SHORT).show();
         }
@@ -357,21 +356,6 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
     }
 
     /**
-     * This method handles the return value after the user edits a comment.
-     * @param result the returned value from the {@link RecipeEditComment} Activity
-     */
-    public void handleEditCommentForResultLauncher(ActivityResult result) {
-        if (result != null && result.getResultCode() == RESULT_OK) {
-            if (result.getData() == null) return;
-            String comment = result.getData().getStringExtra("comment");
-            recipe_comments_data_list.set(comment_selection, comment);
-            recipe_comments_list.setAdapter(comments_adapter);
-        } else {
-            Toast.makeText(EditRecipe.this, "Failed to edit comment", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
      * This method removes the ingredient from the recipe after the user presses the delete button
      * @param position the index position of the ingredient in {@link EditRecipe#recipeIngredient_data_list}
      * @param op a string denoting the operation to perform. Here the operation is either delete or edit.
@@ -389,16 +373,17 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
             intent.putExtra("category", item.getCategory());
             intent.putExtra("amount", item.getAmount());
             edit_ingredient_for_result.launch(intent);
-        } else if (Objects.equals(op, "delete_comment")) {
-            recipe_comments_data_list.remove(position);
-            recipe_comments_list.setAdapter(comments_adapter);
-        } else if (Objects.equals(op, "edit_comment")) {
-            comment_selection = position;
-            Intent intent = new Intent(EditRecipe.this, RecipeEditComment.class);
-            String comment = recipe_comments_data_list.get(position);
-            intent.putExtra("comment", comment);
-            edit_comment_for_result.launch(intent);
         }
+//        } else if (Objects.equals(op, "delete_comment")) {
+//            recipe_comments_data_list.remove(position);
+//            recipe_comments_list.setAdapter(comments_adapter);
+//        } else if (Objects.equals(op, "edit_comment")) {
+//            comment_selection = position;
+//            Intent intent = new Intent(EditRecipe.this, RecipeEditComment.class);
+//            String comment = recipe_comments_data_list.get(position);
+//            intent.putExtra("comment", comment);
+//            edit_comment_for_result.launch(intent);
+//        }
     }
 
     /**
@@ -416,5 +401,10 @@ public class EditRecipe extends AppCompatActivity implements RecyclerViewInterfa
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onOkPressed(ArrayList<String> data_list) {
+        recipe_comments_data_list = data_list;
     }
 }
