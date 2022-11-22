@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding activityMainBinding;
     Button ingredientButton;
     Button mealButton;
     Button recipeButton;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     TextView userWelcome;
     String displayName;
 
-    FirebaseAuth instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        setContentView(activityMainBinding.getRoot());
+        setContentView(R.layout.activity_main);
 
         displayName = user.getDisplayName();
         displayName = displayName.substring(0, displayName.indexOf(' '));

@@ -30,6 +30,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
     private Date date;
     private String loc;
     private String id;
+    private String unit;
 
     /**
      * A constructor with all the member attributes here {@link UserIngredient}.
@@ -40,7 +41,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      * @param date
      * @param locRef
      */
-    public UserIngredient(String category, String description, Integer amount, Double cost, Date date, String locRef) {
+    public UserIngredient(String category, String description, Integer amount, Double cost, Date date, String locRef, String unit) {
 
         this.category = category;
         this.description = description;
@@ -48,6 +49,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
         this.cost = cost;
         this.date = date;
         this.loc = locRef;
+        this.unit = unit;
         this.id = null;
     }
 
@@ -103,6 +105,14 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      */
     public String getLoc() {
         return loc;
+    }
+
+    /**
+     * Get the unit of the ingredient.
+     * @return
+     */
+    public String getUnit() {
+        return unit;
     }
 
     /**
@@ -193,6 +203,14 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      */
     public void setLoc(String loc) {
         this.loc = loc;
+    }
+
+    /**
+     * Set the unit of the ingredient.
+     * @param unit
+     */
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     /**
