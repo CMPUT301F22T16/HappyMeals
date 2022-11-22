@@ -1,11 +1,14 @@
 package com.example.happymeals;
 
+import android.widget.ArrayAdapter;
+
 import com.example.happymeals.meal.Meal;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a modal class for user's MealPlans. Implements {@link Storable} in order to store it to the database.
@@ -13,40 +16,35 @@ import java.util.List;
  *
  * Members:
  *  1. ump_id : A {@link String} id representing document id of the meal plan in the database.
- *  2. breakfast : A {@link List< Meal >} of meals associated with the breakfast in meal plan.
- *  3. lunch : A {@link List<Meal>} of meals associated with the lunch in meal plan.
- *  4. dinner : A {@link List<Meal>} of meals associated with the dinner in meal plan.
- *  5. num_days : An {@link Integer} representing the number of days for which the meal plan is.
+ *  2. title : A {@link String} title for the meal plan.
+ *  3. mealplan : A {@link List<List<Meal>>} list of list each representing 1 day of the MealPlan.
+ *  4. num_days : An {@link Integer} representing the number of days for which the meal plan is.
  */
 public class MealPlan implements Storable, Serializable {
-    private List<Meal> breakfast;
-    private List<Meal> lunch;
-    private List<Meal> dinner;
+    private List<List<Meal>> mealplan;
     private int num_days;
+    private String title;
     private String ump_id = null; // ids' null by default if not fetched
 
     /**
      * Default constructor for mealplan.
      */
-    // TODO: needs a title field
     public MealPlan() {
-        this.breakfast = new ArrayList<>();
-        this.lunch = new ArrayList<>();
-        this.dinner = new ArrayList<>();
+        this.title = "New MealPlan";
         this.num_days = 0;
+        this.mealplan = new ArrayList<>();
     }
+
 
     /**
      * A Constructor for MealPLan using all the member attributes listed {@link MealPlan}.
-     * @param breakfast
-     * @param lunch
-     * @param dinner
+     * @param title
+     * @param mealplan
      * @param num_days
      */
-    public MealPlan(List<Meal> breakfast, List<Meal> lunch, List<Meal> dinner, int num_days) {
-        this.breakfast = breakfast;
-        this.lunch = lunch;
-        this.dinner = dinner;
+    public MealPlan(String title, List<List<Meal>> mealplan, int num_days) {
+        this.title = title;
+        this.mealplan = mealplan;
         this.num_days = num_days;
     }
 
@@ -57,27 +55,11 @@ public class MealPlan implements Storable, Serializable {
     public void setDays(int days) {this.num_days = days;}
 
     /**
-     * Get the {@link List<Meal>} of breakfast items for each day in meal plan.
-     * @return A {@link List<Meal>} of meals for breakfast.
+     * Get the {@link List<List<Meal>>} of meals for each day in meal plan.
+     * @return A {@link List<List<Meal>>} of meals for mealplan.
      */
-    public List<Meal> getBreakfast() {
-        return breakfast;
-    }
-
-    /**
-     * Get the {@link List<Meal>} of lunch items for each day in meal plan.
-     * @return A {@link List<Meal>} of meals for lunch.
-     */
-    public List<Meal> getLunch() {
-        return lunch;
-    }
-
-    /**
-     * Get the {@link List<Meal>} of dinner items for each day in meal plan.
-     * @return A {@link List<Meal>} of meals for dinner.
-     */
-    public List<Meal> getDinner() {
-        return dinner;
+    public List<List<Meal>> getMeals() {
+        return this.mealplan;
     }
 
     /**
@@ -85,38 +67,32 @@ public class MealPlan implements Storable, Serializable {
      * @param meal A {@link Meal} object to set at index;
      * @param index An {@link Integer} index specifying position.
      */
-    public void setBreakfastWithIndex(Meal meal, int index) {
-        if(index >= this.breakfast.size()) {
-            this.breakfast.add(meal);
-        } else {
-            this.breakfast.set(index, meal);
-        }
+    public void setMealWithDayAndIndex(Meal meal, int day, int index) {
+        this.mealplan.get(day).set(index, meal);
+    }
+
+    public List<Meal> getBreakfast() {
+        return new ArrayList<>();
+    }
+
+    public List<Meal> getLunch() {
+        return new ArrayList<>();
+    }
+
+    public List<Meal> getDinner() {
+        return new ArrayList<>();
     }
 
     /**
-     * Set the lunch item at the given index in the Meal Plan.
-     * @param meal A {@link Meal} object to set at index;
-     * @param index An {@link Integer} index specifying position.
+     * Get the {@link String} title for the mealplan.
+     * @return {@link String} title for the mealplan.
      */
-    public void setLunchWithIndex(Meal meal, int index) {
-        if(index >= this.lunch.size()){
-            this.lunch.add(meal);
-        } else {
-            this.lunch.set(index, meal);
-        }
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * Set the dinner item at the given index in the Meal Plan.
-     * @param meal A {@link Meal} object to set at index;
-     * @param index An {@link Integer} index specifying position.
-     */
-    public void setDinnerWithIndex(Meal meal, int index) {
-        if(index >= this.dinner.size()) {
-            this.dinner.add(meal);
-        } else {
-            this.dinner.set(index, meal);
-        }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -146,29 +122,28 @@ public class MealPlan implements Storable, Serializable {
 
     /**
      * Gets a {@link Storable} {@link HashMap<String, Object>} of data corresponding to the contents of the meal.
+     * Here conversion of {@link List<List<Meal>>} to {@link List<Map<String, String>>} is required because firebase doesn't accept nested arrays.
      * @return A {@link Storable} {@link HashMap<String, Object>} of data.
      */
     @Override
     public HashMap<String, Object> getStorable() {
-        List<Meal> breakfast = this.getBreakfast();
-        List<Meal> lunch = this.getLunch();
-        List<Meal> dinner = this.getDinner();
-        int num_days = this.getNum_days();
-        List<String> breakfast_ids = new ArrayList<>();
-        List<String> lunch_ids = new ArrayList<>();
-        List<String> dinner_ids = new ArrayList<>();
 
-        for (int i = 0; i < num_days; i++) {
-            breakfast_ids.add(breakfast.get(i).getM_id());
-            lunch_ids.add(lunch.get(i).getM_id());
-            dinner_ids.add(dinner.get(i).getM_id());
+        List<Map<String, String>> plans = new ArrayList<>();
+
+        for (List<Meal> dayList : this.mealplan) {
+
+            Map<String, String> dayMap = new HashMap<>();
+            for (Meal meal : dayList) {
+                dayMap.put(meal.getTitle(), meal.getM_id());
+            }
+
+            plans.add(dayMap);
         }
 
         HashMap<String, Object> data = new HashMap<>();
-        data.put("breakfast", breakfast_ids);
-        data.put("lunch", lunch_ids);
-        data.put("dinner", dinner_ids);
-        data.put("num_days", num_days);
+        data.put("num_days", this.getNum_days());
+        data.put("title", this.getTitle());
+        data.put("plans", plans);
 
         return data;
     }
