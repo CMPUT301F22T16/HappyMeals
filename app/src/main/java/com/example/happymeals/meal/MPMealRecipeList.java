@@ -48,7 +48,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     MPMealRecipeListAdapter mpMealRecipeListAdapter;
 
     List<Recipe> recipes;
-    List<Recipe> recipes_old;
+    List<Double> scalings;
     Button addRecipButton;
     Button cancelButton;
     Button finishButton;
@@ -88,7 +88,6 @@ public class MPMealRecipeList extends AppCompatActivity {
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
 
         recipes = new ArrayList<>();
-        recipes_old = new ArrayList<>();
         is_modified = false;
 
         // set up users
@@ -106,10 +105,8 @@ public class MPMealRecipeList extends AppCompatActivity {
         } else {
             meal = (Meal) bundle.getSerializable("MEAL");
             recipes = meal.getRecipes();
-        }
-        // keeps a copy of the recipes
-        for (Recipe r : recipes){
-            recipes_old.add(r);
+            scalings = meal.getScalings();
+
         }
 
         // set up adapter

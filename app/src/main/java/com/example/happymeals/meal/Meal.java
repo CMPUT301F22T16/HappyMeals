@@ -47,6 +47,32 @@ public class Meal implements Storable, Serializable {
     }
 
     /**
+     * Update the scaling list of the meal
+     * @param index the index of the value you want to update
+     * @param value the value you want to update to
+     */
+    public void updateScalings(int index, double value) {
+        scalings.set(index,value);
+    }
+
+    /**
+     * remove a scaling at index
+     * @param index the index of the scaling to be removed
+     */
+    public void removeScaling(int index){
+        scalings.remove(index);
+    }
+
+    /**
+     * add a new scaling to list
+     * @param scaling the new scaling factor to be added to the list
+     */
+    public void addScaling(double scaling){
+        scalings.add(scaling);
+    }
+
+
+    /**
      * Removes a recipe from the meal's recipe list specified by the index.
      * @param index An {@link Integer} index for the recipe to be removed.
      */
