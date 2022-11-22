@@ -248,7 +248,8 @@ public class DBHandler {
                         sum += cost * amount;
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
-                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location);
+                        String unit = doc.getString("unit");
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
                         adapter.add(userIngredient);
