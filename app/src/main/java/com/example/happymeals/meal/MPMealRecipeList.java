@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +22,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.R;
+import com.example.happymeals.Recipe;
+import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;

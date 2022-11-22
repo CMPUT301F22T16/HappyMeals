@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
+import com.example.happymeals.meal.MPMyMealsActivity;
+import com.example.happymeals.meal.Meal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

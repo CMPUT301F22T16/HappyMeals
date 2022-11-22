@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
+import com.example.happymeals.meal.MPMyMealsActivity;
+import com.example.happymeals.meal.Meal;
 
 import java.util.ArrayList;
 

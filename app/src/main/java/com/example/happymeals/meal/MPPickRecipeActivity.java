@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,10 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.R;
+import com.example.happymeals.Recipe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
