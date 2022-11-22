@@ -58,8 +58,8 @@ public class IngredientActivity extends AppCompatActivity{
         sortBySelect = (Spinner) findViewById(R.id.sortBy);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DBHandler db = new DBHandler("Guest"); //user.getUid()
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
         db.getIngredients(ingredientAdaptor, totalCost);
 
         ingredientListView.setAdapter(ingredientAdaptor);

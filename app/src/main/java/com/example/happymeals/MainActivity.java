@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.example.happymeals.databinding.ActivityMainBinding;
 
+import com.example.happymeals.storage.StorageActivity;
+
+
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Button mealButton;
     Button recipeButton;
     Button mealplanButton;
+    Button storageButton;
     TextView userWelcome;
     String displayName;
 
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mealButton = findViewById(R.id.meal_button);
         mealplanButton = findViewById(R.id.mealplan_button);
         recipeButton = findViewById(R.id.recipe_button);
+        storageButton = findViewById(R.id.storage_button);
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +92,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                bundle.putSerializable("USER", user.getUid());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        storageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, StorageActivity.class);
+                Bundle bundle = new Bundle();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 bundle.putSerializable("USER", user.getUid());
                 intent.putExtras(bundle);
                 startActivity(intent);
