@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button logoutButton;
     Button ingredientButton;
     Button mealButton;
     Button recipeButton;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         DBHandler db = new DBHandler(user.getUid());
 
+        logoutButton = findViewById(R.id.logout_button);
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
         mealplanButton = findViewById(R.id.mealplan_button);
@@ -61,6 +63,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
