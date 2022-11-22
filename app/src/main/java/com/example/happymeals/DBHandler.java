@@ -733,10 +733,10 @@ public class DBHandler {
 
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
-////                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
-////
+//                            MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+
 //                            mealPlan.setUmp_id(ump_id);
-//
+
 //                            adapter.add(mealPlan);
                         }
 

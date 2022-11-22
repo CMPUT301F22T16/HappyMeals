@@ -71,17 +71,6 @@ public class MealPlan implements Storable, Serializable {
         this.mealplan.get(day).set(index, meal);
     }
 
-    public void setBreakfastWithIndex(Meal meal, int index) {
-
-    }
-
-    public void setLunchWithIndex(Meal meal, int index) {
-
-    }
-    public void setDinnerWithIndex(Meal meal, int index) {
-
-    }
-
     public List<Meal> getBreakfast() {
         return new ArrayList<>();
     }
