@@ -1,118 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical"
-    tools:context=".recipe.EditRecipe"
-    android:background="@drawable/gradient_background">
-
-    <Button
-        android:id="@+id/recipe_img_picker_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:text="Add Image" />
-
-    <EditText
-        android:id="@+id/recipe_title_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Recipe Title" />
-
-    <EditText
-        android:id="@+id/recipe_prep_time_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Preparation Time" />
-
-    <EditText
-        android:id="@+id/recipe_num_serv_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Number of Servings" />
-
-    <EditText
-        android:id="@+id/recipe_category_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Category" />
+    tools:context=".recipe.EditRecipe">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipe_comments_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/recipe_add_new_comment_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:clickable="true"
-            android:text="ADD COMMENT"
-            android:textColor="@color/black"
-            app:icon="@android:drawable/ic_input_add"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recipe_ingredient_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/recipe_pick_new_ingredient_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:clickable="true"
-            android:text="ADD INGREDIENT"
-            android:textColor="@color/black"
-            app:icon="@android:drawable/ic_input_add"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"/>
-
         <Button
-            android:id="@+id/recipe_submit_button"
+            android:id="@+id/recipe_img_picker_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:text="Add Image" />
+
+        <EditText
+            android:id="@+id/recipe_title_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Recipe Title"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/recipe_prep_time_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Preparation Time"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/recipe_num_serv_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Number of Servings"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/recipe_category_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Category"
+            android:inputType="textPersonName" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/recipe_view_comments_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/white"
+                android:text="COMMENTS"
+                android:textColor="@color/black"
+                app:icon="@android:drawable/ic_menu_view" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/recipe_add_new_comment_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/white"
+                android:clickable="true"
+                android:text="COMMENT"
+                android:textColor="@color/black"
+                app:icon="@android:drawable/ic_input_add" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/recipe_view_ingredients_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                app:icon="@android:drawable/ic_menu_view"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:text="INGREDIENTS"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/recipe_pick_new_ingredient_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/white"
+                android:clickable="true"
+                android:text="INGREDIENT"
+                android:textColor="@color/black"
+                app:icon="@android:drawable/ic_input_add" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/recipe_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:text="Submit" />
     </LinearLayout>
 
-
-</LinearLayout>
+</FrameLayout>

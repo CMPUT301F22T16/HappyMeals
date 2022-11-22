@@ -51,6 +51,15 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".meal.MPPickRecipeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".meal.MPMealRecipeList"
+            android:exported="false" />
+        <activity
+            android:name=".meal.MPMyMealsActivity"
+            android:exported="false" />
+        <activity
             android:name=".MPMealListActivity"
             android:exported="false" />
         <activity
@@ -79,10 +88,16 @@
         </activity>
         <activity
             android:name=".MainActivity"
+
             android:exported="true"></activity>
+
         <activity
             android:name=".IngredientActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".addNewIngredient"
             android:exported="true">

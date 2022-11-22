@@ -8,6 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.happymeals.meal.MPMealRecipeListAdapter;
+import com.example.happymeals.meal.MPMyMealsAdapter;
+import com.example.happymeals.meal.MPPickRecipeListAdapter;
+import com.example.happymeals.meal.Meal;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -73,14 +77,12 @@ public class DBHandler {
 
     /**
      * Generic store method that can be used to store data to firestore.
-     * @param ref {@link CollectionReference} reference to the firestore collection.
+     * @param doc {@link DocumentReference} reference to the firestore document.
      * @param data {@link HashMap<String, Object>} data to be stored as keys and values.
      * @param collType {@link String} the type of the collection.
      * @return {@link String} the document id of the newly stored object in Firestore.
      */
-    private String store(CollectionReference ref, HashMap data, String collType) {
-        String id;
-        DocumentReference doc = ref.document();
+    private String store(DocumentReference doc, HashMap data, String collType) {
         doc
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -148,6 +150,15 @@ public class DBHandler {
                 });
     }
 
+    //---------------------------------------------------User Methods--------------------------------------------------//
+
+    public void newUser(String userId) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("ing_sort", "A-Z");
+        DocumentReference doc = conn.collection("users").document(userId);
+        store(doc, data, "User");
+    }
+
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
@@ -157,8 +168,8 @@ public class DBHandler {
     public void newStorage(Storage storage) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
-        CollectionReference ref = conn.collection("storages");
-        String id = store(ref, data, "Storage");
+        DocumentReference doc = conn.collection("storages").document();
+        String id = store(doc, data, "Storage");
         storage.setId(id);
     }
 
@@ -189,8 +200,8 @@ public class DBHandler {
     public void newIngredient(UserIngredient userIngredient) {
         HashMap<String, Object> data  = userIngredient.getStorable();
         data.put("user", getUsername());
-        CollectionReference ref = conn.collection("user_ingredients");
-        String id = store(ref, data, "Ingredient");
+        DocumentReference doc = conn.collection("user_ingredients").document();
+        String id = store(doc, data, "Ingredient");
         userIngredient.setId(id);
     }
 
@@ -289,8 +300,7 @@ public class DBHandler {
 
                             System.out.println(getUsername());
                             System.out.println(data.get("ingredients"));
-                            System.out.println(title);
-                            System.out.println(id);
+
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
@@ -498,7 +508,7 @@ public class DBHandler {
     public void addRecipe(Recipe recipe) {
         HashMap<String, Object> data = recipe.getStorable();
         data.put("user", getUsername());
-        CollectionReference user_recipes = getConn().collection("user_recipes");
+        DocumentReference user_recipes = getConn().collection("user_recipes").document();
         String id = store(user_recipes, data, "Recipes");
         recipe.setR_id(id);
     }
@@ -602,7 +612,8 @@ public class DBHandler {
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            String title = (String) doc.getString("title");
+                            Meal meal = new Meal(title, recipes, scalings, cost);
                             meal.setM_id(m_id);
                             meals.add(meal);
                         }
@@ -636,7 +647,8 @@ public class DBHandler {
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            String title = (String) doc.getString("title");
+                            Meal meal = new Meal(title, recipes, scalings, cost);
                             meal.setM_id(m_id);
                             adapter.add(meal);
                         }
@@ -652,7 +664,7 @@ public class DBHandler {
     public void addMeal(Meal meal) {
         HashMap<String, Object> data = meal.getStorable();
         data.put("user", getUsername());
-        CollectionReference user_meals = getConn().collection("user_meals");
+        DocumentReference user_meals = getConn().collection("user_meals").document();
         String id = store(user_meals, data, "Meal");
         meal.setM_id(id);
     }
@@ -706,25 +718,26 @@ public class DBHandler {
                         for (QueryDocumentSnapshot doc : value) {
                             String ump_id = doc.getId();
                             Map<String, Object> data = doc.getData();
-                            List<Meal> breakfast = new ArrayList<>();
-                            List<Meal> lunch = new ArrayList<>();
-                            List<Meal> dinner = new ArrayList<>();
 
-                            List<String> breakfast_ids = (List<String>) data.get("breakfast");
-                            List<String> lunch_ids = (List<String>) data.get("lunch");
-                            List<String> dinner_ids = (List<String>) data.get("dinner");
+                            List<Map<String, String>> plans = (List<Map<String, String>>) data.get("plans");
 
-                            getUserMealsWithID(breakfast, dialog, breakfast_ids);
-                            getUserMealsWithID(lunch, dialog, lunch_ids);
-                            getUserMealsWithID(dinner, dialog, dinner_ids);
+                            ArrayList<ArrayList<Meal>> mealplan = new ArrayList<>();
+
+                            for (Map<String, String> dayMap : plans) {
+
+                                for (String meal_title : dayMap.keySet()) {
+
+                                }
+
+                            }
 
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
-                            MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
-
-                            mealPlan.setUmp_id(ump_id);
-
-                            adapter.add(mealPlan);
+////                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+////
+//                            mealPlan.setUmp_id(ump_id);
+//
+//                            adapter.add(mealPlan);
                         }
 
                         adapter.notifyDataSetChanged();
@@ -739,7 +752,7 @@ public class DBHandler {
     public void addMealPlan(MealPlan mealplan) {
         HashMap<String, Object> data = mealplan.getStorable();
         data.put("user", getUsername());
-        CollectionReference user_mealplans = getConn().collection("user_mealplans");
+        DocumentReference user_mealplans = getConn().collection("user_mealplans").document();
         String id = store(user_mealplans, data, "Meal Plan");
         mealplan.setUmp_id(id);
     }

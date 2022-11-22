@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.MealPlan;
+import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
