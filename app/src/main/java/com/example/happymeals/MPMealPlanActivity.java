@@ -13,6 +13,8 @@ import android.widget.Button;
 
 import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -28,7 +30,6 @@ public class MPMealPlanActivity extends AppCompatActivity {
     FloatingActionButton new_mp_button;
     RecyclerView meal_plan_list;
     Intent intent_mpl;
-    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,9 @@ public class MPMealPlanActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Meal Plans");
 
-        // get user name
-        Bundle bundle = getIntent().getExtras();
-        userName = (String) bundle.getSerializable("USER");
-        DBHandler db = new DBHandler(userName);
+        // get userId
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
 
         mealPlans = new ArrayList<>();
 
@@ -76,7 +76,8 @@ public class MPMealPlanActivity extends AppCompatActivity {
 //        user.addMealPlan(mealPlan, this);
 //        user.addMealPlan(mealPlan2, this);
 
-        mpAdapter = new MPListAdapter(this, mealPlans, userName);
+        Bundle bundle = getIntent().getExtras();
+        mpAdapter = new MPListAdapter(this, mealPlans, user.getUid());
         meal_plan_list.setLayoutManager(new GridLayoutManager(this, 1));
         meal_plan_list.setAdapter(mpAdapter);
 
@@ -107,7 +108,6 @@ public class MPMealPlanActivity extends AppCompatActivity {
             intent_mpl = new Intent(this, MPMealListActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("MEALPLAN", new MealPlan());
-            bundle.putSerializable("USER", userName);
             bundle.putSerializable("IsNewMP", true);
             intent_mpl.putExtras(bundle);
             startActivity(intent_mpl);

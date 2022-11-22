@@ -1,12 +1,12 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +15,13 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.R;
+import com.example.happymeals.Recipe;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +34,7 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     MPPickRecipeListAdapter recipe_adapter;
     List<Recipe> dataList; // contains all the existing recipes in the meal
     SearchView recipe_search_bar;
-    Button confirmButton;
+    Button confirm_button;
     DBHandler dbHandler;
     Meal meal;
     Intent intent;
@@ -42,15 +49,18 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // set up ui components
-        confirmButton = findViewById(R.id.confirm_recipe_selection_button);
+        confirm_button = findViewById(R.id.confirm_recipe_selection_button);
         recipe_list = findViewById(R.id.mp_recipe_list);
         recipe_search_bar = findViewById(R.id.searchview_recipe);
 
+        // Get data
+        intent =  getIntent();
+
         // Set up user here
-        dbHandler = new DBHandler();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
 
         // set up adapter
-        intent =  getIntent();
         Bundle bundle  = intent.getExtras();
         meal = (Meal) bundle.getSerializable("MEAL");
         dataList = meal.getRecipes();
@@ -83,19 +93,19 @@ public class MPPickRecipeActivity extends AppCompatActivity implements SearchVie
     }
 
     private void setOnConfirmButtonListener() {
-        confirmButton.setOnClickListener(v -> {
+        confirm_button.setOnClickListener(v -> {
             // update recipes for the meal
             if (recipe_adapter.getRecipesSelected().size()<1){
                 createPopup("You haven't select anything yet");
             } else {
 
-                List<Recipe> r = recipe_adapter.getAllRecipes();
-                meal.setRecipes(r);
-                dbHandler.modifyMeal(meal);
+                ArrayList<Recipe> meal_recipes = recipe_adapter.getAllRecipes();
+//                meal.setRecipes(r);
+//                dbHandler.modifyMeal(meal);
 
                 Intent return_intent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Modified-Meal", meal);
+                bundle.putSerializable("Updated-Meal-Recipes", meal_recipes);
                 return_intent.putExtras(bundle);
                 setResult(Activity.RESULT_OK,return_intent);
                 this.finish();// get back to caller activity which is meal recipe list

@@ -1,27 +1,26 @@
-package com.example.happymeals;
+package com.example.happymeals.meal;
 
-import static java.sql.Types.NULL;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.MutableBoolean;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.MealPlan;
+import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -44,7 +43,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
     Intent intent;
     RecyclerView recyclerView;
     DBHandler dbHandler;
-    String userName;
     int dayIndex;
     int mealIndex;
     AtomicBoolean isEdit;
@@ -61,7 +59,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // User
         Bundle bundle = getIntent().getExtras();
-        userName = (String) bundle.getSerializable("USER");
         Boolean is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPlan");
         if (is_from_meal_plan) {
             mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
@@ -69,7 +66,8 @@ public class MPMyMealsActivity extends AppCompatActivity {
             mealIndex = (int) bundle.getSerializable("MEAL");
         }
 
-        dbHandler = new DBHandler(userName);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbHandler = new DBHandler(user.getUid());
         isEdit = new AtomicBoolean(false);
 
         meals = new ArrayList<>();
@@ -77,7 +75,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         finish_button = activityMpmyMealsBinding.myMealsFinish;
         add_button = activityMpmyMealsBinding.myMealsAddButton;
         edit_addtomp_button = activityMpmyMealsBinding.myMealsEditAddtompButton;
-        intent = new Intent(this,MPMealRecipeList.class);
+        intent = new Intent(this, MPMealRecipeList.class);
 
         if (is_from_meal_plan){
             myMealsAdapter = new MPMyMealsAdapter(this, meals, dbHandler, isEdit, dayIndex, mealIndex, mealPlan);

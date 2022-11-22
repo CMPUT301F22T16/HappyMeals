@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "81420419900-q0du1o31fi86h7sars7nm7vde831ev57.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.happymeals",
+            "certificate_hash": "8783255cca7c2c5cec0f70eb094827a9d99f0a6b"
+          }
+        },
+        {
           "client_id": "81420419900-hsd5jfre40j72n1mbfdh02prlul5emq8.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,7 +1,4 @@
-package com.example.happymeals;
-
-import static java.sql.DriverManager.println;
-import static java.sql.Types.NULL;
+package com.example.happymeals.meal;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +11,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.MealPlan;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
 
@@ -46,7 +45,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
             Meal meal = meals.get(index);
 
             if(isEdit.get() ||!is_from_meal_plan) {
-                intent = new Intent(mContext,MPMealRecipeList.class);
+                intent = new Intent(mContext, MPMealRecipeList.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("IsNewMeal", false);
                 bundle.putSerializable("MEAL", meal);

@@ -1,18 +1,29 @@
 package com.example.happymeals;
+
+/**
+ * Data class that captures user information for logged in users retrieved from LoginRepository
+ */
 public class User {
 
-    private String username;
+    private String firstName;
+    private String lastName;
+    private String userName;
 
-    //TEMPORARY TO BE ONLY USED FOR HALFWAY CHECKPOINT
-    public User() {
-        this.username = "Guest";
+    public User(String firstName, String lastName, String userName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
     }
 
-    public User(String username) {
-        this.username = username;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getDisplayName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }
