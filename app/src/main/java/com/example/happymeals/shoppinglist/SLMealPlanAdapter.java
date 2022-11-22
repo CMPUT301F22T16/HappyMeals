@@ -3,6 +3,7 @@ package com.example.happymeals.shoppinglist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -38,20 +39,30 @@ public class SLMealPlanAdapter extends RecyclerView.Adapter<SLMealPlanAdapter.SL
         }
     };
 
+    public SLMealPlanAdapter(Context context, ArrayList<MealPlan> mealPlans) {
+        this.mealPlans = mealPlans;
+        mContext = context;
+        activitySlselectMealPlanBinding = ActivitySlselectMealPlanBinding.inflate(LayoutInflater.from(context));
+    }
+
     @NonNull
     @Override
     public SLMealPlanAdapter.SLMealPlanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        MealPlanListContentBinding binding = MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        binding.getRoot().setOnClickListener(mOnClickListener);
+        return new SLMealPlanViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SLMealPlanAdapter.SLMealPlanViewHolder holder, int position) {
-
+        MealPlan mealPlan = mealPlans.get(position);
+        holder.binding.mpMealListTextView1.setText("MealPlanTitle");
+        holder.binding.mpMealListTextView2.setText(Integer.toString(mealPlan.getNum_days()));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mealPlans.size();
     }
 
     public class SLMealPlanViewHolder extends RecyclerView.ViewHolder {
