@@ -233,6 +233,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
         data.put("cost", this.cost);
         data.put("date", this.date);
         data.put("location", this.loc);
+        data.put("unit", this.unit);
         return data;
     }
 }

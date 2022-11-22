@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 
 public class MPMealListActivity extends AppCompatActivity {
-
+    // TODO this class needs to be fixed
     ActivityMpmealListBinding activityMpmealListBinding;
     RecyclerView meal_list;
     RecyclerView.Adapter mpMealListAdapter;

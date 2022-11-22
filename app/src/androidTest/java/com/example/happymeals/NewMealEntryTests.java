@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;

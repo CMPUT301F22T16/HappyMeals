@@ -303,8 +303,7 @@ public class DBHandler {
 
                             System.out.println(getUsername());
                             System.out.println(data.get("ingredients"));
-                            System.out.println(title);
-                            System.out.println(id);
+
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
@@ -451,58 +450,6 @@ public class DBHandler {
                     }
                 });
     }
-    /**
-     * Used to get user recipes with ids in the recipe_ids {@link List<String>}.
-     * Update the recipes through adapter
-     *
-     * @param recipes
-     * @param recipe_ids
-     * @param adapter
-     */
-    private void getUserRecipesByMeal(List<Recipe> recipes, List<String> recipe_ids, MPMealRecipeListAdapter adapter) {
-        CollectionReference ref = conn.collection("user_recipes");
-        Query query = ref.whereEqualTo("user", getUsername()).whereIn(com.google.firebase.firestore.FieldPath.documentId(), recipe_ids);
-        query
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.d("FETCH RECIPES", error.toString());
-                            return;
-                        }
-                        for (QueryDocumentSnapshot doc : value) {
-                            String id = doc.getId();
-                            Map<String, Object> data = doc.getData();
-                            String category = (String) data.get("category");
-                            List<String> comments = (List<String>) data.get("comments");
-
-                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
-                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-
-                            for (String desc : ingredients.keySet()) {
-                                Map<String, Object> info = ingredients.get(desc);
-                                Double amount = (Double) info.get("amount");
-                                String ingredientCategory = (String) info.get("category");
-
-                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredients.add(recipeIngredient);
-                            }
-
-                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
-                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
-                            String title = (String) data.get("title");
-
-                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
-
-                            String uri = (String) data.get("uri");
-                            recipe.setDownloadUri(uri);
-
-                            adapter.add(recipe); // Adding the recipe from FireStore
-                        }
-                    }
-                });
-    }
 
 
     /**
@@ -616,7 +563,8 @@ public class DBHandler {
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            String title = (String) doc.getString("title");
+                            Meal meal = new Meal(title, recipes, scalings, cost);
                             meal.setM_id(m_id);
                             meals.add(meal);
                         }
@@ -650,7 +598,8 @@ public class DBHandler {
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            String title = (String) doc.getString("title");
+                            Meal meal = new Meal(title, recipes, scalings, cost);
                             meal.setM_id(m_id);
                             adapter.add(meal);
                         }
@@ -702,7 +651,6 @@ public class DBHandler {
      * @param dialog
      */
 
-    // TODO: if the user doesnt have any MealPlan the app crashes
     public void getUserMealPlans(MPListAdapter adapter, LoadingDialog dialog) {
 
         CollectionReference ref = conn.collection("user_mealplans");
@@ -718,26 +666,43 @@ public class DBHandler {
 
                         adapter.clear();
                         for (QueryDocumentSnapshot doc : value) {
+                            // Fetching id
                             String ump_id = doc.getId();
+
+                            // Fetching all data
                             Map<String, Object> data = doc.getData();
-                            List<Meal> breakfast = new ArrayList<>();
-                            List<Meal> lunch = new ArrayList<>();
-                            List<Meal> dinner = new ArrayList<>();
 
-                            List<String> breakfast_ids = (List<String>) data.get("breakfast");
-                            List<String> lunch_ids = (List<String>) data.get("lunch");
-                            List<String> dinner_ids = (List<String>) data.get("dinner");
+                            // Fetching meal plan
+                            List<Map<String, String>> plans = (List<Map<String, String>>) data.get("plans");
 
-                            getUserMealsWithID(breakfast, dialog, breakfast_ids);
-                            getUserMealsWithID(lunch, dialog, lunch_ids);
-                            getUserMealsWithID(dinner, dialog, dinner_ids);
+                            List<List<Meal>> mealplan = new ArrayList<>();
 
+                            for (Map<String, String> dayMap : plans) {
+                                List<String> meal_ids = new ArrayList<>();
+                                List<Meal> meals = new ArrayList<>();
+                                mealplan.add(meals);
+
+                                for (String meal_id : dayMap.values()) {
+                                    meal_ids.add(meal_id);
+                                }
+
+                                getUserMealsWithID(meals, dialog, meal_ids);
+
+                            }
+
+                            // Fetching number of days
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
-                            MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+                            // Fetching title
+                            String title = doc.getString("title");
 
+                            // Creating meal plan object
+                            MealPlan mealPlan = new MealPlan(title, mealplan, num_days);
+
+                            // Setting the document id
                             mealPlan.setUmp_id(ump_id);
 
+                            // Adding the meal plan to the adapter
                             adapter.add(mealPlan);
                         }
 

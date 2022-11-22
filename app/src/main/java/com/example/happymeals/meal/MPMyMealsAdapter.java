@@ -52,16 +52,11 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             } else {
-                // TODO: fix this when the data structure is fixed
                 intent = new Intent();
                 Bundle bundle = new Bundle();
-                if(mealIndex==0) {
-                    mealPlan.setBreakfastWithIndex(meal, dayIndex);
-                } else if(mealIndex == 1) {
-                    mealPlan.setLunchWithIndex(meal, dayIndex);
-                } else if(mealIndex == 2) {
-                    mealPlan.setDinnerWithIndex(meal, dayIndex);
-                }
+
+                mealPlan.setMealWithDayAndIndex(meal, dayIndex, mealIndex);
+
                 bundle.putSerializable("M-MEALPLAN", mealPlan);
                 intent.putExtras(bundle);
                 // https://stackoverflow.com/questions/7951936/how-to-finish-an-activity-from-an-adapter

@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HappyMeals"
         tools:targetApi="31">
+
         <activity
             android:name=".SLShoppingListActivity"
             android:exported="false">
@@ -101,7 +102,9 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+
+            android:exported="true"></activity>
+
         <activity
             android:name=".IngredientActivity"
             android:exported="true">
@@ -115,6 +118,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".storage.StorageActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
     </application>
 

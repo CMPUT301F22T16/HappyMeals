@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="deploymentTargetDropDown">
+    <runningDeviceTargetSelectedWithDropDown>
+      <Target>
+        <type value="RUNNING_DEVICE_TARGET" />
+        <deviceKey>
+          <Key>
+<<<<<<< HEAD
+            <type value="VIRTUAL_DEVICE_PATH" />
+<<<<<<< HEAD
+            <value value="C:\Users\shehr\.android\avd\Pixel_3a_XL_API_33.avd" />
+=======
+            <value value="C:\Users\moham\.android\avd\Pixel_3a_API_33_x86_64.avd" />
+>>>>>>> 930b3f07f126b3e226823fdf582b9b193e61bad9
+          </Key>
+        </deviceKey>
+      </Target>
+    </targetSelectedWithDropDown>
+<<<<<<< HEAD
+    <timeTargetWasSelectedWithDropDown value="2022-11-20T09:04:09.767386800Z" />
+=======
+<<<<<<< HEAD
+    <timeTargetWasSelectedWithDropDown value="2022-11-21T23:02:03.326288600Z" />
+=======
+    <timeTargetWasSelectedWithDropDown value="2022-11-20T06:16:09.632868300Z" />
+>>>>>>> 930b3f07f126b3e226823fdf582b9b193e61bad9
+>>>>>>> e16824813fd28575f38b91b784257077b376bbd7
+=======
+            <type value="SERIAL_NUMBER" />
+            <value value="RF8M72LHFAF" />
+          </Key>
+        </deviceKey>
+      </Target>
+    </runningDeviceTargetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2022-11-22T04:09:25.535132400Z" />
+>>>>>>> 2969f6aee2cb0cc6835094303ba7b11ad5b2c3fe
+  </component>
+</project>
