@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.MealPlan;
+import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
 

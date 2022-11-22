@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.mealplan;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import com.example.happymeals.DBHandler;
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.Meal;

@@ -1,6 +1,7 @@
 package com.example.happymeals;
 
 import com.example.happymeals.meal.Meal;
+import com.example.happymeals.mealplan.MealPlan;
 
 import org.junit.Assert;
 import org.junit.Before;

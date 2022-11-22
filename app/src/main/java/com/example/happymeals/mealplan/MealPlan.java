@@ -1,5 +1,6 @@
-package com.example.happymeals;
+package com.example.happymeals.mealplan;
 
+import com.example.happymeals.Storable;
 import com.example.happymeals.meal.Meal;
 
 import java.io.Serializable;

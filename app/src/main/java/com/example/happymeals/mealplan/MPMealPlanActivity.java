@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.mealplan;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,17 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class MPMealPlanActivity extends AppCompatActivity {
 
