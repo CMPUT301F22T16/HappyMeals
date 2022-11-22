@@ -447,7 +447,7 @@ public class DBHandler {
                     }
                 });
     }
-    
+
 
     /**
      * Add a recipe to database
