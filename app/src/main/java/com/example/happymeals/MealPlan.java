@@ -17,11 +17,11 @@ import java.util.Map;
  * Members:
  *  1. ump_id : A {@link String} id representing document id of the meal plan in the database.
  *  2. title : A {@link String} title for the meal plan.
- *  3. mealplan : A {@link ArrayList<ArrayList<Meal>>} list of list each representing 1 day of the MealPlan.
+ *  3. mealplan : A {@link List<List<Meal>>} list of list each representing 1 day of the MealPlan.
  *  4. num_days : An {@link Integer} representing the number of days for which the meal plan is.
  */
 public class MealPlan implements Storable, Serializable {
-    private ArrayList<ArrayList<Meal>> mealplan;
+    private List<List<Meal>> mealplan;
     private int num_days;
     private String title;
     private String ump_id = null; // ids' null by default if not fetched
@@ -42,7 +42,7 @@ public class MealPlan implements Storable, Serializable {
      * @param mealplan
      * @param num_days
      */
-    public MealPlan(String title, ArrayList<ArrayList<Meal>> mealplan, int num_days) {
+    public MealPlan(String title, List<List<Meal>> mealplan, int num_days) {
         this.title = title;
         this.mealplan = mealplan;
         this.num_days = num_days;
@@ -55,10 +55,10 @@ public class MealPlan implements Storable, Serializable {
     public void setDays(int days) {this.num_days = days;}
 
     /**
-     * Get the {@link ArrayList<ArrayList<Meal>>} of meals for each day in meal plan.
-     * @return A {@link ArrayList<ArrayList<Meal>>} of meals for mealplan.
+     * Get the {@link List<List<Meal>>} of meals for each day in meal plan.
+     * @return A {@link List<List<Meal>>} of meals for mealplan.
      */
-    public ArrayList<ArrayList<Meal>> getMeals() {
+    public List<List<Meal>> getMeals() {
         return this.mealplan;
     }
 
@@ -122,6 +122,7 @@ public class MealPlan implements Storable, Serializable {
 
     /**
      * Gets a {@link Storable} {@link HashMap<String, Object>} of data corresponding to the contents of the meal.
+     * Here conversion of {@link List<List<Meal>>} to {@link List<Map<String, String>>} is required because firebase doesn't accept nested arrays.
      * @return A {@link Storable} {@link HashMap<String, Object>} of data.
      */
     @Override
@@ -129,7 +130,7 @@ public class MealPlan implements Storable, Serializable {
 
         List<Map<String, String>> plans = new ArrayList<>();
 
-        for (ArrayList<Meal> dayList : this.mealplan) {
+        for (List<Meal> dayList : this.mealplan) {
 
             Map<String, String> dayMap = new HashMap<>();
             for (Meal meal : dayList) {
@@ -139,12 +140,9 @@ public class MealPlan implements Storable, Serializable {
             plans.add(dayMap);
         }
 
-
-        int num_days = this.getNum_days();
-
         HashMap<String, Object> data = new HashMap<>();
-        data.put("num_days", num_days);
-        data.put("title", this.title);
+        data.put("num_days", this.getNum_days());
+        data.put("title", this.getTitle());
         data.put("plans", plans);
 
         return data;
