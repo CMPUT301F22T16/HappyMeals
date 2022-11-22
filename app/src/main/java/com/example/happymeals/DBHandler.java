@@ -612,7 +612,8 @@ public class DBHandler {
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            String title = (String) doc.getString("title");
+                            Meal meal = new Meal(title, recipes, scalings, cost);
                             meal.setM_id(m_id);
                             meals.add(meal);
                         }
@@ -646,7 +647,8 @@ public class DBHandler {
                             List<Double> scalings = (List<Double>) doc.get("scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_ids);
-                            Meal meal = new Meal(recipes, scalings, cost);
+                            String title = (String) doc.getString("title");
+                            Meal meal = new Meal(title, recipes, scalings, cost);
                             meal.setM_id(m_id);
                             adapter.add(meal);
                         }
@@ -716,25 +718,26 @@ public class DBHandler {
                         for (QueryDocumentSnapshot doc : value) {
                             String ump_id = doc.getId();
                             Map<String, Object> data = doc.getData();
-                            List<Meal> breakfast = new ArrayList<>();
-                            List<Meal> lunch = new ArrayList<>();
-                            List<Meal> dinner = new ArrayList<>();
 
-                            List<String> breakfast_ids = (List<String>) data.get("breakfast");
-                            List<String> lunch_ids = (List<String>) data.get("lunch");
-                            List<String> dinner_ids = (List<String>) data.get("dinner");
+                            List<Map<String, String>> plans = (List<Map<String, String>>) data.get("plans");
 
-                            getUserMealsWithID(breakfast, dialog, breakfast_ids);
-                            getUserMealsWithID(lunch, dialog, lunch_ids);
-                            getUserMealsWithID(dinner, dialog, dinner_ids);
+                            ArrayList<ArrayList<Meal>> mealplan = new ArrayList<>();
+
+                            for (Map<String, String> dayMap : plans) {
+
+                                for (String meal_title : dayMap.keySet()) {
+
+                                }
+
+                            }
 
                             Integer num_days = ((Long) data.get("num_days")).intValue();
 
-                            MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
-
-                            mealPlan.setUmp_id(ump_id);
-
-                            adapter.add(mealPlan);
+////                             MealPlan mealPlan = new MealPlan(breakfast, lunch, dinner, num_days);
+////
+//                            mealPlan.setUmp_id(ump_id);
+//
+//                            adapter.add(mealPlan);
                         }
 
                         adapter.notifyDataSetChanged();

@@ -17,24 +17,27 @@ import java.util.List;
  *  2. recipes : A {@link List< Recipe >} of recipes associated with the meal.
  *  3. scalings : A {@link List<Double>} of scalings for each recipe that the user can adjust.
  *  4. cost : A {@link Double} total cost for the Meal.
+ *  5. title : A {@link String} title for the meal.
  */
 public class Meal implements Storable, Serializable {
     private List<Recipe> recipes;
     private final List<Double> scalings;
     private final double cost;
     private String m_id = null;
+    private String title;
 
     /**
      * A Constructor for Meal using all the member attributes listed {@link Meal}.
      * @param recipes
      * @param scalings
      * @param cost
+     * @param title
      */
-    // TODO: needs a title field
-    public Meal(List<Recipe> recipes, List<Double> scalings, double cost) {
+    public Meal(String title, List<Recipe> recipes, List<Double> scalings, double cost) {
         this.recipes = recipes;
         this.scalings = scalings;
         this.cost = cost;
+        this.title = title;
     }
 
     /**
@@ -44,6 +47,23 @@ public class Meal implements Storable, Serializable {
         this.recipes = new ArrayList<>();
         scalings = new ArrayList<>();
         cost = 0;
+        this.title = "New Meal";
+    }
+
+    /**
+     * Get the {@link String} title for the meal.
+     * @return {@link String} title.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Set the {@link String} title for the meal
+     * @param title
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -131,6 +151,7 @@ public class Meal implements Storable, Serializable {
             recipe_ids.add(recipe.get_r_id());
         }
         data.put("recipes", recipe_ids);
+        data.put("title", this.title);
 
         return data;
     }
