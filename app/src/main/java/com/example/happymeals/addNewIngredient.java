@@ -114,6 +114,7 @@ public class addNewIngredient extends AppCompatActivity {
                 String description = ingredientDescription.getText().toString();
                 String countString = ingredientCount.getText().toString();
                 String unitCostString = ingredientUnitCost.getText().toString();
+                String unit = ingredientUnit.getSelectedItem().toString();
 
                 int count = -1;
                 double unitCost = -1;
@@ -168,6 +169,7 @@ public class addNewIngredient extends AppCompatActivity {
                     intent.putExtra("month", month);
                     intent.putExtra("day", day);
                     intent.putExtra("location", location);
+                    intent.putExtra("unit", unit);
 
                     setResult(RESULT_OK, intent);
                     finish();
