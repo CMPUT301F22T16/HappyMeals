@@ -62,6 +62,16 @@ public class MealTest {
     }
 
     @Test
+    public void testSetScalings(){
+        List<Double> scalings = new ArrayList<>();
+        scalings.add(1.3);
+        scalings.add(3.1);
+        meal.setScalings(scalings);
+        Assert.assertTrue(meal.getScalings().get(0)==1.3);
+        Assert.assertTrue(meal.getScalings().get(1)==3.1);
+    }
+
+    @Test
     public void testGetCost(){
         Assert.assertTrue(meal.getCost()==19.9);
     }
