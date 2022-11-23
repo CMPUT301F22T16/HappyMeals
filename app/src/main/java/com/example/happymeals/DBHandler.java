@@ -424,7 +424,6 @@ public class DBHandler {
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) data.get("comments");
 
-
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 

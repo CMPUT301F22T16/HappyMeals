@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class Meal implements Storable, Serializable {
     private List<Recipe> recipes;
-    private final List<Double> scalings;
+    private List<Double> scalings;
     private final double cost;
     private String m_id = null;
 
@@ -47,30 +47,12 @@ public class Meal implements Storable, Serializable {
     }
 
     /**
-     * Update the scaling list of the meal
-     * @param index the index of the value you want to update
-     * @param value the value you want to update to
+     * set the scaling list of the meal
+     * @param scalings {@link List<Double>} A list of scaling factors.
      */
-    public void updateScalings(int index, double value) {
-        scalings.set(index,value);
+    public void setScalings(List<Double> scalings) {
+        this.scalings = scalings;
     }
-
-    /**
-     * remove a scaling at index
-     * @param index the index of the scaling to be removed
-     */
-    public void removeScaling(int index){
-        scalings.remove(index);
-    }
-
-    /**
-     * add a new scaling to list
-     * @param scaling the new scaling factor to be added to the list
-     */
-    public void addScaling(double scaling){
-        scalings.add(scaling);
-    }
-
 
     /**
      * Removes a recipe from the meal's recipe list specified by the index.
