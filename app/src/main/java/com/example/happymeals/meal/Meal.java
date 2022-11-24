@@ -23,7 +23,7 @@ import java.util.Map;
 public class Meal implements Storable, Serializable {
     private List<Recipe> recipes;
     private Map<String, Double> scalings;
-    private final double cost;
+    private double cost;
     private String m_id = null;
     private String title;
 
@@ -194,7 +194,7 @@ public class Meal implements Storable, Serializable {
         }
 
         // Put the map for scalings
-        data.put("scalings", this.scalings);
+        data.put("recipe_scalings", this.scalings);
 
 
         // Put the title
