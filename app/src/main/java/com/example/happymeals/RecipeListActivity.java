@@ -89,13 +89,12 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         // Setup recipe list
         recipe_list_view = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
+        LoadingDialog dialog = new LoadingDialog(this);
         recipeAdapter = new RecipeListAdapter(this, recipes, db, this);
         recipe_list_view.setAdapter(recipeAdapter);
-        LoadingDialog dialog = new LoadingDialog(this);
+        dialog.startLoadingDialog();
         db.getUserRecipes(recipeAdapter,dialog);
 
-        // Populate the recipe list
-        db.getUserRecipes(recipeAdapter, new LoadingDialog(this));
 
 
         // Setup add recipe button
@@ -133,6 +132,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
             List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             Recipe rec = recipes.get(position);
+            String filetype = result.getData().getStringExtra("filetype");
             rec.setTitle(title);
             rec.setPreparation_time(prepTime);
             rec.setNum_servings(numServ);
@@ -148,9 +148,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             rec.setDownloadUri(uriStr);
             db.updateRecipe(rec);
 
-            db.uploadImage(uri, rec);
-        } else {
-            Toast.makeText(RecipeListActivity.this, "Failed to edit recipe", Toast.LENGTH_SHORT).show();
+            db.uploadImage(uri, rec, filetype);
         }
     }
 
@@ -163,21 +161,20 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             String category = result.getData().getStringExtra("category");
             List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
+            String filetype = result.getData().getStringExtra("filetype");
+
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (!Objects.equals(uriStr, "")) {
+            if (!Objects.equals(uriStr, null)) {
                 uri = Uri.parse(uriStr);
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
             newRecipe.setDownloadUri(uriStr);
             db.addRecipe(newRecipe);
             // TODO pass file extension
-//            ContentResolver cR = this.getContentResolver();
-//            String type = cR.getType(uri);
-            db.uploadImage(uri, newRecipe);
-        } else {
-            Toast.makeText(RecipeListActivity.this, "Failed to add recipe", Toast.LENGTH_SHORT).show();
+
+            db.uploadImage(uri, newRecipe, filetype);
         }
     }
 
