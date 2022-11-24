@@ -333,6 +333,7 @@ public class DBHandler {
                         adapter.notifyDataSetChanged();
                     }
                 });
+        dialog.dismissDialog();
     }
 
     /**
@@ -491,7 +492,7 @@ public class DBHandler {
         photoRef.delete();
     }
 
-    public void uploadImage(Uri uri, Recipe recipe) {
+    public void uploadImage(Uri uri, Recipe recipe, String filetype) {
 
         if (uri == null) {
             recipe.setDownloadUri("");
@@ -502,7 +503,7 @@ public class DBHandler {
 
         // TODO support other file formats
 
-        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + ".jpg");
+        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + "." + filetype);
 
         UploadTask uploadTask = photoRef.putFile(uri);
 
