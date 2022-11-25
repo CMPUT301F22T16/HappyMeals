@@ -242,7 +242,7 @@ public class DBHandler {
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = doc.getLong("amount").intValue();
+                        Double amount = doc.getDouble("amount");
                         Double cost = doc.getDouble("cost");
                         sum += cost * amount;
                         Date date = doc.getDate("date");
