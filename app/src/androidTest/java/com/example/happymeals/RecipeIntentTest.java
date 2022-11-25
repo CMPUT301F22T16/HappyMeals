@@ -89,6 +89,7 @@ public class RecipeIntentTest {
         solo.clickOnButton("OK");
 
         // Add a new ingredient
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         solo.clickOnView(solo.getView(R.id.recipe_pick_new_ingredient_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeAddIngredient.class);
