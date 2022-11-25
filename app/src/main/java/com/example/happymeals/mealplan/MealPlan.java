@@ -50,9 +50,8 @@ public class MealPlan implements Storable, Serializable {
 
     /**
      * Set the number of days for which the user chose the meal plan for.
-     * @param days An {@link Integer} number of days for which the meal plan is.
      */
-    public void setDays(int days) {this.num_days = days;}
+    public void setDays() {this.num_days = this.getNum_days();}
 
     /**
      * Get the {@link List<List<Meal>>} of meals for each day in meal plan.
@@ -68,19 +67,23 @@ public class MealPlan implements Storable, Serializable {
      * @param index An {@link Integer} index specifying position.
      */
     public void setMealWithDayAndIndex(Meal meal, int day, int index) {
-        this.mealplan.get(day).set(index, meal);
+        if (mealplan.size()<=day) {
+            List<Meal> list = new ArrayList<Meal>();
+            list.add(meal);
+            mealplan.add(list);
+        } else if (mealplan.get(day).size()<=index) {
+            mealplan.get(day).add(meal);
+        } else {
+            this.mealplan.get(day).set(index, meal);
+        }
     }
 
-    public List<Meal> getBreakfast() {
-        return new ArrayList<>();
+    public void clearMealsWithDay(int day) {
+        mealplan.get(day).clear();
     }
 
-    public List<Meal> getLunch() {
-        return new ArrayList<>();
-    }
-
-    public List<Meal> getDinner() {
-        return new ArrayList<>();
+    public void loadMealsWithDay(int day, ArrayList<Meal> meals) {
+        mealplan.get(day).addAll(meals);
     }
 
     /**
@@ -100,7 +103,7 @@ public class MealPlan implements Storable, Serializable {
      * @return An {@link Integer} representing the number of days.
      */
     public int getNum_days() {
-        return num_days;
+        return mealplan.size();
     }
 
     /**
@@ -133,8 +136,10 @@ public class MealPlan implements Storable, Serializable {
         for (List<Meal> dayList : this.mealplan) {
 
             Map<String, String> dayMap = new HashMap<>();
+            int count = 0;
             for (Meal meal : dayList) {
-                dayMap.put(meal.getTitle(), meal.getM_id());
+                dayMap.put(String.valueOf(count), meal.getM_id());
+                count ++;
             }
 
             plans.add(dayMap);

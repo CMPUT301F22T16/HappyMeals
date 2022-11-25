@@ -91,7 +91,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Amount"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
             <Spinner
                 android:id="@+id/ingredientUnit"

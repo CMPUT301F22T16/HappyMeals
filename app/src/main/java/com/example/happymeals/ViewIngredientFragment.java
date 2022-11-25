@@ -74,7 +74,7 @@ public class ViewIngredientFragment extends DialogFragment {
             thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
             thisDescription.setText(thisUserIngredient.getDescription());
             thisLocation.setText(thisUserIngredient.getLoc());
-            thisAmount.setText(Integer.toString(thisUserIngredient.getAmount()));
+            thisAmount.setText(Double.toString(thisUserIngredient.getAmount()));
             thisUnitCost.setText(Double.toString(thisUserIngredient.getCost()));
             thisBestBefore.updateDate(thisUserIngredient.getYear(), thisUserIngredient.getMonth(), thisUserIngredient.getDay());
         }
@@ -91,7 +91,7 @@ public class ViewIngredientFragment extends DialogFragment {
                         String countString = thisAmount.getText().toString();
                         String unitCostString = thisUnitCost.getText().toString();
 
-                        int count = -1;
+                        double count = -1;
                         double unitCost = -1;
 
                         int year = thisBestBefore.getYear();
@@ -121,7 +121,7 @@ public class ViewIngredientFragment extends DialogFragment {
 //                            thisAmount.setError("Please provide the amount of the ingredient.");
                             toast = TRUE;
                         } else {
-                            count = Integer.parseInt(thisAmount.getText().toString());
+                            count = Double.parseDouble(thisAmount.getText().toString());
                             if (count <= 0) {
 //                                thisAmount.requestFocus();
 //                                thisAmount.setError("Please provide a valid count.");

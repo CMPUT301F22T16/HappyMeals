@@ -33,6 +33,7 @@ import com.google.firebase.storage.UploadTask;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -243,7 +244,7 @@ public class DBHandler {
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = doc.getLong("amount").intValue();
+                        Double amount = doc.getDouble("amount");
                         Double cost = doc.getDouble("cost");
                         sum += cost * amount;
                         Date date = doc.getDate("date");
@@ -334,6 +335,7 @@ public class DBHandler {
                         adapter.notifyDataSetChanged();
                     }
                 });
+        dialog.dismissDialog();
     }
 
     /**
@@ -492,7 +494,7 @@ public class DBHandler {
         photoRef.delete();
     }
 
-    public void uploadImage(Uri uri, Recipe recipe) {
+    public void uploadImage(Uri uri, Recipe recipe, String filetype) {
 
         if (uri == null) {
             recipe.setDownloadUri("");
@@ -503,7 +505,7 @@ public class DBHandler {
 
         // TODO support other file formats
 
-        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + ".jpg");
+        StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + "." + filetype);
 
         UploadTask uploadTask = photoRef.putFile(uri);
 
@@ -556,17 +558,32 @@ public class DBHandler {
                         }
 
                         meals.clear();
+                        List<Meal> tempMeals = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             String m_id = doc.getId();
-                            List<String> recipe_ids = (List<String>) doc.get("recipes");
                             Double cost = (Double) doc.getDouble("cost");
-                            List<Double> scalings = (List<Double>) doc.get("scalings");
+
+                            // Get the Recipes and scalings
+                            Map<String, Double> recipe_scalings = (Map<String, Double>) doc.get("recipe_scalings");
+                            String[] recipe_ids = new String[recipe_scalings.size()];
+                            recipe_scalings.keySet().toArray(recipe_ids);
+                            List<String> recipe_id_list = Arrays.asList(recipe_ids);
                             List<Recipe> recipes = new ArrayList<>();
-                            getUserRecipesWithID(recipes, recipe_ids);
+                            getUserRecipesWithID(recipes, recipe_id_list);
+
                             String title = (String) doc.getString("title");
-                            Meal meal = new Meal(title, recipes, scalings, cost);
+                            Meal meal = new Meal(title, recipes, recipe_scalings, cost);
+
                             meal.setM_id(m_id);
-                            meals.add(meal);
+                            tempMeals.add(meal);
+                        }
+                        for (String i : meal_ids) {
+                            for (Meal meal : tempMeals) {
+                                String j = meal.getM_id();
+                                if(i.equals(j)) {
+                                    meals.add(meal.copy());
+                                }
+                            }
                         }
                     }
                 });
@@ -593,13 +610,21 @@ public class DBHandler {
                         adapter.clear();
                         for (QueryDocumentSnapshot doc : value) {
                             String m_id = doc.getId();
-                            List<String> recipe_ids = (List<String>) doc.get("recipes");
+                            // Get the cost
                             Double cost = (Double) doc.getDouble("cost");
-                            List<Double> scalings = (List<Double>) doc.get("scalings");
+
+                            // Get the Recipes and scalings
+                            Map<String, Double> recipe_scalings = (Map<String, Double>) doc.get("recipe_scalings");
                             List<Recipe> recipes = new ArrayList<>();
-                            getUserRecipesWithID(recipes, recipe_ids);
+                            if (!recipe_scalings.keySet().isEmpty()) {
+                                String[] recipe_ids = new String[recipe_scalings.size()];
+                                recipe_scalings.keySet().toArray(recipe_ids);
+                                List<String> recipe_id_list = Arrays.asList(recipe_ids);
+                                getUserRecipesWithID(recipes, recipe_id_list);
+                            }
+
                             String title = (String) doc.getString("title");
-                            Meal meal = new Meal(title, recipes, scalings, cost);
+                            Meal meal = new Meal(title, recipes, recipe_scalings, cost);
                             meal.setM_id(m_id);
                             adapter.add(meal);
                         }

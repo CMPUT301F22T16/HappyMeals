@@ -44,9 +44,10 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
             Meal meal = meals.get(index);
 
-            if(isEdit.get() ||!is_from_meal_plan) {
+            if(isEdit.get() || !is_from_meal_plan) {
                 intent = new Intent(mContext, MPMealRecipeList.class);
                 Bundle bundle = new Bundle();
+
                 bundle.putSerializable("IsNewMeal", false);
                 bundle.putSerializable("MEAL", meal);
                 intent.putExtras(bundle);
@@ -56,7 +57,6 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
                 Bundle bundle = new Bundle();
 
                 mealPlan.setMealWithDayAndIndex(meal, dayIndex, mealIndex);
-
                 bundle.putSerializable("M-MEALPLAN", mealPlan);
                 intent.putExtras(bundle);
                 // https://stackoverflow.com/questions/7951936/how-to-finish-an-activity-from-an-adapter
@@ -123,7 +123,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     public void onBindViewHolder(@NonNull MyMealViewHolder holder, int position) {
         Meal meal = meals.get(position);
         double meal_cost = meal.getCost();
-        holder.binding.mpMealListTextView1.setText("meal cost: "+meal_cost);
+        holder.binding.mpMealListTextView1.setText(meal.getTitle());
         int number_of_recipes = meal.getRecipes().size();
         holder.binding.mpMealListTextView2.setText(Integer.toString(number_of_recipes)+" recipes");
     }

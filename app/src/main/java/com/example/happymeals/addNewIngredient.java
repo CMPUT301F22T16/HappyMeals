@@ -93,7 +93,7 @@ public class addNewIngredient extends AppCompatActivity {
         if (mode.equals("Edit")) {
             String category = intent.getStringExtra("category");
             String description = intent.getStringExtra("description");
-            int count = intent.getIntExtra("count", -1);
+            double count = intent.getIntExtra("count", -1);
             double unitCost = intent.getDoubleExtra("unit cost", -1);
             int year = intent.getIntExtra("year", -1);
             int month = intent.getIntExtra("month", -1);
@@ -116,7 +116,7 @@ public class addNewIngredient extends AppCompatActivity {
                 String unitCostString = ingredientUnitCost.getText().toString();
                 String unit = ingredientUnit.getSelectedItem().toString();
 
-                int count = -1;
+                double count = -1;
                 double unitCost = -1;
 
                 int year = ingredientBestBefore.getYear();
@@ -139,7 +139,7 @@ public class addNewIngredient extends AppCompatActivity {
                     ingredientCount.requestFocus();
                     ingredientCount.setError("Please provide the amount of the ingredient.");
                 } else {
-                    count = Integer.parseInt(ingredientCount.getText().toString());
+                    count = Double.parseDouble(ingredientCount.getText().toString());
                     if (count <= 0) {
                         ingredientCount.requestFocus();
                         ingredientCount.setError("Please provide a valid count.");
