@@ -92,7 +92,7 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
     /**
      * This variable stores the photograph of the recipe
      */
-    String selected_img = null;
+    String selected_img;
 
     /**
      * This is an EditText where the user can edit the title of their recipe
@@ -178,6 +178,7 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
             recipeCategoryEditText.setText("");
             recipe_comments_data_list = new ArrayList<>();
             recipeIngredient_data_list = new ArrayList<>();
+            selected_img = "android.resource://com.example.happymeals/drawable/recipe_default";
         } else if (operation.equals("edit")) {
             recipeTitleEditText.setText(intent.getStringExtra("title"));
             recipePrepTimeEditText.setText(getString(R.string.integer_to_string, intent.getIntExtra("preparation_time", 0)));
@@ -359,7 +360,7 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
 
     private void handleClickImgForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
-            selected_img = photoFile.getAbsolutePath();
+            selected_img = Uri.fromFile(photoFile).toString();
             ImageView check = findViewById(R.id.check_img);
             check.setVisibility(View.VISIBLE);
 

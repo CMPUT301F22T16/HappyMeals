@@ -43,7 +43,7 @@ public class Recipe implements Storable, Serializable {
         this.category = "New Category";
         this.comments = new ArrayList<>(Arrays.asList("Nice!"));
         this.recipeIngredients = new ArrayList<>();
-        this.downloadUri = null;
+        this.downloadUri = "android.resource://com.example.happymeals/drawable/recipe_default";
     }
 
     /**

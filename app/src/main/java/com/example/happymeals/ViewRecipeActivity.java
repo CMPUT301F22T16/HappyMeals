@@ -83,6 +83,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Setting photo
         String uri = recipe.getDownloadUri();
+        System.out.println("IIIIIIIIIII" + uri);
         if (uri != null && !uri.equals("")) {
             Glide.with(this).asBitmap()
                     .load(uri)

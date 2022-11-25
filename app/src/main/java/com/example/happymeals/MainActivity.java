@@ -1,3 +1,8 @@
+/**
+ * Acknowledgements:
+ * 1. Stock recipe image taken from : https://pixabay.com/photos/cook-healthy-food-meal-vegetables-2364221/
+ */
+
 package com.example.happymeals;
 
 import androidx.annotation.NonNull;

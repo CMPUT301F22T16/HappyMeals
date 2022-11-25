@@ -499,7 +499,6 @@ public class DBHandler {
     public void uploadImage(Uri uri, Recipe recipe, String filetype) {
 
         if (uri == null) {
-            recipe.setDownloadUri("");
             return;
         }
 
