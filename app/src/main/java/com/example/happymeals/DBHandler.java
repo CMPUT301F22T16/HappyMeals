@@ -368,8 +368,10 @@ public class DBHandler {
                                 Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnits(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -428,8 +430,10 @@ public class DBHandler {
                                 Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnits(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 

@@ -75,16 +75,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
     ArrayList<RecipeIngredient> recipeIngredient_data_list;
 
     /**
-     * This is a button for the user to pick a new ingredient
-     */
-    ExtendedFloatingActionButton pick_new_ingredient_btn;
-
-    /**
-     * This is a button for the user to add a new comment
-     */
-    ExtendedFloatingActionButton recipe_new_comment_btn;
-
-    /**
      * This is a button for the user to view comments.
      */
     ExtendedFloatingActionButton recipe_view_comments_btn;
@@ -135,16 +125,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
     String filetype = "jpg";
 
     /**
-     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeAddIngredient} class.
-     */
-    ActivityResultLauncher<Intent> add_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            handleAddIngredientForResultLauncher(result);
-        }
-    });
-
-    /**
      * This creates an ActivityResultLauncher when launched will open a gallery for the user to select their image.
      */
     ActivityResultLauncher<Intent> add_img_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -161,18 +141,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
         @Override
         public void onActivityResult(ActivityResult result) {
             handleClickImgForResultLauncher(result);
-        }
-    });
-
-
-
-    /**
-     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeAddComment} class
-     */
-    ActivityResultLauncher<Intent> add_comment_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            handleAddCommentForResultLauncher(result);
         }
     });
 
@@ -252,16 +220,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
             }
         });
 
-        // Handle add new ingredient button
-        pick_new_ingredient_btn = findViewById(R.id.recipe_pick_new_ingredient_button);
-        pick_new_ingredient_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditRecipe.this, RecipeAddIngredient.class);
-                add_ingredient_for_result.launch(intent);
-            }
-        });
-
         // Handle upload new image
         recipe_click_img_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,16 +247,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 add_img_for_result.launch(intent);
-            }
-        });
-
-        // Handle add new comment button
-        recipe_new_comment_btn = findViewById(R.id.recipe_add_new_comment_button);
-        recipe_new_comment_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(EditRecipe.this, RecipeAddComment.class);
-                add_comment_for_result.launch(intent);
             }
         });
 
@@ -370,36 +318,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
 
         return file;
-    }
-
-    /**
-     * This method handles the return value from the {@link RecipeAddIngredient} Activity.
-     * @param result the returned values from the {@link RecipeAddIngredient} Activity..
-     *               The return values consists of the ingredient description and category
-     */
-    public void handleAddIngredientForResultLauncher(ActivityResult result) {
-        if (result != null && result.getResultCode() == RESULT_OK) {
-            if (result.getData() == null) return;
-            String descriptionExtra = result.getData().getStringExtra("description");
-            String categoryExtra = result.getData().getStringExtra("category");
-            Double amountExtra = result.getData().getDoubleExtra("amount", 0.00);
-            String amountUnitExtra = result.getData().getStringExtra("amount_unit");
-            recipeIngredient_data_list.add(new RecipeIngredient(descriptionExtra, categoryExtra, amountExtra));
-//            recipe_ingredient_list.setAdapter(ingredient_adapter);
-        }
-    }
-
-    /**
-     * This method handles the return value after the user adds a comment.
-     * @param result the returned value from the {@link RecipeAddComment} Activity
-     */
-    public void handleAddCommentForResultLauncher(ActivityResult result) {
-        if (result != null && result.getResultCode() == RESULT_OK) {
-            if (result.getData() == null) return;
-            String commentExtra = result.getData().getStringExtra("comment");
-            recipe_comments_data_list.add(commentExtra);
-//            recipe_comments_list.setAdapter(comments_adapter);
-        }
     }
 
     /**

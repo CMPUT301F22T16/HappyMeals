@@ -62,7 +62,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Setting the page details
         for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount() + " uts"));
+            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount() + " " + recipeIngredient.getUnits()));
         }
 
         for (String comment: recipe.getComments()) {

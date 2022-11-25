@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.happymeals.R;
 import com.example.happymeals.RecipeIngredient;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -45,6 +46,11 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
      * This is the recyclerview that displays each comment.
      */
     RecyclerView recipe_comments_list;
+
+    /**
+     * This is the button to add a new comment.
+     */
+    ExtendedFloatingActionButton add_comment_btn;
 
     /**
      * This is the adapter for the recyclerview.
@@ -68,6 +74,16 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
         @Override
         public void onActivityResult(ActivityResult result) {
             handleEditCommentForResultLauncher(result);
+        }
+    });
+
+    /**
+     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeAddComment} class
+     */
+    ActivityResultLauncher<Intent> add_comment_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            handleAddCommentForResultLauncher(result);
         }
     });
 
@@ -112,6 +128,14 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
         recipe_comments_list = view.findViewById(R.id.recipe_comments_recyclerview);
         recipe_comments_list.setLayoutManager(new LinearLayoutManager(getContext()));
         recipe_comments_list.setAdapter(this.comments_adapter);
+        add_comment_btn = view.findViewById(R.id.recipe_add_new_comment_button);
+        add_comment_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), RecipeAddComment.class);
+                add_comment_for_result.launch(intent);
+            }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -138,6 +162,19 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
             recipe_comments_list.setAdapter(comments_adapter);
         } else {
             Toast.makeText(getContext(), "Failed to edit comment", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * This method handles the return value after the user adds a comment.
+     * @param result the returned value from the {@link RecipeAddComment} Activity
+     */
+    public void handleAddCommentForResultLauncher(ActivityResult result) {
+        if (result != null && result.getResultCode() == RESULT_OK) {
+            if (result.getData() == null) return;
+            String commentExtra = result.getData().getStringExtra("comment");
+            recipe_comments_data_list.add(commentExtra);
+            recipe_comments_list.setAdapter(comments_adapter);
         }
     }
 }
