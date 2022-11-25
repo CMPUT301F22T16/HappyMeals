@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         displayName = user.getDisplayName();
-        displayName = displayName.substring(0, displayName.indexOf(' '));
+        displayName = displayName.split(" ")[0];
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Welcome, " + displayName + "!");
 

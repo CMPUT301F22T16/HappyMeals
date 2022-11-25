@@ -33,6 +33,8 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
         @Override
         public void onClick(View v) {
             int itemPosition = activityMpmealListBinding.mpMealListRecyclerview.getChildLayoutPosition(v);
+            mealPlan.clearMealsWithDay(dayIndex);
+            mealPlan.loadMealsWithDay(dayIndex, meals);
             intent = new Intent(mContext, MPMyMealsActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("MEALPLAN", mealPlan);
@@ -41,7 +43,6 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
             bundle.putSerializable("DAY", dayIndex);
             bundle.putSerializable("USER", userName);
             intent.putExtras(bundle);
-//            startActivity(intent);
             activityLauncher.launch(intent);
         }
     };
@@ -67,7 +68,7 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
     @Override
     public void onBindViewHolder(@NonNull MPMealListAdapter.MealViewHolder holder, int position) {
         Meal meal = meals.get(position);
-        holder.binding.mpMealListTextView1.setText("meal name");
+        holder.binding.mpMealListTextView1.setText(meal.getTitle());
         holder.binding.mpMealListTextView2.setText(Double.toString(meal.getCost()));
     }
 
