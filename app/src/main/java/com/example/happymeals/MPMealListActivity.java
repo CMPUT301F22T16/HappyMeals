@@ -70,12 +70,17 @@ public class MPMealListActivity extends AppCompatActivity {
             db.addMealPlan(mealPlan);
         } else {
             meals.clear();
-            if(!mealPlan.getBreakfast().isEmpty()) {
-                meals.add(mealPlan.getBreakfast().get(dayIndex));
-//                meals.add(mealPlan.getLunch().get(dayIndex));
-//                meals.add(mealPlan.getDinner().get(dayIndex));
-                mealIndex = 2;
+            if(!mealPlan.getMeals().isEmpty()) {
+                for(Meal meal : mealPlan.getMeals().get(dayIndex)) {
+                    meals.add(meal);
             }
+            }
+//            if(!mealPlan.getBreakfast().isEmpty()) {
+//                meals.add(mealPlan.getBreakfast().get(dayIndex));
+////                meals.add(mealPlan.getLunch().get(dayIndex));
+////                meals.add(mealPlan.getDinner().get(dayIndex));
+//                mealIndex = 2;
+//            }
         }
 
         mpMealListAdapter = new MPMealListAdapter(this, meals, user.getUid(), dayIndex, mealPlan, activityLauncher);
@@ -112,11 +117,8 @@ public class MPMealListActivity extends AppCompatActivity {
                         Intent data = result.getData();
                         Bundle bundle = data.getExtras();
                         mealPlan = (MealPlan) bundle.getSerializable("M-MEALPLAN");
-//                        db.updateMealPlan(mealPlan, activityMpmealListBinding.getRoot().getContext());
                         meals.clear();
-                        meals.add(mealPlan.getBreakfast().get(dayIndex));
-//                        meals.add(mealPlan.getLunch().get(dayIndex));
-//                        meals.add(mealPlan.getDinner().get(dayIndex));
+                        meals.addAll(mealPlan.getMeals().get(dayIndex));
                         mpMealListAdapter.notifyDataSetChanged();
                     }
                 });
@@ -125,8 +127,11 @@ public class MPMealListActivity extends AppCompatActivity {
 
     private void setOnAddButtonListener() {
         addMealsButton.setOnClickListener(v -> {
-            if(mealIndex>=2) {return;}
-            mealIndex++;
+            if(mealPlan.getNum_days() > dayIndex) {
+                mealIndex= mealPlan.getMeals().get(dayIndex).size();
+            } else {
+                mealIndex = 0;
+            }
             intent = new Intent(this, MPMyMealsActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("Is-From-MealPlan",true);
@@ -134,7 +139,6 @@ public class MPMealListActivity extends AppCompatActivity {
             bundle.putSerializable("MEAL", mealIndex);
             bundle.putSerializable("DAY", dayIndex);
             intent.putExtras(bundle);
-//            startActivity(intent);
             activityLauncher.launch(intent);
         });
     }
@@ -148,10 +152,7 @@ public class MPMealListActivity extends AppCompatActivity {
                 mpMealListAdapter.notifyDataSetChanged();
             } else {
                 meals.clear();
-                meals.add(mealPlan.getBreakfast().get(dayIndex));
-//                meals.add(mealPlan.getLunch().get(dayIndex));
-//                meals.add(mealPlan.getDinner().get(dayIndex));
-                mealIndex=2;
+                meals.addAll(mealPlan.getMeals().get(dayIndex));
                 mpMealListAdapter.notifyDataSetChanged();
             }
         });
@@ -159,7 +160,7 @@ public class MPMealListActivity extends AppCompatActivity {
 
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
-            mealPlan.setDays(mealPlan.getBreakfast().size());
+            mealPlan.setDays();
             db.updateMealPlan(mealPlan);
             finish();
         });

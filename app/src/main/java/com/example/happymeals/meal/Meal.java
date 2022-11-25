@@ -202,4 +202,14 @@ public class Meal implements Storable, Serializable {
 
         return data;
     }
+
+    /**
+     * Create an identical copy of this meal
+     * @return Meal
+     */
+    public Meal copy() {
+        Meal meal = new Meal(this.title, this.recipes, this.scalings, this.cost);
+        meal.setM_id(this.m_id);
+        return meal;
+    }
 }
