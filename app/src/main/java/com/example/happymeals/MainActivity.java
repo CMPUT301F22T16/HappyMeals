@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = instance.getCurrentUser();
         displayName = user.getDisplayName();
-        displayName = displayName.substring(0, displayName.indexOf(' '));
+//        displayName = displayName.substring(0, displayName.indexOf(' '));
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Welcome, " + displayName + "!");
 
