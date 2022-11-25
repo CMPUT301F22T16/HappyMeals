@@ -25,7 +25,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
 
     private String category;
     private String description;
-    private Integer amount;
+    private Double amount;
     private Double cost;
     private Date date;
     private String loc;
@@ -41,7 +41,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      * @param date
      * @param locRef
      */
-    public UserIngredient(String category, String description, Integer amount, Double cost, Date date, String locRef, String unit) {
+    public UserIngredient(String category, String description, Double amount, Double cost, Date date, String locRef, String unit) {
 
         this.category = category;
         this.description = description;
@@ -58,7 +58,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      * @param amount : {@link Integer} amount of ingredient
      * @param description : {@link String} description of the Ingredient
      */
-    public UserIngredient(Integer amount, String description) {
+    public UserIngredient(Double amount, String description) {
         this.amount = amount;
         this.description = description;
     }
@@ -79,7 +79,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      * Get the amount of the ingredient.
      * @return
      */
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -171,7 +171,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
      * Set the amount of the ingredient.
      * @param amount
      */
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

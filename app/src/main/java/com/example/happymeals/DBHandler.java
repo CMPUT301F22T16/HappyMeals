@@ -242,7 +242,7 @@ public class DBHandler {
                     for (QueryDocumentSnapshot doc : value) {
                         String category = doc.getString("category");
                         String description = doc.getString("description");
-                        Integer amount = doc.getLong("amount").intValue();
+                        Double amount = doc.getDouble("amount");
                         Double cost = doc.getDouble("cost");
                         sum += cost * amount;
                         Date date = doc.getDate("date");
@@ -560,13 +560,15 @@ public class DBHandler {
                         }
 
                         meals.clear();
+                        List<Meal> tempMeals = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             String m_id = doc.getId();
                             Double cost = (Double) doc.getDouble("cost");
 
                             // Get the Recipes and scalings
                             Map<String, Double> recipe_scalings = (Map<String, Double>) doc.get("recipe_scalings");
-                            String[] recipe_ids = (String[]) recipe_scalings.keySet().toArray();
+                            String[] recipe_ids = new String[recipe_scalings.size()];
+                            recipe_scalings.keySet().toArray(recipe_ids);
                             List<String> recipe_id_list = Arrays.asList(recipe_ids);
                             List<Recipe> recipes = new ArrayList<>();
                             getUserRecipesWithID(recipes, recipe_id_list);
@@ -575,7 +577,15 @@ public class DBHandler {
                             Meal meal = new Meal(title, recipes, recipe_scalings, cost);
 
                             meal.setM_id(m_id);
-                            meals.add(meal);
+                            tempMeals.add(meal);
+                        }
+                        for (String i : meal_ids) {
+                            for (Meal meal : tempMeals) {
+                                String j = meal.getM_id();
+                                if(i.equals(j)) {
+                                    meals.add(meal.copy());
+                                }
+                            }
                         }
                     }
                 });
@@ -609,7 +619,8 @@ public class DBHandler {
                             Map<String, Double> recipe_scalings = (Map<String, Double>) doc.get("recipe_scalings");
                             List<Recipe> recipes = new ArrayList<>();
                             if (!recipe_scalings.keySet().isEmpty()) {
-                                String[] recipe_ids = (String[]) recipe_scalings.keySet().toArray();
+                                String[] recipe_ids = new String[recipe_scalings.size()];
+                                recipe_scalings.keySet().toArray(recipe_ids);
                                 List<String> recipe_id_list = Arrays.asList(recipe_ids);
                                 getUserRecipesWithID(recipes, recipe_id_list);
                             }
