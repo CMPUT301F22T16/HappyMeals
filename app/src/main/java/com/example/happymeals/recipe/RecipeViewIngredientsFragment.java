@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.happymeals.R;
 import com.example.happymeals.RecipeIngredient;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -51,6 +52,11 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
     RecyclerView recipe_ingredients_list;
 
     /**
+     * This is the button to add a new ingredient.
+     */
+    ExtendedFloatingActionButton recipe_add_ingredient_btn;
+
+    /**
      * This is the adapter for the recyclerview.
      */
     RecipeIngredientAdapter ingredients_adapter;
@@ -72,6 +78,16 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
         @Override
         public void onActivityResult(ActivityResult result) {
             handleEditIngredientForResultLauncher(result);
+        }
+    });
+
+    /**
+     * This creates an ActivityResultLauncher where the user can send and receive data to the {@link RecipeAddIngredient} class.
+     */
+    ActivityResultLauncher<Intent> add_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            handleAddIngredientForResultLauncher(result);
         }
     });
 
@@ -121,6 +137,14 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
         recipe_ingredients_list = view.findViewById(R.id.recipe_ingredient_recyclerview);
         recipe_ingredients_list.setLayoutManager(new LinearLayoutManager(getContext()));
         recipe_ingredients_list.setAdapter(this.ingredients_adapter);
+        recipe_add_ingredient_btn = view.findViewById(R.id.recipe_pick_new_ingredient_button);
+        recipe_add_ingredient_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), RecipeAddIngredient.class);
+                add_ingredient_for_result.launch(intent);
+            }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -152,6 +176,25 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
             this.recipe_ingredients_list.setAdapter(this.ingredients_adapter);
         } else {
             Toast.makeText(getContext(), "Failed to edit ingredient", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * This method handles the return value from the {@link RecipeAddIngredient} Activity.
+     * @param result the returned values from the {@link RecipeAddIngredient} Activity..
+     *               The return values consists of the ingredient description and category
+     */
+    public void handleAddIngredientForResultLauncher(ActivityResult result) {
+        if (result != null && result.getResultCode() == RESULT_OK) {
+            if (result.getData() == null) return;
+            String descriptionExtra = result.getData().getStringExtra("description");
+            String categoryExtra = result.getData().getStringExtra("category");
+            Double amountExtra = result.getData().getDoubleExtra("amount", 0.00);
+            String amountUnitExtra = result.getData().getStringExtra("amount_unit");
+            RecipeIngredient newIngredient = new RecipeIngredient(descriptionExtra, categoryExtra, amountExtra);
+            newIngredient.setUnits(amountUnitExtra);
+            recipe_ingredients_data_list.add(newIngredient);
+            recipe_ingredients_list.setAdapter(ingredients_adapter);
         }
     }
 }

@@ -17,11 +17,11 @@ public class RecipeIngredient extends Ingredient implements Serializable {
         this.units = "uts";
     }
 
-    public RecipeIngredient(String desc, String category, Double amount, String units) {
+    public RecipeIngredient(String desc, String category, Double amount) {
         this.description = desc;
         this.category = category;
         this.amount = amount;
-        this.units = units;
+//        this.units = units;
     }
 
     @Override
