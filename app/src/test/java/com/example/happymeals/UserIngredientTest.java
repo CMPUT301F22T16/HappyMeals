@@ -10,7 +10,7 @@ public class UserIngredientTest {
     UserIngredient userIngredient;
 
     public UserIngredient mockIngredient() {
-        return new UserIngredient("mockCategory", "mockDescription", 5, 6.50, new Date(), "mockLoc");
+        return new UserIngredient("mockCategory", "mockDescription", 5.3, 6.50, new Date(), "mockLoc", "L");
     }
 
     /**
@@ -39,7 +39,7 @@ public class UserIngredientTest {
     @Test
     public void testAmount() {
         userIngredient = mockIngredient();
-        userIngredient.setAmount(3);
+        userIngredient.setAmount(3.0);
         assertEquals(true, userIngredient.getAmount() == 3);
     }
 
