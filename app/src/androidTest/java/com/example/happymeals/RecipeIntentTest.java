@@ -76,6 +76,7 @@ public class RecipeIntentTest {
         solo.enterText((EditText) solo.getView(R.id.recipe_category_edit_text), "Soup");
 
         // Add a new comment
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         solo.clickOnView(solo.getView(R.id.recipe_add_new_comment_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeAddComment.class);
