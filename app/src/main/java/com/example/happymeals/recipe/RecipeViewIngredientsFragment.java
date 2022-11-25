@@ -170,10 +170,12 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
             String desc = result.getData().getStringExtra("desc");
             String category = result.getData().getStringExtra("category");
             Double amount = result.getData().getDoubleExtra("amount", 0.00);
+            String amount_unit = result.getData().getStringExtra("amount_unit");
             RecipeIngredient item = this.recipe_ingredients_data_list.get(selection);
             item.setDescription(desc);
             item.setCategory(category);
             item.setAmount(amount);
+            item.setUnits(amount_unit);
             this.recipe_ingredients_list.setAdapter(this.ingredients_adapter);
         } else {
             Toast.makeText(getContext(), "Failed to edit ingredient", Toast.LENGTH_SHORT).show();
