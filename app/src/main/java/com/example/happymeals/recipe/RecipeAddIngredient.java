@@ -81,7 +81,7 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
                 String description = description_edit_text.getText().toString();
                 String category = category_edit_text.getText().toString();
                 Double amount = amount_edit_text.getText().toString().equals("") ? 0 : Double.parseDouble(amount_edit_text.getText().toString());
-                String amount_unit = amount_unit_spinner.getSelectedItem().toString();
+                amount_unit = amount_unit_spinner.getSelectedItem().toString();
 
                 intent.putExtra("description", description);
                 intent.putExtra("category", category);
