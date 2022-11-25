@@ -220,16 +220,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
             }
         });
 
-        // Handle add new ingredient button
-//        pick_new_ingredient_btn = findViewById(R.id.recipe_pick_new_ingredient_button);
-//        pick_new_ingredient_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(EditRecipe.this, RecipeAddIngredient.class);
-//                add_ingredient_for_result.launch(intent);
-//            }
-//        });
-
         // Handle upload new image
         recipe_click_img_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,16 +249,6 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
                 add_img_for_result.launch(intent);
             }
         });
-
-        // Handle add new comment button
-//        recipe_new_comment_btn = findViewById(R.id.recipe_add_new_comment_button);
-//        recipe_new_comment_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(EditRecipe.this, RecipeAddComment.class);
-//                add_comment_for_result.launch(intent);
-//            }
-//        });
 
         // Handle submit button
         recipe_submit_btn = findViewById(R.id.recipe_submit_button);

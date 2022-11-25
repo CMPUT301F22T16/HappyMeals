@@ -142,7 +142,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (!Objects.equals(uriStr, "")) {
+            if (!Objects.equals(uriStr, null)) {
                 uri = Uri.parse(uriStr);
             }
             rec.setDownloadUri(uriStr);
@@ -162,7 +162,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
             String filetype = result.getData().getStringExtra("filetype");
-
+            Log.d("ingredientUnits", ing.get(0).getUnits());
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
