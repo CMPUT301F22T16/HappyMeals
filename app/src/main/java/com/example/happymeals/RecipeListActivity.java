@@ -146,7 +146,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             if (!Objects.equals(uriStr, null)) {
                 uri = Uri.parse(uriStr);
             }
-            rec.setDownloadUri(uriStr);
             db.updateRecipe(rec);
 
             db.uploadImage(uri, rec, filetype);
@@ -171,7 +170,6 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
                 uri = Uri.parse(uriStr);
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
-            newRecipe.setDownloadUri(uriStr);
             db.addRecipe(newRecipe);
             // TODO pass file extension
 

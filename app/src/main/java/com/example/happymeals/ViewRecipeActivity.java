@@ -62,7 +62,15 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Setting the page details
         for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount() + " " + recipeIngredient.getUnits()));
+
+            // decimal adjusting for nice formatting
+            Double decimal = recipeIngredient.getAmount() - Math.floor(recipeIngredient.getAmount());
+            String amount = recipeIngredient.getAmount().toString();
+            if (decimal == 0.0f) {
+                amount = Long.toString(Math.round(recipeIngredient.getAmount()));
+            }
+
+            ingredientListAdapter.add(String.format("%s %s", amount + " " + recipeIngredient.getUnits(), recipeIngredient.getDescription()));
         }
 
         for (String comment: recipe.getComments()) {

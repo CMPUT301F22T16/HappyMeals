@@ -34,7 +34,7 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        android:text="@string/ADD_RECIPE"
+        android:text="add recipe"
         android:textColor="@color/black"
         app:icon="@android:drawable/ic_input_add"
         app:layout_constraintStart_toStartOf="parent"
