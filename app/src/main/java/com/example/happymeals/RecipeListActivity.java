@@ -140,6 +140,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             rec.setComments(comments);
             rec.setIngredients(ing);
 
+
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
             if (!Objects.equals(uriStr, "")) {
