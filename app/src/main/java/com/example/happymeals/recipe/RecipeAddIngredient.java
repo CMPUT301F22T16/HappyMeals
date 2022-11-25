@@ -26,7 +26,7 @@ import java.util.Arrays;
  * This class creates an Activity that allows the user to add an ingredient to their recipe
  * @author John Yu
  */
-public class RecipeAddIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RecipeAddIngredient extends AppCompatActivity {
 
     /**
      * This is the EditText view where the user can add the recipe description.
@@ -108,15 +108,5 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
                 finish();
             }
         });
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        amount_unit = adapterView.getItemAtPosition(i).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        amount_unit = "qty";
     }
 }

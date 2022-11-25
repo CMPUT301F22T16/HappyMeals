@@ -14,13 +14,15 @@ import android.widget.Spinner;
 
 import com.example.happymeals.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
  * This class opens an Activity to allow the user to edit an ingredient in their recipe
  * @author John Yu
  */
-public class RecipeEditIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RecipeEditIngredient extends AppCompatActivity {
 
     /**
      * This EditText lets the user edit the ingredient description
@@ -28,9 +30,9 @@ public class RecipeEditIngredient extends AppCompatActivity implements AdapterVi
     EditText desc_edit_text;
 
     /**
-     * This EditText lets the user update the ingredient category
+     * This is the spinner where the user can select the category.
      */
-    EditText category_edit_text;
+    Spinner category_spinner;
 
     /**
      * This EditText lets the user update the ingredient amount
@@ -69,7 +71,7 @@ public class RecipeEditIngredient extends AppCompatActivity implements AdapterVi
         setContentView(R.layout.activity_recipe_edit_ingredient);
 
         desc_edit_text = findViewById(R.id.recipe_edit_ingredient_description);
-        category_edit_text = findViewById(R.id.recipe_edit_ingredient_category);
+//        category_edit_text = findViewById(R.id.recipe_edit_ingredient_category);
         amount_edit_text = findViewById(R.id.recipe_edit_ingredient_amount);
         save_btn = findViewById(R.id.recipe_edit_ingredient_save_btn);
 
@@ -79,37 +81,48 @@ public class RecipeEditIngredient extends AppCompatActivity implements AdapterVi
         amount = intent.getDoubleExtra("amount", 0.00);
 
         desc_edit_text.setText(desc);
-        category_edit_text.setText(category);
+//        category_edit_text.setText(category);
         amount_edit_text.setText(getString(R.string.double_to_string, amount));
 
+        category_spinner = findViewById(R.id.recipe_edit_ingredient_category_spinner);
+        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
+        ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));
+        ArrayList<String> solidUnit = new ArrayList<>(Arrays.asList("g", "kg"));
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, R.layout.ingredient_content, R.id.myTextview, categories);
+        category_spinner.setAdapter(categoryAdapter);
+        category_spinner.setSelection(categoryAdapter.getPosition(category));
+
         amount_unit_spinner = findViewById(R.id.recipe_edit_ingredient_amount_spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.add_ingredient_amount_unit, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        amount_unit_spinner.setAdapter(spinnerAdapter);
-        amount_unit_spinner.setOnItemSelectedListener(this);
+
+        category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ArrayAdapter<String> unitAdapter;
+                if (categories.get(i).equals("Drink")) {
+                    unitAdapter = new ArrayAdapter<>(RecipeEditIngredient.this, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                } else {
+                    unitAdapter = new ArrayAdapter<>(RecipeEditIngredient.this, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                }
+                amount_unit_spinner.setAdapter(unitAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.putExtra("desc", desc_edit_text.getText().toString());
-                intent.putExtra("category", category_edit_text.getText().toString());
+                intent.putExtra("category", category_spinner.getSelectedItem().toString());
                 intent.putExtra("amount", Double.parseDouble(amount_edit_text.getText().toString()));
                 intent.putExtra("amount_unit", amount_unit_spinner.getSelectedItem().toString());
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
-
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        ;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        ;
     }
 }
