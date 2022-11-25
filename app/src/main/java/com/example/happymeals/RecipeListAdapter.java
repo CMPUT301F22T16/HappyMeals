@@ -3,6 +3,8 @@ package com.example.happymeals;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,6 +92,28 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> implements Serializa
 
             Glide.with(this.context).asBitmap()
                     .load(uri)
+                    .centerCrop()
+                    .placeholder(progress)
+                    .into(new BitmapImageViewTarget(image) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCornerRadius(32.0f); // radius for corners
+                            view.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        }
+
+        else {
+
+            CircularProgressDrawable progress = new CircularProgressDrawable(this.context);
+            progress.setStrokeWidth(5f);
+            progress.setCenterRadius(30f);
+            progress.start();
+            Uri uridefault = Uri.parse("android.resource://com.example.happymeals/drawable/recipe_default");
+            Glide.with(this.context).asBitmap()
+                    .load(uridefault)
                     .centerCrop()
                     .placeholder(progress)
                     .into(new BitmapImageViewTarget(image) {
