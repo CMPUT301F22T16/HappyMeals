@@ -77,18 +77,18 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      */
     public void updateRecipesList(ArrayList<Recipe> recipes){
         Map<String, Double> scalings_buffer = new HashMap<>();
-        ArrayList<Recipe> recipe_buffer = new ArrayList<>(recipes);
+        ArrayList<Recipe> new_recipes = new ArrayList<>();
         Map<String, Double> scalings = this.meal.getScalings();
         for(Recipe r : recipes){
             double scale = (scalings.get(r.get_r_id())!=null)?scalings.get(r.get_r_id()): -1.0;
             if (scale>=0){
                 scalings_buffer.put(r.get_r_id(),scale);
             } else {
-                recipe_buffer.add(r); // add all new recipes
+                new_recipes.add(r); // add all new recipes
             }
         }
 
-        for (Recipe new_r: recipes){
+        for (Recipe new_r: new_recipes){
             try {
                 meal.addRecipe(new_r);
                 meal.setScalingForRecipe(new_r,1.0);
@@ -202,7 +202,13 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
             @Override
             public void onClick(View v) {
                 intent = new Intent(mContext, ViewRecipeActivity.class);
+                Double s = 1.0;
+                try {
+                    s = meal.getScalingForRecipe(recipe);
+                } catch (Exception e) {
+                }
                 Bundle bundle = new Bundle();
+                bundle.putDouble("SCALE",s);
                 bundle.putSerializable("RECIPE", recipe);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
@@ -215,7 +221,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
             public void onClick(View v) {
                 // build another dialog here
                 EditText editText =createPopup(recipe,meal);
-                Double s = null;
+                Double s = 1.0;
                 try {
                     s = meal.getScalingForRecipe(recipe);
                 } catch (Exception e) {

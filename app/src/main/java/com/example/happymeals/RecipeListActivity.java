@@ -194,6 +194,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         if (op.equals("view")) {
             Intent intent = new Intent(RecipeListActivity.this, ViewRecipeActivity.class);
             Bundle bundle = new Bundle();
+            bundle.putDouble("SCALE",1.0);
             bundle.putSerializable("RECIPE", recipes.get(position));
             intent.putExtras(bundle);
             startActivity(intent);

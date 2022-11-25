@@ -40,6 +40,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Fetching the recipe
         Bundle bundle = getIntent().getExtras();
+        Double scaling_factor = (Double) bundle.getDouble("SCALE");
         Recipe recipe = (Recipe) bundle.getSerializable("RECIPE");
 
         // Setting the title
@@ -62,7 +63,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         // Setting the page details
         for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
-            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount() + " uts"));
+            ingredientListAdapter.add(String.format("%-25s %50s", recipeIngredient.getDescription(), recipeIngredient.getAmount()*scaling_factor + " uts"));
         }
 
         for (String comment: recipe.getComments()) {
@@ -70,8 +71,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
         }
 
         category.setText(recipe.getCategory());
-        servings.setText("Servings: " + recipe.getNum_servings());
-        prep_time.setText(recipe.getPreparation_time() + " min/s");
+        servings.setText("Servings: " + recipe.getNum_servings()*scaling_factor);
+        prep_time.setText(recipe.getPreparation_time()*scaling_factor + " min/s");
 
         // Setting photo
         String uri = recipe.getDownloadUri();
