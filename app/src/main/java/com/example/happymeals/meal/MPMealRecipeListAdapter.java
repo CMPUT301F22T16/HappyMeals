@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,10 @@ import com.example.happymeals.databinding.MealRecipeListContentBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This custom adapter keeps meal recipe list up to date
@@ -30,8 +34,6 @@ import java.util.List;
  * within the list
  */
 public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeListAdapter.MRLViewHolder>{
-    private List<Recipe> recipes;
-    private List<Double> scalings;
     private Meal meal;
     private ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     private Context mContext;
@@ -50,14 +52,6 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      * @param meal
      */
     public MPMealRecipeListAdapter(Context context, Meal meal) {
-        this.recipes = meal.getRecipes();
-        this.scalings = meal.getScalings();
-
-        if(recipes.size() > scalings.size()){
-            for (int i = scalings.size();i<recipes.size();i++){
-                scalings.add(1.0); // default scale is 1
-            }
-        }
         this.meal = meal;
         this.mContext = context;
         activityMpmealRecipeListBinding = ActivityMpmealRecipeListBinding.inflate(LayoutInflater.from(context));
@@ -73,9 +67,8 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
 
     @Override
     public void onBindViewHolder(@NonNull MPMealRecipeListAdapter.MRLViewHolder holder, int position) {
-        Recipe recipe = recipes.get(position);
+        Recipe recipe =this.meal.getRecipes().get(position);
         holder.binding.mpMealRecipeListContentTitle.setText(recipe.getTitle());
-
     }
 
     /**
@@ -83,56 +76,58 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      * @param recipes a list of {@link Recipe}
      */
     public void updateRecipesList(ArrayList<Recipe> recipes){
-        int old_recipe_size = this.recipes.size();
-        int new_recipe_size = recipes.size();
-        int max_size = new_recipe_size;
-        int min_size = old_recipe_size;
-
-        // update scalings
-        if (new_recipe_size < old_recipe_size){max_size = old_recipe_size; min_size = new_recipe_size;}
-        int i = 0;
-        for (; i < min_size;i++){
-            Recipe new_recipe = recipes.get(i);
-            Recipe old_recipe = this.recipes.get(i);
-            if (!(new_recipe.get_r_id().equals(old_recipe.get_r_id()))){
-                scalings.set(i,1.0);
+        Map<String, Double> scalings_buffer = new HashMap<>();
+        ArrayList<Recipe> recipe_buffer = new ArrayList<>(recipes);
+        Map<String, Double> scalings = this.meal.getScalings();
+        for(Recipe r : recipes){
+            double scale = (scalings.get(r.get_r_id())!=null)?scalings.get(r.get_r_id()): -1.0;
+            if (scale>=0){
+                scalings_buffer.put(r.get_r_id(),scale);
+            } else {
+                recipe_buffer.add(r); // add all new recipes
             }
         }
-        if (new_recipe_size < old_recipe_size){
-            for (int j = max_size-1;j>min_size;i--){
-                scalings.remove(j);
-            }
-        }else {
-            for (;i<max_size;i++){
-                scalings.add(1.0);
+
+        for (Recipe new_r: recipes){
+            try {
+                meal.addRecipe(new_r);
+                meal.setScalingForRecipe(new_r,1.0);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        // update recipe
-        this.recipes = recipes;
-    }
+//        List<Recipe> meal_recipes = meal.getRecipes();
+//        for(Recipe r : recipes){
+//            if(meal_recipes.contains())
+//        }
 
-    public void delete(int index){
-        recipes.remove(index);
-        scalings.remove(index);
         notifyDataSetChanged();
     }
 
     /**
-     * clear recipes and scalings list
+     * delete the recipe and its scaling from the list
+     * @param index the index of the recipe to be deleted
      */
-    public void clear(){
-        recipes.clear();
-        scalings.clear();
+    public void delete(int index){
+        Recipe recipe = meal.getRecipes().get(index);
+        this.meal.removeScalingForRecipe(recipe);
+        this.meal.removeRecipe(recipe);
+        notifyDataSetChanged();
     }
+
 
     /**
      * Add a new recipe to list
      * andd also add a default scaling for it
      * @param recipe new {@link Recipe} to be added to the list
      */
-    public void add(Recipe recipe){
-        recipes.add(recipe);
-        scalings.add(1.0);
+    public void add(Recipe recipe) {
+        this.meal.addRecipe(recipe);
+        try {
+            this.meal.setScalingForRecipe(recipe,1.0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -142,8 +137,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      */
     @Override
     public int getItemCount() {
-        assert recipes.size() == scalings.size();
-        return recipes.size();
+        return meal.getRecipes().size();
     }
 
     /**
@@ -151,30 +145,31 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      * @return a updated {@link Meal}
      */
     public Meal getMeal() {
-        this.meal.setRecipes(this.recipes);
-        this.meal.setScalings(this.scalings);
         return this.meal;
     }
 
     /**
      * Creates a popup tha allows user to update scaling for a recipe
-     * @param title the title of the recipe
+     * @param recipe the new recipe of type {@link Recipe} we are displaying
+     * @param meal the meal of type {@link Meal} we will be updating
      * Knowledge from Sumit Saxena's anwser(Apr 22, 2016) to
      * https://stackoverflow.com/questions/22655599/alertdialog-builder-with-custom-layout-and-edittext-cannot-access-view
      */
-    private EditText createPopup(String title,int position) {
+    private EditText createPopup(Recipe recipe,Meal meal) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
         final View popupView = LayoutInflater.from(mContext).inflate(R.layout.adjust_scaling_popup, null);
         dialogBuilder.setView((popupView));
-        dialogBuilder.setTitle(title);
+        dialogBuilder.setTitle(recipe.getTitle());
         EditText editText = popupView.findViewById(R.id.editTextScalingNumber);
         dialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         double new_scaling = Double.parseDouble(editText.getText().toString());
-                        scalings.set(position,new_scaling);
-//                        Toast.makeText(mContext, (String)editText.getText().toString(),
-//                                Toast.LENGTH_LONG).show();
+                        try {
+                            meal.setScalingForRecipe(recipe,new_scaling);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
         );
@@ -202,12 +197,13 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         TextView scale_recipe = bottomSheet.findViewById(R.id.bottom_sheet_textview2);
         scale_recipe.setText("Adjust Scaling for Recipe");
         TextView cancel = bottomSheet.findViewById(R.id.bottom_sheet_cancel);
+        Recipe recipe = meal.getRecipes().get(itemPosition);
         view_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(mContext, ViewRecipeActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("RECIPE", recipes.get(itemPosition));
+                bundle.putSerializable("RECIPE", recipe);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
                 bottomSheet.dismiss();
@@ -218,8 +214,12 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
             @Override
             public void onClick(View v) {
                 // build another dialog here
-                EditText editText =createPopup("Title",itemPosition);
-                Double s = scalings.get(itemPosition);
+                EditText editText =createPopup(recipe,meal);
+                Double s = null;
+                try {
+                    s = meal.getScalingForRecipe(recipe);
+                } catch (Exception e) {
+                }
                 editText.setText(s.toString());
                 bottomSheet.dismiss();
             }

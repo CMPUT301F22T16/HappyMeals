@@ -162,7 +162,7 @@ public class MPMealRecipeList extends AppCompatActivity {
             newRecipe.setDownloadUri(uriStr);
             meal.addRecipe(newRecipe);
             dbHandler.addRecipe(newRecipe);
-            mpMealRecipeListAdapter.setRecipesList((ArrayList<Recipe>) meal.getRecipes());
+            mpMealRecipeListAdapter.updateRecipesList((ArrayList<Recipe>) meal.getRecipes());
             mpMealRecipeListAdapter.notifyDataSetChanged();
 
 //            ContentResolver cR = this.getContentResolver();
