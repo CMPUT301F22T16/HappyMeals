@@ -23,6 +23,10 @@ public class LoadingDialog {
     }
 
     void dismissDialog() {
-        dialog.dismiss();
+        try {
+            dialog.dismiss();
+        } catch (Exception e) {
+
+        }
     }
 }

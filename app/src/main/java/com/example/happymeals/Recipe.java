@@ -191,7 +191,9 @@ public class Recipe implements Storable, Serializable {
      * @param downloadUri {@link Uri} URL of the image on the Firebase Storage.
      */
     public void setDownloadUri(String downloadUri) {
-        this.downloadUri = downloadUri;
+        if (!(downloadUri == null || downloadUri.equals(""))) {
+            this.downloadUri = downloadUri;
+        }
     }
 
     /**

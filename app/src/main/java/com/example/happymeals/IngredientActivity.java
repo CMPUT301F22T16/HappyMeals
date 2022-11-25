@@ -121,6 +121,7 @@ public class IngredientActivity extends AppCompatActivity{
                             int month = addIngredient.getIntExtra("month", -1);
                             int day = addIngredient.getIntExtra("day", -1);
                             String location = addIngredient.getStringExtra("location");
+                            String unit = addIngredient.getStringExtra("unit");
                             String mode = addIngredient.getStringExtra("mode");
 
                             if (mode.equals("Edit") && ingredientPosition != -1) {
@@ -141,7 +142,7 @@ public class IngredientActivity extends AppCompatActivity{
                                 cal.set(Calendar.MONTH, month);
                                 cal.set(Calendar.DAY_OF_MONTH, day);
                                 Date date = cal.getTime();
-                                UserIngredient newUserIngredient = new UserIngredient(category, description, count, unitCost, date, location);
+                                UserIngredient newUserIngredient = new UserIngredient(category, description, count, unitCost, date, location, unit);
                                 //ingredientList.add(newIngredient);
                                 db.newIngredient(newUserIngredient);
                                 ingredientPosition = -1;

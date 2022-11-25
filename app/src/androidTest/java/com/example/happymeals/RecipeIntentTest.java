@@ -83,7 +83,9 @@ public class RecipeIntentTest {
         solo.clickOnView(solo.getView(R.id.recipe_add_comment_submit_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         solo.waitForText("Delicious!");
+        solo.clickOnButton("OK");
 
         // Add a new ingredient
         solo.clickOnView(solo.getView(R.id.recipe_pick_new_ingredient_button));
@@ -95,7 +97,9 @@ public class RecipeIntentTest {
         solo.clickOnView(solo.getView(R.id.recipe_add_ingredient_btn));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         solo.waitForText("Noodles");
+        solo.clickOnButton("OK");
 
         // Upload new recipe to firebase
         solo.clickOnView(solo.getView(R.id.recipe_submit_button));
@@ -147,6 +151,7 @@ public class RecipeIntentTest {
         solo.enterText(edit_text_var, "Japanese");
 
         // Edit the comment
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         RecyclerView comment_recycler_view = (RecyclerView) solo.getView(R.id.recipe_comments_recyclerview);
         View comment_entity = comment_recycler_view.getChildAt(0);
         ImageButton edit_comment_btn = (ImageButton) comment_entity.findViewById(R.id.edit_recipe_ingredient_btn);
@@ -158,10 +163,12 @@ public class RecipeIntentTest {
         solo.enterText(edit_text_var, "Amazing!");
         solo.clickOnView((Button) solo.getView(R.id.recipe_edit_comment_submit_button));
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.waitForText("Amazing!");
+        solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Edit the Ingredient
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         RecyclerView ingredient_recycler_view = (RecyclerView) solo.getView(R.id.recipe_ingredient_recyclerview);
         View ingredient_entity = ingredient_recycler_view.getChildAt(0);
         ImageButton edit_ingredient_btn = (ImageButton) ingredient_entity.findViewById(R.id.edit_recipe_ingredient_btn);
@@ -177,8 +184,9 @@ public class RecipeIntentTest {
         solo.enterText(edit_amount, "10");
         solo.clickOnView((Button) solo.getView(R.id.recipe_edit_ingredient_save_btn));
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.waitForText("Noodles 2");
+        solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Upload edited recipe to firebase
         solo.clickOnView(solo.getView(R.id.recipe_submit_button));
@@ -217,18 +225,22 @@ public class RecipeIntentTest {
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Delete comment
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         comment_entity = comment_recycler_view.getChildAt(0);
         ImageButton delete_comment_btn = (ImageButton) comment_entity.findViewById(R.id.delete_recipe_ingredient_btn);
         solo.clickOnView(delete_comment_btn);
         onView(withId(R.id.recipe_comments_recyclerview))
                 .check(matches(not(hasDescendant(withText("Amazing!")))));
+        solo.clickOnButton("OK");
 
         // Delete ingredient
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         ingredient_entity = ingredient_recycler_view.getChildAt(0);
         ImageButton delete_ingredient_btn = (ImageButton) ingredient_entity.findViewById(R.id.delete_recipe_ingredient_btn);
         solo.clickOnView(delete_ingredient_btn);
         onView(withId(R.id.recipe_ingredient_recyclerview))
                 .check(matches(not(hasDescendant(withText("Noodles 2")))));
+        solo.clickOnButton("OK");
 
         // Save changes to firebase
         solo.clickOnView(solo.getView(R.id.recipe_submit_button));
@@ -259,6 +271,7 @@ public class RecipeIntentTest {
         int recipeCountBefore = recipe_list_adapter_3.getCount();
         FloatingActionButton recipe_delete_button = (FloatingActionButton) recipe_entity_3.findViewById(R.id.recipe_card_delete);
         solo.clickOnView(recipe_delete_button);
+        solo.clickOnButton("Yes");
         solo.sleep(3000);
         int recipeCountAfter = recipe_list_adapter_3.getCount();
         assertEquals(1, recipeCountBefore - recipeCountAfter);

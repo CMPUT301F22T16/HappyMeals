@@ -1,12 +1,13 @@
 package com.example.happymeals.meal;
 
-import com.example.happymeals.Storable;
 import com.example.happymeals.Recipe;
+import com.example.happymeals.Storable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a modal class for user's Meals. Implements {@link Storable} in order to store it to the database.
@@ -14,27 +15,30 @@ import java.util.List;
  *
  * Members:
  *  1. m_id : A {@link String} id representing document id of the meal in the database.
- *  2. recipes : A {@link List<Recipe>} of recipes associated with the meal.
+ *  2. recipes : A {@link List< Recipe >} of recipes associated with the meal.
  *  3. scalings : A {@link List<Double>} of scalings for each recipe that the user can adjust.
  *  4. cost : A {@link Double} total cost for the Meal.
+ *  5. title : A {@link String} title for the meal.
  */
 public class Meal implements Storable, Serializable {
     private List<Recipe> recipes;
-    private List<Double> scalings;
-    private final double cost;
+    private Map<String, Double> scalings;
+    private double cost;
     private String m_id = null;
+    private String title;
 
     /**
      * A Constructor for Meal using all the member attributes listed {@link Meal}.
      * @param recipes
      * @param scalings
      * @param cost
+     * @param title
      */
-    // TODO: needs a title field
-    public Meal(List<Recipe> recipes, List<Double> scalings, double cost) {
+    public Meal(String title, List<Recipe> recipes, Map<String, Double> scalings, double cost) {
         this.recipes = recipes;
         this.scalings = scalings;
         this.cost = cost;
+        this.title = title;
     }
 
     /**
@@ -42,17 +46,27 @@ public class Meal implements Storable, Serializable {
      */
     public Meal(){
         this.recipes = new ArrayList<>();
-        scalings = new ArrayList<>();
+        scalings = new HashMap<>();
         cost = 0;
+        this.title = "New Meal";
     }
 
     /**
-     * set the scaling list of the meal
-     * @param scalings {@link List<Double>} A list of scaling factors.
+     * Get the {@link String} title for the meal.
+     * @return {@link String} title.
      */
-    public void setScalings(List<Double> scalings) {
-        this.scalings = scalings;
+    public String getTitle() {
+        return title;
     }
+
+    /**
+     * Set the {@link String} title for the meal
+     * @param title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
 
     /**
      * Removes a recipe from the meal's recipe list specified by the index.
@@ -91,8 +105,48 @@ public class Meal implements Storable, Serializable {
      * Get the scalings associated with the recipes of the meal object
      * @return {@link List<Recipe>} A list of scalings of type {@link Double}.
      */
-    public List<Double> getScalings() {
+    public Map<String, Double> getScalings() {
         return this.scalings;
+    }
+
+    /**
+     * Set the scalings {@link Map<String, Double>}.
+     * @param scalings {@link Map<String, Double>} of scalings to be set.
+     */
+    public void setScalings(Map<String, Double> scalings) {
+        this.scalings = scalings;
+    }
+
+    /**
+     * Get the scaling corresponding to the recipe in the recipe list.
+     * @param recipe {@link Recipe} recipe for which scaling is to be fetched.
+     * @return A {@link Double} scaling for the recipe
+     * @throws Exception if recipe not found in recipe list
+     */
+    public Double getScalingForRecipe(Recipe recipe) throws Exception {
+        if (this.recipes.contains(recipe) ) {
+            return this.scalings.get(recipe.get_r_id());
+        }
+
+        else {
+            throw new Exception("Recipe not found.");
+        }
+    }
+
+
+    /**
+     * Sets the scaling for the recipe in the recipe list.
+     * @param recipe {@link Recipe} recipe for which the scaling is to be set.
+     * @param scaling {@link Double} double value for the scaling.
+     * @throws Exception if recipe not found in the list.
+     */
+    public void setScalingForRecipe(Recipe recipe, Double scaling) throws Exception {
+        if (this.recipes.contains(recipe)) {
+            this.scalings.put(recipe.get_r_id(), scaling);
+        }
+        else {
+            throw new Exception("Recipe not found.");
+        }
     }
 
     /**
@@ -129,16 +183,23 @@ public class Meal implements Storable, Serializable {
     @Override
     public HashMap<String, Object> getStorable() {
         HashMap<String, Object> data = new HashMap<>();
-        List<Recipe> recipes = this.getRecipes();
-        List<Double> scalings = this.getScalings();
+
+        // Put the cost
         double cost = this.getCost();
         data.put("cost", cost);
-        data.put("scalings", scalings);
+
+        // Put the recipes
         List<String> recipe_ids = new ArrayList<>();
-        for (Recipe recipe: recipes) {
+        for (Recipe recipe : this.recipes) {
             recipe_ids.add(recipe.get_r_id());
         }
-        data.put("recipes", recipe_ids);
+
+        // Put the map for scalings
+        data.put("recipe_scalings", this.scalings);
+
+
+        // Put the title
+        data.put("title", this.title);
 
         return data;
     }

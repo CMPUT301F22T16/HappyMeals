@@ -151,6 +151,7 @@ public class MPMealRecipeList extends AppCompatActivity {
             String category = result.getData().getStringExtra("category");
             List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
+            String filetype = result.getData().getStringExtra("filetype");
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
@@ -159,13 +160,14 @@ public class MPMealRecipeList extends AppCompatActivity {
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
             newRecipe.setDownloadUri(uriStr);
+            meal.addRecipe(newRecipe);
             dbHandler.addRecipe(newRecipe);
-            mpMealRecipeListAdapter.add(newRecipe);
+            mpMealRecipeListAdapter.setRecipesList((ArrayList<Recipe>) meal.getRecipes());
             mpMealRecipeListAdapter.notifyDataSetChanged();
 
-            //            ContentResolver cR = this.getContentResolver();
-            //            String type = cR.getType(uri);
-            dbHandler.uploadImage(uri, newRecipe);
+//            ContentResolver cR = this.getContentResolver();
+//            String type = cR.getType(uri);
+            dbHandler.uploadImage(uri, newRecipe, filetype);
             is_modified = true;
         } else {
             Toast.makeText(context, "Failed to add recipe", Toast.LENGTH_SHORT).show();

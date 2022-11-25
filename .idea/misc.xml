@@ -7,7 +7,7 @@
         <entry key="..\:/Ualberta/Year 3/CMPUT 301/Project/Code/HappyMeals/app/src/main/res/layout/activity_recipe_list.xml" value="0.45121951219512196" />
         <entry key="..\:/Ualberta/Year 3/CMPUT 301/Project/Code/HappyMeals/app/src/main/res/layout/recipe_card_content.xml" value="0.44000000000000006" />
         <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/activity_add_new_ingredient.xml" value="0.2015625" />
-        <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/activity_ingredient.xml" value="0.22916666666666666" />
+        <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/activity_ingredient.xml" value="0.22" />
         <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/confirm_delete_ingredient.xml" value="0.228125" />
         <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/view_ingredient_fragment_layout.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/drawable/dotted.xml" value="0.303" />
@@ -50,10 +50,11 @@
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Javadocs" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
