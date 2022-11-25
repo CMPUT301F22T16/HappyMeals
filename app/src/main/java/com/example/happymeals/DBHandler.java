@@ -300,8 +300,6 @@ public class DBHandler {
                             Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
                             String title = (String) data.get("title");
 
-                            System.out.println(getUsername());
-                            System.out.println(data.get("ingredients"));
 
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
@@ -312,11 +310,13 @@ public class DBHandler {
 
                             for (String desc : ingredients.keySet()) {
                                 Map<String, Object> info = ingredients.get(desc);
-                                System.out.println(info);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnits(units);
+
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -368,8 +368,10 @@ public class DBHandler {
                                 Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnits(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -428,8 +430,10 @@ public class DBHandler {
                                 Map<String, Object> info = ingredients.get(desc);
                                 Double amount = (Double) info.get("amount");
                                 String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnits(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -495,7 +499,6 @@ public class DBHandler {
     public void uploadImage(Uri uri, Recipe recipe, String filetype) {
 
         if (uri == null) {
-            recipe.setDownloadUri("");
             return;
         }
 

@@ -95,6 +95,7 @@ public class RecipeEditIngredient extends AppCompatActivity implements AdapterVi
                 intent.putExtra("desc", desc_edit_text.getText().toString());
                 intent.putExtra("category", category_edit_text.getText().toString());
                 intent.putExtra("amount", Double.parseDouble(amount_edit_text.getText().toString()));
+                intent.putExtra("amount_unit", amount_unit_spinner.getSelectedItem().toString());
                 setResult(RESULT_OK, intent);
                 finish();
             }

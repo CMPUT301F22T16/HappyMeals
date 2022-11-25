@@ -8,11 +8,13 @@ public class RecipeIngredient extends Ingredient implements Serializable {
     private String description;
     private String category;
     private Double amount;
+    private String units;
 
     public RecipeIngredient() {
         this.description = "";
         this.category = "";
         this.amount = 0.00;
+        this.units = "qty";
     }
 
     public RecipeIngredient(String desc, String category, Double amount) {
@@ -45,5 +47,13 @@ public class RecipeIngredient extends Ingredient implements Serializable {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }
