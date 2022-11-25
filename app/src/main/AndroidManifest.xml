@@ -39,14 +39,14 @@
 
 
         <activity
-            android:name=".SLShoppingListActivity"
+            android:name=".shoppinglist.SLShoppingListActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".SLSelectMealPlan"
+            android:name=".shoppinglist.SLSelectMealPlanActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

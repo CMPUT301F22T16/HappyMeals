@@ -14,6 +14,7 @@ import com.example.happymeals.meal.MPPickRecipeListAdapter;
 import com.example.happymeals.meal.Meal;
 import com.example.happymeals.mealplan.MPListAdapter;
 import com.example.happymeals.mealplan.MealPlan;
+import com.example.happymeals.shoppinglist.SLMealPlanAdapter;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -771,4 +772,108 @@ public class DBHandler {
         delete(user_mealplans, id, "user_mealplans");
     }
 
+    /**
+     * Used to fetch all MealPlans for current user.
+     *
+     * @param adapter
+     * @param dialog
+     */
+
+    //-------------------------------------------------ShoppingList Methods-------------------------------------------------//
+
+    public void getSLMealPlans(SLMealPlanAdapter adapter, LoadingDialog dialog) {
+
+        CollectionReference ref = conn.collection("user_mealplans");
+        ref
+                .whereEqualTo("user", getUsername())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALPLANS", error.toString());
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            // Fetching id
+                            String ump_id = doc.getId();
+
+                            // Fetching all data
+                            Map<String, Object> data = doc.getData();
+
+                            // Fetching meal plan
+                            List<Map<String, String>> plans = (List<Map<String, String>>) data.get("plans");
+
+                            List<List<Meal>> mealplan = new ArrayList<>();
+
+                            for (Map<String, String> dayMap : plans) {
+                                List<String> meal_ids = new ArrayList<>();
+                                List<Meal> meals = new ArrayList<>();
+                                mealplan.add(meals);
+
+                                for (String meal_id : dayMap.values()) {
+                                    meal_ids.add(meal_id);
+                                }
+
+                                getUserMealsWithID(meals, dialog, meal_ids);
+
+                            }
+
+                            // Fetching number of days
+                            Integer num_days = ((Long) data.get("num_days")).intValue();
+
+                            // Fetching title
+                            String title = doc.getString("title");
+
+                            // Creating meal plan object
+                            MealPlan mealPlan = new MealPlan(title, mealplan, num_days);
+
+                            // Setting the document id
+                            mealPlan.setUmp_id(ump_id);
+
+                            // Adding the meal plan to the adapter
+                            adapter.add(mealPlan);
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
+     */
+    public void getSLIngredients(ArrayAdapter adapter, MealPlan mealPlan) {
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uIng", "An error has occured while trying to update the local ingredients");
+                } else {
+                    List<UserIngredient> userIngredients = new ArrayList<>();
+                    Double sum = 0.0;
+                    adapter.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String category = doc.getString("category");
+                        String description = doc.getString("description");
+                        Double amount = doc.getDouble("amount");
+                        Double cost = doc.getDouble("cost");
+                        sum += cost * amount;
+                        Date date = doc.getDate("date");
+                        String location = doc.getString("location");
+                        String unit = doc.getString("unit");
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setId(doc.getId());
+                        userIngredients.add(userIngredient);
+//                        adapter.add(userIngredient);
+                    }
+                    adapter.addAll(UnitConverter.getShoppingList(mealPlan, userIngredients));
+                    adapter.notifyDataSetChanged();
+                    Log.d("uIng", "Local ingredients updated successfully!");
+                }
+            }
+        });
+    }
 }

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.LoadingDialog;
@@ -40,11 +41,22 @@ public class SLSelectMealPlanActivity extends AppCompatActivity {
 
         mealPlans = new ArrayList<>();
 
-        mpAdapter = new MPListAdapter(this, mealPlans, user.getUid());
+        mpAdapter = new SLMealPlanAdapter(this, mealPlans);
         activitySlselectMealPlanBinding.slSelectMpList.setLayoutManager(new GridLayoutManager(this, 1));
         activitySlselectMealPlanBinding.slSelectMpList.setAdapter(mpAdapter);
 
         LoadingDialog dialog = new LoadingDialog(this);
-        db.getUserMealPlans((MPListAdapter) mpAdapter, dialog);
+        db.getSLMealPlans((SLMealPlanAdapter) mpAdapter, dialog);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
