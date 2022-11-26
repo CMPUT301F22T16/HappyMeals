@@ -69,6 +69,13 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
     public void onBindViewHolder(@NonNull MPMealRecipeListAdapter.MRLViewHolder holder, int position) {
         Recipe recipe =this.meal.getRecipes().get(position);
         holder.binding.mpMealRecipeListContentTitle.setText(recipe.getTitle());
+        Double scale = 1.0;
+        try {
+            scale = this.meal.getScalingForRecipe(recipe);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        holder.binding.mpMealRecipeListContentScale.setText("Scale: "+scale.toString());
     }
 
     /**
@@ -96,11 +103,6 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
                 e.printStackTrace();
             }
         }
-//        List<Recipe> meal_recipes = meal.getRecipes();
-//        for(Recipe r : recipes){
-//            if(meal_recipes.contains())
-//        }
-
         notifyDataSetChanged();
     }
 
