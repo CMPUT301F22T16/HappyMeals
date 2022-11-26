@@ -10,6 +10,7 @@ import com.example.happymeals.DBHandler;
 import com.example.happymeals.IngredientAdaptor;
 import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.databinding.ActivitySlshoppingListBinding;
+import com.example.happymeals.mealplan.MealPlan;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,6 +21,7 @@ public class SLShoppingListActivity extends AppCompatActivity {
 
     ArrayList<RecipeIngredient> recipeIngredients;
     ArrayAdapter shoppingListAdaptor;
+    MealPlan mealPlan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +38,14 @@ public class SLShoppingListActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DBHandler db = new DBHandler(user.getUid());
 
+        Bundle bundle = getIntent().getExtras();
+        mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
+
+        activity_slshopping_list.slShoppingListText.setText(String.format("%s SL", mealPlan.getTitle()));
         recipeIngredients = new ArrayList<>();
 
         shoppingListAdaptor = new SLShoppingListAdapter(this, recipeIngredients);
-
-
+        db.getSLIngredients(shoppingListAdaptor, mealPlan);
 
     }
 

@@ -12,4 +12,12 @@ public abstract class Ingredient {
     public String getDescription() {
         return description;
     }
+
+    public abstract Double getAmount();
+
+    public abstract void setAmount(Double amount);
+
+    public abstract String getUnit();
+
+    public abstract void setUnit(String units);
 }

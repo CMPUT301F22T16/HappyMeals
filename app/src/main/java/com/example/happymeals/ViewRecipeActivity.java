@@ -70,7 +70,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 amount = Long.toString(Math.round(recipeIngredient.getAmount()));
             }
 
-            ingredientListAdapter.add(String.format("%s %s", amount + " " + recipeIngredient.getUnits(), recipeIngredient.getDescription()));
+            ingredientListAdapter.add(String.format("%s %s", amount + " " + recipeIngredient.getUnit(), recipeIngredient.getDescription()));
         }
 
         for (String comment: recipe.getComments()) {

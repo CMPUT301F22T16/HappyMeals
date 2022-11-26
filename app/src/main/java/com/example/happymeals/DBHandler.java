@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.happymeals.meal.MPMealRecipeListAdapter;
 import com.example.happymeals.meal.MPMyMealsAdapter;
 import com.example.happymeals.meal.MPPickRecipeListAdapter;
 import com.example.happymeals.meal.Meal;
@@ -318,7 +317,7 @@ public class DBHandler {
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
 
                                 recipeIngredients.add(recipeIngredient);
                             }
@@ -374,7 +373,7 @@ public class DBHandler {
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -436,7 +435,7 @@ public class DBHandler {
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 

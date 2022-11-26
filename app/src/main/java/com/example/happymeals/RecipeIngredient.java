@@ -49,11 +49,11 @@ public class RecipeIngredient extends Ingredient implements Serializable {
         this.amount = amount;
     }
 
-    public String getUnits() {
+    public String getUnit() {
         return units;
     }
 
-    public void setUnits(String units) {
+    public void setUnit(String units) {
         this.units = units;
     }
 }

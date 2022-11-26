@@ -19,7 +19,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -175,7 +174,7 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
             item.setDescription(desc);
             item.setCategory(category);
             item.setAmount(amount);
-            item.setUnits(amount_unit);
+            item.setUnit(amount_unit);
             this.recipe_ingredients_list.setAdapter(this.ingredients_adapter);
         } else {
             Toast.makeText(getContext(), "Failed to edit ingredient", Toast.LENGTH_SHORT).show();
@@ -195,7 +194,7 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
             Double amountExtra = result.getData().getDoubleExtra("amount", 0.00);
             String amountUnitExtra = result.getData().getStringExtra("amount_unit");
             RecipeIngredient newIngredient = new RecipeIngredient(descriptionExtra, categoryExtra, amountExtra);
-            newIngredient.setUnits(amountUnitExtra);
+            newIngredient.setUnit(amountUnitExtra);
             recipe_ingredients_data_list.add(newIngredient);
             recipe_ingredients_list.setAdapter(ingredients_adapter);
         }
