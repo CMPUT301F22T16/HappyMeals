@@ -143,7 +143,7 @@ public class ViewIngredientFragment extends DialogFragment {
                         }
 
                         if (toast == TRUE){
-                            Toast.makeText(context, "Incomplete/Invalid input.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Incomplete/Invalid input", Toast.LENGTH_SHORT).show();
                         }
                         if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
                             thisUserIngredient.setCategory(category);
@@ -187,7 +187,7 @@ public class ViewIngredientFragment extends DialogFragment {
                 .create();
         }
 
-    // This is used to serialize the city object and so it can be passed between activities.
+    // This is used to serialize the ingredient object and so it can be passed between activities.
     static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);

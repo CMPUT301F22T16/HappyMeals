@@ -8,25 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
 
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -145,7 +140,7 @@ public class IngredientActivity extends AppCompatActivity{
         floatingAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IngredientActivity.this, addNewIngredient.class);
+                Intent intent = new Intent(IngredientActivity.this, AddNewIngredient.class);
                 intent.putExtra("mode", "Add");
                 addIngredientActivityResultLauncher.launch(intent);
             }
