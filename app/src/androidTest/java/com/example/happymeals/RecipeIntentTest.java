@@ -84,9 +84,9 @@ public class RecipeIntentTest {
         solo.clickOnView(solo.getView(R.id.recipe_add_comment_submit_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
-        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         solo.waitForText("Delicious!");
         solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Add a new ingredient
         solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
@@ -94,12 +94,13 @@ public class RecipeIntentTest {
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeAddIngredient.class);
         solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_description), "Noodles");
-        solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_category), "Grain");
+        solo.pressSpinnerItem(0, 0);
         solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_amount), "20");
+        solo.pressSpinnerItem(1, 0);
         solo.clickOnView(solo.getView(R.id.recipe_add_ingredient_btn));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
-        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
+//        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         solo.waitForText("Noodles");
         solo.clickOnButton("OK");
 
@@ -125,8 +126,9 @@ public class RecipeIntentTest {
                             item.getComments().get(0).equals("Delicious!") &&
                             item.getIngredients().size() > 0 &&
                             item.getIngredients().get(0).getDescription().equals("Noodles") &&
-                            item.getIngredients().get(0).getCategory().equals("Grain") &&
-                            item.getIngredients().get(0).getAmount().equals(20.00)
+                            item.getIngredients().get(0).getCategory().equals("Vegetable") &&
+                            item.getIngredients().get(0).getAmount().equals(20.00) &&
+                            item.getIngredients().get(0).getUnits().equals("g")
             ) {
                 index = i;
                 break;
@@ -178,12 +180,13 @@ public class RecipeIntentTest {
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeEditIngredient.class);
         EditText edit_desc = (EditText) solo.getView(R.id.recipe_edit_ingredient_description);
-        EditText edit_category = (EditText) solo.getView(R.id.recipe_edit_ingredient_category);
+//        EditText edit_category = (EditText) solo.getView(R.id.recipe_edit_ingredient_category);
+        solo.pressSpinnerItem(0, 4);
         EditText edit_amount = (EditText) solo.getView(R.id.recipe_edit_ingredient_amount);
         solo.enterText(edit_desc, " 2");
-        solo.enterText(edit_category, " 2");
         edit_amount.setText("");
         solo.enterText(edit_amount, "10");
+        solo.pressSpinnerItem(1, 0);
         solo.clickOnView((Button) solo.getView(R.id.recipe_edit_ingredient_save_btn));
         solo.sleep(3000);
         solo.waitForText("Noodles 2");
@@ -212,8 +215,9 @@ public class RecipeIntentTest {
                             item.getComments().get(0).equals("Amazing!") &&
                             item.getIngredients().size() > 0 &&
                             item.getIngredients().get(0).getDescription().equals("Noodles 2") &&
-                            item.getIngredients().get(0).getCategory().equals("Grain 2") &&
-                            item.getIngredients().get(0).getAmount().equals(10.00)
+                            item.getIngredients().get(0).getCategory().equals("Dry food") &&
+                            item.getIngredients().get(0).getAmount().equals(10.00) &&
+                            item.getIngredients().get(0).getUnits().equals("g")
             ) {
                 index_2 = i;
                 break;
