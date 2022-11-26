@@ -48,6 +48,10 @@ public class RecipeIntentTest {
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
+    /**
+     * Runs before all tests and creates solo instance.
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -56,11 +60,25 @@ public class RecipeIntentTest {
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
     }
 
+    /**
+     * Gets the Activity
+     * @throws Exception
+     */
     @Test
     public void start() throws Exception {
         Activity activity = rule.getActivity();
     }
 
+    /**
+     * This test will check that the user can add a new recipe. This tests fills in all
+     * the fields for creating a new recipe except for adding a photo. The test will add
+     * the recipe to the firestore. This test also checks that the user can edit a recipe.
+     * The recipe that was just created will be edited. All the fields will be edited and
+     * the edited recipe will be submitted to firebase. This test also checks that the
+     * user can delete the recipe. The test does this by first deleting all the comments
+     * and ingredients created earlier. Then the test will delete the recipe.
+     * @throws InterruptedException
+     */
     @Test
     public void testRecipeActivity() throws InterruptedException {
         ///// ----- Test that the user can add a new recipe ----- /////
@@ -283,6 +301,10 @@ public class RecipeIntentTest {
         assertEquals(1, recipeCountBefore - recipeCountAfter);
     }
 
+    /**
+     * Runs after all tests
+     * @throws Exception
+     */
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
