@@ -66,11 +66,11 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements S
         } else {
             bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-" + month + "-" + day);
         }
-        count.setText("Amount: " + String.valueOf(userIngredient.getAmount()));
+        count.setText("x" + String.valueOf(userIngredient.getAmount()));
 
 
 
-        unitcost.setText("Unit cost: $" + Double.toString(userIngredient.getCost()));
+        unitcost.setText("$" + Double.toString(userIngredient.getCost()));
 
         return convertView;
     }

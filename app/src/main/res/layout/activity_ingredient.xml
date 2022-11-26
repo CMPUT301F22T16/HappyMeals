@@ -31,7 +31,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="15dp"
+        android:dividerHeight="10dp"
         app:layout_constraintBottom_toTopOf="@+id/costDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
