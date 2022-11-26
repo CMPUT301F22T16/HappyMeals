@@ -5,30 +5,30 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
 
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.happymeals.storage.Storage;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * The MainActivity class defines the actions to takes at the home screen as well as initiating
@@ -51,6 +51,18 @@ public class IngredientActivity extends AppCompatActivity{
         setContentView(R.layout.activity_ingredient);
         getSupportActionBar().setTitle("Ingredients");
 
+        // Ingredient list selected from storages
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        Storage storage = null;
+        try {
+            storage = (Storage) bundle.getSerializable("STORAGE");
+        } catch (Exception e) {
+
+        }
+
+
+
         userIngredientList = new ArrayList<UserIngredient>();
 
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
@@ -61,7 +73,18 @@ public class IngredientActivity extends AppCompatActivity{
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DBHandler db = new DBHandler(user.getUid());
-        db.getIngredients(ingredientAdaptor, totalCost);
+
+
+        if (storage != null) {
+            // Disable UI that we don't want
+            setContentView(R.layout.storage_ingredient_list);
+            db.getIngredientsForStorage(ingredientAdaptor, storage);
+            ingredientListView.setAdapter(ingredientAdaptor);
+            return;
+        } else {
+
+            db.getIngredients(ingredientAdaptor, totalCost);
+        }
 
         ingredientListView.setAdapter(ingredientAdaptor);
 

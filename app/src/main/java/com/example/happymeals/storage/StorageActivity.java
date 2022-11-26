@@ -1,21 +1,23 @@
 package com.example.happymeals.storage;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.example.happymeals.DBHandler;
+import com.example.happymeals.IngredientActivity;
 import com.example.happymeals.R;
-import com.example.happymeals.Storage;
-import com.example.happymeals.StorageGridAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StorageActivity extends AppCompatActivity {
 
-    private GridView storageGrid;
+    private ListView storageGrid;
     private List<Storage> storages;
     private StorageGridAdapter adapter;
     private DBHandler db;
@@ -30,20 +32,29 @@ public class StorageActivity extends AppCompatActivity {
         db = new DBHandler(username);
 
         storages = new ArrayList<>();
-        storages.add(new Storage("Fridge"));
-        storages.add(new Storage("Freezer"));
-        storages.add(new Storage("Pantry"));
-        storages.add(new Storage("Pantry"));
-        storages.add(new Storage("Pantry"));
-        storages.add(new Storage("Pantry"));
-        storages.add(new Storage("Pantry"));
-        storages.add(new Storage("Pantry"));
-
         adapter = new StorageGridAdapter(this, storages, db);
+
+        db.getStorages(adapter);
+
 
         storageGrid = findViewById(R.id.storage_grid);
 
         storageGrid.setAdapter(adapter);
 
+        storageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("STORAGE", storages.get(i));
+                Intent intent = new Intent(StorageActivity.this, IngredientActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    public void addStorageAction(View view) {
+        CreateStorageFragment.newInstance(adapter, db).show(getSupportFragmentManager(), "ADD STORAGE");
     }
 }

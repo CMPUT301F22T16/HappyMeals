@@ -8,10 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.happymeals.meal.MPMealRecipeListAdapter;
 import com.example.happymeals.meal.MPMyMealsAdapter;
 import com.example.happymeals.meal.MPPickRecipeListAdapter;
 import com.example.happymeals.meal.Meal;
+import com.example.happymeals.storage.Storage;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -50,7 +52,7 @@ import java.util.Objects;
  * 6. user_mealplans: {@link MealPlan} is the model class for this.
  *
  */
-public class DBHandler {
+public class DBHandler implements Serializable {
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -163,10 +165,39 @@ public class DBHandler {
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
+     * Fetches all the storages for the user
+     * @param adapter
+     */
+    public void getStorages(ArrayAdapter adapter) {
+        CollectionReference ref = conn.collection("storages");
+        Query query = ref.whereEqualTo("user", getUsername());
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        adapter.clear();
+                        for (DocumentSnapshot snapshot: value) {
+                            List<String> ingredient_ids = (List<String>) snapshot.get("ingredients");
+                            String type = snapshot.getString("type");
+
+                            Storage storage = new Storage(type);
+                            String id = snapshot.getId();
+                            storage.setUserIngredients(ingredient_ids);
+                            storage.setId(id);
+
+                            adapter.add(storage);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+    }
+
+    /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
      * @param storage : Object of type {@link Storage} that will be stored in the database.
      */
-    public void newStorage(Storage storage) {
+    public void addStorage(Storage storage) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
         DocumentReference doc = conn.collection("storages").document();
@@ -262,6 +293,45 @@ public class DBHandler {
             }
         });
     }
+
+    /**
+     * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
+     */
+    public void getIngredientsForStorage(ArrayAdapter adapter, Storage storage) {
+
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername()).whereEqualTo("Location", storage.getStoreName());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uIng", "An error has occured while trying to update the local ingredients");
+                } else {
+                    List<UserIngredient> userIngredients = new ArrayList<>();
+                    Double sum = 0.0;
+                    adapter.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String category = doc.getString("category");
+                        String description = doc.getString("description");
+                        Double amount = doc.getDouble("amount");
+                        Double cost = doc.getDouble("cost");
+                        sum += cost * amount;
+                        Date date = doc.getDate("date");
+                        String location = doc.getString("location");
+                        String unit = doc.getString("unit");
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setId(doc.getId());
+                        userIngredients.add(userIngredient);
+                        adapter.add(userIngredient);
+                    }
+                    adapter.notifyDataSetChanged();
+                    Log.d("uIng", "Local ingredients updated successfully!");
+                }
+            }
+        });
+
+    }
+
+
 
     //-------------------------------------------------Recipe Methods-------------------------------------------------//
 
@@ -503,8 +573,6 @@ public class DBHandler {
         }
 
         StorageReference rootRef = storage.getReference();
-
-        // TODO support other file formats
 
         StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + "." + filetype);
 
