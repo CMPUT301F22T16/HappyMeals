@@ -79,7 +79,7 @@ public class EditUserIngredientTest {
         solo.waitForText("Unit cost: $3.3", 1, 2000);
         solo.waitForText("Bestbefore: 2023-06-26", 1, 2000);
 
-        solo.clickOnView((ListView) solo.getView(R.id.ingredientList));
+        solo.clickOnView((ListView) solo.getView(R.id.storage_ingredient_list));
 
         // Check if the fragment is entered
         solo.waitForFragmentByTag("Food detail", 5000);
@@ -98,7 +98,7 @@ public class EditUserIngredientTest {
         solo.clickOnView(solo.getView(R.id.confirm_button));
         solo.assertCurrentActivity("Wrong Activity", IngredientActivity.class);
 
-        solo.clickOnView((ListView) solo.getView(R.id.ingredientList));
+        solo.clickOnView((ListView) solo.getView(R.id.storage_ingredient_list));
 
         // Check if the fragment is entered
         solo.waitForFragmentByTag("Food detail", 5000);

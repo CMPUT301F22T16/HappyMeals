@@ -299,7 +299,7 @@ public class DBHandler implements Serializable {
      */
     public void getIngredientsForStorage(ArrayAdapter adapter, Storage storage) {
 
-        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername()).whereEqualTo("Location", storage.getStoreName());
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername()).whereEqualTo("location", storage.getStoreName());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -321,6 +321,7 @@ public class DBHandler implements Serializable {
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
+
                         adapter.add(userIngredient);
                     }
                     adapter.notifyDataSetChanged();

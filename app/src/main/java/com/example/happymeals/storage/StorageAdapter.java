@@ -12,18 +12,17 @@ import androidx.annotation.Nullable;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
-import com.example.happymeals.storage.Storage;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class StorageGridAdapter extends ArrayAdapter<Storage> implements Serializable {
+public class StorageAdapter extends ArrayAdapter<Storage> implements Serializable {
 
     Context context;
     List<Storage> storages;
     DBHandler db;
 
-    public StorageGridAdapter(@NonNull Context context, List<Storage> storages, DBHandler user) {
+    public StorageAdapter(@NonNull Context context, List<Storage> storages, DBHandler user) {
         super(context, 0, storages);
 
         this.context = context;

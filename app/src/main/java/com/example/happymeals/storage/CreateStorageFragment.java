@@ -25,10 +25,10 @@ import com.example.happymeals.R;
  */
 public class CreateStorageFragment extends DialogFragment {
 
-    StorageGridAdapter adapter;
+    StorageAdapter adapter;
     DBHandler db;
 
-    public static CreateStorageFragment newInstance(StorageGridAdapter adapter, DBHandler db) {
+    public static CreateStorageFragment newInstance(StorageAdapter adapter, DBHandler db) {
         Bundle args = new Bundle();
 
         args.putSerializable("ADAPTER", adapter);
@@ -48,7 +48,7 @@ public class CreateStorageFragment extends DialogFragment {
         View view = LayoutInflater.from(context).inflate(R.layout.fragment_create_storage, null);
 
         Bundle bundle = this.getArguments();
-        adapter = (StorageGridAdapter) bundle.getSerializable("ADAPTER");
+        adapter = (StorageAdapter) bundle.getSerializable("ADAPTER");
         db = (DBHandler) bundle.getSerializable("DBHandler");
 
         EditText input = view.findViewById(R.id.storage_name_fragment);

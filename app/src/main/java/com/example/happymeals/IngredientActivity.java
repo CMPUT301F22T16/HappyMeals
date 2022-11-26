@@ -5,8 +5,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,7 +26,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * The MainActivity class defines the actions to takes at the home screen as well as initiating
@@ -50,6 +47,7 @@ public class IngredientActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
         getSupportActionBar().setTitle("Ingredients");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Ingredient list selected from storages
         Intent intent = getIntent();
@@ -65,7 +63,7 @@ public class IngredientActivity extends AppCompatActivity{
 
         userIngredientList = new ArrayList<UserIngredient>();
 
-        ingredientListView = (ListView) findViewById(R.id.ingredientList);
+        ingredientListView = (ListView) findViewById(R.id.ingredient_list);
         totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd =  findViewById(R.id.floatingAdd);
         sortIngredients = (FloatingActionButton) findViewById(R.id.sort_ingredients);
@@ -77,7 +75,8 @@ public class IngredientActivity extends AppCompatActivity{
 
         if (storage != null) {
             // Disable UI that we don't want
-            setContentView(R.layout.storage_ingredient_list);
+            setContentView(R.layout.storage_ingredient);
+            ingredientListView = findViewById(R.id.storage_ingredient_list);
             db.getIngredientsForStorage(ingredientAdaptor, storage);
             ingredientListView.setAdapter(ingredientAdaptor);
             return;
@@ -174,7 +173,6 @@ public class IngredientActivity extends AppCompatActivity{
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
