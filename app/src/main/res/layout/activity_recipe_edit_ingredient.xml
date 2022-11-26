@@ -25,14 +25,36 @@
         android:inputType="textPersonName"
         android:hint="Description" />
 
-    <EditText
-        android:id="@+id/recipe_edit_ingredient_category"
+<!--    <EditText-->
+<!--        android:id="@+id/recipe_edit_ingredient_category"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="5dp"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:hint="Category" />-->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Category" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|end"
+            android:text="CATEGORY:" />
+
+        <Spinner
+            android:id="@+id/recipe_edit_ingredient_category_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

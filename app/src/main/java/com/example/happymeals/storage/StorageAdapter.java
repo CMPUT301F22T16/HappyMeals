@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.storage;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,15 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.R;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class StorageGridAdapter extends ArrayAdapter<Storage> {
+public class StorageAdapter extends ArrayAdapter<Storage> implements Serializable {
 
     Context context;
     List<Storage> storages;
     DBHandler db;
 
-    public StorageGridAdapter(@NonNull Context context, List<Storage> storages, DBHandler user) {
+    public StorageAdapter(@NonNull Context context, List<Storage> storages, DBHandler user) {
         super(context, 0, storages);
 
         this.context = context;
@@ -38,6 +42,9 @@ public class StorageGridAdapter extends ArrayAdapter<Storage> {
 
         TextView storageNameView = convertView.findViewById(R.id.storage_card_title);
         storageNameView.setText(storage.getStoreName());
+
+        TextView countText = convertView.findViewById(R.id.count_text);
+        countText.setText(Integer.toString(storage.getItemCount()));
 
         return convertView;
     }

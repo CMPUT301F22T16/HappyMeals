@@ -7,21 +7,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.happymeals.recipe.EditRecipe;
@@ -29,8 +23,6 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +57,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         setContentView(R.layout.activity_recipe_list);
 
         // Initialize the Add Recipe Button
-        add_recipe_button = findViewById(R.id.add_recipe_button);
+        add_recipe_button = findViewById(R.id.add_storage_button);
 
 
         // Sort button
@@ -101,25 +93,19 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         add_recipe_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addRecipeAction(view);
+                Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("USER", db.getUsername());
+                intent.putExtras(bundle);
+                // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
+                intent.putExtra("operation", "add");
+                add_recipe_for_result.launch(intent);
             }
         });
 
 
 
     }
-
-    public void addRecipeAction(View view) {
-
-        Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("USER", db.getUsername());
-        intent.putExtras(bundle);
-        // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
-        intent.putExtra("operation", "add");
-        add_recipe_for_result.launch(intent);
-    }
-
 
 
     public void handleEditRecipeForResultLauncher(ActivityResult result) {
@@ -140,12 +126,12 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             rec.setComments(comments);
             rec.setIngredients(ing);
 
+
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (!Objects.equals(uriStr, "")) {
+            if (!Objects.equals(uriStr, null) && !uriStr.equals("")) {
                 uri = Uri.parse(uriStr);
             }
-            rec.setDownloadUri(uriStr);
             db.updateRecipe(rec);
 
             db.uploadImage(uri, rec, filetype);
@@ -163,16 +149,13 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
             String filetype = result.getData().getStringExtra("filetype");
 
-
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
-            if (!Objects.equals(uriStr, null)) {
+            if (!Objects.equals(uriStr, null) && !uriStr.equals("")) {
                 uri = Uri.parse(uriStr);
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
-            newRecipe.setDownloadUri(uriStr);
             db.addRecipe(newRecipe);
-            // TODO pass file extension
 
             db.uploadImage(uri, newRecipe, filetype);
         }

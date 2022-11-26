@@ -9,8 +9,6 @@ import android.app.Activity;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -18,7 +16,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,7 +33,7 @@ public class EditUserIngredientTest {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.assertCurrentActivity("Wrong Activity", IngredientActivity.class);
         solo.clickOnView(solo.getView(R.id.floatingAdd));
-        solo.assertCurrentActivity("Wrong Activity", addNewIngredient.class);
+        solo.assertCurrentActivity("Wrong Activity", AddNewIngredient.class);
     }
 
     /**
@@ -82,7 +79,7 @@ public class EditUserIngredientTest {
         solo.waitForText("Unit cost: $3.3", 1, 2000);
         solo.waitForText("Bestbefore: 2023-06-26", 1, 2000);
 
-        solo.clickOnView((ListView) solo.getView(R.id.ingredientList));
+        solo.clickOnView((ListView) solo.getView(R.id.storage_ingredient_list));
 
         // Check if the fragment is entered
         solo.waitForFragmentByTag("Food detail", 5000);
@@ -101,7 +98,7 @@ public class EditUserIngredientTest {
         solo.clickOnView(solo.getView(R.id.confirm_button));
         solo.assertCurrentActivity("Wrong Activity", IngredientActivity.class);
 
-        solo.clickOnView((ListView) solo.getView(R.id.ingredientList));
+        solo.clickOnView((ListView) solo.getView(R.id.storage_ingredient_list));
 
         // Check if the fragment is entered
         solo.waitForFragmentByTag("Food detail", 5000);

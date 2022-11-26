@@ -5,27 +5,26 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import java.util.ArrayList;
 
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.happymeals.storage.Storage;
+import com.example.happymeals.storage.StorageAdapter;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,11 +34,11 @@ import java.util.Date;
  */
 public class IngredientActivity extends AppCompatActivity{
     ArrayList<UserIngredient> userIngredientList;
-    ArrayAdapter ingredientAdaptor;
+    IngredientAdaptor ingredientAdaptor;
     ListView ingredientListView;
     TextView totalCost;
-    FloatingActionButton floatingAdd;
-    Spinner sortBySelect;
+    ExtendedFloatingActionButton floatingAdd;
+    FloatingActionButton sortIngredients;
 
     // This integer is used to store the index of the Ingredient object in the list.
     int ingredientPosition;
@@ -49,53 +48,53 @@ public class IngredientActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient);
         getSupportActionBar().setTitle("Ingredients");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Ingredient list selected from storages
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        Storage storage = null;
+        try {
+            storage = (Storage) bundle.getSerializable("STORAGE");
+        } catch (Exception e) {
+
+        }
+
+
 
         userIngredientList = new ArrayList<UserIngredient>();
 
-        ingredientListView = (ListView) findViewById(R.id.ingredientList);
+        ingredientListView = (ListView) findViewById(R.id.ingredient_list);
         totalCost = (TextView) findViewById(R.id.costDescription);
-        floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
-        sortBySelect = (Spinner) findViewById(R.id.sortBy);
+        floatingAdd =  findViewById(R.id.floatingAdd);
+        sortIngredients = (FloatingActionButton) findViewById(R.id.sort_ingredients);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DBHandler db = new DBHandler(user.getUid());
-        db.getIngredients(ingredientAdaptor, totalCost);
+
+
+        if (storage != null ) { // Ingredient Activity is launched by Storage Activity
+            // Disable UI that we don't want
+            setContentView(R.layout.storage_ingredient);
+            ingredientListView = findViewById(R.id.storage_ingredient_list);
+            db.getIngredientsForStorage(ingredientAdaptor, storage);
+            ingredientListView.setAdapter(ingredientAdaptor);
+            return;
+        } else {
+
+            db.getIngredients(ingredientAdaptor, totalCost);
+        }
 
         ingredientListView.setAdapter(ingredientAdaptor);
 
         ingredientPosition = -1;
 
-        ArrayList<String> sortBy = new ArrayList<>(Arrays.asList("Name (A-Z)", "Name (Z-A)", "Price (Low - High)", "Price (High - Low)"));
-        ArrayAdapter<String> sortByAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, sortBy);
 
-        sortBySelect.setAdapter(sortByAdapt);
-        sortBySelect.setPrompt("Sort By:");
-
-        // The default sorting is by name a-z
-        sortBySelect.setSelection(0, true);
-
-        sortBySelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sortIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    Toast.makeText(getApplicationContext(), "Sort by Name (A-Z)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                } else if (position == 1) {
-                    Toast.makeText(getApplicationContext(), "Sort by Name (Z-A)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                } else if (position == 2) {
-                    Toast.makeText(getApplicationContext(), "Sort by Price (Low - High)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                } else if (position == 3) {
-                    Toast.makeText(getApplicationContext(), "Sort by Price (High - Low)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View view) {
+                IngredientSortFragment.newInstance(userIngredientList, ingredientAdaptor).show(getSupportFragmentManager(), "SORTING INGREDIENTS");
             }
         });
 
@@ -115,7 +114,7 @@ public class IngredientActivity extends AppCompatActivity{
 
                             String category = addIngredient.getStringExtra("category");
                             String description = addIngredient.getStringExtra("description");
-                            double count = addIngredient.getIntExtra("count", -1);
+                            double count = addIngredient.getDoubleExtra("count", -1);
                             double unitCost = addIngredient.getDoubleExtra("unit cost", -1);
                             int year = addIngredient.getIntExtra("year", -1);
                             int month = addIngredient.getIntExtra("month", -1);
@@ -169,13 +168,12 @@ public class IngredientActivity extends AppCompatActivity{
         floatingAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IngredientActivity.this, addNewIngredient.class);
+                Intent intent = new Intent(IngredientActivity.this, AddNewIngredient.class);
                 intent.putExtra("mode", "Add");
                 addIngredientActivityResultLauncher.launch(intent);
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
