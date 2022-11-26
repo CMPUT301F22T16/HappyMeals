@@ -21,7 +21,7 @@ public class Storage implements Storable, Serializable {
 
     private String storeName;
     private String id;
-    private List<String> userIngredients = new ArrayList<>();
+    private int itemCount;
 
     /**
      * A constructor for storages with a {@link String} storage name provided.
@@ -29,6 +29,7 @@ public class Storage implements Storable, Serializable {
      */
     public Storage(String storeName) {
         this.storeName = storeName;
+        this.itemCount = 0;
     }
 
     /**
@@ -60,34 +61,21 @@ public class Storage implements Storable, Serializable {
      */
     public void setId(String id) { this.id = id; }
 
-    /**
-     * Get the ingredients present in the Storage object.
-     * @return {@link ArrayList< UserIngredient >} of ingredients in the storage.
-     */
-    public List<String> getIngredients() { return this.userIngredients; }
-
-    /**
-     * Set the ingredient list with the ids of the ingredients associated with the storage.
-     * @param userIngredients {@link List<UserIngredient>} a list
-     */
-    public void setUserIngredients(List<String> userIngredients) {
-        this.userIngredients = userIngredients;
-    }
-
-    /**
-     * Add a new ingredient in the storage.
-     * @param userIngredientID {@link String} object to be added.
-     */
-    public void addIngredient(String userIngredientID) {
-        userIngredients.add(userIngredientID);
-    }
 
     /**
      * Returns the Item count for the storage
      * @return {@link Integer} count of items.
      */
     public int getItemCount() {
-        return this.userIngredients.size();
+        return this.itemCount;
+    }
+
+    /**
+     * Sets the item count to the given {@link Integer} val.
+     * @param val
+     */
+    public void setItemCount(int val) {
+        this.itemCount = val;
     }
 
     /**
@@ -98,7 +86,7 @@ public class Storage implements Storable, Serializable {
     public HashMap<String, Object> getStorable() {
         HashMap<String, Object> data = new HashMap();
         data.put("type", this.storeName);
-        data.put("ingredients", this.getIngredients());
+        data.put("items", this.itemCount);
         return data;
     }
 }

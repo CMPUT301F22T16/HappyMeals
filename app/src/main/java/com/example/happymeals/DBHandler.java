@@ -52,7 +52,7 @@ import java.util.Objects;
  * 6. user_mealplans: {@link MealPlan} is the model class for this.
  *
  */
-public class DBHandler implements Serializable {
+public class DBHandler implements Serializable{
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -165,10 +165,10 @@ public class DBHandler implements Serializable {
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
-     * Fetches all the storages for the user
+     * Fetches all the storages for the userin the Storage Activity
      * @param adapter
      */
-    public void getStorages(ArrayAdapter adapter) {
+    public void getStorages(ArrayAdapter<Storage> adapter) {
         CollectionReference ref = conn.collection("storages");
         Query query = ref.whereEqualTo("user", getUsername());
         query
@@ -177,15 +177,39 @@ public class DBHandler implements Serializable {
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         adapter.clear();
                         for (DocumentSnapshot snapshot: value) {
-                            List<String> ingredient_ids = (List<String>) snapshot.get("ingredients");
                             String type = snapshot.getString("type");
 
                             Storage storage = new Storage(type);
                             String id = snapshot.getId();
-                            storage.setUserIngredients(ingredient_ids);
                             storage.setId(id);
 
+                            int count = snapshot.getLong("items").intValue();
+                            storage.setItemCount(count);
+
                             adapter.add(storage);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+    }
+
+    /**
+     * Fetches all the storage {@link String} types for the user in the User Ingredient Activity
+     * @param adapter
+     */
+    public void getStorageTypes(ArrayAdapter<String> adapter) {
+        CollectionReference ref = conn.collection("storages");
+        Query query = ref.whereEqualTo("user", getUsername());
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        adapter.clear();
+                        for (DocumentSnapshot snapshot: value) {
+                            String type = snapshot.getString("type");
+
+                            adapter.add(type);
                         }
                         adapter.notifyDataSetChanged();
 
@@ -204,6 +228,7 @@ public class DBHandler implements Serializable {
         String id = store(doc, data, "Storage");
         storage.setId(id);
     }
+
 
     /**
      * Deletes the entry of a {@link Storage} object from the database.
@@ -304,7 +329,7 @@ public class DBHandler implements Serializable {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    Log.d("uIng", "An error has occured while trying to update the local ingredients");
+                    Log.d("uIng", "An error has occurred while trying to update the local ingredients");
                 } else {
                     List<UserIngredient> userIngredients = new ArrayList<>();
                     Double sum = 0.0;
@@ -321,8 +346,10 @@ public class DBHandler implements Serializable {
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
-
+                        int items = storage.getItemCount();
+                        storage.setItemCount(items + 1);
                         adapter.add(userIngredient);
+
                     }
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");

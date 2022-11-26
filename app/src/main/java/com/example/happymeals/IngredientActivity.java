@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import android.widget.TextView;
 
 import com.example.happymeals.storage.Storage;
+import com.example.happymeals.storage.StorageAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,7 +74,7 @@ public class IngredientActivity extends AppCompatActivity{
         DBHandler db = new DBHandler(user.getUid());
 
 
-        if (storage != null) {
+        if (storage != null ) { // Ingredient Activity is launched by Storage Activity
             // Disable UI that we don't want
             setContentView(R.layout.storage_ingredient);
             ingredientListView = findViewById(R.id.storage_ingredient_list);
