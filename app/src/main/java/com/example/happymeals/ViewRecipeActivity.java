@@ -65,8 +65,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
 
             // decimal adjusting for nice formatting
-            Double decimal = recipeIngredient.getAmount() - Math.floor(recipeIngredient.getAmount());
-            String amount = recipeIngredient.getAmount().toString();
+            Double decimal = recipeIngredient.getAmount()*scaling_factor - Math.floor(recipeIngredient.getAmount())*scaling_factor;
+            Double a = recipeIngredient.getAmount()*scaling_factor;
+            String amount = a.toString();
             if (decimal == 0.0f) {
                 amount = Long.toString(Math.round(recipeIngredient.getAmount()));
             }
