@@ -157,7 +157,7 @@ public class addNewIngredient extends AppCompatActivity {
                     }
                 }
 
-                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
+                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count > 0 && unitCost > 0) {
                     Intent intent = new Intent(addNewIngredient.this, MainActivity.class);
 
                     intent.putExtra("mode", mode);
