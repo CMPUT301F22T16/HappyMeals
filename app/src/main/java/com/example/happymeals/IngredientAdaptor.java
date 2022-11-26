@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * The IngredientAdaptor class defines how the an object of the "Ingredient" class will be displayed in a ListView
  */
 // Coding of this adaptor comes from lab example.
-public class IngredientAdaptor extends ArrayAdapter<UserIngredient> {
+public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements Serializable {
 
     public IngredientAdaptor(Context context, ArrayList<UserIngredient> userIngredients) {
         super(context, 0, userIngredients);

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView11">
 
         <RadioButton
-            android:id="@+id/recipe_low_to_high"
+            android:id="@+id/ingredient_low_to_high"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
@@ -26,7 +26,7 @@
             android:text="Low to High" />
 
         <RadioButton
-            android:id="@+id/recipe_high_to_low"
+            android:id="@+id/ingredient_high_to_low"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="High to Low" />
@@ -36,7 +36,7 @@
     <RadioGroup
         android:id="@+id/sort_recipe_group"
         android:layout_width="0dp"
-        android:layout_height="191dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
@@ -46,29 +46,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView12">
 
         <RadioButton
-            android:id="@+id/recipe_title_radio"
+            android:id="@+id/description_sort_ingredient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Title" />
+            android:text="Description" />
 
         <RadioButton
-            android:id="@+id/recipe_prep_radio"
+            android:id="@+id/price_sort_ingredient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Preparation time" />
+            android:text="Unit cost" />
 
-        <RadioButton
-            android:id="@+id/recipe_servings_radio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Number of Servings" />
-
-        <RadioButton
-            android:id="@+id/recipe_category_radio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recipe Category" />
     </RadioGroup>
 
     <TextView
