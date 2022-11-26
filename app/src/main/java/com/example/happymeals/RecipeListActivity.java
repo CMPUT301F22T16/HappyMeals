@@ -7,21 +7,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.happymeals.recipe.EditRecipe;
@@ -29,8 +23,6 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +57,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         setContentView(R.layout.activity_recipe_list);
 
         // Initialize the Add Recipe Button
-        add_recipe_button = findViewById(R.id.add_recipe_button);
+        add_recipe_button = findViewById(R.id.add_storage_button);
 
 
         // Sort button

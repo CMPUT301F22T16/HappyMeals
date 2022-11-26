@@ -37,8 +37,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 @RunWith(AndroidJUnit4.class)
 public class RecipeIntentTest {
     private Solo solo;
@@ -83,7 +81,7 @@ public class RecipeIntentTest {
     public void testRecipeActivity() throws InterruptedException {
         ///// ----- Test that the user can add a new recipe ----- /////
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
-        solo.clickOnView(solo.getView(R.id.add_recipe_button));
+        solo.clickOnView(solo.getView(R.id.add_storage_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
