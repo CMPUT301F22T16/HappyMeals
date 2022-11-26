@@ -33,7 +33,7 @@ public class EditUserIngredientTest {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.assertCurrentActivity("Wrong Activity", IngredientActivity.class);
         solo.clickOnView(solo.getView(R.id.floatingAdd));
-        solo.assertCurrentActivity("Wrong Activity", addNewIngredient.class);
+        solo.assertCurrentActivity("Wrong Activity", AddNewIngredient.class);
     }
 
     /**

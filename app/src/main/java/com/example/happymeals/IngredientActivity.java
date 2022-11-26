@@ -114,7 +114,7 @@ public class IngredientActivity extends AppCompatActivity{
 
                             String category = addIngredient.getStringExtra("category");
                             String description = addIngredient.getStringExtra("description");
-                            double count = addIngredient.getIntExtra("count", -1);
+                            double count = addIngredient.getDoubleExtra("count", -1);
                             double unitCost = addIngredient.getDoubleExtra("unit cost", -1);
                             int year = addIngredient.getIntExtra("year", -1);
                             int month = addIngredient.getIntExtra("month", -1);
@@ -168,7 +168,7 @@ public class IngredientActivity extends AppCompatActivity{
         floatingAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(IngredientActivity.this, addNewIngredient.class);
+                Intent intent = new Intent(IngredientActivity.this, AddNewIngredient.class);
                 intent.putExtra("mode", "Add");
                 addIngredientActivityResultLauncher.launch(intent);
             }
