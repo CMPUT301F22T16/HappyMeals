@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,11 +36,11 @@ import java.util.Date;
  */
 public class IngredientActivity extends AppCompatActivity{
     ArrayList<UserIngredient> userIngredientList;
-    ArrayAdapter ingredientAdaptor;
+    IngredientAdaptor ingredientAdaptor;
     ListView ingredientListView;
     TextView totalCost;
-    FloatingActionButton floatingAdd;
-    Spinner sortBySelect;
+    ExtendedFloatingActionButton floatingAdd;
+    FloatingActionButton sortIngredients;
 
     // This integer is used to store the index of the Ingredient object in the list.
     int ingredientPosition;
@@ -54,8 +55,8 @@ public class IngredientActivity extends AppCompatActivity{
 
         ingredientListView = (ListView) findViewById(R.id.ingredientList);
         totalCost = (TextView) findViewById(R.id.costDescription);
-        floatingAdd = (FloatingActionButton) findViewById(R.id.floatingAdd);
-        sortBySelect = (Spinner) findViewById(R.id.sortBy);
+        floatingAdd =  findViewById(R.id.floatingAdd);
+        sortIngredients = (FloatingActionButton) findViewById(R.id.sort_ingredients);
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -66,36 +67,11 @@ public class IngredientActivity extends AppCompatActivity{
 
         ingredientPosition = -1;
 
-        ArrayList<String> sortBy = new ArrayList<>(Arrays.asList("Name (A-Z)", "Name (Z-A)", "Price (Low - High)", "Price (High - Low)"));
-        ArrayAdapter<String> sortByAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, sortBy);
 
-        sortBySelect.setAdapter(sortByAdapt);
-        sortBySelect.setPrompt("Sort By:");
-
-        // The default sorting is by name a-z
-        sortBySelect.setSelection(0, true);
-
-        sortBySelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        sortIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    Toast.makeText(getApplicationContext(), "Sort by Name (A-Z)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                } else if (position == 1) {
-                    Toast.makeText(getApplicationContext(), "Sort by Name (Z-A)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                } else if (position == 2) {
-                    Toast.makeText(getApplicationContext(), "Sort by Price (Low - High)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                } else if (position == 3) {
-                    Toast.makeText(getApplicationContext(), "Sort by Price (High - Low)", Toast.LENGTH_SHORT).show();
-                    // Do something
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View view) {
+                IngredientSortFragment.newInstance(userIngredientList, ingredientAdaptor).show(getSupportFragmentManager(), "SORTING INGREDIENTS");
             }
         });
 

@@ -20,19 +20,19 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RecipeSortFragment#newInstance} factory method to
+ * Use the {@link IngredientSortFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecipeSortFragment extends DialogFragment {
+public class IngredientSortFragment extends DialogFragment {
 
-    private List<Recipe> recipes;
+    private List<UserIngredient> userIngredients;
     private RadioGroup sortingOptions;
     private RadioGroup orderOptions;
 
-    public static RecipeSortFragment newInstance(List<Recipe> recipeList, RecipeListAdapter adapter) {
-        RecipeSortFragment fragment = new RecipeSortFragment();
+    public static IngredientSortFragment newInstance(List<UserIngredient> ingredientList, IngredientAdaptor adapter) {
+        IngredientSortFragment fragment = new IngredientSortFragment();
         Bundle args = new Bundle();
-        args.putSerializable("COLLECTION", (Serializable) recipeList);
+        args.putSerializable("COLLECTION", (Serializable) ingredientList);
         args.putSerializable("ADAPTER", (Serializable) adapter);
         fragment.setArguments(args);
         return fragment;
@@ -43,12 +43,12 @@ public class RecipeSortFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         Context context = getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.recipe_fragment_sort, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.ingredient_fragment_sort, null);
 
 
         Bundle bundle = this.getArguments();
-        recipes = (List<Recipe>) bundle.getSerializable("COLLECTION");
-        RecipeListAdapter adapter = (RecipeListAdapter) bundle.getSerializable("ADAPTER");
+        userIngredients = (List<UserIngredient>) bundle.getSerializable("COLLECTION");
+        IngredientAdaptor adapter = (IngredientAdaptor) bundle.getSerializable("ADAPTER");
         setupView(view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -68,47 +68,24 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                                    Collections.sort(userIngredients, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
                                 }
 
                                 else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                                    Collections.sort(userIngredients, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
                                 }
 
                                 break;
 
-                            case R.id.recipe_servings_radio:
-
-                                if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
-                                }
-
-                                else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
-                                }
-
-                                break;
-
-                            case R.id.recipe_category_radio:
-
-                                if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
-                                }
-
-                                else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
-                                }
-
-                                break;
 
                             default:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                                    Collections.sort(userIngredients, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
                                 }
 
                                 else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                                    Collections.sort(userIngredients, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
                                 }
 
                                 break;
