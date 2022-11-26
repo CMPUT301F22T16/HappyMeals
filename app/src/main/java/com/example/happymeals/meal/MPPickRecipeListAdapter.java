@@ -23,7 +23,6 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
     private ArrayList<Recipe> recipes;
     private ArrayList<Recipe> arraylist;
     private ArrayList<Recipe> recipes_buffer;
-    private ArrayList<Recipe> existing_recipes;
     private Context context;
     LayoutInflater inflater;
 
@@ -37,11 +36,14 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         this.context = context;
         this.recipes_buffer = new ArrayList<Recipe>(recipes);
         this.recipes = new ArrayList<>();
-        this.existing_recipes = new ArrayList<Recipe>(recipes);
         this.arraylist = new ArrayList<Recipe>(recipes);
         inflater = LayoutInflater.from(this.context);
     }
 
+    /**
+     * Return the recipe size
+     * @return {@link int}
+     */
     @Override
     public int getCount() {
         return recipes.size();
@@ -54,25 +56,41 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
      * the new ones user just selected
      */
     public ArrayList<Recipe> getAllRecipes(){
-        ArrayList<Recipe> all_recipes = new ArrayList<>();
-        for (Recipe r : recipes_buffer) {
-            all_recipes.add(r);
-        }
-        return all_recipes;
+        return recipes_buffer;
     }
 
 
-
+    /**
+     * Clear recipes list
+     */
     public void clear(){recipes.clear(); arraylist.clear();}
 
+    /**
+     * add a new recipe to list
+     * @param recipe a new {@link Recipe} to be added
+     */
     public void add(Recipe recipe){recipes.add(recipe); arraylist.add(recipe);}
 
+    /**
+     * Return all the selected recipes
+     * @return a list of {@link Recipe} that was selected by user
+     */
     public List<Recipe> getRecipesSelected() { return this.recipes_buffer;}
 
+    /**
+     * Add a recipe to buffer
+     * @param position the position of the recipe in user user
+     *                 recipes list
+     */
     public void addToBuffer(int position){
         recipes_buffer.add(recipes.get(position));
     }
 
+    /**
+     * remove a recipe from buffer
+     * @param position the index of the recipe to be removed
+     *                 in the buffter
+     */
     public void removeFromBuffer(int position){
         Recipe r = recipes.get(position);
         int i = 0;
@@ -85,16 +103,32 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         recipes_buffer.remove(i);
     }
 
+    /**
+     * get recipe by position
+     * @param position the index of the recipe in the recipes list
+     * @return a recipe of type {@link Recipe}
+     */
     @Override
     public Object getItem(int position) {
         return recipes.get(position);
     }
 
+    /**
+     * get the item id
+     * @param position the index
+     * @return index
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * @param position The position of the item within the adapter's data set of the item whose view we want.
+     * @param convertView The old view to reuse, if possible. Note: You should check that this view is non-null and of an appropriate type before using. If it is not possible to convert this view to display the correct data, this method can create a new view. Heterogeneous lists can specify their number of view types, so that this View is always of the right type (see getViewTypeCount() and getItemViewType(int)).
+     * @param parent The parent that this view will eventually be attached to
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;

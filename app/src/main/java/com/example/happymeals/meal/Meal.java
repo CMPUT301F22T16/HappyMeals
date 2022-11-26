@@ -67,12 +67,13 @@ public class Meal implements Storable, Serializable {
         this.title = title;
     }
 
+
     /**
      * Removes a recipe from the meal's recipe list specified by the index.
-     * @param index An {@link Integer} index for the recipe to be removed.
+     * @param recipe An {@link Recipe} the recipe to be removed from the list
      */
-    public void removeRecipe(int index){
-        this.recipes.remove(index);
+    public void removeRecipe(Recipe recipe){
+        this.recipes.remove(recipe);
     }
 
     /**
@@ -132,6 +133,13 @@ public class Meal implements Storable, Serializable {
         }
     }
 
+    /**
+     * remove the scaling for the recipe in the recipe list
+     * @param recipe {@link Recipe} recipe for which the scaling is to be set.
+     */
+    public void removeScalingForRecipe(Recipe recipe){
+            this.scalings.remove(recipe.get_r_id());
+    }
 
     /**
      * Sets the scaling for the recipe in the recipe list.
