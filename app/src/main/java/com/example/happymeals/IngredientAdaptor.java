@@ -106,6 +106,7 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements S
         } else {
             bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-" + month + "-" + day);
         }
+        System.out.println(userIngredient.getDescription() + " " + userIngredient.getUnit());
         count.setText( String.valueOf(userIngredient.getAmount()) + " " + userIngredient.getUnit());
 
 
