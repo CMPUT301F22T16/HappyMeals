@@ -66,7 +66,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
         userIngredientList = new ArrayList<UserIngredient>();
 
         ingredientListView = (ListView) findViewById(R.id.ingredient_list);
-        totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd =  findViewById(R.id.floatingAdd);
         sortIngredients = (FloatingActionButton) findViewById(R.id.sort_ingredients);
 
@@ -90,7 +89,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
             return;
         } else {
 
-            db.getIngredients(ingredientAdaptor, totalCost);
+            db.getIngredients(ingredientAdaptor);
         }
 
         ingredientListView.setAdapter(ingredientAdaptor);

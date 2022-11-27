@@ -284,7 +284,7 @@ public class DBHandler implements Serializable{
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    public void getIngredients(ArrayAdapter adapter, @Nullable TextView totalCost) {
+    public void getIngredients(ArrayAdapter adapter) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -310,9 +310,7 @@ public class DBHandler implements Serializable{
                         adapter.add(userIngredient);
                     }
                     adapter.notifyDataSetChanged();
-                    if (!Objects.isNull(totalCost)) {
-                        totalCost.setText("Total cost: $" + String.valueOf(sum));
-                    }
+
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
