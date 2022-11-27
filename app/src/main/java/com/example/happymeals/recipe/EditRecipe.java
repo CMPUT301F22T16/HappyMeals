@@ -376,9 +376,7 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
                             circularBitmapDrawable.setCornerRadius(32.0f); // radius for corners
                             view.setImageDrawable(circularBitmapDrawable);
                         }
-                    });;
-        } else { // Result was a failure
-            Toast.makeText(this, "Error taking picture", Toast.LENGTH_SHORT).show();
+                    });
         }
     }
 
