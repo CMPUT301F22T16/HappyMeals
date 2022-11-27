@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "81420419900-057qvlkuemcrd60f89qlucdt3j6bjkh0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.happymeals",
-            "certificate_hash": "636a70d982dc8893197f1be029486e937391f28c"
-          }
-        },
-        {
           "client_id": "81420419900-gcbk8j5ri4k3o71tf3dkhsvjf91dhe76.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -30,11 +22,11 @@
           }
         },
         {
-          "client_id": "81420419900-q0du1o31fi86h7sars7nm7vde831ev57.apps.googleusercontent.com",
+          "client_id": "81420419900-tb4q95c8am60p5sa3mr9rdultog1it8l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.happymeals",
-            "certificate_hash": "8783255cca7c2c5cec0f70eb094827a9d99f0a6b"
+            "certificate_hash": "6a1386d495a3fa9c5f746cae1b46db272ee08b7e"
           }
         },
         {
