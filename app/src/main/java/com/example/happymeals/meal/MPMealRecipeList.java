@@ -154,7 +154,9 @@ public class MPMealRecipeList extends AppCompatActivity {
             Intent data = result.getData();
             Bundle bundle = data.getExtras();
             UserIngredient userIngredient = (UserIngredient) bundle.getSerializable("Ingredient");
-            //TODO: update here
+            //TODO: update here: Check if a recipe with that title exist, if exist, add that recipe
+            // if not, create a new one, then compare this ingredient with the big list try to match with
+            // category and description. if match add. if none exist, create new one and add to recipe. then add to meal.
             Recipe newRecipe = new Recipe();
             newRecipe.setTitle(userIngredient.getDescription());
             dbHandler.addRecipe(newRecipe);
