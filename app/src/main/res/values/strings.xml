@@ -66,5 +66,7 @@
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
     <string name="adjust_scaling_text">Enter scaling: </string>
+    <string name="meal_title_placeholder">New Meal</string>
+    <string name="meal_plan_title_placeholder">New Meal Plan</string>
 
 </resources>

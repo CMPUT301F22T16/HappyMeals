@@ -70,7 +70,7 @@ public class AddLocationFragment extends DialogFragment {
                         if (locationStr.isEmpty()){
                             Toast.makeText(context, "Invalid location", Toast.LENGTH_SHORT).show();
                         }else{
-                            Storage storage= new Storage(locationStr);
+//                            Storage storage= new Storage(locationStr);
 //                            db.addStorage(storage);
 
                             // add to database
