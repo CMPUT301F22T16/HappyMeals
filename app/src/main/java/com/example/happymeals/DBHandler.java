@@ -208,7 +208,10 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         adapter.clear();
-                        adapter.add("Select");
+                        if (fragment == false){
+                            adapter.add("Select location");
+                        }
+
                         for (DocumentSnapshot snapshot: value) {
                             String type = snapshot.getString("type");
 
@@ -219,7 +222,6 @@ public class DBHandler implements Serializable{
                         }
 
                         // adapter.notifyDataSetChanged();
-
                     }
                 });
     }
