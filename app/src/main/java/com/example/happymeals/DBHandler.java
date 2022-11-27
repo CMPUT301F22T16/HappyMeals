@@ -206,11 +206,13 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         adapter.clear();
+                        adapter.add("Select");
                         for (DocumentSnapshot snapshot: value) {
                             String type = snapshot.getString("type");
 
                             adapter.add(type);
                         }
+                        adapter.add("Add new location");
                         adapter.notifyDataSetChanged();
 
                     }
