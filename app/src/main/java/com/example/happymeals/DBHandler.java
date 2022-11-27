@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import static java.lang.Boolean.FALSE;
+
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -198,7 +200,7 @@ public class DBHandler implements Serializable{
      * Fetches all the storage {@link String} types for the user in the User Ingredient Activity
      * @param adapter
      */
-    public void getStorageTypes(ArrayAdapter<String> adapter) {
+    public void getStorageTypes(ArrayList<String> adapter, boolean fragment) {
         CollectionReference ref = conn.collection("storages");
         Query query = ref.whereEqualTo("user", getUsername());
         query
@@ -206,12 +208,17 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         adapter.clear();
+                        adapter.add("Select");
                         for (DocumentSnapshot snapshot: value) {
                             String type = snapshot.getString("type");
 
                             adapter.add(type);
                         }
-                        adapter.notifyDataSetChanged();
+                        if (fragment == FALSE){
+                            adapter.add("Add new location");
+                        }
+
+                        // adapter.notifyDataSetChanged();
 
                     }
                 });

@@ -1,5 +1,8 @@
 package com.example.happymeals;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -73,6 +76,8 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DBHandler db = new DBHandler(user.getUid());
 
+        ArrayList<String> locations = new ArrayList<>();
+        db.getStorageTypes(locations, TRUE);
 
         if (storage != null ) { // Ingredient Activity is launched by Storage Activity
             // Disable UI that we don't want
@@ -165,7 +170,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                 ingredientPosition = position;
 
 
-                ViewIngredientFragment.newInstance(userIngredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                ViewIngredientFragment.newInstance(userIngredient, locations).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
             }
         });
