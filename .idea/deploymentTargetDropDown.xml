@@ -7,11 +7,19 @@
         <deviceKey>
           <Key>
             <type value="SERIAL_NUMBER" />
+<<<<<<< HEAD
             <value value="RF8M72LHFAF" />
+=======
+            <value value="adb-R5CR108Y6LM-qJcwDE._adb-tls-connect._tcp" />
+>>>>>>> ce5b117adbce336329e119a57add5bfda1c6ff13
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
+<<<<<<< HEAD
     <timeTargetWasSelectedWithDropDown value="2022-11-27T04:15:32.929391100Z" />
+=======
+    <timeTargetWasSelectedWithDropDown value="2022-11-27T02:45:52.937633600Z" />
+>>>>>>> ce5b117adbce336329e119a57add5bfda1c6ff13
   </component>
 </project>
