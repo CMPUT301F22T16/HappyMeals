@@ -61,21 +61,31 @@
         android:layout_weight="0.5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2"
+        android:weightSum="2.5"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/mpmeal_recipe_list_cancel"
             android:layout_width="0dp"
+            android:background="@drawable/round_button"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="15dp"
             android:text="Cancel" />
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
         <Button
+            android:background="@drawable/round_button"
             android:id="@+id/mpmeal_recipe_list_finish"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="15dp"
             android:text="Finish" />
     </LinearLayout>
 

@@ -111,6 +111,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
         setOnEditAddToMPButtonListener();
         setOnFinishButtonListener();
         setOnAddButtonListener();
+        myMealsAdapter.notifyDataSetChanged();
     }
 
     private void setOnAddButtonListener() {

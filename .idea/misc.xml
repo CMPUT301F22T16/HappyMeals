@@ -10,8 +10,10 @@
         <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/activity_ingredient.xml" value="0.22" />
         <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/confirm_delete_ingredient.xml" value="0.228125" />
         <entry key="..\:/Users/Yihe/AndroidStudioProjects/HappyMeals/app/src/main/res/layout/view_ingredient_fragment_layout.xml" value="0.22916666666666666" />
+        <entry key="app/src/main/res/drawable/border.xml" value="0.2495" />
         <entry key="app/src/main/res/drawable/dotted.xml" value="0.303" />
         <entry key="app/src/main/res/drawable/ic_chevron_left_48px.xml" value="0.4435" />
+        <entry key="app/src/main/res/drawable/round_button.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_add_new_ingredient.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_edit_recipe.xml" value="0.11770157553290084" />
         <entry key="app/src/main/res/layout/activity_ingredient.xml" value="0.2659870250231696" />
@@ -38,8 +40,9 @@
         <entry key="app/src/main/res/layout/ingredient_row.xml" value="0.32344763670064874" />
         <entry key="app/src/main/res/layout/meal_plan_list_content.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/meal_recipe_list_bottom_sheet.xml" value="0.2037037037037037" />
-        <entry key="app/src/main/res/layout/meal_recipe_list_content.xml" value="0.2613326262720654" />
+        <entry key="app/src/main/res/layout/meal_recipe_list_content.xml" value="0.1" />
         <entry key="app/src/main/res/layout/pi ck_recipe_list_content.xml" value="0.39166666666666666" />
+        <entry key="app/src/main/res/layout/pick_recipe_list_content.xml" value="0.443359375" />
         <entry key="app/src/main/res/layout/popup.xml" value="0.4719965797349295" />
         <entry key="app/src/main/res/layout/recipe_add_comment_custom_layout.xml" value="0.415234375" />
         <entry key="app/src/main/res/layout/recipe_add_ingredient_custom_layout.xml" value="0.30141085934159895" />
