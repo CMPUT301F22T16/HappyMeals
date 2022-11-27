@@ -59,7 +59,7 @@ public class AddNewIngredient extends AppCompatActivity {
         ingredientUnit = findViewById(R.id.ingredientUnit);
 
 
-        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Select", "Add new location"));
+        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Select location"));
         ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, locations);
         db.getStorageTypes(locations, FALSE);
 
@@ -188,7 +188,7 @@ public class AddNewIngredient extends AppCompatActivity {
                     }
                 }
 
-                if (location.equals("Select")){
+                if (location.equals("Select location")){
                     Toast.makeText(AddNewIngredient.this, "Please select a location", Toast.LENGTH_SHORT).show();
                 }
 

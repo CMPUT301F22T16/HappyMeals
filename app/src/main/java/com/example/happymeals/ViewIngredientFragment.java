@@ -115,7 +115,7 @@ public class ViewIngredientFragment extends DialogFragment {
 
         return builder
                 .setView(view)
-                .setTitle("Food detail")
+                .setTitle("Ingredient detail")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -176,7 +176,7 @@ public class ViewIngredientFragment extends DialogFragment {
                             }
                         }
 
-                        if (location.equals("Select")){
+                        if (location.equals("Select location")){
                             toast = TRUE;
                         }
 
