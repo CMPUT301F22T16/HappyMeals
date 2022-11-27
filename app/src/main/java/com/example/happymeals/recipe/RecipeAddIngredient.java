@@ -93,19 +93,35 @@ public class RecipeAddIngredient extends AppCompatActivity {
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                boolean allEntered;
+                allEntered = !description_edit_text.getText().toString().isEmpty()
+                        && !amount_edit_text.getText().toString().isEmpty();
 
-                String description = description_edit_text.getText().toString();
-                String category = category_spinner.getSelectedItem().toString();
-                Double amount = amount_edit_text.getText().toString().equals("") ? 0 : Double.parseDouble(amount_edit_text.getText().toString());
-                String amount_unit = amount_unit_spinner.getSelectedItem().toString();
+                if (description_edit_text.getText().toString().isEmpty()) {
+                    description_edit_text.requestFocus();
+                    description_edit_text.setError("Please provide the ingredient description.");
+                }
 
-                intent.putExtra("description", description);
-                intent.putExtra("category", category);
-                intent.putExtra("amount", amount);
-                intent.putExtra("amount_unit", amount_unit);
-                setResult(RESULT_OK, intent);
-                finish();
+                if (amount_edit_text.getText().toString().isEmpty()) {
+                    amount_edit_text.requestFocus();
+                    amount_edit_text.setError("Please provide the ingredient amount");
+                }
+
+                if (allEntered) {
+                    Intent intent = new Intent();
+
+                    String description = description_edit_text.getText().toString();
+                    String category = category_spinner.getSelectedItem().toString();
+                    Double amount = amount_edit_text.getText().toString().equals("") ? 0 : Double.parseDouble(amount_edit_text.getText().toString());
+                    String amount_unit = amount_unit_spinner.getSelectedItem().toString();
+
+                    intent.putExtra("description", description);
+                    intent.putExtra("category", category);
+                    intent.putExtra("amount", amount);
+                    intent.putExtra("amount_unit", amount_unit);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
