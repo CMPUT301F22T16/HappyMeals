@@ -399,11 +399,19 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles when the user presses OK in the {@link RecipeViewCommentsFragment}.
+     * @param data_list a list of comments which are of type {@link String}
+     */
     @Override
     public void onOkPressed_Comment(ArrayList<String> data_list) {
         recipe_comments_data_list = data_list;
     }
 
+    /**
+     * Handles when the user presses OK in the {@link RecipeViewIngredientsFragment}.
+     * @param data_list a list of ingredients which are of type {@link RecipeIngredient}.
+     */
     @Override
     public void onOkPressed_Ingredient(ArrayList<RecipeIngredient> data_list) {
         recipeIngredient_data_list = data_list;
