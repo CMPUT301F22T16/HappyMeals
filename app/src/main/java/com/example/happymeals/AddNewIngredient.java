@@ -61,7 +61,7 @@ public class AddNewIngredient extends AppCompatActivity {
 
         ArrayList<String> locations = new ArrayList<>(Arrays.asList("Select", "Add new location"));
         ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, locations);
-        db.getStorageTypes(locationAdapt);
+        db.getStorageTypes(locations, FALSE);
 
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
         ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));

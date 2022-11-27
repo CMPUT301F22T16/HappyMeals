@@ -49,7 +49,6 @@ public class AddLocationFragment extends DialogFragment {
 
         location = view.findViewById(R.id.location);
 
-
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
         ArrayAdapter<String> categoryAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, categories);
 
