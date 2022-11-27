@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import static java.lang.Boolean.FALSE;
+
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -14,6 +16,7 @@ import com.example.happymeals.meal.Meal;
 import com.example.happymeals.mealplan.MPListAdapter;
 import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.shoppinglist.SLMealPlanAdapter;
+import com.example.happymeals.storage.Storage;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -52,7 +57,7 @@ import java.util.Objects;
  * 6. user_mealplans: {@link MealPlan} is the model class for this.
  *
  */
-public class DBHandler {
+public class DBHandler implements Serializable{
     /**
      * Members
      *  username: A {@link String} username that represents the document id of the user document in database.
@@ -165,16 +170,75 @@ public class DBHandler {
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
+     * Fetches all the storages for the userin the Storage Activity
+     * @param adapter
+     */
+    public void getStorages(ArrayAdapter<Storage> adapter) {
+        CollectionReference ref = conn.collection("storages");
+        Query query = ref.whereEqualTo("user", getUsername());
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        adapter.clear();
+                        for (DocumentSnapshot snapshot: value) {
+                            String type = snapshot.getString("type");
+
+                            Storage storage = new Storage(type);
+                            String id = snapshot.getId();
+                            storage.setId(id);
+
+                            int count = snapshot.getLong("items").intValue();
+                            storage.setItemCount(count);
+
+                            adapter.add(storage);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+    }
+
+    /**
+     * Fetches all the storage {@link String} types for the user in the User Ingredient Activity
+     * @param adapter
+     */
+    public void getStorageTypes(ArrayList<String> adapter, boolean fragment) {
+        CollectionReference ref = conn.collection("storages");
+        Query query = ref.whereEqualTo("user", getUsername());
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        adapter.clear();
+                        adapter.add("Select");
+                        for (DocumentSnapshot snapshot: value) {
+                            String type = snapshot.getString("type");
+
+                            adapter.add(type);
+                        }
+                        if (fragment == FALSE){
+                            adapter.add("Add new location");
+                        }
+
+                        // adapter.notifyDataSetChanged();
+
+                    }
+                });
+    }
+
+    /**
      * Stores a {@link Storage} object in the database, and attaches the database ID of the entry to the object.
      * @param storage : Object of type {@link Storage} that will be stored in the database.
      */
-    public void newStorage(Storage storage) {
+    public void addStorage(Storage storage) {
         HashMap<String, Object> data = storage.getStorable();
         data.put("user", getUsername());
         DocumentReference doc = conn.collection("storages").document();
         String id = store(doc, data, "Storage");
         storage.setId(id);
     }
+
 
     /**
      * Deletes the entry of a {@link Storage} object from the database.
@@ -230,7 +294,7 @@ public class DBHandler {
     /**
      * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
      */
-    public void getIngredients(ArrayAdapter adapter, @Nullable TextView totalCost) {
+    public void getIngredients(ArrayAdapter adapter) {
         Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -256,14 +320,54 @@ public class DBHandler {
                         adapter.add(userIngredient);
                     }
                     adapter.notifyDataSetChanged();
-                    if (!Objects.isNull(totalCost)) {
-                        totalCost.setText("Total cost: $" + String.valueOf(sum));
-                    }
+
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
         });
     }
+
+    /**
+     * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
+     */
+    public void getIngredientsForStorage(ArrayAdapter adapter, Storage storage) {
+
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername()).whereEqualTo("location", storage.getStoreName());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uIng", "An error has occurred while trying to update the local ingredients");
+                } else {
+                    List<UserIngredient> userIngredients = new ArrayList<>();
+                    Double sum = 0.0;
+                    adapter.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String category = doc.getString("category");
+                        String description = doc.getString("description");
+                        Double amount = doc.getDouble("amount");
+                        Double cost = doc.getDouble("cost");
+                        sum += cost * amount;
+                        Date date = doc.getDate("date");
+                        String location = doc.getString("location");
+                        String unit = doc.getString("unit");
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setId(doc.getId());
+                        userIngredients.add(userIngredient);
+                        int items = storage.getItemCount();
+                        storage.setItemCount(items + 1);
+                        adapter.add(userIngredient);
+
+                    }
+                    adapter.notifyDataSetChanged();
+                    Log.d("uIng", "Local ingredients updated successfully!");
+                }
+            }
+        });
+
+    }
+
+
 
     //-------------------------------------------------Recipe Methods-------------------------------------------------//
 
@@ -424,7 +528,6 @@ public class DBHandler {
                             String category = (String) data.get("category");
                             List<String> comments = (List<String>) data.get("comments");
 
-
                             Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
                             List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
@@ -505,8 +608,6 @@ public class DBHandler {
         }
 
         StorageReference rootRef = storage.getReference();
-
-        // TODO support other file formats
 
         StorageReference photoRef = rootRef.child("images/" + this.getUsername() + "/" + recipe.getTitle() + "." + filetype);
 

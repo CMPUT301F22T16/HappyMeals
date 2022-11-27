@@ -39,6 +39,12 @@ public class RecipeIngredientAdapter extends RecyclerView.Adapter<RecipeIngredie
      */
     private ArrayList<RecipeIngredient> userIngredients;
 
+    /**
+     * Constructor
+     * @param context the context
+     * @param userIngredients a list of {@link RecipeIngredient} objects.
+     * @param recyclerViewInterface an interface for handling item clicks in the RecyclerView.
+     */
     public RecipeIngredientAdapter(Context context, ArrayList<RecipeIngredient> userIngredients, RecyclerViewInterface recyclerViewInterface) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;

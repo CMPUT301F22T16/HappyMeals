@@ -19,12 +19,13 @@ import com.example.happymeals.storage.StorageActivity;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.mealplan.MPMealPlanActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button logoutButton;
+    FloatingActionButton logoutButton;
     Button ingredientButton;
     Button mealButton;
     Button recipeButton;
@@ -44,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         displayName = user.getDisplayName();
-        displayName = displayName.split(" ")[0];
+//        displayName = displayName.split(" ")[0];
         userWelcome = findViewById(R.id.userWelcome);
-        userWelcome.setText("Welcome, " + displayName + "!");
+        userWelcome.setText("Hello,\n" + displayName);
 
         DBHandler db = new DBHandler(user.getUid());
 

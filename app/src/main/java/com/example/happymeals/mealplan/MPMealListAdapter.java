@@ -69,7 +69,6 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
     public void onBindViewHolder(@NonNull MPMealListAdapter.MealViewHolder holder, int position) {
         Meal meal = meals.get(position);
         holder.binding.mpMealListTextView1.setText(meal.getTitle());
-        holder.binding.mpMealListTextView2.setText(Double.toString(meal.getCost()));
     }
 
     @Override

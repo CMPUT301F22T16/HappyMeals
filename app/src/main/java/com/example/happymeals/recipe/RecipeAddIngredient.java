@@ -20,12 +20,13 @@ import com.example.happymeals.IngredientAdaptor;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class creates an Activity that allows the user to add an ingredient to their recipe
  * @author John Yu
  */
-public class RecipeAddIngredient extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class RecipeAddIngredient extends AppCompatActivity {
 
     /**
      * This is the EditText view where the user can add the recipe description.
@@ -33,9 +34,9 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
     EditText description_edit_text;
 
     /**
-     * This is the EditText View where the user can add the recipe category.
+     * This is the spinner where the user can select a category.
      */
-    EditText category_edit_text;
+    Spinner category_spinner;
 
     /**
      * This is the EditText View where the user can add the recipe amount.
@@ -48,11 +49,6 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
     Spinner amount_unit_spinner;
 
     /**
-     * This variable stores the unit for the amounts variable.
-     */
-    String amount_unit;
-
-    /**
      * This button lets the user submit their new ingredient
      */
     Button submit_btn;
@@ -62,14 +58,35 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_add_ingredient);
 
+        category_spinner = findViewById(R.id.recipe_add_ingredient_category_spinner);
+        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
+        ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));
+        ArrayList<String> solidUnit = new ArrayList<>(Arrays.asList("g", "kg"));
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, R.layout.ingredient_content, R.id.myTextview, categories);
+        category_spinner.setAdapter(categoryAdapter);
+        category_spinner.setPrompt("CATEGORY");
+
         amount_unit_spinner = findViewById(R.id.recipe_add_ingredient_amount_units);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.add_ingredient_amount_unit, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        amount_unit_spinner.setAdapter(spinnerAdapter);
-        amount_unit_spinner.setOnItemSelectedListener(this);
+        category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ArrayAdapter<String> unitAdapt;
+                if (categories.get(i).equals("Drink")) {
+                    unitAdapt = new ArrayAdapter<>(RecipeAddIngredient.this, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                } else {
+                    unitAdapt = new ArrayAdapter<>(RecipeAddIngredient.this, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                }
+                amount_unit_spinner.setAdapter(unitAdapt);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         description_edit_text = findViewById(R.id.recipe_add_ingredient_description);
-        category_edit_text = findViewById(R.id.recipe_add_ingredient_category);
+//        category_edit_text = findViewById(R.id.recipe_add_ingredient_category);
         amount_edit_text = findViewById(R.id.recipe_add_ingredient_amount);
 
         submit_btn = findViewById(R.id.recipe_add_ingredient_btn);
@@ -79,9 +96,9 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
                 Intent intent = new Intent();
 
                 String description = description_edit_text.getText().toString();
-                String category = category_edit_text.getText().toString();
+                String category = category_spinner.getSelectedItem().toString();
                 Double amount = amount_edit_text.getText().toString().equals("") ? 0 : Double.parseDouble(amount_edit_text.getText().toString());
-                amount_unit = amount_unit_spinner.getSelectedItem().toString();
+                String amount_unit = amount_unit_spinner.getSelectedItem().toString();
 
                 intent.putExtra("description", description);
                 intent.putExtra("category", category);
@@ -91,15 +108,5 @@ public class RecipeAddIngredient extends AppCompatActivity implements AdapterVie
                 finish();
             }
         });
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        amount_unit = adapterView.getItemAtPosition(i).toString();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        amount_unit = "qty";
     }
 }

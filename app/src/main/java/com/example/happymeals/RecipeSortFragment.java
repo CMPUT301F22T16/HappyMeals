@@ -12,13 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -49,7 +43,7 @@ public class RecipeSortFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         Context context = getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.fragment_sort, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.recipe_fragment_sort, null);
 
 
         Bundle bundle = this.getArguments();
@@ -65,13 +59,13 @@ public class RecipeSortFragment extends DialogFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        boolean isLowtoHigh = orderOptions.getCheckedRadioButtonId() == R.id.recipe_low_to_high;
+                        boolean isLowtoHigh = orderOptions.getCheckedRadioButtonId() == R.id.ingredient_low_to_high;
 
                         int option = sortingOptions.getCheckedRadioButtonId();
 
                         switch(option) {
 
-                            case R.id.recipe_prep_radio:
+                            case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
                                     Collections.sort(recipes, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));

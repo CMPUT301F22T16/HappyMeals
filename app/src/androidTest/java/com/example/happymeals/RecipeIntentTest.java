@@ -37,8 +37,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 @RunWith(AndroidJUnit4.class)
 public class RecipeIntentTest {
     private Solo solo;
@@ -48,6 +46,10 @@ public class RecipeIntentTest {
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
+    /**
+     * Runs before all tests and creates solo instance.
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -56,16 +58,30 @@ public class RecipeIntentTest {
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
     }
 
+    /**
+     * Gets the Activity
+     * @throws Exception
+     */
     @Test
     public void start() throws Exception {
         Activity activity = rule.getActivity();
     }
 
+    /**
+     * This test will check that the user can add a new recipe. This tests fills in all
+     * the fields for creating a new recipe except for adding a photo. The test will add
+     * the recipe to the firestore. This test also checks that the user can edit a recipe.
+     * The recipe that was just created will be edited. All the fields will be edited and
+     * the edited recipe will be submitted to firebase. This test also checks that the
+     * user can delete the recipe. The test does this by first deleting all the comments
+     * and ingredients created earlier. Then the test will delete the recipe.
+     * @throws InterruptedException
+     */
     @Test
     public void testRecipeActivity() throws InterruptedException {
         ///// ----- Test that the user can add a new recipe ----- /////
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
-        solo.clickOnView(solo.getView(R.id.add_recipe_button));
+        solo.clickOnView(solo.getView(R.id.add_storage_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
@@ -84,9 +100,9 @@ public class RecipeIntentTest {
         solo.clickOnView(solo.getView(R.id.recipe_add_comment_submit_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
-        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         solo.waitForText("Delicious!");
         solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Add a new ingredient
         solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
@@ -94,12 +110,13 @@ public class RecipeIntentTest {
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeAddIngredient.class);
         solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_description), "Noodles");
-        solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_category), "Grain");
+        solo.pressSpinnerItem(0, 0);
         solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_amount), "20");
+        solo.pressSpinnerItem(1, 0);
         solo.clickOnView(solo.getView(R.id.recipe_add_ingredient_btn));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
-        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
+//        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         solo.waitForText("Noodles");
         solo.clickOnButton("OK");
 
@@ -125,8 +142,9 @@ public class RecipeIntentTest {
                             item.getComments().get(0).equals("Delicious!") &&
                             item.getIngredients().size() > 0 &&
                             item.getIngredients().get(0).getDescription().equals("Noodles") &&
-                            item.getIngredients().get(0).getCategory().equals("Grain") &&
-                            item.getIngredients().get(0).getAmount().equals(20.00)
+                            item.getIngredients().get(0).getCategory().equals("Vegetable") &&
+                            item.getIngredients().get(0).getAmount().equals(20.00) &&
+                            item.getIngredients().get(0).getUnits().equals("g")
             ) {
                 index = i;
                 break;
@@ -178,12 +196,13 @@ public class RecipeIntentTest {
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeEditIngredient.class);
         EditText edit_desc = (EditText) solo.getView(R.id.recipe_edit_ingredient_description);
-        EditText edit_category = (EditText) solo.getView(R.id.recipe_edit_ingredient_category);
+//        EditText edit_category = (EditText) solo.getView(R.id.recipe_edit_ingredient_category);
+        solo.pressSpinnerItem(0, 4);
         EditText edit_amount = (EditText) solo.getView(R.id.recipe_edit_ingredient_amount);
         solo.enterText(edit_desc, " 2");
-        solo.enterText(edit_category, " 2");
         edit_amount.setText("");
         solo.enterText(edit_amount, "10");
+        solo.pressSpinnerItem(1, 0);
         solo.clickOnView((Button) solo.getView(R.id.recipe_edit_ingredient_save_btn));
         solo.sleep(3000);
         solo.waitForText("Noodles 2");
@@ -212,8 +231,9 @@ public class RecipeIntentTest {
                             item.getComments().get(0).equals("Amazing!") &&
                             item.getIngredients().size() > 0 &&
                             item.getIngredients().get(0).getDescription().equals("Noodles 2") &&
-                            item.getIngredients().get(0).getCategory().equals("Grain 2") &&
-                            item.getIngredients().get(0).getAmount().equals(10.00)
+                            item.getIngredients().get(0).getCategory().equals("Dry food") &&
+                            item.getIngredients().get(0).getAmount().equals(10.00) &&
+                            item.getIngredients().get(0).getUnits().equals("g")
             ) {
                 index_2 = i;
                 break;
@@ -279,6 +299,10 @@ public class RecipeIntentTest {
         assertEquals(1, recipeCountBefore - recipeCountAfter);
     }
 
+    /**
+     * Runs after all tests
+     * @throws Exception
+     */
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
