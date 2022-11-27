@@ -34,6 +34,10 @@
         <item>qty</item>
         <item>grams</item>
         <item>kilograms</item>
+        <item>ml</item>
+        <item>L</item>
+        <item>tsp</item>
+        <item>tbs</item>
     </string-array>
     <string name="integer_to_string">%1$d</string>
     <string name="double_to_string">%.2f</string>
@@ -61,5 +65,8 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
+    <string name="adjust_scaling_text">Enter scaling: </string>
+    <string name="meal_title_placeholder">New Meal</string>
+    <string name="meal_plan_title_placeholder">New Meal Plan</string>
 
 </resources>

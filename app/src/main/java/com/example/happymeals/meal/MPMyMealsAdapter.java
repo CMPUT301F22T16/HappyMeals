@@ -44,24 +44,19 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
             int index = activityMpmyMealsBinding.myMealsRecyclerview.getChildLayoutPosition(v);
             Meal meal = meals.get(index);
 
-            if(isEdit.get() ||!is_from_meal_plan) {
+            if(isEdit.get() || !is_from_meal_plan) {
                 intent = new Intent(mContext, MPMealRecipeList.class);
                 Bundle bundle = new Bundle();
+
                 bundle.putSerializable("IsNewMeal", false);
                 bundle.putSerializable("MEAL", meal);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             } else {
-                // TODO: fix this when the data structure is fixed
                 intent = new Intent();
                 Bundle bundle = new Bundle();
-                if(mealIndex==0) {
-                    mealPlan.setBreakfastWithIndex(meal, dayIndex);
-                } else if(mealIndex == 1) {
-                    mealPlan.setLunchWithIndex(meal, dayIndex);
-                } else if(mealIndex == 2) {
-                    mealPlan.setDinnerWithIndex(meal, dayIndex);
-                }
+
+                mealPlan.setMealWithDayAndIndex(meal, dayIndex, mealIndex);
                 bundle.putSerializable("M-MEALPLAN", mealPlan);
                 intent.putExtras(bundle);
                 // https://stackoverflow.com/questions/7951936/how-to-finish-an-activity-from-an-adapter
@@ -127,10 +122,7 @@ public class MPMyMealsAdapter extends RecyclerView.Adapter<MPMyMealsAdapter.MyMe
     @Override
     public void onBindViewHolder(@NonNull MyMealViewHolder holder, int position) {
         Meal meal = meals.get(position);
-        double meal_cost = meal.getCost();
-        holder.binding.mpMealListTextView1.setText("meal cost: "+meal_cost);
-        int number_of_recipes = meal.getRecipes().size();
-        holder.binding.mpMealListTextView2.setText(Integer.toString(number_of_recipes)+" recipes");
+        holder.binding.mpMealListTextView1.setText(meal.getTitle());
     }
 
     @Override

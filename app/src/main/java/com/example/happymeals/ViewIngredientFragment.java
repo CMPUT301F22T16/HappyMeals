@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -36,11 +37,12 @@ public class ViewIngredientFragment extends DialogFragment {
 
     private Spinner thisCategory;
     private EditText thisDescription;
-    private EditText thisLocation;
+    private Spinner thisLocation;
     private EditText thisAmount;
     private EditText thisUnitCost;
     private DatePicker thisBestBefore;
-    UserIngredient thisUserIngredient;
+    private Spinner thisUnit;
+    private UserIngredient thisUserIngredient;
 
     @NonNull
     @Override
@@ -57,14 +59,21 @@ public class ViewIngredientFragment extends DialogFragment {
         thisLocation = view.findViewById(R.id.location_frag);
         thisAmount = view.findViewById(R.id.count_frag);
         thisUnitCost = view.findViewById(R.id.unitcost_frag);
+        thisUnit = view.findViewById(R.id.unit_frag);
         thisBestBefore = view.findViewById(R.id.ingredientBestbefore);
+
+
+        ArrayList<String> locations = new ArrayList<>();
+        ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this.getContext(), R.layout.ingredient_content, R.id.myTextview, locations);
+        this.thisLocation.setAdapter(locationAdapt);
 
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
         ArrayAdapter<String> categoryAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, categories);
-
-
         thisCategory.setAdapter(categoryAdapt);
         thisCategory.setPrompt("Ingredient category");
+
+        ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));
+        ArrayList<String> solidUnit = new ArrayList<>(Arrays.asList("g", "kg"));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -73,12 +82,36 @@ public class ViewIngredientFragment extends DialogFragment {
             thisUserIngredient = (UserIngredient) ingredient.getSerializable("ingredient");
             thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
             thisDescription.setText(thisUserIngredient.getDescription());
-            thisLocation.setText(thisUserIngredient.getLoc());
-            thisAmount.setText(Integer.toString(thisUserIngredient.getAmount()));
+
+            locations = (ArrayList<String>) ingredient.getSerializable("locations");
+            locationAdapt = new ArrayAdapter<String>(this.getContext(), R.layout.ingredient_content, R.id.myTextview, locations);
+            this.thisLocation.setAdapter(locationAdapt);
+
+            thisLocation.setSelection(locations.indexOf(thisUserIngredient.getLoc()));
+            thisAmount.setText(Double.toString(thisUserIngredient.getAmount()));
             thisUnitCost.setText(Double.toString(thisUserIngredient.getCost()));
             thisBestBefore.updateDate(thisUserIngredient.getYear(), thisUserIngredient.getMonth(), thisUserIngredient.getDay());
         }
 
+        thisCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (categories.get(position) == "Drink") {
+                    // Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
+                    ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                    thisUnit.setAdapter(unitAdapt);
+                } else {
+                    // Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
+                    ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                    thisUnit.setAdapter(unitAdapt);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return builder
                 .setView(view)
@@ -91,13 +124,14 @@ public class ViewIngredientFragment extends DialogFragment {
                         String countString = thisAmount.getText().toString();
                         String unitCostString = thisUnitCost.getText().toString();
 
-                        int count = -1;
+                        double count = -1;
                         double unitCost = -1;
 
                         int year = thisBestBefore.getYear();
                         int month = thisBestBefore.getMonth();
                         int day = thisBestBefore.getDayOfMonth();
-                        String location = thisLocation.getText().toString();
+                        String location = thisLocation.getSelectedItem().toString();
+                        String unit = thisUnit.getSelectedItem().toString();
 
                         boolean toast = FALSE;
 
@@ -121,7 +155,7 @@ public class ViewIngredientFragment extends DialogFragment {
 //                            thisAmount.setError("Please provide the amount of the ingredient.");
                             toast = TRUE;
                         } else {
-                            count = Integer.parseInt(thisAmount.getText().toString());
+                            count = Double.parseDouble(thisAmount.getText().toString());
                             if (count <= 0) {
 //                                thisAmount.requestFocus();
 //                                thisAmount.setError("Please provide a valid count.");
@@ -142,16 +176,21 @@ public class ViewIngredientFragment extends DialogFragment {
                             }
                         }
 
-                        if (toast == TRUE){
-                            Toast.makeText(context, "Incomplete/Invalid input.", Toast.LENGTH_SHORT).show();
+                        if (location.equals("Select")){
+                            toast = TRUE;
                         }
-                        if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
+
+                        if (toast == TRUE){
+                            Toast.makeText(context, "Incomplete/Invalid input", Toast.LENGTH_SHORT).show();
+                        }
+                        if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0 && toast == FALSE) {
                             thisUserIngredient.setCategory(category);
                             thisUserIngredient.setDescription(description);
                             thisUserIngredient.setAmount(count);
                             thisUserIngredient.setCost(unitCost);
                             thisUserIngredient.setDate(year, month, day);
                             thisUserIngredient.setLoc(location);
+                            thisUserIngredient.setUnit(unit);
                             db.updateIngredient(thisUserIngredient);
 
                         }
@@ -187,10 +226,11 @@ public class ViewIngredientFragment extends DialogFragment {
                 .create();
         }
 
-    // This is used to serialize the city object and so it can be passed between activities.
-    static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
+    // This is used to serialize the ingredient object and so it can be passed between activities.
+    static ViewIngredientFragment newInstance(UserIngredient userIngredient, ArrayList<String> locations) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);
+        args.putSerializable("locations", locations);
         ViewIngredientFragment fragment = new ViewIngredientFragment();
         fragment.setArguments(args);
         return fragment;

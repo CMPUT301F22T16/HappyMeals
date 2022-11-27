@@ -13,17 +13,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.Meal;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
 public class MPMealListActivity extends AppCompatActivity {
-
+    // TODO this class needs to be fixed
     ActivityMpmealListBinding activityMpmealListBinding;
     RecyclerView meal_list;
     RecyclerView.Adapter mpMealListAdapter;
@@ -31,9 +33,10 @@ public class MPMealListActivity extends AppCompatActivity {
     int dayIndex;
     int mealIndex;
     ArrayList<Meal> meals;
-    Button addMealsButton;
+    FloatingActionButton addMealsButton;
     Button nextDayButton;
     Button finishButton;
+    EditText meal_plan_title;
     Intent intent;
     DBHandler db;
     ActivityResultLauncher<Intent> activityLauncher;
@@ -50,6 +53,7 @@ public class MPMealListActivity extends AppCompatActivity {
         nextDayButton = activityMpmealListBinding.mpFabNextDay;
         finishButton = activityMpmealListBinding.mpFabFinish;
         meal_list = activityMpmealListBinding.mpMealListRecyclerview;
+        meal_plan_title = activityMpmealListBinding.mealPlanTitle;
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,12 +74,17 @@ public class MPMealListActivity extends AppCompatActivity {
             db.addMealPlan(mealPlan);
         } else {
             meals.clear();
-            if(!mealPlan.getBreakfast().isEmpty()) {
-                meals.add(mealPlan.getBreakfast().get(dayIndex));
-//                meals.add(mealPlan.getLunch().get(dayIndex));
-//                meals.add(mealPlan.getDinner().get(dayIndex));
-                mealIndex = 2;
+            if(!mealPlan.getMeals().isEmpty()) {
+                for(Meal meal : mealPlan.getMeals().get(dayIndex)) {
+                    meals.add(meal);
             }
+            }
+//            if(!mealPlan.getBreakfast().isEmpty()) {
+//                meals.add(mealPlan.getBreakfast().get(dayIndex));
+////                meals.add(mealPlan.getLunch().get(dayIndex));
+////                meals.add(mealPlan.getDinner().get(dayIndex));
+//                mealIndex = 2;
+//            }
         }
 
         mpMealListAdapter = new MPMealListAdapter(this, meals, user.getUid(), dayIndex, mealPlan, activityLauncher);
@@ -96,6 +105,7 @@ public class MPMealListActivity extends AppCompatActivity {
             }
         });
         itemTouchHelper.attachToRecyclerView(activityMpmealListBinding.mpMealListRecyclerview);
+        meal_plan_title.setText(mealPlan.getTitle());
 
         setOnAddButtonListener();
         setOnNextButtonListener();
@@ -112,11 +122,8 @@ public class MPMealListActivity extends AppCompatActivity {
                         Intent data = result.getData();
                         Bundle bundle = data.getExtras();
                         mealPlan = (MealPlan) bundle.getSerializable("M-MEALPLAN");
-//                        db.updateMealPlan(mealPlan, activityMpmealListBinding.getRoot().getContext());
                         meals.clear();
-                        meals.add(mealPlan.getBreakfast().get(dayIndex));
-//                        meals.add(mealPlan.getLunch().get(dayIndex));
-//                        meals.add(mealPlan.getDinner().get(dayIndex));
+                        meals.addAll(mealPlan.getMeals().get(dayIndex));
                         mpMealListAdapter.notifyDataSetChanged();
                     }
                 });
@@ -125,8 +132,11 @@ public class MPMealListActivity extends AppCompatActivity {
 
     private void setOnAddButtonListener() {
         addMealsButton.setOnClickListener(v -> {
-            if(mealIndex>=2) {return;}
-            mealIndex++;
+            if(mealPlan.getNum_days() > dayIndex) {
+                mealIndex= mealPlan.getMeals().get(dayIndex).size();
+            } else {
+                mealIndex = 0;
+            }
             intent = new Intent(this, MPMyMealsActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("Is-From-MealPlan",true);
@@ -134,7 +144,6 @@ public class MPMealListActivity extends AppCompatActivity {
             bundle.putSerializable("MEAL", mealIndex);
             bundle.putSerializable("DAY", dayIndex);
             intent.putExtras(bundle);
-//            startActivity(intent);
             activityLauncher.launch(intent);
         });
     }
@@ -148,10 +157,7 @@ public class MPMealListActivity extends AppCompatActivity {
                 mpMealListAdapter.notifyDataSetChanged();
             } else {
                 meals.clear();
-                meals.add(mealPlan.getBreakfast().get(dayIndex));
-//                meals.add(mealPlan.getLunch().get(dayIndex));
-//                meals.add(mealPlan.getDinner().get(dayIndex));
-                mealIndex=2;
+                meals.addAll(mealPlan.getMeals().get(dayIndex));
                 mpMealListAdapter.notifyDataSetChanged();
             }
         });
@@ -159,7 +165,13 @@ public class MPMealListActivity extends AppCompatActivity {
 
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
-            mealPlan.setDays(mealPlan.getBreakfast().size());
+            mealPlan.setDays();
+            String title = meal_plan_title.getText().toString();
+            if (title.isEmpty()) {
+                meal_plan_title.requestFocus();
+                meal_plan_title.setError("Please give a title to your meal");
+            }
+            mealPlan.setTitle(title);
             db.updateMealPlan(mealPlan);
             finish();
         });

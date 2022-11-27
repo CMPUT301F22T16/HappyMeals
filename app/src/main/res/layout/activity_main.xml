@@ -5,31 +5,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@android:color/black">
+
+    <TextView
+        android:id="@+id/option"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="What's on \nyour mind today?"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ingredient_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/storage_button"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif"
+        android:text="Storages"
+        android:textAlignment="textEnd"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mealplan_button"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/ingredient_button"
-        android:layout_width="300dp"
-        android:layout_height="59dp"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="136dp"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
-        android:text="userIngredients"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif"
+        android:text="Ingredients"
+        android:textAlignment="textEnd"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/userWelcome" />
 
     <Button
         android:id="@+id/recipe_button"
-        android:layout_width="300dp"
-        android:layout_height="59dp"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
-        android:text="recipes"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif"
+        android:text="Recipes"
+        android:textAlignment="textEnd"
+
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,13 +90,21 @@
 
     <Button
         android:id="@+id/meal_button"
-        android:layout_width="300dp"
-        android:layout_height="59dp"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
-        android:text="MEALS"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif"
+        android:text="Meals"
+        android:textAlignment="textEnd"
+
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,49 +112,52 @@
 
     <Button
         android:id="@+id/mealplan_button"
-        android:layout_width="300dp"
-        android:layout_height="59dp"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_weight="1"
-        android:text="MEAL PLANS"
+        android:backgroundTint="@color/white"
+        android:fontFamily="sans-serif"
+        android:text="Meal plans"
+        android:textAlignment="textEnd"
+
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/meal_button" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="176dp"
-        android:layout_height="261dp"
-        android:layout_marginTop="88dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
-
     <TextView
         android:id="@+id/userWelcome"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
         android:text="Logged in as: Guest"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/logout_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/logout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="13dp"
-        android:text="Logout"
-        android:backgroundTint="@android:color/holo_red_light"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

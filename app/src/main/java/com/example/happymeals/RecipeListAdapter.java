@@ -3,6 +3,8 @@ package com.example.happymeals;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import java.io.Serializable;
 import java.util.List;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,11 +33,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class RecipeListAdapter extends ArrayAdapter<Recipe> {
+public class RecipeListAdapter extends ArrayAdapter<Recipe> implements Serializable {
     Context context;
     List<Recipe> recipes;
     DBHandler db;
     RecipeListInterface recipeListInterface;
+
 
     RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user, RecipeListInterface recipeListInterface) {
         super(context, 0, recipes);
@@ -74,13 +80,20 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
         Button viewButton = convertView.findViewById(R.id.recipe_card_view);
 
         // Downloading and setting the image
+        // https://stackoverflow.com/questions/35305875/progress-bar-while-loading-image-using-glide
         String uri = recipe.getDownloadUri();
 
         if (uri != null && !uri.equals("")) {
+
+            CircularProgressDrawable progress = new CircularProgressDrawable(this.context);
+            progress.setStrokeWidth(5f);
+            progress.setCenterRadius(30f);
+            progress.start();
+
             Glide.with(this.context).asBitmap()
                     .load(uri)
                     .centerCrop()
-                    .placeholder(R.color.white)
+                    .placeholder(progress)
                     .into(new BitmapImageViewTarget(image) {
                         @Override
                         protected void setResource(Bitmap resource) {
@@ -89,7 +102,29 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
                             circularBitmapDrawable.setCornerRadius(32.0f); // radius for corners
                             view.setImageDrawable(circularBitmapDrawable);
                         }
-                    });;
+                    });
+        }
+
+        else {
+
+            CircularProgressDrawable progress = new CircularProgressDrawable(this.context);
+            progress.setStrokeWidth(5f);
+            progress.setCenterRadius(30f);
+            progress.start();
+            Uri uridefault = Uri.parse("android.resource://com.example.happymeals/drawable/recipe_default");
+            Glide.with(this.context).asBitmap()
+                    .load(uridefault)
+                    .centerCrop()
+                    .placeholder(progress)
+                    .into(new BitmapImageViewTarget(image) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            circularBitmapDrawable.setCornerRadius(32.0f); // radius for corners
+                            view.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
         }
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +146,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe> {
                 recipeListInterface.onItemClick(position, "delete");
             }
         });
-
 
         return convertView;
     }

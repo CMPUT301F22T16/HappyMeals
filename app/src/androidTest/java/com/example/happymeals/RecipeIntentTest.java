@@ -37,8 +37,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
 @RunWith(AndroidJUnit4.class)
 public class RecipeIntentTest {
     private Solo solo;
@@ -48,6 +46,10 @@ public class RecipeIntentTest {
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
+    /**
+     * Runs before all tests and creates solo instance.
+     * @throws Exception
+     */
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -56,16 +58,30 @@ public class RecipeIntentTest {
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
     }
 
+    /**
+     * Gets the Activity
+     * @throws Exception
+     */
     @Test
     public void start() throws Exception {
         Activity activity = rule.getActivity();
     }
 
+    /**
+     * This test will check that the user can add a new recipe. This tests fills in all
+     * the fields for creating a new recipe except for adding a photo. The test will add
+     * the recipe to the firestore. This test also checks that the user can edit a recipe.
+     * The recipe that was just created will be edited. All the fields will be edited and
+     * the edited recipe will be submitted to firebase. This test also checks that the
+     * user can delete the recipe. The test does this by first deleting all the comments
+     * and ingredients created earlier. Then the test will delete the recipe.
+     * @throws InterruptedException
+     */
     @Test
     public void testRecipeActivity() throws InterruptedException {
         ///// ----- Test that the user can add a new recipe ----- /////
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
-        solo.clickOnView(solo.getView(R.id.add_recipe_button));
+        solo.clickOnView(solo.getView(R.id.add_storage_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
@@ -76,6 +92,7 @@ public class RecipeIntentTest {
         solo.enterText((EditText) solo.getView(R.id.recipe_category_edit_text), "Soup");
 
         // Add a new comment
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         solo.clickOnView(solo.getView(R.id.recipe_add_new_comment_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeAddComment.class);
@@ -84,18 +101,24 @@ public class RecipeIntentTest {
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.waitForText("Delicious!");
+        solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Add a new ingredient
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         solo.clickOnView(solo.getView(R.id.recipe_pick_new_ingredient_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeAddIngredient.class);
         solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_description), "Noodles");
-        solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_category), "Grain");
+        solo.pressSpinnerItem(0, 0);
         solo.enterText((EditText) solo.getView(R.id.recipe_add_ingredient_amount), "20");
+        solo.pressSpinnerItem(1, 0);
         solo.clickOnView(solo.getView(R.id.recipe_add_ingredient_btn));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
+//        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         solo.waitForText("Noodles");
+        solo.clickOnButton("OK");
 
         // Upload new recipe to firebase
         solo.clickOnView(solo.getView(R.id.recipe_submit_button));
@@ -119,8 +142,9 @@ public class RecipeIntentTest {
                             item.getComments().get(0).equals("Delicious!") &&
                             item.getIngredients().size() > 0 &&
                             item.getIngredients().get(0).getDescription().equals("Noodles") &&
-                            item.getIngredients().get(0).getCategory().equals("Grain") &&
-                            item.getIngredients().get(0).getAmount().equals(20.00)
+                            item.getIngredients().get(0).getCategory().equals("Vegetable") &&
+                            item.getIngredients().get(0).getAmount().equals(20.00) &&
+                            item.getIngredients().get(0).getUnits().equals("g")
             ) {
                 index = i;
                 break;
@@ -147,6 +171,7 @@ public class RecipeIntentTest {
         solo.enterText(edit_text_var, "Japanese");
 
         // Edit the comment
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         RecyclerView comment_recycler_view = (RecyclerView) solo.getView(R.id.recipe_comments_recyclerview);
         View comment_entity = comment_recycler_view.getChildAt(0);
         ImageButton edit_comment_btn = (ImageButton) comment_entity.findViewById(R.id.edit_recipe_ingredient_btn);
@@ -158,10 +183,12 @@ public class RecipeIntentTest {
         solo.enterText(edit_text_var, "Amazing!");
         solo.clickOnView((Button) solo.getView(R.id.recipe_edit_comment_submit_button));
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.waitForText("Amazing!");
+        solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Edit the Ingredient
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         RecyclerView ingredient_recycler_view = (RecyclerView) solo.getView(R.id.recipe_ingredient_recyclerview);
         View ingredient_entity = ingredient_recycler_view.getChildAt(0);
         ImageButton edit_ingredient_btn = (ImageButton) ingredient_entity.findViewById(R.id.edit_recipe_ingredient_btn);
@@ -169,16 +196,18 @@ public class RecipeIntentTest {
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", RecipeEditIngredient.class);
         EditText edit_desc = (EditText) solo.getView(R.id.recipe_edit_ingredient_description);
-        EditText edit_category = (EditText) solo.getView(R.id.recipe_edit_ingredient_category);
+//        EditText edit_category = (EditText) solo.getView(R.id.recipe_edit_ingredient_category);
+        solo.pressSpinnerItem(0, 4);
         EditText edit_amount = (EditText) solo.getView(R.id.recipe_edit_ingredient_amount);
         solo.enterText(edit_desc, " 2");
-        solo.enterText(edit_category, " 2");
         edit_amount.setText("");
         solo.enterText(edit_amount, "10");
+        solo.pressSpinnerItem(1, 0);
         solo.clickOnView((Button) solo.getView(R.id.recipe_edit_ingredient_save_btn));
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
         solo.waitForText("Noodles 2");
+        solo.clickOnButton("OK");
+        solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Upload edited recipe to firebase
         solo.clickOnView(solo.getView(R.id.recipe_submit_button));
@@ -202,8 +231,9 @@ public class RecipeIntentTest {
                             item.getComments().get(0).equals("Amazing!") &&
                             item.getIngredients().size() > 0 &&
                             item.getIngredients().get(0).getDescription().equals("Noodles 2") &&
-                            item.getIngredients().get(0).getCategory().equals("Grain 2") &&
-                            item.getIngredients().get(0).getAmount().equals(10.00)
+                            item.getIngredients().get(0).getCategory().equals("Dry food") &&
+                            item.getIngredients().get(0).getAmount().equals(10.00) &&
+                            item.getIngredients().get(0).getUnits().equals("g")
             ) {
                 index_2 = i;
                 break;
@@ -217,18 +247,22 @@ public class RecipeIntentTest {
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
         // Delete comment
+        solo.clickOnView(solo.getView(R.id.recipe_view_comments_button));
         comment_entity = comment_recycler_view.getChildAt(0);
         ImageButton delete_comment_btn = (ImageButton) comment_entity.findViewById(R.id.delete_recipe_ingredient_btn);
         solo.clickOnView(delete_comment_btn);
         onView(withId(R.id.recipe_comments_recyclerview))
                 .check(matches(not(hasDescendant(withText("Amazing!")))));
+        solo.clickOnButton("OK");
 
         // Delete ingredient
+        solo.clickOnView(solo.getView(R.id.recipe_view_ingredients_button));
         ingredient_entity = ingredient_recycler_view.getChildAt(0);
         ImageButton delete_ingredient_btn = (ImageButton) ingredient_entity.findViewById(R.id.delete_recipe_ingredient_btn);
         solo.clickOnView(delete_ingredient_btn);
         onView(withId(R.id.recipe_ingredient_recyclerview))
                 .check(matches(not(hasDescendant(withText("Noodles 2")))));
+        solo.clickOnButton("OK");
 
         // Save changes to firebase
         solo.clickOnView(solo.getView(R.id.recipe_submit_button));
@@ -259,11 +293,16 @@ public class RecipeIntentTest {
         int recipeCountBefore = recipe_list_adapter_3.getCount();
         FloatingActionButton recipe_delete_button = (FloatingActionButton) recipe_entity_3.findViewById(R.id.recipe_card_delete);
         solo.clickOnView(recipe_delete_button);
+        solo.clickOnButton("Yes");
         solo.sleep(3000);
         int recipeCountAfter = recipe_list_adapter_3.getCount();
         assertEquals(1, recipeCountBefore - recipeCountAfter);
     }
 
+    /**
+     * Runs after all tests
+     * @throws Exception
+     */
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();

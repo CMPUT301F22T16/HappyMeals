@@ -9,6 +9,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import kotlin.jvm.Throws;
 
 public class MealTest {
     Meal meal;
@@ -18,16 +21,16 @@ public class MealTest {
     public void mockMeal(){
         List<Recipe> recipes = new ArrayList<>();
         recipe = new Recipe();
+        recipe.setR_id("test111id");
         recipes.add(recipe);
-        List<Double> scaling = new ArrayList<>();
-        scaling.add(3.14);
-        scaling.add(1.11);
-        meal = new Meal(recipes,scaling,19.9);
+        Map<String,Double> scaling = new HashMap<>();
+        scaling.put(recipe.get_r_id(), 1.11);
+        meal = new Meal("Test Meal Title",recipes,scaling,19.9);
     }
 
     @Test
     public void testRemoveRecipe(){
-        meal.removeRecipe(0);
+        meal.removeRecipe(recipe);
         Assert.assertEquals(meal.getRecipes().size(),0);
     }
 
@@ -55,11 +58,43 @@ public class MealTest {
     }
 
     @Test
-    public void testGetScalings(){
-        List<Double> scalings = meal.getScalings();
-        Assert.assertTrue(scalings.get(0)==3.14);
-        Assert.assertTrue(scalings.get(1)==1.11);
+    public void testSetScalings(){
+        Map<String,Double> scalings = new HashMap<>();
+        scalings.put("test222id",2.22);
+        scalings.put("test333id",3.33);
+        meal.setScalings(scalings);
+        Assert.assertTrue(scalings.get("test222id")==2.22);
+        Assert.assertTrue(scalings.get("test333id")==3.33);
     }
+
+    @Test
+    public void testGetScalings(){
+        Map<String,Double> scalings = meal.getScalings();
+        Assert.assertTrue(scalings.get("test111id")==1.11);
+    }
+
+    @Test
+    public void testGetScalingForRecipe() throws Exception {
+        Double scaling = meal.getScalingForRecipe(recipe);
+        Assert.assertTrue(scaling == 1.11);
+    }
+
+    @Test
+    public void testGetScalingForRecipeException() throws Exception{
+        Recipe recipe2 = new Recipe();
+        recipe2.setR_id("test000id");
+        Exception e = Assert.assertThrows(Exception.class,()->meal.getScalingForRecipe(recipe2));
+        Assert.assertTrue(e.getMessage().contains("Recipe not found"));
+    }
+
+    @Test
+    public void testRemoveScalingForRecipe() {
+        meal.removeScalingForRecipe(recipe);
+        Assert.assertTrue(meal.getScalings().size()==0);
+    }
+
+
+
 
     @Test
     public void testGetCost(){

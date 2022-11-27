@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     // Create and launch sign-in intent
     Intent signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .build();
 
@@ -53,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         else {
             signInLauncher.launch(signInIntent);
-            finish();
         }
     }
 
@@ -62,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            Log.d("Momo", user.getUid());
             launchMain(user);
             // ...
         } else {
@@ -69,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
+            Toast.makeText(this, "An error has occured", Toast.LENGTH_SHORT).show();
         }
     }
 

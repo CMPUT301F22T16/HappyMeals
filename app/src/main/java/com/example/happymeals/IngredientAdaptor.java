@@ -1,22 +1,66 @@
 package com.example.happymeals;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * The IngredientAdaptor class defines how the an object of the "Ingredient" class will be displayed in a ListView
  */
 // Coding of this adaptor comes from lab example.
-public class IngredientAdaptor extends ArrayAdapter<UserIngredient> {
+public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements Serializable {
+
+    List<UserIngredient> userIngredientList = new ArrayList<>();
+    List<UserIngredient> ingredientBuffer;
 
     public IngredientAdaptor(Context context, ArrayList<UserIngredient> userIngredients) {
+
         super(context, 0, userIngredients);
+
+        this.ingredientBuffer = new ArrayList<>();
+        this.userIngredientList = userIngredients;
+
+        System.out.println(this.userIngredientList);
+    }
+
+    /**
+     * Filter recipe list based on user inputs to search bar
+     * got inspiration from https://abhiandroid.com/ui/searchview
+     */
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        userIngredientList.clear();
+        if (charText.length() == 0) {
+            userIngredientList.addAll(ingredientBuffer);
+        } else {
+            for (UserIngredient r : ingredientBuffer) {
+                if (r.getDescription().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    userIngredientList.add(r);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(@Nullable UserIngredient object) {
+        super.add(object);
+        ingredientBuffer.add(object);
     }
 
     @Override
@@ -36,7 +80,23 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> {
         int month = userIngredient.getMonth()+1;
         int day = userIngredient.getDay();
         // Set the values for display.
-        description.setText(userIngredient.getDescription());
+
+        Date now = new Date();
+
+        if (now.after(userIngredient.getDate())) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                description.setTextColor(getContext().getColor(R.color.red));
+            }
+            description.setText(userIngredient.getDescription() + " (Expired)");
+
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                description.setTextColor(getContext().getColor(R.color.black));
+            }
+            description.setText(userIngredient.getDescription());
+        }
+
+
         if (userIngredient.getMonth() < 9){
             if (userIngredient.getDay() < 9){
                 bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-0" + month + "-0" + day);
@@ -46,12 +106,19 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> {
         } else {
             bestbefore.setText("Bestbefore: " + userIngredient.getYear() + "-" + month + "-" + day);
         }
-        count.setText("Amount: " + String.valueOf(userIngredient.getAmount()));
+        System.out.println(userIngredient.getDescription() + " " + userIngredient.getUnit());
+        count.setText( String.valueOf(userIngredient.getAmount()) + " " + userIngredient.getUnit());
 
-        System.out.println("Here");
-        System.out.println(userIngredient.getCost());
-        unitcost.setText("Unit cost: $" + Double.toString(userIngredient.getCost()));
+
+
+        unitcost.setText("$" + Double.toString(userIngredient.getCost()));
 
         return convertView;
+    }
+
+    @Nullable
+    @Override
+    public UserIngredient getItem(int position) {
+        return this.userIngredientList.get(position);
     }
 }

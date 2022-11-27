@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +48,6 @@ public class MPMealRecipeList extends AppCompatActivity {
     ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     MPMealRecipeListAdapter mpMealRecipeListAdapter;
 
-    List<Recipe> recipes;
-    List<Recipe> recipes_old;
     Button addRecipButton;
     Button cancelButton;
     Button finishButton;
@@ -59,6 +58,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Context context;
     boolean is_new_meal;
     boolean is_modified;
+    EditText meal_title;
 
     ActivityResultLauncher<Intent> add_recipe_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -86,9 +86,9 @@ public class MPMealRecipeList extends AppCompatActivity {
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
+        meal_title = findViewById(R.id.mp_meal_recipe_title);
 
-        recipes = new ArrayList<>();
-        recipes_old = new ArrayList<>();
+
         is_modified = false;
 
         // set up users
@@ -102,22 +102,15 @@ public class MPMealRecipeList extends AppCompatActivity {
 
         if (is_new_meal) {
             meal = new Meal();
-            dbHandler.addMeal(meal);
         } else {
             meal = (Meal) bundle.getSerializable("MEAL");
-            recipes = meal.getRecipes();
-        }
-        // keeps a copy of the recipes
-        for (Recipe r : recipes){
-            recipes_old.add(r);
+            meal_title.setText(meal.getTitle());
         }
 
         // set up adapter
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, (ArrayList<Recipe>) recipes, dbHandler);
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, meal);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        LoadingDialog dialog = new LoadingDialog(this);
-
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -129,8 +122,6 @@ public class MPMealRecipeList extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int item_index = viewHolder.getAdapterPosition();
                 mpMealRecipeListAdapter.delete(item_index);
-                recipes = mpMealRecipeListAdapter.getRecipes();
-                meal.setRecipes(recipes);
                 is_modified = true;
 
             }
@@ -149,9 +140,8 @@ public class MPMealRecipeList extends AppCompatActivity {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             Bundle bundle = data.getExtras();
-            recipes = (ArrayList<Recipe>) bundle.getSerializable("Updated-Meal-Recipes");
-            meal.setRecipes(recipes);
-            mpMealRecipeListAdapter.setRecipesList((ArrayList<Recipe>) recipes);
+            ArrayList<Recipe> recipes = (ArrayList<Recipe>) bundle.getSerializable("Updated-Meal-Recipes");
+            mpMealRecipeListAdapter.updateRecipesList((ArrayList<Recipe>) recipes);
             mpMealRecipeListAdapter.notifyDataSetChanged();
             is_modified = true;
         }
@@ -166,6 +156,7 @@ public class MPMealRecipeList extends AppCompatActivity {
             String category = result.getData().getStringExtra("category");
             List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
             List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
+            String filetype = result.getData().getStringExtra("filetype");
 
             String uriStr = result.getData().getStringExtra("photo");
             Uri uri = null;
@@ -174,14 +165,13 @@ public class MPMealRecipeList extends AppCompatActivity {
             }
             Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
             newRecipe.setDownloadUri(uriStr);
-            meal.addRecipe(newRecipe);
             dbHandler.addRecipe(newRecipe);
-            mpMealRecipeListAdapter.setRecipesList((ArrayList<Recipe>) meal.getRecipes());
+            mpMealRecipeListAdapter.updateRecipesList((ArrayList<Recipe>) meal.getRecipes());
             mpMealRecipeListAdapter.notifyDataSetChanged();
 
 //            ContentResolver cR = this.getContentResolver();
 //            String type = cR.getType(uri);
-            dbHandler.uploadImage(uri, newRecipe);
+            dbHandler.uploadImage(uri, newRecipe, filetype);
             is_modified = true;
         } else {
             Toast.makeText(context, "Failed to add recipe", Toast.LENGTH_SHORT).show();
@@ -195,7 +185,7 @@ public class MPMealRecipeList extends AppCompatActivity {
      */
     private void setOnAddButtonListener() {
         addRecipButton.setOnClickListener(v -> {
-            showBottomSheetDialog();
+            showBottomSheetDialogOnAdd();
         });
     }
 
@@ -204,10 +194,6 @@ public class MPMealRecipeList extends AppCompatActivity {
      */
     private void setOnCancelButtonListener() {
         cancelButton.setOnClickListener(v -> {
-            if(recipes.isEmpty() && is_new_meal) {
-                dbHandler.removeMeal(meal);
-                finish();
-            }
             if (is_modified) {
                 showAlertOnCancel();
             } else {
@@ -230,10 +216,6 @@ public class MPMealRecipeList extends AppCompatActivity {
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Continue with delete operation
-                        if (is_new_meal){
-                            dbHandler.removeMeal(meal);
-                        }
                         mpMealRecipeListAdapter.notifyDataSetChanged();
                         finish();
                     }
@@ -252,12 +234,12 @@ public class MPMealRecipeList extends AppCompatActivity {
      * or create a new recipe and add to the recipe list
      * for the meal.
      */
-    private void showBottomSheetDialog() {
+    private void showBottomSheetDialogOnAdd() {
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(R.layout.meal_recipe_list_bottom_sheet);
 
-        TextView add_from_recipe = bottomSheetDialog.findViewById(R.id.add_from_recipe_textview);
-        TextView create_recipe = bottomSheetDialog.findViewById(R.id.create_new_recipe_textview);
+        TextView add_from_recipe = bottomSheetDialog.findViewById(R.id.bottom_sheet_textview1);
+        TextView create_recipe = bottomSheetDialog.findViewById(R.id.bottom_sheet_textview2);
         TextView cancel = bottomSheetDialog.findViewById(R.id.bottom_sheet_cancel);
         add_from_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,6 +247,7 @@ public class MPMealRecipeList extends AppCompatActivity {
                 bottomSheetDialog.dismiss();
                 intent = new Intent(context, MPPickRecipeActivity.class);
                 Bundle bundle = new Bundle();
+                meal = mpMealRecipeListAdapter.getMeal();
                 bundle.putSerializable("MEAL", meal);
                 intent.putExtras(bundle);
                 modify_meal_for_result.launch(intent);
@@ -297,8 +280,18 @@ public class MPMealRecipeList extends AppCompatActivity {
 
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
+            meal = mpMealRecipeListAdapter.getMeal();
+            String title = meal_title.getText().toString();
+            if (title.isEmpty()){
+                meal_title.requestFocus();
+                meal_title.setError("Please give a title to your meal");
+            } else {
+            meal.setTitle(title);
+            if (is_new_meal) {
+                dbHandler.addMeal(meal);
+            }
             dbHandler.modifyMeal(meal);
-            finish();
+            finish();}
         });
     }
 }

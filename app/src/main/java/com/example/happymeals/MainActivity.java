@@ -1,52 +1,67 @@
+/**
+ * Acknowledgements:
+ * 1. Stock recipe image taken from : https://pixabay.com/photos/cook-healthy-food-meal-vegetables-2364221/
+ */
+
 package com.example.happymeals;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.happymeals.databinding.ActivityMainBinding;
+import com.example.happymeals.storage.StorageActivity;
+
+
 import com.example.happymeals.meal.MPMyMealsActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding activityMainBinding;
-    Button logoutButton;
+    FloatingActionButton logoutButton;
     Button ingredientButton;
     Button mealButton;
     Button recipeButton;
     Button mealplanButton;
+    Button storageButton;
     TextView userWelcome;
     String displayName;
-    FirebaseAuth instance;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(activityMainBinding.getRoot());
 
-        instance = FirebaseAuth.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseUser user = instance.getCurrentUser();
+        setContentView(R.layout.activity_main);
+
         displayName = user.getDisplayName();
-        displayName = displayName.substring(0, displayName.indexOf(' '));
+//        displayName = displayName.split(" ")[0];
         userWelcome = findViewById(R.id.userWelcome);
-        userWelcome.setText("Welcome, " + displayName + "!");
+        userWelcome.setText("Hello,\n" + displayName);
+
+        DBHandler db = new DBHandler(user.getUid());
 
         logoutButton = findViewById(R.id.logout_button);
         ingredientButton = findViewById(R.id.ingredient_button);
         mealButton = findViewById(R.id.meal_button);
         mealplanButton = findViewById(R.id.mealplan_button);
         recipeButton = findViewById(R.id.recipe_button);
-
+        storageButton = findViewById(R.id.storage_button);
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                instance.signOut();
+                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -70,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MPMyMealsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Is-From-MealPlan",false);
+                bundle.putSerializable("Is-From-MealPlan", false);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -91,6 +106,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
                 Bundle bundle = new Bundle();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                bundle.putSerializable("USER", user.getUid());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        storageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, StorageActivity.class);
+                Bundle bundle = new Bundle();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                bundle.putSerializable("USER", user.getUid());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import android.app.Activity;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -112,7 +111,7 @@ public class NewMealEntryTests {
         Button addRecipeButton = (Button) solo.getView(R.id.mp_recipe_add_button);
         solo.clickOnView(addRecipeButton);
         solo.waitForDialogToOpen();
-        TextView add_new_recipe = (TextView) solo.getView(R.id.add_from_recipe_textview);
+        TextView add_new_recipe = (TextView) solo.getView(R.id.bottom_sheet_textview1);
         solo.clickOnView(add_new_recipe);
         solo.assertCurrentActivity("Wrong Activity", MPPickRecipeActivity.class); // within pick
 
