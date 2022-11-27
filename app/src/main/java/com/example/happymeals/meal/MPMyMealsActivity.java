@@ -17,6 +17,7 @@ import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.MealPlan;
 import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -38,20 +39,22 @@ public class MPMyMealsActivity extends AppCompatActivity {
     MealPlan mealPlan;
     Button cancel_button;
     Button finish_button;
-    Button edit_addtomp_button;
-    Button add_button;
+    FloatingActionButton edit_addtomp_button;
+    FloatingActionButton add_button;
     Intent intent;
     RecyclerView recyclerView;
     DBHandler dbHandler;
     int dayIndex;
     int mealIndex;
     AtomicBoolean isEdit;
+    Boolean is_from_meal_plan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMpmyMealsBinding = ActivityMpmyMealsBinding.inflate(getLayoutInflater());
         setContentView(activityMpmyMealsBinding.getRoot());
+        is_from_meal_plan = false;
 
         // back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,7 +62,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // User
         Bundle bundle = getIntent().getExtras();
-        Boolean is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPlan");
+        is_from_meal_plan = (Boolean) bundle.getSerializable("Is-From-MealPlan");
         if (is_from_meal_plan) {
             mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
             dayIndex = (int) bundle.getSerializable("DAY");
@@ -101,6 +104,9 @@ public class MPMyMealsActivity extends AppCompatActivity {
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
         if (!is_from_meal_plan){edit_addtomp_button.setVisibility(View.INVISIBLE);
+        } else {
+            finish_button.setVisibility(View.INVISIBLE);
+            add_button.setVisibility(View.INVISIBLE);
         }
         setOnEditAddToMPButtonListener();
         setOnFinishButtonListener();
@@ -118,19 +124,23 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
     private void setOnEditAddToMPButtonListener() {
         edit_addtomp_button.setOnClickListener(v -> {
-            if(isEdit.get()) {
-                isEdit.set(false);
-                edit_addtomp_button.setText(getResources().getString(R.string.meal_plan_edit));
-            } else {
+                finish_button.setVisibility(View.VISIBLE);
+                add_button.setVisibility(View.VISIBLE);
+                edit_addtomp_button.setVisibility(View.INVISIBLE);
                 isEdit.set(true);
-                edit_addtomp_button.setText(getResources().getString(R.string.meal_plan_addtomp));
-            }
         });
     }
 
     private void setOnFinishButtonListener() {
         finish_button.setOnClickListener(v -> {
-            finish();
+            if (is_from_meal_plan) {
+                finish_button.setVisibility(View.INVISIBLE);
+                add_button.setVisibility(View.INVISIBLE);
+                edit_addtomp_button.setVisibility(View.VISIBLE);
+                isEdit.set(false);
+            } else {
+                finish();
+            }
         });
     }
 
