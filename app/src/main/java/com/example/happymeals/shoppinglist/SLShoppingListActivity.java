@@ -44,7 +44,10 @@ public class SLShoppingListActivity extends AppCompatActivity {
         activity_slshopping_list.slShoppingListText.setText(String.format("%s SL", mealPlan.getTitle()));
         recipeIngredients = new ArrayList<>();
 
+//        recipeIngredients.add(new RecipeIngredient("carrot", "fruit", 10.0));
+
         shoppingListAdaptor = new SLShoppingListAdapter(this, recipeIngredients);
+        activity_slshopping_list.slShoppingList.setAdapter(shoppingListAdaptor);
         db.getSLIngredients(shoppingListAdaptor, mealPlan);
 
     }

@@ -13,13 +13,15 @@ import androidx.annotation.Nullable;
 import com.example.happymeals.R;
 import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
+import com.example.happymeals.databinding.IngredientRowBinding;
 
 import java.util.ArrayList;
 
 public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
-
+    private Context mContext;
     public SLShoppingListAdapter(@NonNull Context context, ArrayList<RecipeIngredient> recipeIngredients) {
         super(context, 0, recipeIngredients);
+        mContext = context;
     }
 
     @NonNull
@@ -41,7 +43,7 @@ public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
         description.setText(recipeIngredient.getDescription());
         category.setText(recipeIngredient.getCategory());
         amount.setText("Amount: " + String.valueOf(recipeIngredient.getAmount()));
-        unit.setText("Unit");
+        unit.setText("Unit: " + recipeIngredient.getUnit());
 
         return convertView;
     }

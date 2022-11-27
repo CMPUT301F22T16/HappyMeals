@@ -869,9 +869,9 @@ public class DBHandler {
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
-//                        adapter.add(userIngredient);
                     }
-                    adapter.addAll(UnitConverter.getShoppingList(mealPlan, userIngredients));
+                    List<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
+                    adapter.addAll(slIngredients);
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
