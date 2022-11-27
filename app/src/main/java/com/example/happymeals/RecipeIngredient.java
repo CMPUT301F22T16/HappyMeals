@@ -43,6 +43,7 @@ public class RecipeIngredient extends Ingredient implements Serializable {
         this.description = desc;
         this.category = category;
         this.amount = amount;
+        this.units = "qty";
     }
 
     /**
