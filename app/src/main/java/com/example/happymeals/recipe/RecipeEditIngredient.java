@@ -115,13 +115,29 @@ public class RecipeEditIngredient extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("desc", desc_edit_text.getText().toString());
-                intent.putExtra("category", category_spinner.getSelectedItem().toString());
-                intent.putExtra("amount", Double.parseDouble(amount_edit_text.getText().toString()));
-                intent.putExtra("amount_unit", amount_unit_spinner.getSelectedItem().toString());
-                setResult(RESULT_OK, intent);
-                finish();
+                boolean allEntered;
+                allEntered = !desc_edit_text.getText().toString().isEmpty()
+                        && !amount_edit_text.getText().toString().isEmpty();
+
+                if (desc_edit_text.getText().toString().isEmpty()) {
+                    desc_edit_text.requestFocus();
+                    desc_edit_text.setError("Please provide the ingredient description.");
+                }
+
+                if (amount_edit_text.getText().toString().isEmpty()) {
+                    amount_edit_text.requestFocus();
+                    amount_edit_text.setError("Please provide the ingredient amount");
+                }
+
+                if (allEntered) {
+                    Intent intent = new Intent();
+                    intent.putExtra("desc", desc_edit_text.getText().toString());
+                    intent.putExtra("category", category_spinner.getSelectedItem().toString());
+                    intent.putExtra("amount", Double.parseDouble(amount_edit_text.getText().toString()));
+                    intent.putExtra("amount_unit", amount_unit_spinner.getSelectedItem().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }

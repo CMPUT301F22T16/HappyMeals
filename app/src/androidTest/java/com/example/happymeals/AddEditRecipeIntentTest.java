@@ -38,7 +38,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class RecipeIntentTest {
+public class AddEditRecipeIntentTest {
     private Solo solo;
     private FirebaseFirestore conn;
     private String r_id;

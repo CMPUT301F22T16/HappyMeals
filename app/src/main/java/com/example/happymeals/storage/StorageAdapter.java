@@ -43,9 +43,6 @@ public class StorageAdapter extends ArrayAdapter<Storage> implements Serializabl
         TextView storageNameView = convertView.findViewById(R.id.storage_card_title);
         storageNameView.setText(storage.getStoreName());
 
-        TextView countText = convertView.findViewById(R.id.count_text);
-        countText.setText(Integer.toString(storage.getItemCount()));
-
         return convertView;
     }
 }

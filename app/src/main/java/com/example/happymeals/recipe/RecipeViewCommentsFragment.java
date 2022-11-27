@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.happymeals.R;
 import com.example.happymeals.RecipeIngredient;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -50,7 +51,7 @@ public class RecipeViewCommentsFragment extends DialogFragment implements Recycl
     /**
      * This is the button to add a new comment.
      */
-    ExtendedFloatingActionButton add_comment_btn;
+    FloatingActionButton add_comment_btn;
 
     /**
      * This is the adapter for the recyclerview.
