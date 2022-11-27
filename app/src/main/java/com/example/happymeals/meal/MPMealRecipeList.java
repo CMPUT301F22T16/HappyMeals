@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class MPMealRecipeList extends AppCompatActivity {
     Context context;
     boolean is_new_meal;
     boolean is_modified;
+    EditText meal_title;
 
     ActivityResultLauncher<Intent> add_recipe_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -84,6 +86,8 @@ public class MPMealRecipeList extends AppCompatActivity {
         addRecipButton = findViewById(R.id.mp_recipe_add_button);
         finishButton = findViewById(R.id.mpmeal_recipe_list_finish);
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
+        meal_title = findViewById(R.id.mp_meal_recipe_title);
+
 
         is_modified = false;
 
@@ -100,6 +104,7 @@ public class MPMealRecipeList extends AppCompatActivity {
             meal = new Meal();
         } else {
             meal = (Meal) bundle.getSerializable("MEAL");
+            meal_title.setText(meal.getTitle());
         }
 
         // set up adapter
@@ -276,11 +281,17 @@ public class MPMealRecipeList extends AppCompatActivity {
     private void setOnFinishButtonListener() {
         finishButton.setOnClickListener(v -> {
             meal = mpMealRecipeListAdapter.getMeal();
+            String title = meal_title.getText().toString();
+            if (title.isEmpty()){
+                meal_title.requestFocus();
+                meal_title.setError("Please give a title to your meal");
+            } else {
+            meal.setTitle(title);
             if (is_new_meal) {
                 dbHandler.addMeal(meal);
             }
             dbHandler.modifyMeal(meal);
-            finish();
+            finish();}
         });
     }
 }

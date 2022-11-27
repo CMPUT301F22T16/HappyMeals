@@ -18,14 +18,15 @@
         app:layout_constraintTop_toBottomOf="@+id/button">
 
 
-        <TextView
-            android:id="@+id/mp_meal_recipe_list"
+        <EditText
+            android:id="@+id/mp_meal_recipe_title"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:padding="1dp"
-            android:text="@string/mp_meal_recipe_list"
+            android:hint="@string/meal_title_placeholder"
             android:textAlignment="center"
             android:textSize="34sp"
+            android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/mp_recipe_add_button"
             app:layout_constraintHorizontal_bias="0.5"
@@ -42,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/mp_meal_recipe_list"
+            app:layout_constraintStart_toEndOf="@+id/mp_meal_recipe_title"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
