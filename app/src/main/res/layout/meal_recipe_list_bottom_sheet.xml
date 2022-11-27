@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/add_from_recipe_textview"
+        android:id="@+id/bottom_sheet_textview1"
         android:padding="20dp"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -19,7 +19,7 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
     <TextView
-        android:id="@+id/create_new_recipe_textview"
+        android:id="@+id/bottom_sheet_textview2"
         android:padding="20dp"
         android:textColor="@color/black"
         android:layout_width="match_parent"
