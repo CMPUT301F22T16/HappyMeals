@@ -22,14 +22,12 @@ public class StorageTest {
 
     @Test
     public void testGetStoreName() {
-        mockStorage();
         String name = this.storage.getStoreName();
         Assert.assertEquals(name, "Fridge");
     }
 
     @Test
     public void testSetStoreName() {
-        mockStorage();
         String new_name = "Freezer";
         this.storage.setStoreName(new_name);
         Assert.assertEquals(this.storage.getStoreName(), new_name);
@@ -37,20 +35,17 @@ public class StorageTest {
 
     @Test
     public void testGetItemCount() {
-        mockStorage();
         Assert.assertEquals(this.storage.getItemCount(), 0);
     }
 
     @Test
     public void testSetItemCount() {
-        mockStorage();
         this.storage.setItemCount(1);
         Assert.assertEquals(this.storage.getItemCount(), 1);
     }
 
     @Test
     public void testGetStorable() {
-        mockStorage();
         this.storage.setItemCount(1);
         this.storage.setStoreName("Freezer");
 

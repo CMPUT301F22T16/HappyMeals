@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import kotlin.jvm.Throws;
 
@@ -25,8 +27,22 @@ public class MealTest {
         recipes.add(recipe);
         Map<String,Double> scaling = new HashMap<>();
         scaling.put(recipe.get_r_id(), 1.11);
-        meal = new Meal("Test Meal Title",recipes,scaling,19.9);
+        meal = new Meal("Breakfast",recipes,scaling,19.9);
     }
+
+    @Test
+    public void testGetTitle() {
+        String title = meal.getTitle();
+        Assert.assertEquals(title, "Breakfast");
+    }
+
+    @Test
+    public void testSetTitle() {
+        String new_title = "Lunch";
+        this.meal.setTitle(new_title);
+        Assert.assertEquals(this.meal.getTitle(), "Lunch");
+    }
+
 
     @Test
     public void testRemoveRecipe(){
@@ -106,5 +122,11 @@ public class MealTest {
     public void testGetStorable(){
         HashMap<String, Object> data = meal.getStorable();
         Assert.assertEquals(data.get("cost"),19.9);
+        String title = (String) data.get("title");
+        Map<String, Double> recipe_scalings = (Map<String, Double>) data.get("recipe_scalings");
+        Set<String> recipes = recipe_scalings.keySet();
+        Assert.assertTrue(recipes.contains("test111id"));
+        Collection<Double> scalings = recipe_scalings.values();
+        Assert.assertTrue(scalings.contains(1.11));
     }
 }
