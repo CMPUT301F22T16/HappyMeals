@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -58,22 +59,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        Log.d("Moho", "REACHED");
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (response.isNewUser()) {
-
-            }
+            Log.d("Momo", user.getUid());
             launchMain(user);
             // ...
         } else {
-            Log.d("Moho", "REACHED1");
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
+            Toast.makeText(this, "An error has occured", Toast.LENGTH_SHORT).show();
         }
     }
 
