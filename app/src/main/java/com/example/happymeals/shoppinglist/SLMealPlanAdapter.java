@@ -55,7 +55,6 @@ public class SLMealPlanAdapter extends RecyclerView.Adapter<SLMealPlanAdapter.SL
     public void onBindViewHolder(@NonNull SLMealPlanAdapter.SLMealPlanViewHolder holder, int position) {
         MealPlan mealPlan = mealPlans.get(position);
         holder.binding.mpMealListTextView1.setText(mealPlan.getTitle());
-        holder.binding.mpMealListTextView2.setText(Integer.toString(mealPlan.getNum_days()));
     }
 
     @Override
