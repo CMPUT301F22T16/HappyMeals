@@ -62,7 +62,7 @@ public class CreateStorageFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String name = input.getText().toString();
-
+                        name = name.trim();
                         Storage storage = new Storage(name);
                         db.addStorage(storage);
                     }

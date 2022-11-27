@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.happymeals.storage.Storage;
@@ -32,7 +33,7 @@ import java.util.Date;
  * The MainActivity class defines the actions to takes at the home screen as well as initiating
  * new activities when pressing certain buttons.
  */
-public class IngredientActivity extends AppCompatActivity{
+public class IngredientActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     ArrayList<UserIngredient> userIngredientList;
     IngredientAdaptor ingredientAdaptor;
     ListView ingredientListView;
@@ -65,7 +66,6 @@ public class IngredientActivity extends AppCompatActivity{
         userIngredientList = new ArrayList<UserIngredient>();
 
         ingredientListView = (ListView) findViewById(R.id.ingredient_list);
-        totalCost = (TextView) findViewById(R.id.costDescription);
         floatingAdd =  findViewById(R.id.floatingAdd);
         sortIngredients = (FloatingActionButton) findViewById(R.id.sort_ingredients);
 
@@ -80,10 +80,16 @@ public class IngredientActivity extends AppCompatActivity{
             ingredientListView = findViewById(R.id.storage_ingredient_list);
             db.getIngredientsForStorage(ingredientAdaptor, storage);
             ingredientListView.setAdapter(ingredientAdaptor);
+
+            // SearchView
+            SearchView search = findViewById(R.id.ingredient_search);
+            search.setOnQueryTextListener(this);
+
+
             return;
         } else {
 
-            db.getIngredients(ingredientAdaptor, totalCost);
+            db.getIngredients(ingredientAdaptor);
         }
 
         ingredientListView.setAdapter(ingredientAdaptor);
@@ -193,5 +199,15 @@ public class IngredientActivity extends AppCompatActivity{
         return true;
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
 
+    @Override
+    public boolean onQueryTextChange(String s) {
+        String entered_text = s;
+        ingredientAdaptor.filter(entered_text);
+        return false;
+    }
 }

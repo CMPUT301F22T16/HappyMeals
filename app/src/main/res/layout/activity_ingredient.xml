@@ -33,22 +33,10 @@
         android:layout_marginBottom="16dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/costDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/floatingAdd"></ListView>
-
-    <TextView
-        android:id="@+id/costDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:textSize="36dp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storage_ingredient_list" />
+        app:layout_constraintTop_toBottomOf="@+id/floatingAdd"></ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sort_ingredients"
