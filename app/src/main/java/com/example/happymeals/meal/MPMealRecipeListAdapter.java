@@ -181,6 +181,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        notifyDataSetChanged();
                     }
                 }
         );
@@ -192,6 +193,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         });
         dialogBuilder.create();
         dialogBuilder.show();
+        notifyDataSetChanged();
         return editText;
     }
 
@@ -232,6 +234,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
             public void onClick(View v) {
                 // build another dialog here
                 EditText editText =createPopup(recipe,meal);
+                notifyDataSetChanged();
                 Double s = 1.0;
                 try {
                     s = meal.getScalingForRecipe(recipe);
@@ -249,7 +252,7 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
             }
         });
         bottomSheet.show();
-
+        notifyDataSetChanged();
     }
 
     public class MRLViewHolder extends RecyclerView.ViewHolder {
