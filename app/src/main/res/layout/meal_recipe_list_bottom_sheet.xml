@@ -24,7 +24,7 @@
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create New Recipe and Add to Meal"
+        android:text="Add A Ingredient"
         android:textAlignment="center"
 
         />

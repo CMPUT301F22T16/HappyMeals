@@ -40,6 +40,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
     TextView totalCost;
     ExtendedFloatingActionButton floatingAdd;
     FloatingActionButton sortIngredients;
+    Boolean isFromMealActivity;
 
     // This integer is used to store the index of the Ingredient object in the list.
     int ingredientPosition;
@@ -54,6 +55,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
         // Ingredient list selected from storages
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
+        isFromMealActivity = bundle.getBoolean("IS-FROM-MEAL");
         Storage storage = null;
         try {
             storage = (Storage) bundle.getSerializable("STORAGE");
@@ -68,6 +70,10 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
         ingredientListView = (ListView) findViewById(R.id.ingredient_list);
         floatingAdd =  findViewById(R.id.floatingAdd);
         sortIngredients = (FloatingActionButton) findViewById(R.id.sort_ingredients);
+        if (isFromMealActivity){
+            floatingAdd.setVisibility(View.INVISIBLE);
+            sortIngredients.setVisibility(View.INVISIBLE);
+        }
 
         ingredientAdaptor = new IngredientAdaptor(this, userIngredientList);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -163,9 +169,16 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                                     int position, long id) {
                 UserIngredient userIngredient = (UserIngredient) parent.getItemAtPosition(position);
                 ingredientPosition = position;
-
-
-                ViewIngredientFragment.newInstance(userIngredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                if (isFromMealActivity){
+                    Intent return_intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Ingredient", userIngredient);
+                    return_intent.putExtras(bundle);
+                    setResult(Activity.RESULT_OK,return_intent);
+                    finish();// get back to caller activity which is meal recipe list
+                }else{
+                    ViewIngredientFragment.newInstance(userIngredient).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                }
 
             }
         });

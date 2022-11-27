@@ -66,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, IngredientActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("IS-FROM-MEAL", false);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

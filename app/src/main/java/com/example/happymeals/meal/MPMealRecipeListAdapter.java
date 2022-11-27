@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.R;
 import com.example.happymeals.Recipe;
+import com.example.happymeals.UserIngredient;
 import com.example.happymeals.ViewRecipeActivity;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.databinding.MealRecipeListContentBinding;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * This custom adapter keeps meal recipe list up to date
@@ -105,6 +105,15 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         }
         notifyDataSetChanged();
     }
+
+    /**
+     * add an ingredient
+     * @param userIngredient
+     */
+    public void addIngredient(UserIngredient userIngredient){
+        // TODO:update from adapter?
+    }
+
 
     /**
      * delete the recipe and its scaling from the list
