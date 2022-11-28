@@ -88,4 +88,9 @@ public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> implem
 
         return convertView;
     }
+
+    @Override
+    public int getCount() {
+        return super.getCount();
+    }
 }
