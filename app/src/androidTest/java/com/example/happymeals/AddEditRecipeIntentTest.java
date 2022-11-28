@@ -146,7 +146,7 @@ public class AddEditRecipeIntentTest {
                             item.getIngredients().get(0).getDescription().equals("Noodles") &&
                             item.getIngredients().get(0).getCategory().equals("Vegetable") &&
                             item.getIngredients().get(0).getAmount().equals(20.00) &&
-                            item.getIngredients().get(0).getUnits().equals("g")
+                            item.getIngredients().get(0).getUnit().equals("g")
             ) {
                 index = i;
                 break;
@@ -235,7 +235,7 @@ public class AddEditRecipeIntentTest {
                             item.getIngredients().get(0).getDescription().equals("Noodles 2") &&
                             item.getIngredients().get(0).getCategory().equals("Dry food") &&
                             item.getIngredients().get(0).getAmount().equals(10.00) &&
-                            item.getIngredients().get(0).getUnits().equals("g")
+                            item.getIngredients().get(0).getUnit().equals("g")
             ) {
                 index_2 = i;
                 break;
