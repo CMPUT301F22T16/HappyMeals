@@ -41,38 +41,13 @@ public class MPMealPlanActivity extends AppCompatActivity {
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Meal Plans");
+        getSupportActionBar().setTitle("Weekly Meal Plans");
 
         // get userId
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DBHandler db = new DBHandler(user.getUid());
 
         mealPlans = new ArrayList<>();
-
-//        //Testing
-//        Ingredient ind = new Ingredient(3,"carrot");
-//        List<String> comments = new ArrayList<>();
-//        comments.add("LGTM!");
-//        List<Ingredient> ingredients = new ArrayList<>();
-//        ingredients.add(ind);
-//        Recipe r1 = new Recipe("Greedy recipe",1,1,"vst", comments, ingredients);
-//        List<Recipe> recipes = new ArrayList<>();
-//        recipes.add(r1);
-//        List<Double> scalings = new ArrayList<>();
-//        scalings.add(1.11);
-//        ArrayList<Meal> mealsb = new ArrayList<>();
-//        ArrayList<Meal> mealsl = new ArrayList<>();
-//        ArrayList<Meal> mealsn = new ArrayList<>();
-//        mealsb.add(new Meal(recipes,scalings,3.4));
-//        mealsl.add(new Meal(recipes,scalings,3.4));
-//        mealsn.add(new Meal(recipes,scalings,3.4));
-//        MealPlan mealPlan = new MealPlan(mealsb,mealsl,mealsn,1);
-//        MealPlan mealPlan2 = new MealPlan(mealsb,mealsl,mealsn,1);
-//        mealPlans.add(mealPlan);
-//        mealPlans.add(mealPlan2);
-//
-//        user.addMealPlan(mealPlan, this);
-//        user.addMealPlan(mealPlan2, this);
 
         Bundle bundle = getIntent().getExtras();
         mpAdapter = new MPListAdapter(this, mealPlans, user.getUid());
