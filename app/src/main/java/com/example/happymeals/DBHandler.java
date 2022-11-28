@@ -32,6 +32,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -172,30 +173,26 @@ public class DBHandler implements Serializable{
 
     //---------------------------------------------------User Methods--------------------------------------------------//
 
-    private void checkIncomplete(Context context, Boolean isIncomplete) {
-        if (isIncomplete) {
+    private void checkIncomplete(Context context, Integer incompleteCount) {
+        if (incompleteCount>0) {
             Toast.makeText(context, "YOU HAVE INCOMPLETE DATA", Toast.LENGTH_LONG).show();
         }
     }
 
     public void markIncompleteData() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("sl_incomplete", true);
-        CollectionReference ref = conn.collection("user");
-        update(ref, username, data, "user");
+        DocumentReference ref = conn.collection("users").document(username);
+        ref.update("sl_incomplete", FieldValue.increment(1));
     }
 
     public void markcompleteData() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("sl_incomplete", false);
-        CollectionReference ref = conn.collection("user");
-        update(ref, username, data, "user");
+        DocumentReference ref = conn.collection("users").document(username);
+        ref.update("sl_incomplete", FieldValue.increment(-1));
     }
 
     private void newUser(String userId) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ing_sort", "A-Z");
-        data.put("sl_incomplete", false);
+        data.put("sl_incomplete", 0);
         DocumentReference doc = conn.collection("users").document(userId);
         store(doc, data, "User");
     }
@@ -207,7 +204,7 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            checkIncomplete(context, documentSnapshot.getBoolean("sl_incomplete"));
+                            checkIncomplete(context, documentSnapshot.getDouble("sl_incomplete").intValue());
                         } else {
                             newUser(user.getUid());
                         }
