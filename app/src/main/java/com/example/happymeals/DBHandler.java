@@ -2,10 +2,12 @@ package com.example.happymeals;
 
 import static java.lang.Boolean.FALSE;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -169,13 +172,54 @@ public class DBHandler implements Serializable{
 
     //---------------------------------------------------User Methods--------------------------------------------------//
 
-    public void newUser(String userId) {
+    private void checkIncomplete(Context context, Boolean isIncomplete) {
+        if (isIncomplete) {
+            Toast.makeText(context, "YOU HAVE INCOMPLETE DATA", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void markIncompleteData() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("sl_incomplete", true);
+        CollectionReference ref = conn.collection("user");
+        update(ref, username, data, "user");
+    }
+
+    public void markcompleteData() {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("sl_incomplete", false);
+        CollectionReference ref = conn.collection("user");
+        update(ref, username, data, "user");
+    }
+
+    private void newUser(String userId) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ing_sort", "A-Z");
+        data.put("sl_incomplete", false);
         DocumentReference doc = conn.collection("users").document(userId);
         store(doc, data, "User");
     }
 
+    public void validateUser(FirebaseUser user, Context context) {
+        DocumentReference docRef = conn.collection("users").document(user.getUid());
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            checkIncomplete(context, documentSnapshot.getBoolean("sl_incomplete"));
+                        } else {
+                            newUser(user.getUid());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
