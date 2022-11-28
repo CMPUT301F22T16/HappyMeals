@@ -123,8 +123,10 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
                 return;
             }
         }
+        RecipeIngredient recipeIngredient = new RecipeIngredient(description,userIngredient.getCategory(), userIngredient.getAmount());
+        recipeIngredient.setUnit(userIngredient.getUnit());
         List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-        recipeIngredients.add(new RecipeIngredient(description,userIngredient.getCategory(), userIngredient.getAmount()));
+        recipeIngredients.add(recipeIngredient);
         Recipe new_recipe = new Recipe(description, 0, 1,userIngredient.getCategory() , new ArrayList<>(), recipeIngredients);
         db.addRecipe(new_recipe);
         add(new_recipe);
