@@ -2,10 +2,12 @@ package com.example.happymeals;
 
 import static java.lang.Boolean.FALSE;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -88,8 +91,100 @@ public class DBHandler implements Serializable{
     }
 
 
-    private void sortFilter(Adapter adapter, List list, String type) {
-        
+    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist,String type) {
+        DocumentReference doc = conn.collection("users").document(getUsername());
+        doc
+                .update("ing_sort", type)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (ilist != null) {
+                            if (type.equals("A-Z")) {
+                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("Z-A")) {
+                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("1-9")) {
+                                Collections.sort(ilist, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                            }
+                            else if (type.equals("9-1")) {
+                                Collections.sort(ilist, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                            }
+                        }
+                       else if (rlist != null) {
+                            if (type.equals("S1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                            } else if (type.equals("S9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                            } else if (type.equals("P1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                            } else if (type.equals("P9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                            }
+                            else if (type.equals("CA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                            } else if (type.equals("CZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
+                            } else if (type.equals("TA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                            } else if (type.equals("TZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+
+    }
+
+    private void sortFilter(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist) {
+        DocumentReference doc = conn.collection("users").document(getUsername());
+        doc
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String type;
+                        adapter.clear();
+                        if (ilist != null) {
+                            type = task.getResult().getString("ing_sort");
+                            if (type.equals("A-Z")) {
+                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            } else if (type.equals("Z-A")) {
+                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            } else if (type.equals("1-9")) {
+                                Collections.sort(ilist, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                            } else if (type.equals("9-1")) {
+                                Collections.sort(ilist, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                            }
+                        }
+                        else if (rlist != null) {
+                            type = task.getResult().getString("rec_sort");
+                            if (type.equals("S1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                            } else if (type.equals("S9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                            } else if (type.equals("P1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                            } else if (type.equals("P9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                            }
+                            else if (type.equals("CA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                            } else if (type.equals("CZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
+                            } else if (type.equals("TA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                            } else if (type.equals("TZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                            }
+                        }
+                        adapter.addAll(ilist);
+                        adapter.notifyDataSetChanged();
+
+                    }});
     }
 
     /**
@@ -169,13 +264,53 @@ public class DBHandler implements Serializable{
 
     //---------------------------------------------------User Methods--------------------------------------------------//
 
-    public void newUser(String userId) {
+    public void checkIncomplete(Context context) {
+        CollectionReference ref = conn.collection("user_ingredients");
+        Query query = ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("incomplete", true);
+        query
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> value) {
+                        List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
+                        Log.d("Momo", String.valueOf(ingredients));
+                        if (!ingredients.isEmpty()) {
+                            Toast.makeText(context, "You have missing information in your ingredients!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+
+    private void newUser(String userId) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ing_sort", "A-Z");
+        data.put("rec_sort", "TA-Z");
+        data.put("sl_incomplete", false);
         DocumentReference doc = conn.collection("users").document(userId);
         store(doc, data, "User");
     }
 
+    public void validateUser(FirebaseUser user, Context context) {
+        DocumentReference docRef = conn.collection("users").document(user.getUid());
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            newUser(user.getUid());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
@@ -325,13 +460,13 @@ public class DBHandler implements Serializable{
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         String unit = doc.getString("unit");
+                        Boolean status = doc.getBoolean("incomplete");
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setIncomplete(status);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
-                        adapter.add(userIngredient);
                     }
-                    adapter.notifyDataSetChanged();
-
+                    sortFilter(adapter, userIngredients, null);
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
@@ -1088,6 +1223,7 @@ public class DBHandler implements Serializable{
                             cal.set(Calendar.DAY_OF_MONTH, 30);
                             date = cal.getTime();
                             UserIngredient userIngredient = new UserIngredient(category, description, needed, cost, date, "", unit);
+                            userIngredient.setIncomplete(true);
                             newIngredient(userIngredient);
                         }
                         else {
@@ -1097,6 +1233,7 @@ public class DBHandler implements Serializable{
                             amount = doc.getDouble("amount");
                             UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "", unit);
                             userIngredient.setId(doc.getId());
+                            userIngredient.setIncomplete(true);
                             updateIngredient(userIngredient);
                         }
 

@@ -75,7 +75,6 @@ public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
             @Override
             public void onClick(View view) {
                 db.pickUpIngredient(SLShoppingListAdapter.this, recipeIngredient.getDescription(), recipeIngredient.getCategory(), recipeIngredient.getAmount(), recipeIngredient.getUnit(), position);
-
             }
         });
 

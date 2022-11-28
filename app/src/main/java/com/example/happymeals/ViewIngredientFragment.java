@@ -316,6 +316,7 @@ public class ViewIngredientFragment extends DialogFragment {
                             thisUserIngredient.setDate(year, month, day);
                             thisUserIngredient.setLoc(location);
                             thisUserIngredient.setUnit(unit);
+                            thisUserIngredient.setIncomplete(false);
                             db.updateIngredient(thisUserIngredient);
 
                         }

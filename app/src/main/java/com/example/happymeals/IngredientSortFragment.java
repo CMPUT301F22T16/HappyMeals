@@ -14,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +31,7 @@ public class IngredientSortFragment extends DialogFragment {
     private List<UserIngredient> userIngredients;
     private RadioGroup sortingOptions;
     private RadioGroup orderOptions;
+    private DBHandler db;
 
     public static IngredientSortFragment newInstance(List<UserIngredient> ingredientList, IngredientAdaptor adapter) {
         IngredientSortFragment fragment = new IngredientSortFragment();
@@ -47,6 +51,8 @@ public class IngredientSortFragment extends DialogFragment {
 
 
         Bundle bundle = this.getArguments();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = new DBHandler(user.getUid());
         userIngredients = (List<UserIngredient>) bundle.getSerializable("COLLECTION");
         IngredientAdaptor adapter = (IngredientAdaptor) bundle.getSerializable("ADAPTER");
         setupView(view);
@@ -68,11 +74,11 @@ public class IngredientSortFragment extends DialogFragment {
                             case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(userIngredients, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                                    db.setSort(adapter, userIngredients, null, "1-9");
                                 }
 
                                 else {
-                                    Collections.sort(userIngredients, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                                    db.setSort(adapter, userIngredients, null, "9-1");
                                 }
 
                                 break;
@@ -81,11 +87,11 @@ public class IngredientSortFragment extends DialogFragment {
                             default:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(userIngredients, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                                    db.setSort(adapter, userIngredients, null, "Z-A");
                                 }
 
                                 else {
-                                    Collections.sort(userIngredients, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                                    db.setSort(adapter, userIngredients, null, "A-Z");
                                 }
 
                                 break;

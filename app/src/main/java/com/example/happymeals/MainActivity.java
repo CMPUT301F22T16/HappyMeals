@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
+        db.validateUser(user, getApplicationContext());
+        db.checkIncomplete(getApplicationContext());
+
 
         setContentView(R.layout.activity_main);
 
@@ -50,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         userWelcome = findViewById(R.id.userWelcome);
         userWelcome.setText("Hello,\n" + displayName);
 
-        DBHandler db = new DBHandler(user.getUid());
 
         logoutButton = findViewById(R.id.logout_button);
         ingredientButton = findViewById(R.id.ingredient_button);

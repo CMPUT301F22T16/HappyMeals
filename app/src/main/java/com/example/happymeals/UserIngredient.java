@@ -2,6 +2,7 @@ package com.example.happymeals;
 
 
 import java.io.Serializable;
+import java.time.chrono.MinguoChronology;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,6 +32,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
     private String loc;
     private String id;
     private String unit;
+    private Boolean incomplete;
 
     /**
      * A constructor with all the member attributes here {@link UserIngredient}.
@@ -50,6 +52,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
         this.date = date;
         this.loc = locRef;
         this.unit = unit;
+        this.incomplete = false;
         this.id = null;
     }
 
@@ -214,6 +217,13 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
     }
 
     /**
+     * Mark this ingredient as incomplete/complete.
+     */
+    public void setIncomplete(Boolean status) {
+        this.incomplete = status;
+    }
+
+    /**
      * Set the id of ingredient.
      * @param id
      */
@@ -234,6 +244,7 @@ public class UserIngredient extends Ingredient implements Storable, Serializable
         data.put("date", this.date);
         data.put("location", this.loc);
         data.put("unit", this.unit);
+        data.put("incomplete", this.incomplete);
         return data;
     }
 }
