@@ -224,9 +224,9 @@ public class ViewIngredientFragment extends DialogFragment {
                     }
                 })
                 .create();
-        }
+    }
 
-    // This is used to serialize the ingredient object and so it can be passed between activities.
+        // This is used to serialize the ingredient object and so it can be passed between activities.
     static ViewIngredientFragment newInstance(UserIngredient userIngredient, ArrayList<String> locations) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);
