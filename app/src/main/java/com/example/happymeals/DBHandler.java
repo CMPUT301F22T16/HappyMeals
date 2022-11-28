@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.meal.MPMealRecipeListAdapter;
 import com.example.happymeals.meal.MPMyMealsAdapter;
 import com.example.happymeals.meal.MPPickRecipeListAdapter;
@@ -482,7 +483,7 @@ public class DBHandler implements Serializable{
 
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
@@ -541,7 +542,7 @@ public class DBHandler implements Serializable{
                             String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
@@ -611,7 +612,7 @@ public class DBHandler implements Serializable{
 
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
@@ -674,7 +675,7 @@ public class DBHandler implements Serializable{
                             String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
@@ -695,7 +696,7 @@ public class DBHandler implements Serializable{
         data.put("user", getUsername());
         DocumentReference user_recipes = getConn().collection("user_recipes").document();
         String id = store(user_recipes, data, "Recipes");
-        recipe.setR_id(id);
+        recipe.setRId(id);
     }
 
     /**
@@ -706,7 +707,7 @@ public class DBHandler implements Serializable{
         HashMap<String, Object> data = new_recipe.getStorable();
         data.put("user", getUsername());
         CollectionReference user_recipes = getConn().collection("user_recipes");
-        String id = new_recipe.get_r_id();
+        String id = new_recipe.getRId();
         update(user_recipes, id, data, "user_recipes");
     }
 
@@ -716,7 +717,7 @@ public class DBHandler implements Serializable{
      */
     public void removeRecipe(Recipe recipe) {
         CollectionReference user_recipes = getConn().collection("user_recipes");
-        String id = recipe.get_r_id();
+        String id = recipe.getRId();
         delete(user_recipes, id, "user_recipes");
 
         // Removing photo
@@ -803,12 +804,12 @@ public class DBHandler implements Serializable{
                             String title = (String) doc.getString("title");
                             Meal meal = new Meal(title, recipes, recipe_scalings, cost);
 
-                            meal.setM_id(m_id);
+                            meal.setMId(m_id);
                             tempMeals.add(meal);
                         }
                         for (String i : meal_ids) {
                             for (Meal meal : tempMeals) {
-                                String j = meal.getM_id();
+                                String j = meal.getMId();
                                 if(i.equals(j)) {
                                     meals.add(meal.copy());
                                 }
@@ -854,7 +855,7 @@ public class DBHandler implements Serializable{
 
                             String title = (String) doc.getString("title");
                             Meal meal = new Meal(title, recipes, recipe_scalings, cost);
-                            meal.setM_id(m_id);
+                            meal.setMId(m_id);
                             adapter.add(meal);
                         }
                         adapter.notifyDataSetChanged();
@@ -871,7 +872,7 @@ public class DBHandler implements Serializable{
         data.put("user", getUsername());
         DocumentReference user_meals = getConn().collection("user_meals").document();
         String id = store(user_meals, data, "Meal");
-        meal.setM_id(id);
+        meal.setMId(id);
     }
 
     /**
@@ -882,7 +883,7 @@ public class DBHandler implements Serializable{
         HashMap<String, Object> data = new_meal.getStorable();
         data.put("user", getUsername());
         CollectionReference user_meals = getConn().collection("user_meals");
-        String id = new_meal.getM_id();
+        String id = new_meal.getMId();
         update(user_meals, id, data, "user_meals");
     }
 
@@ -892,7 +893,7 @@ public class DBHandler implements Serializable{
      */
     public void removeMeal(Meal meal) {
         CollectionReference user_meals = getConn().collection("user_meals");
-        String id = meal.getM_id();
+        String id = meal.getMId();
         delete(user_meals, id, "user_meals");
     }
 
@@ -954,7 +955,7 @@ public class DBHandler implements Serializable{
                             MealPlan mealPlan = new MealPlan(title, mealplan, num_days);
 
                             // Setting the document id
-                            mealPlan.setUmp_id(ump_id);
+                            mealPlan.setUmpId(ump_id);
 
                             // Adding the meal plan to the adapter
                             adapter.add(mealPlan);
@@ -973,7 +974,7 @@ public class DBHandler implements Serializable{
         data.put("user", getUsername());
         DocumentReference user_mealplans = getConn().collection("user_mealplans").document();
         String id = store(user_mealplans, data, "Meal Plan");
-        mealplan.setUmp_id(id);
+        mealplan.setUmpId(id);
     }
 
     /**
@@ -985,7 +986,7 @@ public class DBHandler implements Serializable{
         HashMap<String, Object> data = mealPlan.getStorable();
         data.put("user", getUsername());
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
-        String id = mealPlan.get_ump_id();
+        String id = mealPlan.getUmpId();
         update(user_mealplans, id, data, "user_mealplans");
     }
 
@@ -995,7 +996,7 @@ public class DBHandler implements Serializable{
      */
     public void removeMealPlan(MealPlan mealPlan) {
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
-        String id = mealPlan.get_ump_id();
+        String id = mealPlan.getUmpId();
         delete(user_mealplans, id, "user_mealplans");
     }
 
@@ -1057,7 +1058,7 @@ public class DBHandler implements Serializable{
                             MealPlan mealPlan = new MealPlan(title, mealplan, num_days);
 
                             // Setting the document id
-                            mealPlan.setUmp_id(ump_id);
+                            mealPlan.setUmpId(ump_id);
 
                             // Adding the meal plan to the adapter
                             adapter.add(mealPlan);

@@ -1,15 +1,14 @@
 package com.example.happymeals;
 
-import android.app.Activity;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SearchView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.happymeals.recipe.RecipeListActivity;
+import com.example.happymeals.ingredient.IngredientActivity;
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.storage.Storage;
 import com.example.happymeals.storage.StorageActivity;
 import com.robotium.solo.Solo;

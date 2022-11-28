@@ -24,7 +24,7 @@ public class MealPlan implements Storable, Serializable {
     private List<List<Meal>> mealplan;
     private int num_days;
     private String title;
-    private String ump_id = null; // ids' null by default if not fetched
+    private String umpId = null; // ids' null by default if not fetched
 
     /**
      * Default constructor for mealplan.
@@ -110,7 +110,7 @@ public class MealPlan implements Storable, Serializable {
      * Get the document id of the MealPlan object in the database.
      * @return {@link String} document id of the MealPlan.
      */
-    public String get_ump_id() {return this.ump_id;};
+    public String getUmpId() {return this.umpId;};
 
     /**
      * Sets the returned document id from the firestore.
@@ -119,8 +119,8 @@ public class MealPlan implements Storable, Serializable {
      *          database.
      * @param id {@link String} id to be set.
      */
-    public void setUmp_id(String id) {
-        this.ump_id = id;
+    public void setUmpId(String id) {
+        this.umpId = id;
     }
 
     /**
@@ -138,7 +138,7 @@ public class MealPlan implements Storable, Serializable {
             Map<String, String> dayMap = new HashMap<>();
             int count = 0;
             for (Meal meal : dayList) {
-                dayMap.put(String.valueOf(count), meal.getM_id());
+                dayMap.put(String.valueOf(count), meal.getMId());
                 count ++;
             }
 

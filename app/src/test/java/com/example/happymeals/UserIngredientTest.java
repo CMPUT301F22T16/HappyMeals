@@ -3,6 +3,8 @@ package com.example.happymeals;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import com.example.happymeals.ingredient.UserIngredient;
+
 import java.util.Date;
 
 public class UserIngredientTest {

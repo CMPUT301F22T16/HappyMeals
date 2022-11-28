@@ -1,7 +1,6 @@
-package com.example.happymeals;
+package com.example.happymeals.ingredient;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,10 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.example.happymeals.R;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

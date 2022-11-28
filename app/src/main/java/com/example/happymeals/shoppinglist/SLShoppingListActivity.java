@@ -1,20 +1,13 @@
 package com.example.happymeals.shoppinglist;
 
-import static java.lang.Boolean.TRUE;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.IngredientAdaptor;
-import com.example.happymeals.UserIngredient;
-import com.example.happymeals.ViewIngredientFragment;
 import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.databinding.ActivitySlshoppingListBinding;
 import com.example.happymeals.mealplan.MealPlan;

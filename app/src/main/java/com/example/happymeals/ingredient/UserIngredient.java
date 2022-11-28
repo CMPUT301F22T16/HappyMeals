@@ -1,8 +1,9 @@
-package com.example.happymeals;
+package com.example.happymeals.ingredient;
 
+
+import com.example.happymeals.Storable;
 
 import java.io.Serializable;
-import java.time.chrono.MinguoChronology;
 import java.util.Calendar;
 import java.util.Date;
 

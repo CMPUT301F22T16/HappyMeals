@@ -24,7 +24,7 @@ public class Meal implements Storable, Serializable {
     private List<Recipe> recipes;
     private Map<String, Double> scalings;
     private double cost;
-    private String m_id = null;
+    private String mId = null;
     private String title;
 
     /**
@@ -125,7 +125,7 @@ public class Meal implements Storable, Serializable {
      */
     public Double getScalingForRecipe(Recipe recipe) throws Exception {
         if (this.recipes.contains(recipe) ) {
-            return this.scalings.get(recipe.get_r_id());
+            return this.scalings.get(recipe.getRId());
         }
 
         else {
@@ -138,7 +138,7 @@ public class Meal implements Storable, Serializable {
      * @param recipe {@link Recipe} recipe for which the scaling is to be set.
      */
     public void removeScalingForRecipe(Recipe recipe){
-            this.scalings.remove(recipe.get_r_id());
+            this.scalings.remove(recipe.getRId());
     }
 
     /**
@@ -149,7 +149,7 @@ public class Meal implements Storable, Serializable {
      */
     public void setScalingForRecipe(Recipe recipe, Double scaling) throws Exception {
         if (this.recipes.contains(recipe)) {
-            this.scalings.put(recipe.get_r_id(), scaling);
+            this.scalings.put(recipe.getRId(), scaling);
         }
         else {
             throw new Exception("Recipe not found.");
@@ -168,8 +168,8 @@ public class Meal implements Storable, Serializable {
      * Get the document id of the meal object in the database.
      * @return {@link String} document id of the Meal.
      */
-    public String getM_id() {
-        return this.m_id;
+    public String getMId() {
+        return this.mId;
     }
 
     /**
@@ -179,8 +179,8 @@ public class Meal implements Storable, Serializable {
      *          database.
      * @param id {@link String} id to be set.
      */
-    public void setM_id(String id) {
-        this.m_id = id;
+    public void setMId(String id) {
+        this.mId = id;
     }
 
     /**
@@ -198,7 +198,7 @@ public class Meal implements Storable, Serializable {
         // Put the recipes
         List<String> recipe_ids = new ArrayList<>();
         for (Recipe recipe : this.recipes) {
-            recipe_ids.add(recipe.get_r_id());
+            recipe_ids.add(recipe.getRId());
         }
 
         // Put the map for scalings
@@ -217,7 +217,7 @@ public class Meal implements Storable, Serializable {
      */
     public Meal copy() {
         Meal meal = new Meal(this.title, this.recipes, this.scalings, this.cost);
-        meal.setM_id(this.m_id);
+        meal.setMId(this.mId);
         return meal;
     }
 }

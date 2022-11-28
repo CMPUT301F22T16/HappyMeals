@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,22 +23,17 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.IngredientActivity;
-import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.ingredient.IngredientActivity;
 import com.example.happymeals.R;
 import com.example.happymeals.recipe.Recipe;
-import com.example.happymeals.recipe.RecipeIngredient;
-import com.example.happymeals.UserIngredient;
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
-import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * This activity allows user to view all the recipes from the meal,
