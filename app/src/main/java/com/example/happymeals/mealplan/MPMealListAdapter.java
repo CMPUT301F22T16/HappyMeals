@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
+import com.example.happymeals.meal.MPMealRecipeList;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.Meal;
 
@@ -47,6 +48,21 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
         }
     };
 
+    private final View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            intent = new Intent(mContext, MPMealRecipeList.class);
+            Bundle bundle = new Bundle();
+            int itemPosition = activityMpmealListBinding.mpMealListRecyclerview.getChildLayoutPosition(v);
+            bundle.putSerializable("IsNewMeal", false);
+            Meal meal = mealPlan.getMeals().get(dayIndex).get(itemPosition);
+            bundle.putSerializable("MEAL", meal);
+            intent.putExtras(bundle);
+            mContext.startActivity(intent);
+            return false;
+        }
+    };
+
     public MPMealListAdapter(Context context, ArrayList<Meal> meals, String userName, int dayIndex, MealPlan mealPlan, ActivityResultLauncher activityLauncher) {
         this.userName = userName;
         this.dayIndex = dayIndex;
@@ -62,6 +78,7 @@ public class MPMealListAdapter extends RecyclerView.Adapter<MPMealListAdapter.Me
     public MPMealListAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MealPlanListContentBinding binding = MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
         binding.getRoot().setOnClickListener(mOnClickListener);
+        binding.getRoot().setOnLongClickListener(onLongClickListener);
         return new MPMealListAdapter.MealViewHolder(binding);
     }
 
