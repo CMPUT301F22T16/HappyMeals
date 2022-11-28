@@ -22,10 +22,10 @@ public class MealTest {
     public void mockMeal(){
         List<Recipe> recipes = new ArrayList<>();
         recipe = new Recipe();
-        recipe.setR_id("test111id");
+        recipe.setRId("test111id");
         recipes.add(recipe);
         Map<String,Double> scaling = new HashMap<>();
-        scaling.put(recipe.get_r_id(), 1.11);
+        scaling.put(recipe.getRId(), 1.11);
         meal = new Meal("Breakfast",recipes,scaling,19.9);
     }
 
@@ -97,7 +97,7 @@ public class MealTest {
     @Test
     public void testGetScalingForRecipeException() throws Exception{
         Recipe recipe2 = new Recipe();
-        recipe2.setR_id("test000id");
+        recipe2.setRId("test000id");
         Exception e = Assert.assertThrows(Exception.class,()->meal.getScalingForRecipe(recipe2));
         Assert.assertTrue(e.getMessage().contains("Recipe not found"));
     }
@@ -107,9 +107,6 @@ public class MealTest {
         meal.removeScalingForRecipe(recipe);
         Assert.assertTrue(meal.getScalings().size()==0);
     }
-
-
-
 
     @Test
     public void testGetCost(){
