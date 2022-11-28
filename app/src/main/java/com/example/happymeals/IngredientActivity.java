@@ -40,7 +40,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
     ArrayList<UserIngredient> userIngredientList;
     IngredientAdaptor ingredientAdaptor;
     ListView ingredientListView;
-    TextView totalCost;
     ExtendedFloatingActionButton floatingAdd;
     FloatingActionButton sortIngredients;
 
@@ -63,8 +62,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
         } catch (Exception e) {
 
         }
-
-
 
         userIngredientList = new ArrayList<UserIngredient>();
 
@@ -170,7 +167,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                 ingredientPosition = position;
 
 
-                ViewIngredientFragment.newInstance(userIngredient, locations).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                ViewIngredientFragment.newInstance(userIngredient, locations, false).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
             }
         });

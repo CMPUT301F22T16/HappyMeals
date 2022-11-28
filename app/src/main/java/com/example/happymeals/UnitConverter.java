@@ -7,6 +7,7 @@ import com.example.happymeals.recipe.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,7 +61,12 @@ public class UnitConverter {
         for (List<Meal> meals : mealPlan.getMeals()) {
             for (Meal meal : meals) {
                 for (Recipe recipe : meal.getRecipes()) {
-                    recipeIngredients.addAll(recipe.getIngredients());
+                    for (RecipeIngredient ingredient : recipe.getIngredients()) {
+                        try {
+                            ingredient.setAmount(ingredient.getAmount()*meal.getScalingForRecipe(recipe));
+                        } catch (Exception e){}
+                        recipeIngredients.add(ingredient);
+                    }
                 }
             }
         }
@@ -78,8 +84,12 @@ public class UnitConverter {
                 tempIngredients.add(origIng);
             }
         }
-        //  adjust recipeingredients amount according to useringredients
-        for (Ingredient ingredient : userIngredients) {
+        Date now = new Date();
+        //  adjust recipeingredients amount according to unexpired useringredients
+        for (UserIngredient ingredient : userIngredients) {
+            if (now.after(ingredient.getDate())) {
+                continue;
+            }
             for (Ingredient ringredient : tempIngredients) {
                 if (ingredient.getDescription().toLowerCase().equals(ringredient.getDescription().toLowerCase()) && ingredient.getCategory().toLowerCase().equals(ringredient.getCategory().toLowerCase())) {
                     UtoRIngredientUpdate(ringredient, ingredient);
