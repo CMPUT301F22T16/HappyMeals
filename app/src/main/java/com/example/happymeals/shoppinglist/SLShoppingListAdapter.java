@@ -42,7 +42,7 @@ public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
         // Set the values for display.
         description.setText(recipeIngredient.getDescription());
         category.setText(recipeIngredient.getCategory());
-        amount.setText("Amount: " + String.valueOf(recipeIngredient.getAmount()));
+        amount.setText(String.format("Amount: %.2f",recipeIngredient.getAmount()));
         unit.setText("Unit: " + recipeIngredient.getUnit());
 
         return convertView;

@@ -89,17 +89,23 @@ public class ViewIngredientFragment extends DialogFragment {
             this.thisLocation.setAdapter(locationAdapt);
 
             thisAmount.setText(Double.toString(thisUserIngredient.getAmount()));
-            if (fluidUnit.contains(thisUserIngredient.getUnit())){
-                thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
-            }
-            if (solidUnit.contains(thisUserIngredient.getUnit())){
-                thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
-            }
-            thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
+
             if(!isSL) {
-                thisLocation.setSelection(locations.indexOf(thisUserIngredient.getLoc()));
                 thisUnitCost.setText(Double.toString(thisUserIngredient.getCost()));
+                thisLocation.setSelection(locations.indexOf(thisUserIngredient.getLoc()));
                 thisBestBefore.updateDate(thisUserIngredient.getYear(), thisUserIngredient.getMonth(), thisUserIngredient.getDay());
+            }
+
+            if (thisUserIngredient.getCategory().equals("Drink")){
+                ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                thisUnit.setAdapter(unitAdapt);
+                // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
+                thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
+
+            }else{
+                ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                thisUnit.setAdapter(unitAdapt);
+                thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
             }
         }
 
@@ -107,13 +113,29 @@ public class ViewIngredientFragment extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (categories.get(position) == "Drink") {
+                    if (thisUserIngredient.getCategory().equals("Drink")){
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                        // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
+                        thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
+                    }else{
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                    }
                     // Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
-                    ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
-                    thisUnit.setAdapter(unitAdapt);
+
                 } else {
+                    if (!thisUserIngredient.getCategory().equals("Drink")){
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                        // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
+                        thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
+                    }else{
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                    }
                     // Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
-                    ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
-                    thisUnit.setAdapter(unitAdapt);
+
                 }
             }
 

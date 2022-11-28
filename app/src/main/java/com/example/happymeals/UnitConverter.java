@@ -81,7 +81,7 @@ public class UnitConverter {
             }
 
             if(!containsFlag) {
-                tempIngredients.add(origIng);
+                tempIngredients.add(origIng.getCopy());
             }
         }
         Date now = new Date();

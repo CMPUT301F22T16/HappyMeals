@@ -113,4 +113,14 @@ public class RecipeIngredient extends Ingredient implements Serializable {
     public void setUnit(String units) {
         this.units = units;
     }
+
+    /**
+     * This method creates an identical copy of this object
+     * @return
+     */
+    public RecipeIngredient getCopy() {
+        RecipeIngredient ingredient = new RecipeIngredient(this.description, this.category, this.amount);
+        ingredient.setUnit(this.units);
+        return ingredient;
+    }
 }
