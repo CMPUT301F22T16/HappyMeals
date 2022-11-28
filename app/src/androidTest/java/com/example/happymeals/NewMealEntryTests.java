@@ -80,6 +80,9 @@ public class NewMealEntryTests {
                     }
                 });
         recipe_id=doc.getId();
+        solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
+        solo.clickOnButton("MEALS");
+        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
     }
 
     /**
@@ -96,11 +99,7 @@ public class NewMealEntryTests {
      * a new meal with selecting meal to it
      */
     @Test
-    public void testCreateNewMeal() throws InterruptedException {
-        // starting from main activity
-        solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
-        solo.clickOnButton("MEALS");
-        solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
+    public void test_pick_recipes_for_meal() throws InterruptedException {
 
         // click to add a new meal
         Button addButton = (Button) solo.getView(R.id.my_meals_add_button);

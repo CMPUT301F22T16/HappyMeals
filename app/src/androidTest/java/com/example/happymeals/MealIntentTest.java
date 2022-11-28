@@ -44,5 +44,14 @@ public class MealIntentTest {
         Activity activity = rule.getActivity();
     }
 
+    /**
+     * This test the whole work flow from creating a new meal
+     * and try to adding new recipes to it
+     */
+    @Test
+    public void test_pick_new_recipes(){
+
+    }
+
 
 }
