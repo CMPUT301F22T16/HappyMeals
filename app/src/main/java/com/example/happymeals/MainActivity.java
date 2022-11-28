@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.happymeals.shoppinglist.SLSelectMealPlanActivity;
+import com.example.happymeals.recipe.RecipeListActivity;
 import com.example.happymeals.storage.StorageActivity;
 
 import com.example.happymeals.meal.MPMyMealsActivity;

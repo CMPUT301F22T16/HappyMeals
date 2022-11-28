@@ -2,10 +2,13 @@ package com.example.happymeals;
 
 import com.example.happymeals.meal.Meal;
 import com.example.happymeals.mealplan.MealPlan;
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class UnitConverter {
     public static final List<String> upperList = Collections.unmodifiableList(
@@ -78,7 +81,7 @@ public class UnitConverter {
         //  adjust recipeingredients amount according to useringredients
         for (Ingredient ingredient : userIngredients) {
             for (Ingredient ringredient : tempIngredients) {
-                if (ingredient.getDescription() == ringredient.getDescription() && ingredient.getCategory() == ringredient.getCategory()) {
+                if (ingredient.getDescription().toLowerCase().equals(ringredient.getDescription().toLowerCase()) && ingredient.getCategory().toLowerCase().equals(ringredient.getCategory().toLowerCase())) {
                     UtoRIngredientUpdate(ringredient, ingredient);
                 }
             }
@@ -113,7 +116,7 @@ public class UnitConverter {
      * @param r2
      */
     static public void UtoRIngredientUpdate(Ingredient r1, Ingredient r2) {
-        if (r1.getUnit() == r2.getUnit()) {
+        if (r1.getUnit().toLowerCase().equals(r2.getUnit().toLowerCase()) ) {
             r1.setAmount(r1.getAmount()-r2.getAmount());
         } else if (upperList.contains(r1.getUnit()) && lowerList.contains(r2.getUnit())) {
             NegStoLKeepL(r1, r2);
@@ -128,13 +131,13 @@ public class UnitConverter {
      * @param r2
      */
     static public void StoLKeepL(Ingredient r1, Ingredient r2) {
-        if (p3List.contains(r1)) {
+        if (p3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()+r2.getAmount()/1000);
-        } else if (p2List.contains(r1)) {
+        } else if (p2List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()+r2.getAmount()/100);
-        } else if (p1List.contains(r1)) {
+        } else if (p1List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()+r2.getAmount()/10);
-        } else if (t3List.contains(r1)) {
+        } else if (t3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()+r2.getAmount()/3);
         }
     }
@@ -145,13 +148,13 @@ public class UnitConverter {
      * @param r2
      */
     static public void LtoSKeepL(Ingredient r1, Ingredient r2) {
-        if (p3List.contains(r1)) {
+        if (p3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()/1000+r2.getAmount());
-        } else if (p2List.contains(r1)) {
+        } else if (p2List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()/100+r2.getAmount());
-        } else if (p1List.contains(r1)) {
+        } else if (p1List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()/10+r2.getAmount());
-        } else if (t3List.contains(r1)) {
+        } else if (t3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()/3+r2.getAmount());
         }
         r1.setUnit(r2.getUnit());
@@ -163,13 +166,13 @@ public class UnitConverter {
      * @param r2
      */
     static public void NegLtoSKeepS(Ingredient r1, Ingredient r2) {
-        if (p3List.contains(r1)) {
+        if (p3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()*1000);
-        } else if (p2List.contains(r1)) {
+        } else if (p2List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()*100);
-        } else if (p1List.contains(r1)) {
+        } else if (p1List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()*10);
-        } else if (t3List.contains(r1)) {
+        } else if (t3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()*3);
         }
     }
@@ -180,13 +183,13 @@ public class UnitConverter {
      * @param r2
      */
     static public void NegStoLKeepL(Ingredient r1, Ingredient r2) {
-        if (p3List.contains(r1)) {
+        if (p3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()/1000);
-        } else if (p2List.contains(r1)) {
+        } else if (p2List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()/100);
-        } else if (p1List.contains(r1)) {
+        } else if (p1List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()/10);
-        } else if (t3List.contains(r1)) {
+        } else if (t3List.contains(r1.getUnit())) {
             r1.setAmount(r1.getAmount()-r2.getAmount()/3);
         }
     }

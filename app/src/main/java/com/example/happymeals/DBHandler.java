@@ -5,7 +5,6 @@ import static java.lang.Boolean.FALSE;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +15,8 @@ import com.example.happymeals.meal.Meal;
 import com.example.happymeals.mealplan.MPListAdapter;
 import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.shoppinglist.SLMealPlanAdapter;
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.storage.Storage;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +44,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -211,7 +211,10 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         adapter.clear();
-                        adapter.add("Select");
+                        if (fragment == false){
+                            adapter.add("Select location");
+                        }
+
                         for (DocumentSnapshot snapshot: value) {
                             String type = snapshot.getString("type");
 
@@ -222,7 +225,6 @@ public class DBHandler implements Serializable{
                         }
 
                         // adapter.notifyDataSetChanged();
-
                     }
                 });
     }
@@ -971,7 +973,7 @@ public class DBHandler implements Serializable{
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
                     }
-                    List<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
+                    ArrayList<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
                     adapter.addAll(slIngredients);
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");

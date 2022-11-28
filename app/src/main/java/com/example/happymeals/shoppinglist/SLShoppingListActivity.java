@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.IngredientAdaptor;
-import com.example.happymeals.RecipeIngredient;
+import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.databinding.ActivitySlshoppingListBinding;
 import com.example.happymeals.mealplan.MealPlan;
 import com.google.firebase.auth.FirebaseAuth;

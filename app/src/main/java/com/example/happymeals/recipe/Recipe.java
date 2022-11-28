@@ -1,6 +1,9 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
 
 import android.net.Uri;
+
+import com.example.happymeals.Storable;
+import com.example.happymeals.UserIngredient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ import java.util.Map;
  *  4. num_servings : An {@link Integer} representing number of servings for the recipe.
  *  5. category: A {@link String} representing category of the recipe.
  *  6. comments: A {@link List<String>} of comments left by User on their own recipe.
- *  7. ingredients : A {@link List< UserIngredient >} for list of ingredients that this recipe has.
+ *  7. ingredients : A {@link List<  UserIngredient  >} for list of ingredients that this recipe has.
  */
 public class Recipe implements Storable, Serializable {
     private String r_id = null; // All ids' are null if not fetched

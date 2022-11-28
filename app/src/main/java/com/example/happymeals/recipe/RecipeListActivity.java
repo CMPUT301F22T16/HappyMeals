@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -18,7 +18,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.happymeals.recipe.EditRecipe;
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.LoadingDialog;
+import com.example.happymeals.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

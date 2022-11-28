@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.happymeals.R;
-import com.example.happymeals.RecipeIngredient;
+import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.databinding.IngredientRowBinding;
 
