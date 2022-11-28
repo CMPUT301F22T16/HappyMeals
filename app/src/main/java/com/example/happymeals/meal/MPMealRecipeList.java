@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,6 +91,9 @@ public class MPMealRecipeList extends AppCompatActivity {
         cancelButton = findViewById(R.id.mpmeal_recipe_list_cancel);
         meal_title = findViewById(R.id.mp_meal_recipe_title);
 
+        // back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Meal Detail");
 
         is_modified = false;
 
@@ -274,5 +278,16 @@ public class MPMealRecipeList extends AppCompatActivity {
             dbHandler.modifyMeal(meal);
             finish();}
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
