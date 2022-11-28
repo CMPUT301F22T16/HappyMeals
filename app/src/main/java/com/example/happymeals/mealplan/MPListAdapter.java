@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
+import com.example.happymeals.meal.MPMealRecipeList;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
             mContext.startActivity(intent);
         }
     };
+
 
 
     public MPListAdapter(Context context, ArrayList<MealPlan> mealPlans, String userName) {
