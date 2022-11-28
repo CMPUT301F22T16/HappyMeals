@@ -109,7 +109,7 @@ public class RecipeTest {
         ingredient.setCategory("Fruit");
         ingredient.setDescription("Apple");
         ingredient.setAmount(1.0);
-        ingredient.setUnits("kg");
+        ingredient.setUnit("kg");
         List<RecipeIngredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient);
         this.recipe.setIngredients(ingredients);
