@@ -24,8 +24,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.happymeals.R;
-import com.example.happymeals.RecipeIngredient;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

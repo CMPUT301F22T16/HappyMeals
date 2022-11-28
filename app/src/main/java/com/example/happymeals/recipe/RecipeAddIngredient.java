@@ -9,14 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.example.happymeals.DBHandler;
-import com.example.happymeals.Recipe;
-import com.example.happymeals.RecipeIngredient;
-import com.example.happymeals.UserIngredient;
-import com.example.happymeals.IngredientAdaptor;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;

@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ import java.util.Date;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.R;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,7 +83,7 @@ public class EditRecipe extends AppCompatActivity implements RecipeViewCommentsF
     ExtendedFloatingActionButton recipe_view_ingredients_btn;
 
     /**
-     * This is a button to submit the changes back to the parent activity which is {@link com.example.happymeals.RecipeListActivity}
+     * This is a button to submit the changes back to the parent activity which is {@link RecipeListActivity}
      */
     Button recipe_submit_btn;
 
