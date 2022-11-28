@@ -24,9 +24,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
+import com.example.happymeals.IngredientActivity;
+import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
 import com.example.happymeals.recipe.Recipe;
 import com.example.happymeals.recipe.RecipeIngredient;
+import com.example.happymeals.UserIngredient;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -59,10 +62,10 @@ public class MPMealRecipeList extends AppCompatActivity {
     boolean is_modified;
     EditText meal_title;
 
-    ActivityResultLauncher<Intent> add_recipe_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> add_ingredient_for_result = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            handleAddRecipeForResultLauncher(result);
+            handleAddIngredientForResultLauncher(result);
         }
     });
 
@@ -107,7 +110,7 @@ public class MPMealRecipeList extends AppCompatActivity {
         }
 
         // set up adapter
-        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, meal);
+        mpMealRecipeListAdapter = new MPMealRecipeListAdapter(this, meal,dbHandler);
         recyclerView.setAdapter(mpMealRecipeListAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
@@ -146,34 +149,15 @@ public class MPMealRecipeList extends AppCompatActivity {
         }
     }
 
-    private void handleAddRecipeForResultLauncher(ActivityResult result) {
+    private void handleAddIngredientForResultLauncher(ActivityResult result) {
         if (result != null && result.getResultCode() == RESULT_OK) {
-            if (result.getData() == null) return;
-            String title = result.getData().getStringExtra("title");
-            int prepTime = result.getData().getIntExtra("prep_time", 0);
-            int numServ = result.getData().getIntExtra("num_serv", 0);
-            String category = result.getData().getStringExtra("category");
-            List<String> comments = (ArrayList<String>) result.getData().getSerializableExtra("comments");
-            List<RecipeIngredient> ing = (ArrayList<RecipeIngredient>) result.getData().getSerializableExtra("ingredients");
-            String filetype = result.getData().getStringExtra("filetype");
-
-            String uriStr = result.getData().getStringExtra("photo");
-            Uri uri = null;
-            if (!Objects.equals(uriStr, "")) {
-                uri = Uri.parse(uriStr);
-            }
-            Recipe newRecipe = new Recipe(title, prepTime, numServ, category, comments, ing);
-            newRecipe.setDownloadUri(uriStr);
-            dbHandler.addRecipe(newRecipe);
-            mpMealRecipeListAdapter.updateRecipesList((ArrayList<Recipe>) meal.getRecipes());
+            Intent data = result.getData();
+            Bundle bundle = data.getExtras();
+            UserIngredient userIngredient = (UserIngredient) bundle.getSerializable("Ingredient");
+            mpMealRecipeListAdapter.addIngredient(userIngredient);
             mpMealRecipeListAdapter.notifyDataSetChanged();
-
-//            ContentResolver cR = this.getContentResolver();
-//            String type = cR.getType(uri);
-            dbHandler.uploadImage(uri, newRecipe, filetype);
-            is_modified = true;
         } else {
-            Toast.makeText(context, "Failed to add recipe", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to add ingredient", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -257,13 +241,11 @@ public class MPMealRecipeList extends AppCompatActivity {
         create_recipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, EditRecipe.class);
+                Intent intent = new Intent(context, IngredientActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("USER", dbHandler.getUsername());
+                bundle.putBoolean("IS-FROM-MEAL", true);
                 intent.putExtras(bundle);
-                // The operation extra tells the EditRecipe Activity whether it is adding or editing a recipe
-                intent.putExtra("operation", "add");
-                add_recipe_for_result.launch(intent);
+                add_ingredient_for_result.launch(intent);
                 bottomSheetDialog.dismiss();
             }
         });
