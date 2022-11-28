@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.happymeals.meal.MPMealRecipeListAdapter;
 import com.example.happymeals.meal.MPMyMealsAdapter;
 import com.example.happymeals.meal.MPPickRecipeListAdapter;
 import com.example.happymeals.meal.Meal;
@@ -507,6 +508,77 @@ public class DBHandler implements Serializable{
                         adapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    /**
+     * Used to fetch either all Recipes for current user.
+     * Attaches an event listener to the user's recipe documents in user_recipes Collection update their respective
+     * ArrayAdapter and notify them for future real time updates.
+     *
+     * @param adapter {@link MPMealRecipeListAdapter} in which data is to be populated
+     * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
+     *
+     * @throws RuntimeException if Recipe has no ingredients
+     */
+    public void getUserRecipesMealRecipeList(MPMealRecipeListAdapter adapter, LoadingDialog dialog) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername());
+
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) doc.get("comments");
+
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            if (ingredients == null) {
+                                throw new RuntimeException("Ingredients not found");
+                            }
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnit(units);
+
+                                recipeIngredients.add(recipeIngredient);
+                            }
+
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
+                            recipe.setR_id(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
+                            adapter.addToUserRecipes(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+        dialog.dismissDialog();
     }
 
 

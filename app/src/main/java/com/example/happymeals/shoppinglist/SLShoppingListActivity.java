@@ -4,6 +4,7 @@ import static java.lang.Boolean.TRUE;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ public class SLShoppingListActivity extends AppCompatActivity {
     ArrayList<RecipeIngredient> recipeIngredients;
     ArrayAdapter shoppingListAdaptor;
     MealPlan mealPlan;
+    DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class SLShoppingListActivity extends AppCompatActivity {
 
         // get userId
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DBHandler db = new DBHandler(user.getUid());
+        db = new DBHandler(user.getUid());
 
         Bundle bundle = getIntent().getExtras();
         mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
@@ -65,11 +67,15 @@ public class SLShoppingListActivity extends AppCompatActivity {
                 userIngredient.setCategory(recipeIngredient.getCategory());
                 userIngredient.setUnit(recipeIngredient.getUnit());
 
-
                 ViewIngredientFragment.newInstance(userIngredient, locations, true).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
-
             }
         });
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+        db.getSLIngredients(shoppingListAdaptor, mealPlan);
     }
 
     @Override
