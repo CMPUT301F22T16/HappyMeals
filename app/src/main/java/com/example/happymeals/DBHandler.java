@@ -553,7 +553,7 @@ public class DBHandler implements Serializable{
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
 
                                 recipeIngredients.add(recipeIngredient);
                             }
