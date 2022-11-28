@@ -82,18 +82,20 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements S
         // Set the values for display.
 
         Date now = new Date();
+        String desc = userIngredient.getDescription();
 
         if (now.after(userIngredient.getDate())) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 description.setTextColor(getContext().getColor(R.color.red));
             }
-            description.setText(userIngredient.getDescription() + " (Expired)");
+            desc = desc + " (Expired)";
+            description.setText(desc);
 
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 description.setTextColor(getContext().getColor(R.color.black));
             }
-            description.setText(userIngredient.getDescription());
+            description.setText(desc);
         }
 
 
@@ -108,6 +110,14 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements S
         }
         System.out.println(userIngredient.getDescription() + " " + userIngredient.getUnit());
         count.setText( String.valueOf(userIngredient.getAmount()) + " " + userIngredient.getUnit());
+
+        if (userIngredient.getLoc().equals("")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                description.setTextColor(getContext().getColor(R.color.red));
+            }
+            desc = desc + " (Picked-up)";
+            description.setText(desc);
+        }
 
 
 

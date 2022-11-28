@@ -41,6 +41,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -988,7 +989,8 @@ public class DBHandler implements Serializable{
         });
     }
 
-    public void pickUpIngredient(ArrayAdapter adapter, String description, String category, double needed, Integer position) {
+
+    public void pickUpIngredient(ArrayAdapter adapter, String description, String category, double needed, String unit, Integer position) {
 
         CollectionReference ref = conn.collection("user_ingredients");
 
@@ -1001,18 +1003,40 @@ public class DBHandler implements Serializable{
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> value) {
-                        List<UserIngredient> userIngredients = new ArrayList<>();
-                        DocumentSnapshot doc = value.getResult().getDocuments().get(0);
-                        Double amount = doc.getDouble("amount");
-                        Double cost = doc.getDouble("cost");
-                        Date date = doc.getDate("date");
-                        String unit = doc.getString("unit");
-                        UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "PLEASE SELECT", unit);
-                        userIngredient.setId(doc.getId());
-                        updateIngredient(userIngredient);
+                        List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
+                        DocumentSnapshot doc;
+                        Double cost;
+                        Date date;
+                        Double amount;
+                        if (ingredients.isEmpty()) {
+                            cost = 0.0;
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.YEAR, 2099);
+                            cal.set(Calendar.MONTH, 11);
+                            cal.set(Calendar.DAY_OF_MONTH, 30);
+                            date = cal.getTime();
+                            UserIngredient userIngredient = new UserIngredient(category, description, needed, cost, date, "", unit);
+                            newIngredient(userIngredient);
+                        }
+                        else {
+                            doc = ingredients.get(0);
+                            cost = doc.getDouble("cost");
+                            date = doc.getDate("date");
+                            amount = doc.getDouble("amount");
+                            UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "", unit);
+                            userIngredient.setId(doc.getId());
+                            updateIngredient(userIngredient);
+                        }
+
                         adapter.remove(position);
                         adapter.notifyDataSetChanged();
                         Log.d("uIng", "Local ingredients updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("sling", "Updating ingredient as a result of a shopping list pickup has failed");
                     }
                 });
 

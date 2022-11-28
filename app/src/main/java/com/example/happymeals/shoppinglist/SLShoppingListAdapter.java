@@ -60,10 +60,18 @@ public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
         pickup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.pickUpIngredient(SLShoppingListAdapter.this, description.getText().toString(), category.getText().toString(), recipeIngredient.getAmount(), position);
+                db.pickUpIngredient(SLShoppingListAdapter.this, recipeIngredient.getDescription(), recipeIngredient.getCategory(), recipeIngredient.getAmount(), recipeIngredient.getUnit(), position);
 
             }
         });
+
+        Toast toast = Toast.makeText(context, R.string.string_message_id, Toast.LENGTH_LONG);
+        View view = toast.getView();
+        view.setBackgroundResource(R.drawable.custom_background);
+        TextView text = (TextView) view.findViewById(android.R.id.message);
+        /*Here you can do anything with above textview like text.setTextColor(Color.parseColor("#000000"));*/
+        text.setTextColor(Color.parseColor("#000000"));
+        toast.show();
 
         return convertView;
     }
