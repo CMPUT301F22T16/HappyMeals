@@ -19,55 +19,24 @@ public class MealPlanTest {
         mealplan = new MealPlan();
     }
 
-//    @Test
-//    public void testGetDays() {
-//        Assert.assertEquals(mealplan.getNum_days(), 0);
-//    }
-//
-//    @Test
-//    public void testGetBreakfast() {
-//        Assert.assertEquals(mealplan.getBreakfast().size(), 0);
-//    }
-//
-//    @Test
-//    public void testGetLunch() {
-//        Assert.assertEquals(mealplan.getLunch().size(), 0);
-//    }
-//
-//    @Test
-//    public void testGetDinner() {
-//        Assert.assertEquals(mealplan.getDinner().size(), 0);
-//    }
-//
-//    @Test
-//    public void testSetNumDays() {
-//        mealplan.setDays(5);
-//        Assert.assertEquals(mealplan.getNum_days(), 5);
-//    }
-//
-//    @Test
-//    public void testSetBreakfast() {
-//        Meal meal = new Meal();
-//        mealplan.setBreakfastWithIndex(meal, 0);
-//
-//        Assert.assertEquals(mealplan.getBreakfast().size(), 1);
-//    }
-//
-//    @Test
-//    public void testSetLunch() {
-//        Meal meal = new Meal();
-//        mealplan.setLunchWithIndex(meal, 0);
-//
-//        Assert.assertEquals(mealplan.getLunch().size(), 1);
-//    }
-//
-//    @Test
-//    public void testSetDinner() {
-//        Meal meal = new Meal();
-//        mealplan.setDinnerWithIndex(meal, 0);
-//
-//        Assert.assertEquals(mealplan.getDinner().size(), 1);
-//    }
+    @Test
+    public void testGetDays() {
+        Assert.assertEquals(mealplan.getNum_days(), 0);
+    }
+
+    @Test
+    public void testGetBreakfast() {
+        Assert.assertEquals(mealplan.getMeals().size(), 0);
+    }
+
+
+    @Test
+    public void testSetNumDays() {
+        mealplan.setDays();
+        Assert.assertEquals(mealplan.getNum_days(), 0);
+    }
+
+
 //
 //    @Test
 //    public void testGetStorable() {
