@@ -3,6 +3,20 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+        <entry key="-1974517833">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1434229681">
           <value>
             <AndroidTestResultsTableState>
@@ -11,6 +25,20 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_5_API_30" value="120" />
                   <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-856968383">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -42,6 +70,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="30754861">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="181733204">
           <value>
             <AndroidTestResultsTableState>
@@ -50,6 +92,62 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_4_API_30" value="120" />
                   <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="258672992">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="691105285">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1229150130">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1582665382">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="RF8M72LHFAF" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="samsung&#10; SM-G973W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
