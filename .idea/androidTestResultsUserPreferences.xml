@@ -55,6 +55,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="2019267580">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="adb-R5CR108Y6LM-qJcwDE._adb-tls-connect._tcp" value="120" />
+                  <entry key="samsung&#10; SM-G991W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

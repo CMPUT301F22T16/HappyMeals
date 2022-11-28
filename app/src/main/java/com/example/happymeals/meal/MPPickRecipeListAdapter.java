@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.happymeals.R;
-import com.example.happymeals.Recipe;
+import com.example.happymeals.recipe.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;

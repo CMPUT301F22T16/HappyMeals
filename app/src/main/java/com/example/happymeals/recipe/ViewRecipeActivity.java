@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.example.happymeals.R;
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.List;

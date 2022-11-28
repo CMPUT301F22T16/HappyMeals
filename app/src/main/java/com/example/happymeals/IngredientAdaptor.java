@@ -25,7 +25,7 @@ import java.util.Locale;
 // Coding of this adaptor comes from lab example.
 public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements Serializable {
 
-    List<UserIngredient> userIngredientList = new ArrayList<>();
+    List<UserIngredient> userIngredientList;
     List<UserIngredient> ingredientBuffer;
 
     public IngredientAdaptor(Context context, ArrayList<UserIngredient> userIngredients) {

@@ -19,14 +19,12 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.happymeals.R;
-import com.example.happymeals.RecipeIngredient;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -55,7 +53,8 @@ public class RecipeViewIngredientsFragment extends DialogFragment implements Rec
     /**
      * This is the button to add a new ingredient.
      */
-    ExtendedFloatingActionButton recipe_add_ingredient_btn;
+
+    FloatingActionButton recipe_add_ingredient_btn;
 
     /**
      * This is the adapter for the recyclerview.

@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/gradient_background"
     tools:context=".recipe.RecipeAddComment">
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="48sp"
+        android:textSize="24dp"
+        android:textStyle="bold"
         android:gravity="center"
-        android:textColor="@color/black"
         android:text="ADD COMMENT" />
 
     <EditText

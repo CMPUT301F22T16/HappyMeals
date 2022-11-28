@@ -40,7 +40,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
     ArrayList<UserIngredient> userIngredientList;
     IngredientAdaptor ingredientAdaptor;
     ListView ingredientListView;
-    TextView totalCost;
     ExtendedFloatingActionButton floatingAdd;
     FloatingActionButton sortIngredients;
 

@@ -1,5 +1,8 @@
 package com.example.happymeals;
 
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +10,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class RecipeTest {
 
@@ -74,11 +79,63 @@ public class RecipeTest {
     }
 
     @Test
+    public void testSetIngredients() {
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
+        List<RecipeIngredient> ingredients = new ArrayList<>();
+        ingredients.add(recipeIngredient);
+        this.recipe.setIngredients(ingredients);
+
+        Assert.assertEquals(recipe.getIngredients().size(), 1);
+    }
+
+
+    @Test
+    public void testGetDownloadUri() {
+        Assert.assertEquals(this.recipe.getDownloadUri(), "android.resource://com.example.happymeals/drawable/recipe_default");
+    }
+
+    @Test
+    public void testSetDownloadUri() {
+        this.recipe.setDownloadUri("filepath");
+        Assert.assertEquals(this.recipe.getDownloadUri(), "filepath");
+    }
+
+
+    @Test
     public void testGetStorable() {
+
+        // Adding ingredient
+        RecipeIngredient ingredient = new RecipeIngredient();
+        ingredient.setCategory("Fruit");
+        ingredient.setDescription("Apple");
+        ingredient.setAmount(1.0);
+        ingredient.setUnits("kg");
+        List<RecipeIngredient> ingredients = new ArrayList<>();
+        ingredients.add(ingredient);
+        this.recipe.setIngredients(ingredients);
+
+
         HashMap<String, Object> data = recipe.getStorable();
         Assert.assertEquals((String) data.get("title"), "New Recipe");
         Assert.assertEquals(data.get("preparation_time"), 0);
         Assert.assertEquals(data.get("num_servings"), 0);
+        Assert.assertEquals(data.get("category"), "New Category");
+        List<String> comments = (List<String>) data.get("comments");
+        Assert.assertTrue(comments.contains("Nice!"));
+
+        Map<String, Map<String, Object>> ingredientsMap = (Map<String, Map<String, Object>>) data.get("ingredients");
+
+        Set<String> recipeDescs = ingredientsMap.keySet();
+
+
+        Assert.assertTrue(recipeDescs.contains("Apple"));
+
+        Map<String, Object> ingredientInfo = ingredientsMap.get("Apple");
+
+        Assert.assertEquals(ingredientInfo.get("amount"), 1.0);
+        Assert.assertEquals(ingredientInfo.get("category"), "Fruit");
+        Assert.assertEquals(ingredientInfo.get("units"), "kg");
+
     }
 
 }
