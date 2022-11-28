@@ -27,7 +27,7 @@
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_storage_button"
+        android:id="@+id/add_recipe_button"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
         android:layout_marginStart="16dp"
@@ -49,7 +49,7 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/white"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/add_storage_button"
+        app:layout_constraintBottom_toBottomOf="@+id/add_recipe_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_sort_by_size"

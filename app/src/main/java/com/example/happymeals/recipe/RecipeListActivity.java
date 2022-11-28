@@ -59,7 +59,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         setContentView(R.layout.activity_recipe_list);
 
         // Initialize the Add Recipe Button
-        add_recipe_button = findViewById(R.id.add_storage_button);
+        add_recipe_button = findViewById(R.id.add_recipe_button);
 
 
         // Sort button
