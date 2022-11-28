@@ -108,6 +108,4 @@ public class IngredientSortFragment extends DialogFragment {
         sortingOptions = view.findViewById(R.id.sort_recipe_group);
         orderOptions = view.findViewById(R.id.sort_order_group);
     }
-
-
 }

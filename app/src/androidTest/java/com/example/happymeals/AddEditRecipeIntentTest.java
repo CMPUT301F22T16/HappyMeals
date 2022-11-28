@@ -83,7 +83,7 @@ public class AddEditRecipeIntentTest {
     public void testRecipeActivity() throws InterruptedException {
         ///// ----- Test that the user can add a new recipe ----- /////
         solo.assertCurrentActivity("Wrong Activity", RecipeListActivity.class);
-        solo.clickOnView(solo.getView(R.id.add_storage_button));
+        solo.clickOnView(solo.getView(R.id.add_recipe_button));
         solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", EditRecipe.class);
 
