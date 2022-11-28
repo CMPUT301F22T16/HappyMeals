@@ -91,10 +91,20 @@ public class DBHandler implements Serializable{
     }
 
 
-    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist,String type) {
+    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist, String type) {
+        String field;
+        if (ilist != null) {
+            field = "ing_sort";
+        }
+        else if (rlist != null) {
+            field = "rec_sort";
+        }
+        else {
+            field = "sl_sort";
+        }
         DocumentReference doc = conn.collection("users").document(getUsername());
         doc
-                .update("ing_sort", type)
+                .update(field, type)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -132,13 +142,22 @@ public class DBHandler implements Serializable{
                                 Collections.sort(rlist, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
                             }
                         }
+                        else {
+                            if (type.equals("A-Z")) {
+                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("Z-A")) {
+                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                        }
+
                         adapter.notifyDataSetChanged();
 
                     }
                 });
 
     }
-
+    
     private void sortFilter(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist) {
         DocumentReference doc = conn.collection("users").document(getUsername());
         doc
@@ -159,6 +178,7 @@ public class DBHandler implements Serializable{
                             } else if (type.equals("9-1")) {
                                 Collections.sort(ilist, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
                             }
+                            adapter.addAll(ilist);
                         }
                         else if (rlist != null) {
                             type = task.getResult().getString("rec_sort");
@@ -170,8 +190,7 @@ public class DBHandler implements Serializable{
                                 Collections.sort(rlist, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
                             } else if (type.equals("P9-1")) {
                                 Collections.sort(rlist, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
-                            }
-                            else if (type.equals("CA-Z")) {
+                            } else if (type.equals("CA-Z")) {
                                 Collections.sort(rlist, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
                             } else if (type.equals("CZ-A")) {
                                 Collections.sort(rlist, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
@@ -180,8 +199,16 @@ public class DBHandler implements Serializable{
                             } else if (type.equals("TZ-A")) {
                                 Collections.sort(rlist, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
                             }
+                            adapter.addAll(rlist);
                         }
-                        adapter.addAll(ilist);
+                        else if (ilist != null) {
+                            type = task.getResult().getString("sl_sort");
+                            if (type.equals("A-Z")) {
+                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            } else if (type.equals("Z-A")) {
+                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                        }
                         adapter.notifyDataSetChanged();
 
                     }});
@@ -283,15 +310,16 @@ public class DBHandler implements Serializable{
                 });
     }
 
-
     private void newUser(String userId) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ing_sort", "A-Z");
         data.put("rec_sort", "TA-Z");
+        data.put("sl_sort", "A-Z");
         data.put("sl_incomplete", false);
         DocumentReference doc = conn.collection("users").document(userId);
         store(doc, data, "User");
     }
+
 
     public void validateUser(FirebaseUser user, Context context) {
         DocumentReference docRef = conn.collection("users").document(user.getUid());
@@ -540,6 +568,7 @@ public class DBHandler implements Serializable{
                         }
 
                         adapter.clear();
+                        List<Recipe> rlist = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             String id = doc.getId();
                             Map<String, Object> data = doc.getData();
@@ -578,10 +607,9 @@ public class DBHandler implements Serializable{
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
 
-                            adapter.add(recipe); // Adding the recipe from FireStore
+                            rlist.add(recipe); // Adding the recipe from FireStore
                         }
-
-                        adapter.notifyDataSetChanged();
+                        sortFilter(adapter, null, rlist);
                     }
                 });
         dialog.dismissDialog();
@@ -1099,6 +1127,11 @@ public class DBHandler implements Serializable{
 
     //-------------------------------------------------ShoppingList Methods-------------------------------------------------//
 
+    /**
+     * Get meal pla
+     * @param adapter
+     * @param dialog
+     */
     public void getSLMealPlans(SLMealPlanAdapter adapter, LoadingDialog dialog) {
 
         CollectionReference ref = conn.collection("user_mealplans");
@@ -1196,7 +1229,15 @@ public class DBHandler implements Serializable{
         });
     }
 
-
+    /**
+     * Add an item from shopping list into ingredient.
+     * @param adapter {@link ArrayAdapter} in which data is to be populated
+     * @param description {@link String} description of item.
+     * @param category {@link String} category of item.
+     * @param needed {@link Integer}amount needed for given recipe.
+     * @param unit {@link String} unit of item.
+     * @param position {@link Integer} Item position in data list.
+     */
     public void pickUpIngredient(ArrayAdapter adapter, String description, String category, double needed, String unit, Integer position) {
 
         CollectionReference ref = conn.collection("user_ingredients");
