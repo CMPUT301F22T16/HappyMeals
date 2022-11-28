@@ -4,6 +4,7 @@ import static java.lang.Boolean.FALSE;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +83,11 @@ public class DBHandler implements Serializable{
 
     private FirebaseFirestore getConn() {
         return this.conn;
+    }
+
+
+    private void sortFilter(Adapter adapter, List list, String type) {
+        
     }
 
     /**
@@ -359,7 +366,6 @@ public class DBHandler implements Serializable{
                         int items = storage.getItemCount();
                         storage.setItemCount(items + 1);
                         adapter.add(userIngredient);
-
                     }
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
@@ -836,7 +842,6 @@ public class DBHandler implements Serializable{
                             // Adding the meal plan to the adapter
                             adapter.add(mealPlan);
                         }
-
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -974,6 +979,7 @@ public class DBHandler implements Serializable{
                         userIngredients.add(userIngredient);
                     }
                     ArrayList<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
+                    Collections.sort(slIngredients, (o1, o2) -> o1.getAmount().compareTo(o2.getAmount()));
                     adapter.addAll(slIngredients);
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
