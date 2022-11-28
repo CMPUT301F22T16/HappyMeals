@@ -14,5 +14,7 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
     <color name="highlight">#E4E4E4</color>
+    <color name="oat">#D0B8A8</color>
+    <color name="purple">#7D6E83</color>
 
 </resources>
