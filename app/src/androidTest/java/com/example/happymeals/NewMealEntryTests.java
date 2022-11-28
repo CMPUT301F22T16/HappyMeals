@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -60,7 +61,7 @@ public class NewMealEntryTests {
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
         conn = FirebaseFirestore.getInstance();
-        Recipe recipe = new Recipe("Testing Recipe", 10, 1, "Test", new ArrayList<>(), new ArrayList<>());
+        Recipe recipe = new Recipe("Testing Recipe98304", 10, 1, "Test", new ArrayList<>(), new ArrayList<>());
         HashMap<String, Object> data = recipe.getStorable();
         data.put("user", "Guest");
         CollectionReference user_recipes = conn.collection("user_recipes");
@@ -80,8 +81,8 @@ public class NewMealEntryTests {
                     }
                 });
         recipe_id=doc.getId();
-        solo.assertCurrentActivity("Wrong Activity",MainActivity.class);
-        solo.clickOnButton("MEALS");
+        solo.clickOnView(solo.getView(R.id.meal_button));
+        solo.sleep(3000);
         solo.assertCurrentActivity("Wrong Activity", MPMyMealsActivity.class);
     }
 
@@ -102,7 +103,7 @@ public class NewMealEntryTests {
     public void test_pick_recipes_for_meal() throws InterruptedException {
 
         // click to add a new meal
-        Button addButton = (Button) solo.getView(R.id.my_meals_add_button);
+        FloatingActionButton addButton = (FloatingActionButton) solo.getView(R.id.my_meals_add_button);
         solo.clickOnView(addButton);
 
         // view all recipes for this meal
@@ -114,12 +115,12 @@ public class NewMealEntryTests {
         solo.clickOnView(add_new_recipe);
         solo.assertCurrentActivity("Wrong Activity", MPPickRecipeActivity.class); // within pick
 
-        solo.clickOnText("Testing Recipe");
+        solo.clickOnText("Testing Recipe98304");
         solo.clickOnButton("CONFIRM");
 
         // ensure the recipe was added to the meal
         solo.waitForActivity(MPMealRecipeList.class);
-        solo.waitForText("Testing Recipe");
+        solo.waitForText("Testing Recipe98304");
 
         // ensure the meal was added to meal list
         CollectionReference user_meals = conn.collection("user_meals");
