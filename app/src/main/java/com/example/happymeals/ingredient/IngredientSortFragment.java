@@ -1,4 +1,4 @@
-package com.example.happymeals.recipe;
+package com.example.happymeals.ingredient;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,19 +26,20 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RecipeSortFragment#newInstance} factory method to
+ * Use the {@link IngredientSortFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecipeSortFragment extends DialogFragment {
+public class IngredientSortFragment extends DialogFragment {
 
-    private List<Recipe> recipes;
+    private List<UserIngredient> userIngredients;
     private RadioGroup sortingOptions;
     private RadioGroup orderOptions;
+    private DBHandler db;
 
-    public static RecipeSortFragment newInstance(List<Recipe> recipeList, RecipeListAdapter adapter) {
-        RecipeSortFragment fragment = new RecipeSortFragment();
+    public static IngredientSortFragment newInstance(List<UserIngredient> ingredientList, IngredientAdaptor adapter) {
+        IngredientSortFragment fragment = new IngredientSortFragment();
         Bundle args = new Bundle();
-        args.putSerializable("COLLECTION", (Serializable) recipeList);
+        args.putSerializable("COLLECTION", (Serializable) ingredientList);
         args.putSerializable("ADAPTER", (Serializable) adapter);
         fragment.setArguments(args);
         return fragment;
@@ -48,17 +50,17 @@ public class RecipeSortFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         Context context = getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.recipe_fragment_sort, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.ingredient_fragment_sort, null);
 
 
         Bundle bundle = this.getArguments();
-        recipes = (List<Recipe>) bundle.getSerializable("COLLECTION");
-        RecipeListAdapter adapter = (RecipeListAdapter) bundle.getSerializable("ADAPTER");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db = new DBHandler(user.getUid());
+        userIngredients = (List<UserIngredient>) bundle.getSerializable("COLLECTION");
+        IngredientAdaptor adapter = (IngredientAdaptor) bundle.getSerializable("ADAPTER");
         setupView(view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DBHandler db = new DBHandler(user.getUid());
 
         return builder
                 .setView(view)
@@ -75,47 +77,24 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, null, "P1-9");
+                                    db.setSort(adapter, userIngredients, null, null, "1-9");
                                 }
 
                                 else {
-                                    db.setSort(adapter, null ,recipes, null, "P9-1");
+                                    db.setSort(adapter, userIngredients, null, null, "9-1");
                                 }
 
                                 break;
 
-                            case R.id.recipe_servings_radio:
-
-                                if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, null, "S1-9");
-                                }
-
-                                else {
-                                    db.setSort(adapter, null ,recipes, null, "S9-1");
-                                }
-
-                                break;
-
-                            case R.id.recipe_category_radio:
-
-                                if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, null, "CA-Z");
-                                }
-
-                                else {
-                                    db.setSort(adapter, null ,recipes, null, "CZ-A");
-                                }
-
-                                break;
 
                             default:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, null, "TA-Z");
+                                    db.setSort(adapter, userIngredients, null, null, "Z-A");
                                 }
 
                                 else {
-                                    db.setSort(adapter, null ,recipes, null,  "TZ-A");
+                                    db.setSort(adapter, userIngredients, null, null, "A-Z");
                                 }
 
                                 break;
@@ -138,6 +117,4 @@ public class RecipeSortFragment extends DialogFragment {
         sortingOptions = view.findViewById(R.id.sort_recipe_group);
         orderOptions = view.findViewById(R.id.sort_order_group);
     }
-
-
 }

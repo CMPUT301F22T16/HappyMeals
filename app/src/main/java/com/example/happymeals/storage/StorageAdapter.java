@@ -18,9 +18,9 @@ import java.util.List;
 
 public class StorageAdapter extends ArrayAdapter<Storage> implements Serializable {
 
-    Context context;
-    List<Storage> storages;
-    DBHandler db;
+    private Context context;
+    private List<Storage> storages;
+    private DBHandler db;
 
     public StorageAdapter(@NonNull Context context, List<Storage> storages, DBHandler user) {
         super(context, 0, storages);

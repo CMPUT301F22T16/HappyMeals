@@ -58,7 +58,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("My Meals");
+        getSupportActionBar().setTitle("Pick a Meal for MealPlan");
 
         // User
         Bundle bundle = getIntent().getExtras();
