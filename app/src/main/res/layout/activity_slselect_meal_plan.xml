@@ -13,8 +13,9 @@
         android:layout_marginTop="16dp"
         android:text="@string/sl_select_meal_plan_activity"
         android:textSize="34sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-1dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sl_select_mp_list"
