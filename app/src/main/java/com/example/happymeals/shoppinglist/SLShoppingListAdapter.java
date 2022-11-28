@@ -23,9 +23,10 @@ import com.example.happymeals.ingredient.UserIngredient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
+public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> implements Serializable {
     private Context viewContext = getContext();
     private Context mContext;
     private DBHandler db;
