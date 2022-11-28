@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             .createSignInIntentBuilder()
             .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
+            .setTheme(R.style.Theme_HappyMeals)
             .build();
 
 

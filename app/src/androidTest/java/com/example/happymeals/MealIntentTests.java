@@ -4,36 +4,26 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.happymeals.ingredient.IngredientActivity;
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.meal.MPMealRecipeList;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.MPPickRecipeActivity;
 import com.example.happymeals.meal.Meal;
-import com.example.happymeals.recipe.EditRecipe;
 import com.example.happymeals.recipe.Recipe;
 import com.example.happymeals.recipe.ViewRecipeActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -44,8 +34,6 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class MealIntentTests {

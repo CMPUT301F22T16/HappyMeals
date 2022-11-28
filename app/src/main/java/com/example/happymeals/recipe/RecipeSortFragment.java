@@ -75,11 +75,11 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, "P1-9");
+                                    db.setSort(adapter, null ,recipes, null, "P1-9");
                                 }
 
                                 else {
-                                    db.setSort(adapter, null ,recipes, "P9-1");
+                                    db.setSort(adapter, null ,recipes, null, "P9-1");
                                 }
 
                                 break;
@@ -87,11 +87,11 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.recipe_servings_radio:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, "S1-9");
+                                    db.setSort(adapter, null ,recipes, null, "S1-9");
                                 }
 
                                 else {
-                                    db.setSort(adapter, null ,recipes, "S9-1");
+                                    db.setSort(adapter, null ,recipes, null, "S9-1");
                                 }
 
                                 break;
@@ -99,11 +99,11 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.recipe_category_radio:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, "CA-Z");
+                                    db.setSort(adapter, null ,recipes, null, "CA-Z");
                                 }
 
                                 else {
-                                    db.setSort(adapter, null ,recipes, "CZ-A");
+                                    db.setSort(adapter, null ,recipes, null, "CZ-A");
                                 }
 
                                 break;
@@ -111,11 +111,11 @@ public class RecipeSortFragment extends DialogFragment {
                             default:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, null ,recipes, "TA-Z");
+                                    db.setSort(adapter, null ,recipes, null, "TA-Z");
                                 }
 
                                 else {
-                                    db.setSort(adapter, null ,recipes, "TZ-A");
+                                    db.setSort(adapter, null ,recipes, null,  "TZ-A");
                                 }
 
                                 break;

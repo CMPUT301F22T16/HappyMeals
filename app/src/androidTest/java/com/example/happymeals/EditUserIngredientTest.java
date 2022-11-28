@@ -6,16 +6,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.happymeals.recipe.RecipeListActivity;
+import com.example.happymeals.ingredient.AddNewIngredient;
+import com.example.happymeals.ingredient.IngredientActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.Before;

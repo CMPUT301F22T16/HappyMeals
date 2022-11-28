@@ -8,7 +8,8 @@
     android:paddingHorizontal="7dp"
     android:paddingVertical="14dp"
     android:orientation="horizontal"
-    android:layout_margin="3dp"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="7dp"
     android:background="@drawable/border"
     android:weightSum="4">
 
@@ -20,7 +21,7 @@
             android:paddingLeft="9dp"
             android:layout_weight="3.5"
             android:text="TextView"
-            android:textSize="23sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 

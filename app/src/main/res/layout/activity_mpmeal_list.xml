@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".mealplan.MPMealPlanActivity"
     android:weightSum="6"
+    android:background ="@color/oat"
     >
 
 
@@ -26,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:background="@null"
             android:hint="@string/meal_plan_title_placeholder"
             android:text="TextView"
             android:textSize="30sp"
@@ -52,6 +52,7 @@
             android:layout_marginEnd="16dp"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_input_add" />
@@ -80,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
+            android:backgroundTint="@color/white"
             android:layout_margin="16dp"
             android:text="@string/meal_plan_finish" />
 
@@ -91,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|left"
             android:layout_margin="16dp"
+            android:backgroundTint="@color/white"
             android:contentDescription="@string/meal_plan_next_day"
             android:text="@string/meal_plan_next_day"
             app:icon="@drawable/ic_chevron_right_48px" />

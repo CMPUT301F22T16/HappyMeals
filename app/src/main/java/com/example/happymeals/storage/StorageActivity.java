@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.IngredientActivity;
+import com.example.happymeals.ingredient.IngredientActivity;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
