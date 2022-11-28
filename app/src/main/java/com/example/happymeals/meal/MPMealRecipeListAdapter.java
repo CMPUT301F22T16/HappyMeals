@@ -15,13 +15,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
 import com.example.happymeals.Recipe;
+import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
 import com.example.happymeals.ViewRecipeActivity;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.databinding.MealRecipeListContentBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,9 +39,11 @@ import java.util.Map;
  */
 public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeListAdapter.MRLViewHolder>{
     private Meal meal;
+    private List<Recipe> user_recipes;
     private ActivityMpmealRecipeListBinding activityMpmealRecipeListBinding;
     private Context mContext;
     private Intent intent;
+    private DBHandler db;
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -51,8 +57,10 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      * @param context the context. In this case it would be the {@link MPMealRecipeList} activity.
      * @param meal
      */
-    public MPMealRecipeListAdapter(Context context, Meal meal) {
+    public MPMealRecipeListAdapter(Context context, Meal meal,DBHandler db) {
+        user_recipes = new ArrayList<>();
         this.meal = meal;
+        this.db = db;
         this.mContext = context;
         activityMpmealRecipeListBinding = ActivityMpmealRecipeListBinding.inflate(LayoutInflater.from(context));
     }
@@ -112,6 +120,18 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      */
     public void addIngredient(UserIngredient userIngredient){
         // TODO:update from adapter?
+        String description = userIngredient.getDescription();
+        for (Recipe r :user_recipes){
+            if (r.getTitle()==description) {
+                add(r);
+                return;
+            }
+        }
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+        recipeIngredients.add(new RecipeIngredient(description,userIngredient.getCategory(), userIngredient.getAmount()));
+        Recipe new_recipe = new Recipe(description, 0, 1,userIngredient.getCategory() , new ArrayList<>(), recipeIngredients);
+        db.addRecipe(new_recipe);
+        add(new_recipe);
     }
 
 
@@ -140,6 +160,22 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
             e.printStackTrace();
         }
     }
+
+    /**
+     * add to user recipe list
+     * @param r the new {@link Recipe} thats going to be added to the lsit
+     */
+    public void addToUserRecipes(Recipe r){
+        user_recipes.add(r);
+    }
+
+    /**
+     * clear user recipe list
+     */
+    public void clear() {
+        user_recipes.clear();
+    }
+
 
     /**
      * Get the total counts

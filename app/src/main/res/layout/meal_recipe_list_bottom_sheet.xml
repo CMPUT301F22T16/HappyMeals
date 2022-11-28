@@ -13,7 +13,7 @@
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add From My Recipes" />
+        android:text="Add Recipes to Meal" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -24,7 +24,7 @@
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add A Ingredient"
+        android:text="Add A Ingredient to Meal"
         android:textAlignment="center"
 
         />
