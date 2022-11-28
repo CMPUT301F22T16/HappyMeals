@@ -92,7 +92,7 @@ public class DBHandler implements Serializable{
     }
 
 
-    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist, String type) {
+    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist,  @Nullable List<RecipeIngredient> sllist, String type) {
         String field;
         if (ilist != null) {
             field = "ing_sort";
@@ -145,10 +145,10 @@ public class DBHandler implements Serializable{
                         }
                         else {
                             if (type.equals("A-Z")) {
-                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                                Collections.sort(sllist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
                             }
                             else if (type.equals("Z-A")) {
-                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                                Collections.sort(sllist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
                             }
                         }
 
@@ -159,7 +159,7 @@ public class DBHandler implements Serializable{
 
     }
     
-    private void sortFilter(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist) {
+    private void sortFilter(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist, @Nullable List<RecipeIngredient> sllist) {
         DocumentReference doc = conn.collection("users").document(getUsername());
         doc
                 .get()
@@ -202,13 +202,14 @@ public class DBHandler implements Serializable{
                             }
                             adapter.addAll(rlist);
                         }
-                        else if (ilist != null) {
+                        else {
                             type = task.getResult().getString("sl_sort");
                             if (type.equals("A-Z")) {
-                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                                Collections.sort(sllist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
                             } else if (type.equals("Z-A")) {
-                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                                Collections.sort(sllist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
                             }
+                            adapter.addAll(sllist);
                         }
                         adapter.notifyDataSetChanged();
 
@@ -495,7 +496,7 @@ public class DBHandler implements Serializable{
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
                     }
-                    sortFilter(adapter, userIngredients, null);
+                    sortFilter(adapter, userIngredients, null, null);
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
@@ -610,7 +611,7 @@ public class DBHandler implements Serializable{
 
                             rlist.add(recipe); // Adding the recipe from FireStore
                         }
-                        sortFilter(adapter, null, rlist);
+                        sortFilter(adapter, null, rlist, null);
                     }
                 });
         dialog.dismissDialog();
@@ -1221,9 +1222,7 @@ public class DBHandler implements Serializable{
                         userIngredients.add(userIngredient);
                     }
                     ArrayList<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
-                    Collections.sort(slIngredients, (o1, o2) -> o1.getAmount().compareTo(o2.getAmount()));
-                    adapter.addAll(slIngredients);
-                    adapter.notifyDataSetChanged();
+                    sortFilter(adapter, null, null, slIngredients);
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }

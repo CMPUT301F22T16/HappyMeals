@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class ShoppingListSortFragment extends DialogFragment {
 
-    private List<UserIngredient> userIngredients;
+    private List<RecipeIngredient> userIngredients;
     private RadioGroup sortingOptions;
     private RadioGroup orderOptions;
     private DBHandler db;
@@ -60,7 +60,7 @@ public class ShoppingListSortFragment extends DialogFragment {
         Bundle bundle = this.getArguments();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db = new DBHandler(user.getUid());
-        userIngredients = (List<UserIngredient>) bundle.getSerializable("COLLECTION");
+        userIngredients = (List<RecipeIngredient>) bundle.getSerializable("COLLECTION");
         SLShoppingListAdapter adapter = (SLShoppingListAdapter) bundle.getSerializable("ADAPTER");
         setupView(view);
 
@@ -81,11 +81,11 @@ public class ShoppingListSortFragment extends DialogFragment {
                             default:
 
                                 if (isLowtoHigh) {
-//                                    db.setSort(adapter, userIngredients, null, "Z-A");
+                                    db.setSort(adapter, null, null, userIngredients, "Z-A");
                                 }
 
                                 else {
-//                                    db.setSort(adapter, userIngredients, null, "A-Z");
+                                    db.setSort(adapter, null, null, userIngredients, "A-Z");
                                 }
 
                                 break;

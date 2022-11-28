@@ -31,12 +31,14 @@ public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> implem
     private Context mContext;
     private DBHandler db;
     private ActivitySlshoppingListBinding binding;
+    private ArrayList<RecipeIngredient> recipeIngredients;
     public SLShoppingListAdapter(@NonNull Context context, ArrayList<RecipeIngredient> recipeIngredients, ActivitySlshoppingListBinding binding) {
         super(context, 0, recipeIngredients);
         mContext = context;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db = new DBHandler(user.getUid());
         this.binding = binding;
+        this.recipeIngredients = recipeIngredients;
     }
 
     @NonNull
