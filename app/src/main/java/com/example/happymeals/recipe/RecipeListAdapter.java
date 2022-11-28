@@ -27,10 +27,10 @@ import com.example.happymeals.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class RecipeListAdapter extends ArrayAdapter<Recipe> implements Serializable {
-    Context context;
-    List<Recipe> recipes;
-    DBHandler db;
-    RecipeListInterface recipeListInterface;
+    private Context context;
+    private List<Recipe> recipes;
+    private DBHandler db;
+    private RecipeListInterface recipeListInterface;
 
 
     RecipeListAdapter(Context context, List<Recipe> recipes, DBHandler user, RecipeListInterface recipeListInterface) {

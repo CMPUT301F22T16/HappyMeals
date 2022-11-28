@@ -3,36 +3,30 @@ package com.example.happymeals.shoppinglist;
 import static java.lang.Boolean.TRUE;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
-import com.example.happymeals.ViewIngredientFragment;
+import com.example.happymeals.ingredient.ViewIngredientFragment;
 import com.example.happymeals.databinding.ActivitySlshoppingListBinding;
-import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.recipe.RecipeIngredient;
-import com.example.happymeals.UserIngredient;
-import com.example.happymeals.databinding.IngredientRowBinding;
+import com.example.happymeals.ingredient.UserIngredient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> {
+public class SLShoppingListAdapter extends ArrayAdapter<RecipeIngredient> implements Serializable {
     private Context viewContext = getContext();
     private Context mContext;
     private DBHandler db;

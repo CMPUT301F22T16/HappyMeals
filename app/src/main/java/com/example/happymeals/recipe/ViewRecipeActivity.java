@@ -23,18 +23,18 @@ import java.util.List;
 
 public class ViewRecipeActivity extends AppCompatActivity {
 
-    ImageView photo;
-    TextView category;
-    TextView servings;
-    TextView prep_time;
-    ListView ingredients_list;
-    ListView comments_list;
+    private ImageView photo;
+    private TextView category;
+    private TextView servings;
+    private TextView prepTime;
+    private ListView ingredientsList;
+    private ListView commentsList;
 
-    List<String> ingredient_str_list;
-    List<String> comment_str_list;
+    private List<String> ingredientStrList;
+    private List<String> commentStrList;
 
-    ArrayAdapter<String> ingredientListAdapter;
-    ArrayAdapter<String> commentListAdapter;
+    private ArrayAdapter<String> ingredientListAdapter;
+    private ArrayAdapter<String> commentListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +54,15 @@ public class ViewRecipeActivity extends AppCompatActivity {
         photo = findViewById(R.id.recipe_detail_image);
         category = findViewById(R.id.recipe_detail_category);
         servings = findViewById(R.id.recipe_detail_servings);
-        prep_time = findViewById(R.id.recipe_detail_preptime);
-        ingredients_list = findViewById(R.id.ingredients_list);
-        comments_list = findViewById(R.id.comments_list);
-        ingredient_str_list = new ArrayList<>();
-        comment_str_list = new ArrayList<>();
-        ingredientListAdapter = new ArrayAdapter<String>(this, R.layout.recipe_details_content, ingredient_str_list);
-        commentListAdapter = new ArrayAdapter<String>(this, R.layout.recipe_details_content, comment_str_list);
-        ingredients_list.setAdapter(ingredientListAdapter);
-        comments_list.setAdapter(commentListAdapter);
+        prepTime = findViewById(R.id.recipe_detail_preptime);
+        ingredientsList = findViewById(R.id.ingredients_list);
+        commentsList = findViewById(R.id.comments_list);
+        ingredientStrList = new ArrayList<>();
+        commentStrList = new ArrayList<>();
+        ingredientListAdapter = new ArrayAdapter<String>(this, R.layout.recipe_details_content, ingredientStrList);
+        commentListAdapter = new ArrayAdapter<String>(this, R.layout.recipe_details_content, commentStrList);
+        ingredientsList.setAdapter(ingredientListAdapter);
+        commentsList.setAdapter(commentListAdapter);
 
         // Setting the page details
         for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
@@ -84,7 +84,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         category.setText(recipe.getCategory());
         servings.setText("Servings: " + recipe.getNum_servings()*scaling_factor);
-        prep_time.setText(recipe.getPreparation_time()*scaling_factor + " min/s");
+        prepTime.setText(recipe.getPreparation_time()*scaling_factor + " min/s");
 
         // Setting photo
         String uri = recipe.getDownloadUri();

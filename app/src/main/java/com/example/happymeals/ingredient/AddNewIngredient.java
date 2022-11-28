@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.ingredient;
 
 import static java.lang.Boolean.FALSE;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,9 @@ import android.widget.Spinner;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.MainActivity;
+import com.example.happymeals.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
