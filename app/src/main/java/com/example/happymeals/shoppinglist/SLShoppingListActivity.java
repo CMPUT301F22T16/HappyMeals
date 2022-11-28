@@ -52,24 +52,10 @@ public class SLShoppingListActivity extends AppCompatActivity {
         activity_slshopping_list.slShoppingListText.setText(String.format("%s SL", mealPlan.getTitle()));
         recipeIngredients = new ArrayList<>();
 
-        shoppingListAdaptor = new SLShoppingListAdapter(this, recipeIngredients);
+        shoppingListAdaptor = new SLShoppingListAdapter(this, recipeIngredients, activity_slshopping_list);
         activity_slshopping_list.slShoppingList.setAdapter(shoppingListAdaptor);
         db.getSLIngredients(shoppingListAdaptor, mealPlan);
 
-        ArrayList<String> locations = new ArrayList<>();
-        db.getStorageTypes(locations, TRUE);
-
-        activity_slshopping_list.slShoppingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                RecipeIngredient recipeIngredient = (RecipeIngredient) parent.getItemAtPosition(position);
-                UserIngredient userIngredient = new UserIngredient(recipeIngredient.getAmount(), recipeIngredient.getDescription());
-                userIngredient.setCategory(recipeIngredient.getCategory());
-                userIngredient.setUnit(recipeIngredient.getUnit());
-
-                ViewIngredientFragment.newInstance(userIngredient, locations, true).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
-            }
-        });
     }
 
     @Override
