@@ -169,7 +169,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                 ingredientPosition = position;
 
 
-                ViewIngredientFragment.newInstance(userIngredient, locations).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                ViewIngredientFragment.newInstance(userIngredient, locations, false).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
 
             }
         });
