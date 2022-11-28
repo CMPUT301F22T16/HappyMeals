@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.Meal;
 import com.example.happymeals.mealplan.MPMealListActivity;
