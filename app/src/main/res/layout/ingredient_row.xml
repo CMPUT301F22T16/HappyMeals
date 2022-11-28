@@ -18,8 +18,8 @@
 
         <TextView
             android:id="@+id/description"
-            android:layout_width="224dp"
-            android:layout_height="wrap_content"
+            android:layout_width="178dp"
+            android:layout_height="26dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -46,8 +46,8 @@
 
         <TextView
             android:id="@+id/unitcost"
-            android:layout_width="224dp"
-            android:layout_height="wrap_content"
+            android:layout_width="178dp"
+            android:layout_height="16dp"
             android:layout_marginStart="8dp"
             android:paddingLeft="20dp"
             android:text="Unit cost"
@@ -58,8 +58,8 @@
 
         <TextView
             android:id="@+id/bestbefore"
-            android:layout_width="224dp"
-            android:layout_height="wrap_content"
+            android:layout_width="178dp"
+            android:layout_height="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:paddingLeft="20dp"
@@ -70,6 +70,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/unitcost"
             app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/pickup"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pickup"
+            android:layout_marginTop="12dp"
+            tools:layout_editor_absoluteX="186dp"
+            tools:layout_editor_absoluteY="16dp"
+            app:layout_constraintStart_toEndOf="@+id/description"
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

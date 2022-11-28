@@ -987,4 +987,34 @@ public class DBHandler implements Serializable{
             }
         });
     }
+
+    public void pickUpIngredient(ArrayAdapter adapter, String description, String category, double needed, Integer position) {
+
+        CollectionReference ref = conn.collection("user_ingredients");
+
+        Query query = ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("description", description)
+                .whereEqualTo("category", category);
+
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> value) {
+                        List<UserIngredient> userIngredients = new ArrayList<>();
+                        DocumentSnapshot doc = value.getResult().getDocuments().get(0);
+                        Double amount = doc.getDouble("amount");
+                        Double cost = doc.getDouble("cost");
+                        Date date = doc.getDate("date");
+                        String unit = doc.getString("unit");
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "PLEASE SELECT", unit);
+                        userIngredient.setId(doc.getId());
+                        updateIngredient(userIngredient);
+                        adapter.remove(position);
+                        adapter.notifyDataSetChanged();
+                        Log.d("uIng", "Local ingredients updated successfully!");
+                    }
+                });
+
+    }
 }
