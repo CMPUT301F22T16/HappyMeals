@@ -13,11 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.happymeals.shoppinglist.SLSelectMealPlanActivity;
 import com.example.happymeals.recipe.RecipeListActivity;
 import com.example.happymeals.storage.StorageActivity;
 
-
 import com.example.happymeals.meal.MPMyMealsActivity;
+import com.example.happymeals.mealplan.MPMealPlanActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Button recipeButton;
     Button mealplanButton;
     Button storageButton;
+    Button shoppinglistButton;
     TextView userWelcome;
     String displayName;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         mealplanButton = findViewById(R.id.mealplan_button);
         recipeButton = findViewById(R.id.recipe_button);
         storageButton = findViewById(R.id.storage_button);
+        shoppinglistButton = findViewById(R.id.shopping_list_button);
+
         ingredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +122,16 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 bundle.putSerializable("USER", user.getUid());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        shoppinglistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SLSelectMealPlanActivity.class);
+                Bundle bundle = new Bundle();
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

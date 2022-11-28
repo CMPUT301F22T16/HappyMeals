@@ -220,7 +220,7 @@ public class Recipe implements Storable, Serializable {
             Map<String, Object> info = new HashMap<>();
             info.put("category", ingredient.getCategory());
             info.put("amount", ingredient.getAmount());
-            info.put("units", ingredient.getUnits());
+            info.put("units", ingredient.getUnit());
             ingredientsMap.put(ingredient.getDescription(), info);
         }
 

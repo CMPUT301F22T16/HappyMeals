@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.shoppinglist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,54 +10,51 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.happymeals.databinding.ActivityMpmealPlanBinding;
+import com.example.happymeals.databinding.ActivitySlselectMealPlanBinding;
 import com.example.happymeals.databinding.MealPlanListContentBinding;
+import com.example.happymeals.mealplan.MPMealListActivity;
+import com.example.happymeals.mealplan.MealPlan;
 
 import java.util.ArrayList;
 
-public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHolder> {
+public class SLMealPlanAdapter extends RecyclerView.Adapter<SLMealPlanAdapter.SLMealPlanViewHolder> {
 
     private ArrayList<MealPlan> mealPlans;
     private Context mContext;
-    private ActivityMpmealPlanBinding activityMpmealPlanBinding;
+    private ActivitySlselectMealPlanBinding activitySlselectMealPlanBinding;
     private Intent intent;
-    private String userName;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int index = activityMpmealPlanBinding.mpRecyclerview.getChildLayoutPosition(v);
+            int index = activitySlselectMealPlanBinding.slSelectMpList.getChildLayoutPosition(v);
             MealPlan mealPlan = mealPlans.get(index);
-            intent = new Intent(mContext, MPMealListActivity.class);
+            intent = new Intent(mContext, SLShoppingListActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("USER", userName);
-            bundle.putSerializable("IsNewMP", false);
             bundle.putSerializable("MEALPLAN", mealPlan);
             intent.putExtras(bundle);
             mContext.startActivity(intent);
         }
     };
 
-
-    public MPListAdapter(Context context, ArrayList<MealPlan> mealPlans, String userName) {
-        this.userName = userName;
+    public SLMealPlanAdapter(Context context, ArrayList<MealPlan> mealPlans) {
         this.mealPlans = mealPlans;
         mContext = context;
-        activityMpmealPlanBinding = ActivityMpmealPlanBinding.inflate(LayoutInflater.from(context));
+        activitySlselectMealPlanBinding = ActivitySlselectMealPlanBinding.inflate(LayoutInflater.from(context));
     }
 
     @NonNull
     @Override
-    public MPViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SLMealPlanAdapter.SLMealPlanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MealPlanListContentBinding binding = MealPlanListContentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         binding.getRoot().setOnClickListener(mOnClickListener);
-        return new MPViewHolder(binding);
+        return new SLMealPlanViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MPViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SLMealPlanAdapter.SLMealPlanViewHolder holder, int position) {
         MealPlan mealPlan = mealPlans.get(position);
-        holder.binding.mpMealListTextView1.setText("MealPlanTitle");
+        holder.binding.mpMealListTextView1.setText(mealPlan.getTitle());
     }
 
     @Override
@@ -80,11 +77,11 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
         mealPlans.add(mealPlan);
     }
 
-    public class MPViewHolder extends RecyclerView.ViewHolder {
+    public class SLMealPlanViewHolder extends RecyclerView.ViewHolder {
 
         MealPlanListContentBinding binding;
 
-        public MPViewHolder(MealPlanListContentBinding b) {
+        public SLMealPlanViewHolder(MealPlanListContentBinding b) {
             super(b.getRoot());
             binding = b;
         }

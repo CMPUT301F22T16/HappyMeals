@@ -53,12 +53,12 @@ public class RecipeIngredientTest {
 
     @Test
     public void testGetUnits() {
-        Assert.assertEquals(this.ingredient.getUnits(), "qty");
+        Assert.assertEquals(this.ingredient.getUnit(), "qty");
     }
 
     @Test
     public void testSetUnit() {
-        this.ingredient.setUnits("g");
-        Assert.assertEquals(this.ingredient.getUnits(), "g");
+        this.ingredient.setUnit("g");
+        Assert.assertEquals(this.ingredient.getUnit(), "g");
     }
 }

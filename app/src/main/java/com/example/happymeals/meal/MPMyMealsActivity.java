@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.LoadingDialog;
-import com.example.happymeals.MealPlan;
+import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

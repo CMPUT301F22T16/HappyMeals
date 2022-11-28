@@ -1,8 +1,6 @@
-package com.example.happymeals;
+package com.example.happymeals.mealplan;
 
-import static java.sql.DriverManager.println;
-
-import android.widget.ArrayAdapter;
+import com.example.happymeals.Storable;
 
 import com.example.happymeals.meal.Meal;
 

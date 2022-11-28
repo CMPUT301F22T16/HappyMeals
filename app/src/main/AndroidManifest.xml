@@ -39,6 +39,20 @@
 
 
         <activity
+            android:name=".shoppinglist.SLShoppingListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".shoppinglist.SLSelectMealPlanActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
@@ -85,10 +99,10 @@
             android:name=".meal.MPMyMealsActivity"
             android:exported="false" />
         <activity
-            android:name=".MPMealListActivity"
+            android:name=".mealplan.MPMealListActivity"
             android:exported="false" />
         <activity
-            android:name=".MPMealPlanActivity"
+            android:name=".mealplan.MPMealPlanActivity"
             android:exported="false" />
         <activity
             android:name=".recipe.RecipeEditIngredient"

@@ -12,6 +12,9 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.happymeals.meal.MPMyMealsActivity;
+import com.example.happymeals.mealplan.MPMealListActivity;
+import com.example.happymeals.mealplan.MPMealPlanActivity;
+import com.example.happymeals.mealplan.MealPlan;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -70,7 +73,7 @@ public class MealPlanTest {
 
         solo.clickOnButton("MEAL PLANS");
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity",MPMealPlanActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", MPMealPlanActivity.class);
     }
 
     /**
@@ -92,7 +95,7 @@ public class MealPlanTest {
         int mpBefore = ((RecyclerView) solo.getView(R.id.mp_recyclerview)).getAdapter().getItemCount();
         solo.clickOnView(solo.getView(R.id.my_meals_add_button));
         solo.sleep(3000);
-        solo.assertCurrentActivity("Wrong Activity",MPMealListActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", MPMealListActivity.class);
         int mealsBefore = ((RecyclerView) solo.getView(R.id.mp_meal_list_recyclerview)).getAdapter().getItemCount();
         // breakfast
         solo.clickOnButton("ADD MEAL");

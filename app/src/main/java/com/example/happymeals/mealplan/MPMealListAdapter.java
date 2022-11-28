@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.mealplan;
 
 import android.content.Context;
 import android.content.Intent;

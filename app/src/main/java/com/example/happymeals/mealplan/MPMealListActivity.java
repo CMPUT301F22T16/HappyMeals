@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.mealplan;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -14,7 +14,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.happymeals.DBHandler;
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.Meal;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 
 public class MPMealListActivity extends AppCompatActivity {
     // TODO this class needs to be fixed
+
     ActivityMpmealListBinding activityMpmealListBinding;
     RecyclerView meal_list;
     RecyclerView.Adapter mpMealListAdapter;
@@ -37,6 +40,7 @@ public class MPMealListActivity extends AppCompatActivity {
     Button nextDayButton;
     Button finishButton;
     EditText meal_plan_title;
+    TextView meal_day_text;
     Intent intent;
     DBHandler db;
     ActivityResultLauncher<Intent> activityLauncher;
@@ -54,6 +58,7 @@ public class MPMealListActivity extends AppCompatActivity {
         finishButton = activityMpmealListBinding.mpFabFinish;
         meal_list = activityMpmealListBinding.mpMealListRecyclerview;
         meal_plan_title = activityMpmealListBinding.mealPlanTitle;
+        meal_day_text = activityMpmealListBinding.mpDayText;
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -64,6 +69,8 @@ public class MPMealListActivity extends AppCompatActivity {
         mealIndex = -1;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db = new DBHandler(user.getUid());
+
+        meal_day_text.setText(String.format("Day %d", dayIndex+1));
 
         Bundle bundle = getIntent().getExtras();
         meals = new ArrayList<>();
@@ -79,12 +86,6 @@ public class MPMealListActivity extends AppCompatActivity {
                     meals.add(meal);
             }
             }
-//            if(!mealPlan.getBreakfast().isEmpty()) {
-//                meals.add(mealPlan.getBreakfast().get(dayIndex));
-////                meals.add(mealPlan.getLunch().get(dayIndex));
-////                meals.add(mealPlan.getDinner().get(dayIndex));
-//                mealIndex = 2;
-//            }
         }
 
         mpMealListAdapter = new MPMealListAdapter(this, meals, user.getUid(), dayIndex, mealPlan, activityLauncher);
@@ -160,6 +161,7 @@ public class MPMealListActivity extends AppCompatActivity {
                 meals.addAll(mealPlan.getMeals().get(dayIndex));
                 mpMealListAdapter.notifyDataSetChanged();
             }
+            meal_day_text.setText(String.format("Day %d", dayIndex+1));
         });
     }
 

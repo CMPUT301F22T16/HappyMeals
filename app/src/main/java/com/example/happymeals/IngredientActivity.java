@@ -66,8 +66,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
 
         }
 
-
-
         userIngredientList = new ArrayList<UserIngredient>();
 
         ingredientListView = (ListView) findViewById(R.id.ingredient_list);
@@ -106,7 +104,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
         ingredientListView.setAdapter(ingredientAdaptor);
 
         ingredientPosition = -1;
-
 
         sortIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +171,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                                     int position, long id) {
                 UserIngredient userIngredient = (UserIngredient) parent.getItemAtPosition(position);
                 ingredientPosition = position;
+
                 if (isFromMealActivity){
                     Intent return_intent = new Intent();
                     Bundle bundle = new Bundle();
@@ -182,9 +180,8 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                     setResult(Activity.RESULT_OK,return_intent);
                     finish();// get back to caller activity which is meal recipe list
                 }else{
-                    ViewIngredientFragment.newInstance(userIngredient, locations).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
+                    ViewIngredientFragment.newInstance(userIngredient, locations, false).show(getSupportFragmentManager(), "VIEW_INGREDIENT");
                 }
-
             }
         });
 
