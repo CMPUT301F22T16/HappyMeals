@@ -1,9 +1,10 @@
 package com.example.happymeals;
 
+import static java.lang.Boolean.FALSE;
+
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,8 @@ import com.example.happymeals.meal.MPMealRecipeListAdapter;
 import com.example.happymeals.meal.MPMyMealsAdapter;
 import com.example.happymeals.meal.MPPickRecipeListAdapter;
 import com.example.happymeals.meal.Meal;
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.storage.Storage;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +42,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -199,7 +201,7 @@ public class DBHandler implements Serializable{
      * Fetches all the storage {@link String} types for the user in the User Ingredient Activity
      * @param adapter
      */
-    public void getStorageTypes(ArrayAdapter<String> adapter) {
+    public void getStorageTypes(ArrayList<String> adapter, boolean fragment) {
         CollectionReference ref = conn.collection("storages");
         Query query = ref.whereEqualTo("user", getUsername());
         query
@@ -207,13 +209,20 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         adapter.clear();
+                        if (fragment == false){
+                            adapter.add("Select location");
+                        }
+
                         for (DocumentSnapshot snapshot: value) {
                             String type = snapshot.getString("type");
 
                             adapter.add(type);
                         }
-                        adapter.notifyDataSetChanged();
+                        if (fragment == FALSE){
+                            adapter.add("Add new location");
+                        }
 
+                        // adapter.notifyDataSetChanged();
                     }
                 });
     }

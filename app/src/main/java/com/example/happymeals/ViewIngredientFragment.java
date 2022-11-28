@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -36,11 +37,12 @@ public class ViewIngredientFragment extends DialogFragment {
 
     private Spinner thisCategory;
     private EditText thisDescription;
-    private EditText thisLocation;
+    private Spinner thisLocation;
     private EditText thisAmount;
     private EditText thisUnitCost;
     private DatePicker thisBestBefore;
-    UserIngredient thisUserIngredient;
+    private Spinner thisUnit;
+    private UserIngredient thisUserIngredient;
 
     @NonNull
     @Override
@@ -57,14 +59,21 @@ public class ViewIngredientFragment extends DialogFragment {
         thisLocation = view.findViewById(R.id.location_frag);
         thisAmount = view.findViewById(R.id.count_frag);
         thisUnitCost = view.findViewById(R.id.unitcost_frag);
+        thisUnit = view.findViewById(R.id.unit_frag);
         thisBestBefore = view.findViewById(R.id.ingredientBestbefore);
+
+
+        ArrayList<String> locations = new ArrayList<>();
+        ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this.getContext(), R.layout.ingredient_content, R.id.myTextview, locations);
+        this.thisLocation.setAdapter(locationAdapt);
 
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
         ArrayAdapter<String> categoryAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, categories);
-
-
         thisCategory.setAdapter(categoryAdapt);
         thisCategory.setPrompt("Ingredient category");
+
+        ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));
+        ArrayList<String> solidUnit = new ArrayList<>(Arrays.asList("g", "kg"));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -73,16 +82,67 @@ public class ViewIngredientFragment extends DialogFragment {
             thisUserIngredient = (UserIngredient) ingredient.getSerializable("ingredient");
             thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
             thisDescription.setText(thisUserIngredient.getDescription());
-            thisLocation.setText(thisUserIngredient.getLoc());
+
+            locations = (ArrayList<String>) ingredient.getSerializable("locations");
+            locationAdapt = new ArrayAdapter<String>(this.getContext(), R.layout.ingredient_content, R.id.myTextview, locations);
+            this.thisLocation.setAdapter(locationAdapt);
+
+            thisLocation.setSelection(locations.indexOf(thisUserIngredient.getLoc()));
             thisAmount.setText(Double.toString(thisUserIngredient.getAmount()));
             thisUnitCost.setText(Double.toString(thisUserIngredient.getCost()));
+            if (thisUserIngredient.getCategory().equals("Drink")){
+                ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                thisUnit.setAdapter(unitAdapt);
+                // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
+                thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
+
+            }else{
+                ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                thisUnit.setAdapter(unitAdapt);
+                thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
+            }
             thisBestBefore.updateDate(thisUserIngredient.getYear(), thisUserIngredient.getMonth(), thisUserIngredient.getDay());
         }
 
+        thisCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (categories.get(position) == "Drink") {
+                    if (thisUserIngredient.getCategory().equals("Drink")){
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                        // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
+                        thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
+                    }else{
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                    }
+                    // Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    if (!thisUserIngredient.getCategory().equals("Drink")){
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                        // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
+                        thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
+                    }else{
+                        ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
+                        thisUnit.setAdapter(unitAdapt);
+                    }
+                    // Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return builder
                 .setView(view)
-                .setTitle("Food detail")
+                .setTitle("Ingredient detail")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -97,7 +157,8 @@ public class ViewIngredientFragment extends DialogFragment {
                         int year = thisBestBefore.getYear();
                         int month = thisBestBefore.getMonth();
                         int day = thisBestBefore.getDayOfMonth();
-                        String location = thisLocation.getText().toString();
+                        String location = thisLocation.getSelectedItem().toString();
+                        String unit = thisUnit.getSelectedItem().toString();
 
                         boolean toast = FALSE;
 
@@ -142,16 +203,21 @@ public class ViewIngredientFragment extends DialogFragment {
                             }
                         }
 
+                        if (location.equals("Select location")){
+                            toast = TRUE;
+                        }
+
                         if (toast == TRUE){
                             Toast.makeText(context, "Incomplete/Invalid input", Toast.LENGTH_SHORT).show();
                         }
-                        if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0) {
+                        if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count != 0 && unitCost != 0 && toast == FALSE) {
                             thisUserIngredient.setCategory(category);
                             thisUserIngredient.setDescription(description);
                             thisUserIngredient.setAmount(count);
                             thisUserIngredient.setCost(unitCost);
                             thisUserIngredient.setDate(year, month, day);
                             thisUserIngredient.setLoc(location);
+                            thisUserIngredient.setUnit(unit);
                             db.updateIngredient(thisUserIngredient);
 
                         }
@@ -185,12 +251,13 @@ public class ViewIngredientFragment extends DialogFragment {
                     }
                 })
                 .create();
-        }
+    }
 
-    // This is used to serialize the ingredient object and so it can be passed between activities.
-    static ViewIngredientFragment newInstance(UserIngredient userIngredient) {
+        // This is used to serialize the ingredient object and so it can be passed between activities.
+    static ViewIngredientFragment newInstance(UserIngredient userIngredient, ArrayList<String> locations) {
         Bundle args = new Bundle();
         args.putSerializable("ingredient", userIngredient);
+        args.putSerializable("locations", locations);
         ViewIngredientFragment fragment = new ViewIngredientFragment();
         fragment.setArguments(args);
         return fragment;

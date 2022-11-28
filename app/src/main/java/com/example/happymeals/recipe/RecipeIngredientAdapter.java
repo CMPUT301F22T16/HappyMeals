@@ -10,9 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.happymeals.Recipe;
-import com.example.happymeals.RecipeIngredient;
-import com.example.happymeals.UserIngredient;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;

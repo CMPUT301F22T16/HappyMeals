@@ -13,6 +13,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +46,9 @@ public class AddNewIngredient extends AppCompatActivity {
         // This line sets the return button to home screen.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
+
         ingredientCategorySpinner = findViewById(R.id.ingredientCategory);
         ingredientDescription = findViewById(R.id.ingredientDescription);
         ingredientCount = findViewById(R.id.ingredientCount);
@@ -52,8 +59,9 @@ public class AddNewIngredient extends AppCompatActivity {
         ingredientUnit = findViewById(R.id.ingredientUnit);
 
 
-        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Pantry", "Freezer", "Fridge", "Add new location"));
+        ArrayList<String> locations = new ArrayList<>(Arrays.asList("Select location"));
         ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(this, R.layout.ingredient_content, R.id.myTextview, locations);
+        db.getStorageTypes(locations, FALSE);
 
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
         ArrayList<String> fluidUnit = new ArrayList<>(Arrays.asList("ml", "L"));
@@ -180,7 +188,11 @@ public class AddNewIngredient extends AppCompatActivity {
                     }
                 }
 
-                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count > 0 && unitCost > 0) {
+                if (location.equals("Select location")){
+                    Toast.makeText(AddNewIngredient.this, "Please select a location", Toast.LENGTH_SHORT).show();
+                }
+
+                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count > 0 && unitCost > 0 && !location.equals("Select")) {
                     Intent intent = new Intent(AddNewIngredient.this, MainActivity.class);
 
                     intent.putExtra("mode", mode);

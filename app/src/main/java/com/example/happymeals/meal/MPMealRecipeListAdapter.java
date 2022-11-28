@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
-import com.example.happymeals.Recipe;
-import com.example.happymeals.RecipeIngredient;
 import com.example.happymeals.UserIngredient;
-import com.example.happymeals.ViewRecipeActivity;
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
+import com.example.happymeals.recipe.ViewRecipeActivity;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.databinding.MealRecipeListContentBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This custom adapter keeps meal recipe list up to date
@@ -119,7 +120,6 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
      * @param userIngredient
      */
     public void addIngredient(UserIngredient userIngredient){
-        // TODO:update from adapter?
         String description = userIngredient.getDescription();
         for (Recipe r :user_recipes){
             if (r.getTitle()==description) {

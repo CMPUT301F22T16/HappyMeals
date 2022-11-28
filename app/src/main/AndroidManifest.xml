@@ -66,10 +66,10 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ViewRecipeActivity"
+            android:name=".recipe.ViewRecipeActivity"
             android:exported="false" />
         <activity
-            android:name=".RecipeListActivity"
+            android:name=".recipe.RecipeListActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
