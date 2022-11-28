@@ -91,8 +91,63 @@ public class DBHandler implements Serializable{
     }
 
 
-    private void sortFilter(Adapter adapter, List list, String type) {
-        
+    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> list, String type) {
+        DocumentReference doc = conn.collection("users").document(getUsername());
+        doc
+                .update("ing_sort", type)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (type.equals("A-Z")) {
+                            Collections.sort(list, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            adapter.notifyDataSetChanged();
+                        }
+                        else if (type.equals("Z-A")) {
+                            Collections.sort(list, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            adapter.notifyDataSetChanged();
+                        }
+                        else if (type.equals("1-9")) {
+                            Collections.sort(list, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                            adapter.notifyDataSetChanged();
+                        }
+                        else if (type.equals("9-1")) {
+                            Collections.sort(list, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+
+    }
+
+    private void sortFilter(ArrayAdapter adapter, @Nullable List<UserIngredient> list) {
+        DocumentReference doc = conn.collection("users").document(getUsername());
+        doc
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        adapter.clear();
+                        if (list != null) {
+                            String type = task.getResult().getString("ing_sort");
+                            if (type.equals("A-Z")) {
+                                Log.d("Momo", list.toString());
+                                Collections.sort(list, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("Z-A")) {
+                                Collections.sort(list, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("1-9")) {
+                                Collections.sort(list, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                            }
+                            else if (type.equals("9-1")) {
+                                Collections.sort(list, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                            }
+                            adapter.addAll(list);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                    }
+                });
     }
 
     /**
@@ -372,10 +427,8 @@ public class DBHandler implements Serializable{
                         userIngredient.setIncomplete(status);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
-                        adapter.add(userIngredient);
                     }
-                    adapter.notifyDataSetChanged();
-
+                    sortFilter(adapter, userIngredients);
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
