@@ -185,7 +185,7 @@ public class DBHandler implements Serializable{
                         List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
                         Log.d("Momo", String.valueOf(ingredients));
                         if (!ingredients.isEmpty()) {
-                            Toast.makeText(context, "Don't forget to update the ingredients you bought!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "You have missing information in your ingredients!", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
