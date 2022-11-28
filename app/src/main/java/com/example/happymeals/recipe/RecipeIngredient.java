@@ -1,7 +1,8 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
+
+import com.example.happymeals.Ingredient;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * This class represents the ingredients for the recipes and inherits from {@link Ingredient} some of the attributes.

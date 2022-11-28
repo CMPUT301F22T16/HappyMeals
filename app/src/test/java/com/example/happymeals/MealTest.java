@@ -1,6 +1,7 @@
 package com.example.happymeals;
 
 import com.example.happymeals.meal.Meal;
+import com.example.happymeals.recipe.Recipe;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import kotlin.jvm.Throws;
 
 public class MealTest {
     Meal meal;

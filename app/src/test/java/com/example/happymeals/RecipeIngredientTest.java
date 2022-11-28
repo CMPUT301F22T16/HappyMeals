@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import com.example.happymeals.recipe.RecipeIngredient;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

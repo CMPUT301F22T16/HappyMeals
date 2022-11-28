@@ -1,19 +1,12 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
@@ -25,12 +18,12 @@ import java.util.List;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class RecipeListAdapter extends ArrayAdapter<Recipe> implements Serializable {

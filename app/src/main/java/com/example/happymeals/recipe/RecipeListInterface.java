@@ -1,5 +1,8 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
 
+
+import com.example.happymeals.recipe.RecipeListActivity;
+import com.example.happymeals.recipe.RecipeListAdapter;
 
 /**
  * This interface lets me invoke an item click listener in the {@link RecipeListAdapter}

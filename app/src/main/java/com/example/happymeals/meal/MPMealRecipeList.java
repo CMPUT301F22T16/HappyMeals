@@ -24,10 +24,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
-import com.example.happymeals.Recipe;
-import com.example.happymeals.RecipeIngredient;
+import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.recipe.EditRecipe;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
