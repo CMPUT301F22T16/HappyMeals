@@ -14,7 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -54,6 +57,8 @@ public class RecipeSortFragment extends DialogFragment {
         setupView(view);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DBHandler db = new DBHandler(user.getUid());
 
         return builder
                 .setView(view)
@@ -70,11 +75,11 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                                    db.setSort(adapter, null ,recipes, null, "P1-9");
                                 }
 
                                 else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                                    db.setSort(adapter, null ,recipes, null, "P9-1");
                                 }
 
                                 break;
@@ -82,11 +87,11 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.recipe_servings_radio:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                                    db.setSort(adapter, null ,recipes, null, "S1-9");
                                 }
 
                                 else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                                    db.setSort(adapter, null ,recipes, null, "S9-1");
                                 }
 
                                 break;
@@ -94,11 +99,11 @@ public class RecipeSortFragment extends DialogFragment {
                             case R.id.recipe_category_radio:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                                    db.setSort(adapter, null ,recipes, null, "CA-Z");
                                 }
 
                                 else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
+                                    db.setSort(adapter, null ,recipes, null, "CZ-A");
                                 }
 
                                 break;
@@ -106,11 +111,11 @@ public class RecipeSortFragment extends DialogFragment {
                             default:
 
                                 if (isLowtoHigh) {
-                                    Collections.sort(recipes, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                                    db.setSort(adapter, null ,recipes, null, "TA-Z");
                                 }
 
                                 else {
-                                    Collections.sort(recipes, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                                    db.setSort(adapter, null ,recipes, null,  "TZ-A");
                                 }
 
                                 break;

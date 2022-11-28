@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.happymeals.DBHandler;
-import com.example.happymeals.IngredientActivity;
+import com.example.happymeals.ingredient.IngredientActivity;
 import com.example.happymeals.R;
 
 import java.util.ArrayList;
@@ -51,6 +51,7 @@ public class StorageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("STORAGE", storages.get(i));
+                bundle.putBoolean("IS-FROM-MEAL", false);
                 Intent intent = new Intent(StorageActivity.this, IngredientActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);

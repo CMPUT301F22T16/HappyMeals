@@ -2,16 +2,24 @@ package com.example.happymeals;
 
 import static java.lang.Boolean.FALSE;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.happymeals.ingredient.UserIngredient;
+import com.example.happymeals.meal.MPMealRecipeListAdapter;
 import com.example.happymeals.meal.MPMyMealsAdapter;
 import com.example.happymeals.meal.MPPickRecipeListAdapter;
 import com.example.happymeals.meal.Meal;
+import com.example.happymeals.mealplan.MPListAdapter;
+import com.example.happymeals.mealplan.MealPlan;
+import com.example.happymeals.shoppinglist.SLMealPlanAdapter;
 import com.example.happymeals.recipe.Recipe;
 import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.storage.Storage;
@@ -20,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +46,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +89,131 @@ public class DBHandler implements Serializable{
 
     private FirebaseFirestore getConn() {
         return this.conn;
+    }
+
+
+    public void setSort(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist,  @Nullable List<RecipeIngredient> sllist, String type) {
+        String field;
+        if (ilist != null) {
+            field = "ing_sort";
+        }
+        else if (rlist != null) {
+            field = "rec_sort";
+        }
+        else {
+            field = "sl_sort";
+        }
+        DocumentReference doc = conn.collection("users").document(getUsername());
+        doc
+                .update(field, type)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (ilist != null) {
+                            if (type.equals("A-Z")) {
+                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("Z-A")) {
+                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("1-9")) {
+                                Collections.sort(ilist, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                            }
+                            else if (type.equals("9-1")) {
+                                Collections.sort(ilist, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                            }
+                        }
+                       else if (rlist != null) {
+                            if (type.equals("S1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                            } else if (type.equals("S9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                            } else if (type.equals("P1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                            } else if (type.equals("P9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                            }
+                            else if (type.equals("CA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                            } else if (type.equals("CZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
+                            } else if (type.equals("TA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                            } else if (type.equals("TZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                            }
+                        }
+                        else {
+                            if (type.equals("A-Z")) {
+                                Collections.sort(sllist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            }
+                            else if (type.equals("Z-A")) {
+                                Collections.sort(sllist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                        }
+
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+
+    }
+    
+    private void sortFilter(ArrayAdapter adapter, @Nullable List<UserIngredient> ilist, @Nullable List<Recipe> rlist, @Nullable List<RecipeIngredient> sllist) {
+        DocumentReference doc = conn.collection("users").document(getUsername());
+        doc
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String type;
+                        adapter.clear();
+                        if (ilist != null) {
+                            type = task.getResult().getString("ing_sort");
+                            if (type.equals("A-Z")) {
+                                Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            } else if (type.equals("Z-A")) {
+                                Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            } else if (type.equals("1-9")) {
+                                Collections.sort(ilist, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));
+                            } else if (type.equals("9-1")) {
+                                Collections.sort(ilist, (o1, o2) -> o2.getCost().compareTo(o1.getCost()));
+                            }
+                            adapter.addAll(ilist);
+                        }
+                        else if (rlist != null) {
+                            type = task.getResult().getString("rec_sort");
+                            if (type.equals("S1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getNum_servings() - o2.getNum_servings()));
+                            } else if (type.equals("S9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getNum_servings() - o1.getNum_servings()));
+                            } else if (type.equals("P1-9")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getPreparation_time() - o2.getPreparation_time()));
+                            } else if (type.equals("P9-1")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getPreparation_time() - o1.getPreparation_time()));
+                            } else if (type.equals("CA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getCategory().toLowerCase().compareTo(o2.getCategory().toLowerCase())));
+                            } else if (type.equals("CZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getCategory().toLowerCase().compareTo(o1.getCategory().toLowerCase())));
+                            } else if (type.equals("TA-Z")) {
+                                Collections.sort(rlist, (o1, o2) -> (o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase())));
+                            } else if (type.equals("TZ-A")) {
+                                Collections.sort(rlist, (o1, o2) -> (o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase())));
+                            }
+                            adapter.addAll(rlist);
+                        }
+                        else {
+                            type = task.getResult().getString("sl_sort");
+                            if (type.equals("A-Z")) {
+                                Collections.sort(sllist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
+                            } else if (type.equals("Z-A")) {
+                                Collections.sort(sllist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
+                            }
+                            adapter.addAll(sllist);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }});
     }
 
     /**
@@ -157,13 +293,54 @@ public class DBHandler implements Serializable{
 
     //---------------------------------------------------User Methods--------------------------------------------------//
 
-    public void newUser(String userId) {
+    public void checkIncomplete(Context context) {
+        CollectionReference ref = conn.collection("user_ingredients");
+        Query query = ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("incomplete", true);
+        query
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> value) {
+                        List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
+                        Log.d("Momo", String.valueOf(ingredients));
+                        if (!ingredients.isEmpty()) {
+                            Toast.makeText(context, "You have missing information in your ingredients!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    private void newUser(String userId) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("ing_sort", "A-Z");
+        data.put("rec_sort", "TA-Z");
+        data.put("sl_sort", "A-Z");
+        data.put("sl_incomplete", false);
         DocumentReference doc = conn.collection("users").document(userId);
         store(doc, data, "User");
     }
 
+
+    public void validateUser(FirebaseUser user, Context context) {
+        DocumentReference docRef = conn.collection("users").document(user.getUid());
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (!documentSnapshot.exists()) {
+                            newUser(user.getUid());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
     //-------------------------------------------------Storage Methods-------------------------------------------------//
 
     /**
@@ -313,13 +490,13 @@ public class DBHandler implements Serializable{
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         String unit = doc.getString("unit");
+                        Boolean status = doc.getBoolean("incomplete");
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setIncomplete(status);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
-                        adapter.add(userIngredient);
                     }
-                    adapter.notifyDataSetChanged();
-
+                    sortFilter(adapter, userIngredients, null, null);
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
@@ -356,7 +533,6 @@ public class DBHandler implements Serializable{
                         int items = storage.getItemCount();
                         storage.setItemCount(items + 1);
                         adapter.add(userIngredient);
-
                     }
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
@@ -394,6 +570,7 @@ public class DBHandler implements Serializable{
                         }
 
                         adapter.clear();
+                        List<Recipe> rlist = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             String id = doc.getId();
                             Map<String, Object> data = doc.getData();
@@ -420,22 +597,21 @@ public class DBHandler implements Serializable{
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
 
                                 recipeIngredients.add(recipeIngredient);
                             }
 
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
 
-                            adapter.add(recipe); // Adding the recipe from FireStore
+                            rlist.add(recipe); // Adding the recipe from FireStore
                         }
-
-                        adapter.notifyDataSetChanged();
+                        sortFilter(adapter, null, rlist, null);
                     }
                 });
         dialog.dismissDialog();
@@ -476,7 +652,7 @@ public class DBHandler implements Serializable{
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -486,7 +662,7 @@ public class DBHandler implements Serializable{
                             String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
@@ -497,6 +673,77 @@ public class DBHandler implements Serializable{
                         adapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    /**
+     * Used to fetch either all Recipes for current user.
+     * Attaches an event listener to the user's recipe documents in user_recipes Collection update their respective
+     * ArrayAdapter and notify them for future real time updates.
+     *
+     * @param adapter {@link MPMealRecipeListAdapter} in which data is to be populated
+     * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
+     *
+     * @throws RuntimeException if Recipe has no ingredients
+     */
+    public void getUserRecipesMealRecipeList(MPMealRecipeListAdapter adapter, LoadingDialog dialog) {
+        CollectionReference ref = conn.collection("user_recipes");
+        Query query = ref.whereEqualTo("user", getUsername());
+
+        query
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH RECIPES", error.toString());
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
+                            Map<String, Object> data = doc.getData();
+                            String category = (String) data.get("category");
+                            List<String> comments = (List<String>) doc.get("comments");
+
+
+                            Integer num_servings = ((Long) data.get("num_servings")).intValue();
+                            Integer preparation_time = ((Long) data.get("preparation_time")).intValue();
+                            String title = (String) data.get("title");
+
+
+                            Map<String, Map<String, Object>> ingredients = (Map<String, Map<String, Object>>) data.get("ingredients");
+                            List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+                            if (ingredients == null) {
+                                throw new RuntimeException("Ingredients not found");
+                            }
+
+                            for (String desc : ingredients.keySet()) {
+                                Map<String, Object> info = ingredients.get(desc);
+                                Double amount = (Double) info.get("amount");
+                                String ingredientCategory = (String) info.get("category");
+                                String units = (String) info.get("units");
+
+                                RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
+                                recipeIngredient.setUnit(units);
+
+                                recipeIngredients.add(recipeIngredient);
+                            }
+
+
+                            Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
+                            recipe.setRId(id);
+
+                            String uri = (String) data.get("uri");
+                            recipe.setDownloadUri(uri);
+
+                            adapter.addToUserRecipes(recipe); // Adding the recipe from FireStore
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+        dialog.dismissDialog();
     }
 
 
@@ -537,7 +784,7 @@ public class DBHandler implements Serializable{
                                 String units = (String) info.get("units");
 
                                 RecipeIngredient recipeIngredient = new RecipeIngredient(desc, ingredientCategory, amount);
-                                recipeIngredient.setUnits(units);
+                                recipeIngredient.setUnit(units);
                                 recipeIngredients.add(recipeIngredient);
                             }
 
@@ -548,7 +795,7 @@ public class DBHandler implements Serializable{
                             String title = (String) data.get("title");
 
                             Recipe recipe = new Recipe(title, preparation_time, num_servings, category, comments, recipeIngredients);
-                            recipe.setR_id(id);
+                            recipe.setRId(id);
 
                             String uri = (String) data.get("uri");
                             recipe.setDownloadUri(uri);
@@ -569,7 +816,7 @@ public class DBHandler implements Serializable{
         data.put("user", getUsername());
         DocumentReference user_recipes = getConn().collection("user_recipes").document();
         String id = store(user_recipes, data, "Recipes");
-        recipe.setR_id(id);
+        recipe.setRId(id);
     }
 
     /**
@@ -580,7 +827,7 @@ public class DBHandler implements Serializable{
         HashMap<String, Object> data = new_recipe.getStorable();
         data.put("user", getUsername());
         CollectionReference user_recipes = getConn().collection("user_recipes");
-        String id = new_recipe.get_r_id();
+        String id = new_recipe.getRId();
         update(user_recipes, id, data, "user_recipes");
     }
 
@@ -590,7 +837,7 @@ public class DBHandler implements Serializable{
      */
     public void removeRecipe(Recipe recipe) {
         CollectionReference user_recipes = getConn().collection("user_recipes");
-        String id = recipe.get_r_id();
+        String id = recipe.getRId();
         delete(user_recipes, id, "user_recipes");
 
         // Removing photo
@@ -677,12 +924,12 @@ public class DBHandler implements Serializable{
                             String title = (String) doc.getString("title");
                             Meal meal = new Meal(title, recipes, recipe_scalings, cost);
 
-                            meal.setM_id(m_id);
+                            meal.setMId(m_id);
                             tempMeals.add(meal);
                         }
                         for (String i : meal_ids) {
                             for (Meal meal : tempMeals) {
-                                String j = meal.getM_id();
+                                String j = meal.getMId();
                                 if(i.equals(j)) {
                                     meals.add(meal.copy());
                                 }
@@ -728,7 +975,7 @@ public class DBHandler implements Serializable{
 
                             String title = (String) doc.getString("title");
                             Meal meal = new Meal(title, recipes, recipe_scalings, cost);
-                            meal.setM_id(m_id);
+                            meal.setMId(m_id);
                             adapter.add(meal);
                         }
                         adapter.notifyDataSetChanged();
@@ -745,7 +992,7 @@ public class DBHandler implements Serializable{
         data.put("user", getUsername());
         DocumentReference user_meals = getConn().collection("user_meals").document();
         String id = store(user_meals, data, "Meal");
-        meal.setM_id(id);
+        meal.setMId(id);
     }
 
     /**
@@ -756,7 +1003,7 @@ public class DBHandler implements Serializable{
         HashMap<String, Object> data = new_meal.getStorable();
         data.put("user", getUsername());
         CollectionReference user_meals = getConn().collection("user_meals");
-        String id = new_meal.getM_id();
+        String id = new_meal.getMId();
         update(user_meals, id, data, "user_meals");
     }
 
@@ -766,7 +1013,7 @@ public class DBHandler implements Serializable{
      */
     public void removeMeal(Meal meal) {
         CollectionReference user_meals = getConn().collection("user_meals");
-        String id = meal.getM_id();
+        String id = meal.getMId();
         delete(user_meals, id, "user_meals");
     }
 
@@ -828,12 +1075,11 @@ public class DBHandler implements Serializable{
                             MealPlan mealPlan = new MealPlan(title, mealplan, num_days);
 
                             // Setting the document id
-                            mealPlan.setUmp_id(ump_id);
+                            mealPlan.setUmpId(ump_id);
 
                             // Adding the meal plan to the adapter
                             adapter.add(mealPlan);
                         }
-
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -848,7 +1094,7 @@ public class DBHandler implements Serializable{
         data.put("user", getUsername());
         DocumentReference user_mealplans = getConn().collection("user_mealplans").document();
         String id = store(user_mealplans, data, "Meal Plan");
-        mealplan.setUmp_id(id);
+        mealplan.setUmpId(id);
     }
 
     /**
@@ -860,7 +1106,7 @@ public class DBHandler implements Serializable{
         HashMap<String, Object> data = mealPlan.getStorable();
         data.put("user", getUsername());
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
-        String id = mealPlan.get_ump_id();
+        String id = mealPlan.getUmpId();
         update(user_mealplans, id, data, "user_mealplans");
     }
 
@@ -870,8 +1116,179 @@ public class DBHandler implements Serializable{
      */
     public void removeMealPlan(MealPlan mealPlan) {
         CollectionReference user_mealplans = getConn().collection("user_mealplans");
-        String id = mealPlan.get_ump_id();
+        String id = mealPlan.getUmpId();
         delete(user_mealplans, id, "user_mealplans");
     }
 
+    /**
+     * Used to fetch all MealPlans for current user.
+     *
+     * @param adapter
+     * @param dialog
+     */
+
+    //-------------------------------------------------ShoppingList Methods-------------------------------------------------//
+
+    /**
+     * Get meal pla
+     * @param adapter
+     * @param dialog
+     */
+    public void getSLMealPlans(SLMealPlanAdapter adapter, LoadingDialog dialog) {
+
+        CollectionReference ref = conn.collection("user_mealplans");
+        ref
+                .whereEqualTo("user", getUsername())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("FETCH MEALPLANS", error.toString());
+                            return;
+                        }
+
+                        adapter.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            // Fetching id
+                            String ump_id = doc.getId();
+
+                            // Fetching all data
+                            Map<String, Object> data = doc.getData();
+
+                            // Fetching meal plan
+                            List<Map<String, String>> plans = (List<Map<String, String>>) data.get("plans");
+
+                            List<List<Meal>> mealplan = new ArrayList<>();
+
+                            for (Map<String, String> dayMap : plans) {
+                                List<String> meal_ids = new ArrayList<>();
+                                List<Meal> meals = new ArrayList<>();
+                                mealplan.add(meals);
+
+                                for (String meal_id : dayMap.values()) {
+                                    meal_ids.add(meal_id);
+                                }
+
+                                getUserMealsWithID(meals, dialog, meal_ids);
+
+                            }
+
+                            // Fetching number of days
+                            Integer num_days = ((Long) data.get("num_days")).intValue();
+
+                            // Fetching title
+                            String title = doc.getString("title");
+
+                            // Creating meal plan object
+                            MealPlan mealPlan = new MealPlan(title, mealplan, num_days);
+
+                            // Setting the document id
+                            mealPlan.setUmpId(ump_id);
+
+                            // Adding the meal plan to the adapter
+                            adapter.add(mealPlan);
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    /**
+     * Keeps checking for changes in a user's query for user_ingredients and updates their ingredients if change is found.
+     */
+    public void getSLIngredients(ArrayAdapter adapter, MealPlan mealPlan) {
+        Query query = conn.collection("user_ingredients").whereEqualTo("user", getUsername());
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.d("uIng", "An error has occured while trying to update the local ingredients");
+                } else {
+                    List<UserIngredient> userIngredients = new ArrayList<>();
+                    Double sum = 0.0;
+                    adapter.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        String category = doc.getString("category");
+                        String description = doc.getString("description");
+                        Double amount = doc.getDouble("amount");
+                        Double cost = doc.getDouble("cost");
+                        sum += cost * amount;
+                        Date date = doc.getDate("date");
+                        String location = doc.getString("location");
+                        String unit = doc.getString("unit");
+                        UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setId(doc.getId());
+                        userIngredients.add(userIngredient);
+                    }
+                    ArrayList<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
+                    sortFilter(adapter, null, null, slIngredients);
+                    Log.d("uIng", "Local ingredients updated successfully!");
+                }
+            }
+        });
+    }
+
+    /**
+     * Add an item from shopping list into ingredient.
+     * @param adapter {@link ArrayAdapter} in which data is to be populated
+     * @param description {@link String} description of item.
+     * @param category {@link String} category of item.
+     * @param needed {@link Integer}amount needed for given recipe.
+     * @param unit {@link String} unit of item.
+     * @param position {@link Integer} Item position in data list.
+     */
+    public void pickUpIngredient(ArrayAdapter adapter, String description, String category, double needed, String unit, Integer position) {
+
+        CollectionReference ref = conn.collection("user_ingredients");
+
+        Query query = ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("description", description)
+                .whereEqualTo("category", category);
+
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> value) {
+                        List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
+                        DocumentSnapshot doc;
+                        Double cost;
+                        Date date;
+                        Double amount;
+                        if (ingredients.isEmpty()) {
+                            cost = 0.0;
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.YEAR, 2099);
+                            cal.set(Calendar.MONTH, 11);
+                            cal.set(Calendar.DAY_OF_MONTH, 30);
+                            date = cal.getTime();
+                            UserIngredient userIngredient = new UserIngredient(category, description, needed, cost, date, "", unit);
+                            userIngredient.setIncomplete(true);
+                            newIngredient(userIngredient);
+                        }
+                        else {
+                            doc = ingredients.get(0);
+                            cost = doc.getDouble("cost");
+                            date = doc.getDate("date");
+                            amount = doc.getDouble("amount");
+                            UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "", unit);
+                            userIngredient.setId(doc.getId());
+                            userIngredient.setIncomplete(true);
+                            updateIngredient(userIngredient);
+                        }
+
+                        adapter.remove(position);
+                        adapter.notifyDataSetChanged();
+                        Log.d("uIng", "Local ingredients updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("sling", "Updating ingredient as a result of a shopping list pickup has failed");
+                    }
+                });
+
+    }
 }

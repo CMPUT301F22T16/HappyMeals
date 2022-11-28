@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.LoadingDialog;
-import com.example.happymeals.MealPlan;
+import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.R;
 import com.example.happymeals.databinding.ActivityMpmyMealsBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -58,7 +58,7 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("My Meals");
+        getSupportActionBar().setTitle("Pick a Meal for MealPlan");
 
         // User
         Bundle bundle = getIntent().getExtras();

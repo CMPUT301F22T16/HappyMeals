@@ -30,12 +30,12 @@ import java.util.Objects;
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeListInterface {
 
-    private ExtendedFloatingActionButton add_recipe_button;
-    private ListView recipe_list_view;
+    private ExtendedFloatingActionButton addRecipeButton;
+    private ListView recipeListView;
     private List<Recipe> recipes;
     private RecipeListAdapter recipeAdapter;
     private FloatingActionButton sortButton;
-    DBHandler db;
+    private DBHandler db;
     private int position;
 
 
@@ -59,7 +59,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         setContentView(R.layout.activity_recipe_list);
 
         // Initialize the Add Recipe Button
-        add_recipe_button = findViewById(R.id.add_storage_button);
+        addRecipeButton = findViewById(R.id.add_recipe_button);
 
 
         // Sort button
@@ -81,18 +81,18 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeListI
         getSupportActionBar().setTitle("Recipes");
 
         // Setup recipe list
-        recipe_list_view = findViewById(R.id.recipe_list);
+        recipeListView = findViewById(R.id.recipe_list);
         recipes = new ArrayList<>();
         LoadingDialog dialog = new LoadingDialog(this);
         recipeAdapter = new RecipeListAdapter(this, recipes, db, this);
-        recipe_list_view.setAdapter(recipeAdapter);
+        recipeListView.setAdapter(recipeAdapter);
         dialog.startLoadingDialog();
         db.getUserRecipes(recipeAdapter,dialog);
 
 
 
         // Setup add recipe button
-        add_recipe_button.setOnClickListener(new View.OnClickListener() {
+        addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(RecipeListActivity.this, EditRecipe.class);

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="6"
+    android:background="@color/oat"
     tools:context=".meal.MPPickRecipeActivity">
 
     <SearchView
@@ -34,7 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pick_recipe_confirm_button"
-            android:background="@drawable/round_button"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

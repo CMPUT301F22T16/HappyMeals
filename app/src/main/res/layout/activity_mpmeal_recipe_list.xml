@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="6.5"
+    android:background="@color/oat"
     tools:context=".meal.MPMealRecipeList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:clickable="true"
+            android:backgroundTint="@color/white"
             app:icon="@android:drawable/ic_input_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +69,8 @@
         <Button
             android:id="@+id/mpmeal_recipe_list_cancel"
             android:layout_width="0dp"
-            android:background="@drawable/round_button"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="15dp"
@@ -80,8 +83,9 @@
             android:layout_weight="0.5" />
 
         <Button
-            android:background="@drawable/round_button"
             android:id="@+id/mpmeal_recipe_list_finish"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

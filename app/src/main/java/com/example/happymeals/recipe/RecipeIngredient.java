@@ -1,6 +1,6 @@
 package com.example.happymeals.recipe;
 
-import com.example.happymeals.Ingredient;
+import com.example.happymeals.ingredient.Ingredient;
 
 import java.io.Serializable;
 
@@ -102,7 +102,7 @@ public class RecipeIngredient extends Ingredient implements Serializable {
      * Getter for the {@link String} units of the ingredient.
      * @return A {@link String} units for the ingredient amount.
      */
-    public String getUnits() {
+    public String getUnit() {
         return units;
     }
 
@@ -110,7 +110,17 @@ public class RecipeIngredient extends Ingredient implements Serializable {
      * Setter for the {@link String} units of the ingredient.
      * @param units A {@link String} units for the ingredient amount.
      */
-    public void setUnits(String units) {
+    public void setUnit(String units) {
         this.units = units;
+    }
+
+    /**
+     * This method creates an identical copy of this object
+     * @return
+     */
+    public RecipeIngredient getCopy() {
+        RecipeIngredient ingredient = new RecipeIngredient(this.description, this.category, this.amount);
+        ingredient.setUnit(this.units);
+        return ingredient;
     }
 }

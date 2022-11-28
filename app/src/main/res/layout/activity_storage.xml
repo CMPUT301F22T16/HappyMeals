@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".storage.StorageActivity"
-    android:background="@drawable/gradient_background">
+    android:background="@color/oat">
 
     <ListView
         android:id="@+id/storage_grid"
@@ -18,13 +18,13 @@
         android:layout_marginBottom="16dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_storage_button"
+        app:layout_constraintBottom_toTopOf="@+id/add_recipe_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_storage_button"
+        android:id="@+id/add_recipe_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
