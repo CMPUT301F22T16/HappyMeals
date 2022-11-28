@@ -505,7 +505,7 @@ public class DBHandler implements Serializable{
      * Attaches an event listener to the user's recipe documents in user_recipes Collection update their respective
      * ArrayAdapter and notify them for future real time updates.
      *
-     * @param adapter {@link ArrayAdapter} in which data is to be populated
+     * @param adapter {@link MPMealRecipeListAdapter} in which data is to be populated
      * @param dialog {@link LoadingDialog} dialog box to be suspended when data has been fetched.
      *
      * @throws RuntimeException if Recipe has no ingredients
