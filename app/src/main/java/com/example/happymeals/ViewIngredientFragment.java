@@ -89,7 +89,13 @@ public class ViewIngredientFragment extends DialogFragment {
             this.thisLocation.setAdapter(locationAdapt);
 
             thisAmount.setText(Double.toString(thisUserIngredient.getAmount()));
-
+            if (fluidUnit.contains(thisUserIngredient.getUnit())){
+                thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
+            }
+            if (solidUnit.contains(thisUserIngredient.getUnit())){
+                thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
+            }
+            thisCategory.setSelection(categories.indexOf(thisUserIngredient.getCategory()));
             if(!isSL) {
                 thisLocation.setSelection(locations.indexOf(thisUserIngredient.getLoc()));
                 thisUnitCost.setText(Double.toString(thisUserIngredient.getCost()));

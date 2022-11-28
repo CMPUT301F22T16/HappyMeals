@@ -63,8 +63,6 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
 
         }
 
-
-
         userIngredientList = new ArrayList<UserIngredient>();
 
         ingredientListView = (ListView) findViewById(R.id.ingredient_list);
