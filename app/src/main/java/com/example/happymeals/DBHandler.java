@@ -4,6 +4,7 @@ import static java.lang.Boolean.FALSE;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +85,11 @@ public class DBHandler implements Serializable{
 
     private FirebaseFirestore getConn() {
         return this.conn;
+    }
+
+
+    private void sortFilter(Adapter adapter, List list, String type) {
+        
     }
 
     /**
@@ -360,7 +368,6 @@ public class DBHandler implements Serializable{
                         int items = storage.getItemCount();
                         storage.setItemCount(items + 1);
                         adapter.add(userIngredient);
-
                     }
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
@@ -908,7 +915,6 @@ public class DBHandler implements Serializable{
                             // Adding the meal plan to the adapter
                             adapter.add(mealPlan);
                         }
-
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -1046,11 +1052,65 @@ public class DBHandler implements Serializable{
                         userIngredients.add(userIngredient);
                     }
                     ArrayList<RecipeIngredient> slIngredients = UnitConverter.getShoppingList(mealPlan, userIngredients);
+                    Collections.sort(slIngredients, (o1, o2) -> o1.getAmount().compareTo(o2.getAmount()));
                     adapter.addAll(slIngredients);
                     adapter.notifyDataSetChanged();
                     Log.d("uIng", "Local ingredients updated successfully!");
                 }
             }
         });
+    }
+
+
+    public void pickUpIngredient(ArrayAdapter adapter, String description, String category, double needed, String unit, Integer position) {
+
+        CollectionReference ref = conn.collection("user_ingredients");
+
+        Query query = ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("description", description)
+                .whereEqualTo("category", category);
+
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> value) {
+                        List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
+                        DocumentSnapshot doc;
+                        Double cost;
+                        Date date;
+                        Double amount;
+                        if (ingredients.isEmpty()) {
+                            cost = 0.0;
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.YEAR, 2099);
+                            cal.set(Calendar.MONTH, 11);
+                            cal.set(Calendar.DAY_OF_MONTH, 30);
+                            date = cal.getTime();
+                            UserIngredient userIngredient = new UserIngredient(category, description, needed, cost, date, "", unit);
+                            newIngredient(userIngredient);
+                        }
+                        else {
+                            doc = ingredients.get(0);
+                            cost = doc.getDouble("cost");
+                            date = doc.getDate("date");
+                            amount = doc.getDouble("amount");
+                            UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "", unit);
+                            userIngredient.setId(doc.getId());
+                            updateIngredient(userIngredient);
+                        }
+
+                        adapter.remove(position);
+                        adapter.notifyDataSetChanged();
+                        Log.d("uIng", "Local ingredients updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("sling", "Updating ingredient as a result of a shopping list pickup has failed");
+                    }
+                });
+
     }
 }

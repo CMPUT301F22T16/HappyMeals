@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Log.d("Momo", user.getUid());
             launchMain(user);
             // ...
         } else {
