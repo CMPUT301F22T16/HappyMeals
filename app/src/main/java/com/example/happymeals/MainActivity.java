@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DBHandler db = new DBHandler(user.getUid());
-        db.validateUser(user, getApplicationContext());
+        db.checkIncomplete(getApplicationContext());
 
         setContentView(R.layout.activity_main);
 

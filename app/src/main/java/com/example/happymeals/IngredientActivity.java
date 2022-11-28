@@ -146,6 +146,7 @@ public class IngredientActivity extends AppCompatActivity implements SearchView.
                                 oldUserIngredient.setCost(unitCost);
                                 oldUserIngredient.setDate(year, month, day);
                                 oldUserIngredient.setLoc(location);
+                                oldUserIngredient.setIncomplete(false);
 
                                 db.updateIngredient(oldUserIngredient);
                                 ingredientPosition = -1;

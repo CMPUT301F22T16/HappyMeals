@@ -172,25 +172,25 @@ public class DBHandler implements Serializable{
 
     //---------------------------------------------------User Methods--------------------------------------------------//
 
-    private void checkIncomplete(Context context, Boolean isIncomplete) {
-        if (isIncomplete) {
-            Toast.makeText(context, "YOU HAVE INCOMPLETE DATA", Toast.LENGTH_LONG).show();
-        }
+    public void checkIncomplete(Context context) {
+        CollectionReference ref = conn.collection("user_ingredients");
+        Query query = ref
+                .whereEqualTo("user", getUsername())
+                .whereEqualTo("incomplete", true);
+        query
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> value) {
+                        List<DocumentSnapshot> ingredients = value.getResult().getDocuments();
+                        Log.d("Momo", String.valueOf(ingredients));
+                        if (!ingredients.isEmpty()) {
+                            Toast.makeText(context, "Don't forget to update the ingredients you bought!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
-    public void markIncompleteData() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("sl_incomplete", true);
-        CollectionReference ref = conn.collection("user");
-        update(ref, username, data, "user");
-    }
-
-    public void markcompleteData() {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("sl_incomplete", false);
-        CollectionReference ref = conn.collection("user");
-        update(ref, username, data, "user");
-    }
 
     private void newUser(String userId) {
         HashMap<String, Object> data = new HashMap<>();
@@ -206,9 +206,7 @@ public class DBHandler implements Serializable{
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            checkIncomplete(context, documentSnapshot.getBoolean("sl_incomplete"));
-                        } else {
+                        if (!documentSnapshot.exists()) {
                             newUser(user.getUid());
                         }
                     }
@@ -369,7 +367,9 @@ public class DBHandler implements Serializable{
                         Date date = doc.getDate("date");
                         String location = doc.getString("location");
                         String unit = doc.getString("unit");
+                        Boolean status = doc.getBoolean("incomplete");
                         UserIngredient userIngredient = new UserIngredient(category, description, amount, cost, date, location, unit);
+                        userIngredient.setIncomplete(status);
                         userIngredient.setId(doc.getId());
                         userIngredients.add(userIngredient);
                         adapter.add(userIngredient);
@@ -1132,6 +1132,7 @@ public class DBHandler implements Serializable{
                             cal.set(Calendar.DAY_OF_MONTH, 30);
                             date = cal.getTime();
                             UserIngredient userIngredient = new UserIngredient(category, description, needed, cost, date, "", unit);
+                            userIngredient.setIncomplete(true);
                             newIngredient(userIngredient);
                         }
                         else {
@@ -1141,6 +1142,7 @@ public class DBHandler implements Serializable{
                             amount = doc.getDouble("amount");
                             UserIngredient userIngredient = new UserIngredient(category, description, amount+needed, cost, date, "", unit);
                             userIngredient.setId(doc.getId());
+                            userIngredient.setIncomplete(true);
                             updateIngredient(userIngredient);
                         }
 
