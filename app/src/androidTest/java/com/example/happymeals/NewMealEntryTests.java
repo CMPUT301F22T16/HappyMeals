@@ -17,6 +17,7 @@ import com.example.happymeals.meal.MPMealRecipeList;
 import com.example.happymeals.meal.MPMyMealsActivity;
 import com.example.happymeals.meal.MPPickRecipeActivity;
 import com.example.happymeals.recipe.EditRecipe;
+import com.example.happymeals.recipe.Recipe;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

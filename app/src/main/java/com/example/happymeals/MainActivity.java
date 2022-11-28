@@ -5,7 +5,6 @@
 
 package com.example.happymeals;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,16 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.happymeals.recipe.RecipeListActivity;
 import com.example.happymeals.storage.StorageActivity;
 
 
 import com.example.happymeals.meal.MPMyMealsActivity;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;

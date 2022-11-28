@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipe_comments_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recipe_add_new_comment_button"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="COMMENT"
-        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:icon="@android:drawable/ic_input_add" />
-</LinearLayout>
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:elevation="0dp"
+        app:backgroundTint="@android:color/transparent"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:fabSize="mini"
+        app:pressedTranslationZ="0dp"
+        app:rippleColor="@android:color/transparent"
+        app:shapeAppearance="@null"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_comments_recyclerview" />
+</androidx.constraintlayout.widget.ConstraintLayout>

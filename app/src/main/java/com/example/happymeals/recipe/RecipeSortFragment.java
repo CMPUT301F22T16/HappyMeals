@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.recipe;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import com.example.happymeals.R;
 
 import java.io.Serializable;
 import java.util.Collections;

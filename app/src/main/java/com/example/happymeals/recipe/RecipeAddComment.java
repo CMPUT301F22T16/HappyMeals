@@ -33,12 +33,22 @@ public class RecipeAddComment extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String comment = commentEditText.getText().toString();
+                boolean allEntered;
+                allEntered = !commentEditText.getText().toString().isEmpty();
 
-                Intent intent = new Intent();
-                intent.putExtra("comment", comment);
-                setResult(RESULT_OK, intent);
-                finish();
+                if (commentEditText.getText().toString().isEmpty()) {
+                    commentEditText.requestFocus();
+                    commentEditText.setError("Please provide the recipe comment.");
+                }
+
+                if (allEntered) {
+                    String comment = commentEditText.getText().toString();
+
+                    Intent intent = new Intent();
+                    intent.putExtra("comment", comment);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }

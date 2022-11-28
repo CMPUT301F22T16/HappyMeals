@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.LoadingDialog;
 import com.example.happymeals.R;
-import com.example.happymeals.Recipe;
+import com.example.happymeals.recipe.Recipe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

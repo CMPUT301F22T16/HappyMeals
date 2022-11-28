@@ -23,10 +23,12 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.happymeals.recipe.EditRecipe;
+import com.example.happymeals.recipe.Recipe;
 import com.example.happymeals.recipe.RecipeAddComment;
 import com.example.happymeals.recipe.RecipeAddIngredient;
 import com.example.happymeals.recipe.RecipeEditComment;
 import com.example.happymeals.recipe.RecipeEditIngredient;
+import com.example.happymeals.recipe.RecipeListActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
@@ -38,7 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class RecipeIntentTest {
+public class AddEditRecipeIntentTest {
     private Solo solo;
     private FirebaseFirestore conn;
     private String r_id;
