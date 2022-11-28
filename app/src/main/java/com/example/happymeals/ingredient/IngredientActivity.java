@@ -1,6 +1,5 @@
-package com.example.happymeals;
+package com.example.happymeals.ingredient;
 
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 import androidx.activity.result.ActivityResult;
@@ -22,8 +21,9 @@ import java.util.ArrayList;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.R;
 import com.example.happymeals.storage.Storage;
-import com.example.happymeals.storage.StorageAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;

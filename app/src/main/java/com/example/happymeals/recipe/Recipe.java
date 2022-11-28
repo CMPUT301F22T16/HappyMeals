@@ -3,7 +3,7 @@ package com.example.happymeals.recipe;
 import android.net.Uri;
 
 import com.example.happymeals.Storable;
-import com.example.happymeals.UserIngredient;
+import com.example.happymeals.ingredient.UserIngredient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.Map;
  *  7. ingredients : A {@link List<  UserIngredient  >} for list of ingredients that this recipe has.
  */
 public class Recipe implements Storable, Serializable {
-    private String r_id = null; // All ids' are null if not fetched
+    private String rId = null; // All ids' are null if not fetched
     private String title;
     private int preparation_time;
     private int num_servings;
@@ -168,8 +168,8 @@ public class Recipe implements Storable, Serializable {
      * Get the document id of the current recipe in the user's database.
      * @return {@link String} document id for the recipe.
      */
-    public String get_r_id() {
-        return this.r_id;
+    public String getRId() {
+        return this.rId;
     }
 
     /**
@@ -179,7 +179,7 @@ public class Recipe implements Storable, Serializable {
      *          database.
      * @param id {@link String} id to be set.
      */
-    public void setR_id(String id) {this.r_id = id;}
+    public void setRId(String id) {this.rId = id;}
 
     /**
      * Gets the downloadable URL for the photo of the recipe

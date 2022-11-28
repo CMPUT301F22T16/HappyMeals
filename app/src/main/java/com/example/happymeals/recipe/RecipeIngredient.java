@@ -1,6 +1,6 @@
 package com.example.happymeals.recipe;
 
-import com.example.happymeals.Ingredient;
+import com.example.happymeals.ingredient.Ingredient;
 
 import java.io.Serializable;
 

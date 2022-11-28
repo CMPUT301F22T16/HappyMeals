@@ -95,7 +95,7 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
         Recipe r = recipes.get(position);
         int i = 0;
         for (Recipe recipe : recipes_buffer){
-            if(recipe.get_r_id().equals(r.get_r_id())){
+            if(recipe.getRId().equals(r.getRId())){
                 break;
             }
             i++;
@@ -163,8 +163,8 @@ public class MPPickRecipeListAdapter extends BaseAdapter {
      */
     public boolean isAlreadyInBuffer(Recipe r){
         for (Recipe recipe :recipes_buffer) {
-            String a = recipe.get_r_id();
-            String b = r.get_r_id();
+            String a = recipe.getRId();
+            String b = r.getRId();
             if (a.equals(b)) {
                 return true;
             }

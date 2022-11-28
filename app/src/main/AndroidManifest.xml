@@ -131,14 +131,14 @@
             android:exported="true"></activity>
 
         <activity
-            android:name=".IngredientActivity"
+            android:name=".ingredient.IngredientActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddNewIngredient"
+            android:name=".ingredient.AddNewIngredient"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

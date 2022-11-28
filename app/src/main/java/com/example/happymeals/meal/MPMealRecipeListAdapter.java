@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.R;
-import com.example.happymeals.UserIngredient;
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.recipe.Recipe;
 import com.example.happymeals.recipe.RecipeIngredient;
 import com.example.happymeals.recipe.ViewRecipeActivity;
@@ -25,13 +24,10 @@ import com.example.happymeals.databinding.ActivityMpmealRecipeListBinding;
 import com.example.happymeals.databinding.MealRecipeListContentBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * This custom adapter keeps meal recipe list up to date
@@ -96,9 +92,9 @@ public class MPMealRecipeListAdapter extends RecyclerView.Adapter<MPMealRecipeLi
         ArrayList<Recipe> new_recipes = new ArrayList<>();
         Map<String, Double> scalings = this.meal.getScalings();
         for(Recipe r : recipes){
-            double scale = (scalings.get(r.get_r_id())!=null)?scalings.get(r.get_r_id()): -1.0;
+            double scale = (scalings.get(r.getRId())!=null)?scalings.get(r.getRId()): -1.0;
             if (scale>=0){
-                scalings_buffer.put(r.get_r_id(),scale);
+                scalings_buffer.put(r.getRId(),scale);
             } else {
                 new_recipes.add(r); // add all new recipes
             }

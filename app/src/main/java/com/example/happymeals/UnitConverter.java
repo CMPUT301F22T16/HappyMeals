@@ -1,5 +1,7 @@
 package com.example.happymeals;
 
+import com.example.happymeals.ingredient.Ingredient;
+import com.example.happymeals.ingredient.UserIngredient;
 import com.example.happymeals.meal.Meal;
 import com.example.happymeals.mealplan.MealPlan;
 import com.example.happymeals.recipe.Recipe;
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class UnitConverter {
     public static final List<String> upperList = Collections.unmodifiableList(

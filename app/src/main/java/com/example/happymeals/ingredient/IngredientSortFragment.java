@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.ingredient;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.R;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

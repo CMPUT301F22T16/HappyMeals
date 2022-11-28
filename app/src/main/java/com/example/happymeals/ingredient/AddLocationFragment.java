@@ -1,4 +1,4 @@
-package com.example.happymeals;
+package com.example.happymeals.ingredient;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.happymeals.DBHandler;
+import com.example.happymeals.R;
 import com.example.happymeals.storage.Storage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

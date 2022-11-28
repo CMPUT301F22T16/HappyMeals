@@ -1,10 +1,9 @@
 package com.example.happymeals.storage;
 
 import com.example.happymeals.Storable;
-import com.example.happymeals.UserIngredient;
+import com.example.happymeals.ingredient.UserIngredient;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
