@@ -20,6 +20,7 @@ import com.example.happymeals.meal.MPPickRecipeActivity;
 import com.example.happymeals.meal.Meal;
 import com.example.happymeals.recipe.EditRecipe;
 import com.example.happymeals.recipe.Recipe;
+import com.example.happymeals.recipe.ViewRecipeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -181,7 +182,7 @@ public class MealIntentTests {
         TextView view_detail = (TextView) solo.getView(R.id.bottom_sheet_textview1);
         solo.clickOnView(view_detail);
 
-        solo.waitForActivity(EditRecipe.class);
+        solo.waitForActivity(ViewRecipeActivity.class);
         solo.waitForText("Test Recipe98304");
     }
 
@@ -198,14 +199,10 @@ public class MealIntentTests {
         solo.assertCurrentActivity("Wrong Activity", MPMealRecipeList.class);
         solo.waitForText("Test Recipe98304");
         solo.clickOnText("Test Recipe98304");
-
         solo.waitForDialogToOpen();
-
         TextView change_scaling = (TextView) solo.getView(R.id.bottom_sheet_textview2);
         solo.clickOnView(change_scaling);
-
         solo.waitForDialogToOpen();
-
         EditText scale_input = (EditText) solo.getView(R.id.editTextScalingNumber);
         solo.clearEditText(scale_input);
         solo.enterText(scale_input,"29.0");
