@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.happymeals.DBHandler;
 import com.example.happymeals.databinding.ActivityMpmealListBinding;
@@ -62,7 +63,7 @@ public class MPMealListActivity extends AppCompatActivity {
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("One Day Meals");
+        getSupportActionBar().setTitle("Meals for a Day");
 
         // get user name
         dayIndex = 0;
@@ -131,6 +132,11 @@ public class MPMealListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+    }
+
     private void setOnAddButtonListener() {
         addMealsButton.setOnClickListener(v -> {
             if(mealPlan.getNum_days() > dayIndex) {
@@ -152,9 +158,13 @@ public class MPMealListActivity extends AppCompatActivity {
     private void setOnNextButtonListener() {
         nextDayButton.setOnClickListener(v -> {
             dayIndex++;
-            if(mealPlan.getNum_days() <= dayIndex) {
+            if(dayIndex>=7) {
+                dayIndex--;
+                Toast.makeText(this, "End of the week :D", Toast.LENGTH_SHORT).show();
+            } else if(mealPlan.getNum_days() <= dayIndex) {
                 meals.clear();
                 mealIndex=-1;
+                mealPlan.getMeals().add(new ArrayList<Meal>());
                 mpMealListAdapter.notifyDataSetChanged();
             } else {
                 meals.clear();

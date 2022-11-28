@@ -77,11 +77,11 @@ public class IngredientSortFragment extends DialogFragment {
                             case R.id.price_sort_ingredient:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, userIngredients, null, "1-9");
+                                    db.setSort(adapter, userIngredients, null, null, "1-9");
                                 }
 
                                 else {
-                                    db.setSort(adapter, userIngredients, null, "9-1");
+                                    db.setSort(adapter, userIngredients, null, null, "9-1");
                                 }
 
                                 break;
@@ -90,11 +90,11 @@ public class IngredientSortFragment extends DialogFragment {
                             default:
 
                                 if (isLowtoHigh) {
-                                    db.setSort(adapter, userIngredients, null, "Z-A");
+                                    db.setSort(adapter, userIngredients, null, null, "Z-A");
                                 }
 
                                 else {
-                                    db.setSort(adapter, userIngredients, null, "A-Z");
+                                    db.setSort(adapter, userIngredients, null, null, "A-Z");
                                 }
 
                                 break;

@@ -57,7 +57,7 @@ public class MPListAdapter extends RecyclerView.Adapter<MPListAdapter.MPViewHold
     @Override
     public void onBindViewHolder(@NonNull MPViewHolder holder, int position) {
         MealPlan mealPlan = mealPlans.get(position);
-        holder.binding.mpMealListTextView1.setText("MealPlanTitle");
+        holder.binding.mpMealListTextView1.setText(mealPlan.getTitle());
     }
 
     @Override
