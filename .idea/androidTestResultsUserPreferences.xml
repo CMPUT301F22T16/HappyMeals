@@ -16,6 +16,20 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1065008071">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="adb-R5CR108Y6LM-qJcwDE._adb-tls-connect._tcp" value="120" />
+                  <entry key="samsung&#10; SM-G991W" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-792101448">
           <value>
             <AndroidTestResultsTableState>
@@ -24,6 +38,20 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_4_API_30" value="120" />
                   <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-650709611">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="adb-R5CR108Y6LM-qJcwDE._adb-tls-connect._tcp" value="120" />
+                  <entry key="samsung&#10; SM-G991W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -50,6 +78,20 @@
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_4_API_30" value="120" />
                   <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1272300454">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="adb-R5CR108Y6LM-qJcwDE._adb-tls-connect._tcp" value="120" />
+                  <entry key="samsung&#10; SM-G991W" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
