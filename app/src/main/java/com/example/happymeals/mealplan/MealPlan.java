@@ -30,7 +30,7 @@ public class MealPlan implements Storable, Serializable {
      * Default constructor for mealplan.
      */
     public MealPlan() {
-        this.title = "New MealPlan";
+        this.title = "Meal Plan";
         this.num_days = 0;
         this.mealplan = new ArrayList<>();
     }

@@ -24,10 +24,10 @@
         <entry key="app/src/main/res/layout/activity_meal_plan_list.xml" value="0.3809082031250001" />
         <entry key="app/src/main/res/layout/activity_meal_plan_meal_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_meal_recipe_list.xml" value="0.44583333333333336" />
-        <entry key="app/src/main/res/layout/activity_mpmeal_list.xml" value="0.24049449462368733" />
+        <entry key="app/src/main/res/layout/activity_mpmeal_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_mpmeal_plan.xml" value="0.17728999577880963" />
         <entry key="app/src/main/res/layout/activity_mpmeal_recipe_list.xml" value="0.3070724487304688" />
-        <entry key="app/src/main/res/layout/activity_mpmy_meals.xml" value="0.2187485576236589" />
+        <entry key="app/src/main/res/layout/activity_mpmy_meals.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_mppick_recipe.xml" value="0.20296570898980537" />
         <entry key="app/src/main/res/layout/activity_my_meals.xml" value="0.4317708333333333" />
         <entry key="app/src/main/res/layout/activity_pick_recipe.xml" value="0.3625480974775545" />

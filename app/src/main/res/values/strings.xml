@@ -68,6 +68,6 @@
     <string name="sl_select_meal_plan_activity">What are you in the store for today?</string>
     <string name="adjust_scaling_text">Enter scaling: </string>
     <string name="meal_title_placeholder">New Meal</string>
-    <string name="meal_plan_title_placeholder">New Meal Plan</string>
+    <string name="meal_plan_title_placeholder">New Plan</string>
 
 </resources>
