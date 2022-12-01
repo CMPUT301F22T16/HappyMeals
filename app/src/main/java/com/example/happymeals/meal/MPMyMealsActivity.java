@@ -58,7 +58,6 @@ public class MPMyMealsActivity extends AppCompatActivity {
 
         // back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Meal");
 
         // User
         Bundle bundle = getIntent().getExtras();
@@ -67,7 +66,12 @@ public class MPMyMealsActivity extends AppCompatActivity {
             mealPlan = (MealPlan) bundle.getSerializable("MEALPLAN");
             dayIndex = (int) bundle.getSerializable("DAY");
             mealIndex = (int) bundle.getSerializable("MEAL");
+            getSupportActionBar().setTitle("Pick Meal For Meal Plan");
+        } else {
+            getSupportActionBar().setTitle("Meal");
+
         }
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         dbHandler = new DBHandler(user.getUid());
