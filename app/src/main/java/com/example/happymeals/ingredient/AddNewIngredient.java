@@ -84,12 +84,9 @@ public class AddNewIngredient extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (categories.get(position) == "Drink") {
-                    // Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
                     ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(AddNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
                     ingredientUnit.setAdapter(unitAdapt);
-                    // Do something
                 } else {
-                    // Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
                     ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(AddNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, solidUnit);
                     ingredientUnit.setAdapter(unitAdapt);
                 }
@@ -109,11 +106,9 @@ public class AddNewIngredient extends AppCompatActivity {
                 if(selectedItem.equals("Add new location"))
                 {
                     new AddLocationFragment().show(getSupportFragmentManager(), "ADD_LOCATION");
-                    // Location array should come from database
                     ArrayAdapter<String> locationAdapt = new ArrayAdapter<String>(AddNewIngredient.this, R.layout.ingredient_content, R.id.myTextview, locations);
                     ingredientLocationSpinner.setAdapter(locationAdapt);
                     ingredientLocationSpinner.setSelection(0);
-                    // do your stuff
                 }
 
             } // to close the onItemSelected
@@ -162,11 +157,6 @@ public class AddNewIngredient extends AppCompatActivity {
                     ingredientDescription.requestFocus();
                     ingredientDescription.setError("Please provide the ingredient description.");
                 }
-
-//                if (location.isEmpty()){
-//                    ingredientLocationSpinner.requestFocus();
-//                    ingredientLocationSpinner.setError("Please provide the ingredient location.");
-//                }
 
                 // Set corresponding error messages if a text box is empty.
                 if (countString.isEmpty()) {

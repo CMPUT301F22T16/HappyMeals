@@ -117,26 +117,21 @@ public class ViewIngredientFragment extends DialogFragment {
                     if (thisUserIngredient.getCategory().equals("Drink")){
                         ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
                         thisUnit.setAdapter(unitAdapt);
-                        // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
                         thisUnit.setSelection(fluidUnit.indexOf(thisUserIngredient.getUnit()));
                     }else{
                         ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, fluidUnit);
                         thisUnit.setAdapter(unitAdapt);
                     }
-                    // Toast.makeText(getApplicationContext(), "Selected Drink", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (!thisUserIngredient.getCategory().equals("Drink")){
                         ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
                         thisUnit.setAdapter(unitAdapt);
-                        // Toast.makeText(context, thisUserIngredient.getUnit(), Toast.LENGTH_SHORT).show();
                         thisUnit.setSelection(solidUnit.indexOf(thisUserIngredient.getUnit()));
                     }else{
                         ArrayAdapter<String> unitAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, solidUnit);
                         thisUnit.setAdapter(unitAdapt);
                     }
-                    // Toast.makeText(getApplicationContext(), "Selected non-Drink", Toast.LENGTH_SHORT).show();
-
                 }
             }
 
@@ -170,42 +165,30 @@ public class ViewIngredientFragment extends DialogFragment {
                             boolean toast = FALSE;
 
                             if (description.isEmpty()) {
-//                            thisDescription.requestFocus();
-//                            thisDescription.setError("Please provide the ingredient description.");
                                 toast = TRUE;
 
                             }
 
                             if (location.isEmpty()) {
-//                            thisDescription.requestFocus();
-//                            thisDescription.setError("Please provide the ingredient description.");
                                 toast = TRUE;
 
                             }
 
                             // Set corresponding error messages if a text box is empty.
                             if (countString.isEmpty()) {
-//                            thisAmount.requestFocus();
-//                            thisAmount.setError("Please provide the amount of the ingredient.");
                                 toast = TRUE;
                             } else {
                                 count = Double.parseDouble(thisAmount.getText().toString());
                                 if (count <= 0) {
-//                                thisAmount.requestFocus();
-//                                thisAmount.setError("Please provide a valid count.");
                                     toast = TRUE;
                                 }
                             }
 
                             if (unitCostString.isEmpty()) {
-//                            thisUnitCost.requestFocus();
-//                            thisUnitCost.setError("Please provide the unit cost of the ingredient.");
                                 toast = TRUE;
                             } else {
                                 unitCost = Double.parseDouble(thisUnitCost.getText().toString());
                                 if (unitCost <= 0) {
-//                                thisUnitCost.requestFocus();
-//                                thisUnitCost.setError("Please provide a valid unit cost.");
                                     toast = TRUE;
                                 }
                             }
@@ -228,8 +211,6 @@ public class ViewIngredientFragment extends DialogFragment {
                                 db.newIngredient(thisUserIngredient);
 
                             }
-
-                            //startActivity(intent);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -262,42 +243,30 @@ public class ViewIngredientFragment extends DialogFragment {
                         boolean toast = FALSE;
 
                         if (description.isEmpty()) {
-//                            thisDescription.requestFocus();
-//                            thisDescription.setError("Please provide the ingredient description.");
                             toast = TRUE;
 
                         }
 
                         if (location.isEmpty()) {
-//                            thisDescription.requestFocus();
-//                            thisDescription.setError("Please provide the ingredient description.");
                             toast = TRUE;
 
                         }
 
                         // Set corresponding error messages if a text box is empty.
                         if (countString.isEmpty()) {
-//                            thisAmount.requestFocus();
-//                            thisAmount.setError("Please provide the amount of the ingredient.");
                             toast = TRUE;
                         } else {
                             count = Double.parseDouble(thisAmount.getText().toString());
                             if (count <= 0) {
-//                                thisAmount.requestFocus();
-//                                thisAmount.setError("Please provide a valid count.");
                                 toast = TRUE;
                             }
                         }
 
                         if (unitCostString.isEmpty()) {
-//                            thisUnitCost.requestFocus();
-//                            thisUnitCost.setError("Please provide the unit cost of the ingredient.");
                             toast = TRUE;
                         } else {
                             unitCost = Double.parseDouble(thisUnitCost.getText().toString());
                             if (unitCost <= 0) {
-//                                thisUnitCost.requestFocus();
-//                                thisUnitCost.setError("Please provide a valid unit cost.");
                                 toast = TRUE;
                             }
                         }
@@ -319,10 +288,7 @@ public class ViewIngredientFragment extends DialogFragment {
                             thisUserIngredient.setUnit(unit);
                             thisUserIngredient.setIncomplete(false);
                             db.updateIngredient(thisUserIngredient);
-
                         }
-
-                        //startActivity(intent);
                     }
                 })
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
@@ -346,8 +312,6 @@ public class ViewIngredientFragment extends DialogFragment {
                             }
                         });
                         builder.create().show();
-
-
                     }
                 })
                 .create();

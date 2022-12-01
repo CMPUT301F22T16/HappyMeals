@@ -117,11 +117,7 @@ public class IngredientAdaptor extends ArrayAdapter<UserIngredient> implements S
             desc = desc + " (Picked-up)";
             description.setText(desc);
         }
-
-
-
         unitcost.setText("$" + Double.toString(userIngredient.getCost()));
-
         return convertView;
     }
 

@@ -54,8 +54,6 @@ public class AddLocationFragment extends DialogFragment {
         ArrayList<String> categories = new ArrayList<>(Arrays.asList("Vegetable", "Fruit", "Meat", "Drink", "Dry food", "Others"));
         ArrayAdapter<String> categoryAdapt = new ArrayAdapter<String>(context, R.layout.ingredient_content, R.id.myTextview, categories);
 
-
-//        location.setAdapter(categoryAdapt);
         location.setHint("Location name");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -75,20 +73,14 @@ public class AddLocationFragment extends DialogFragment {
                             Storage storage= new Storage(locationStr);
                             db.addStorage(storage);
                             Toast.makeText(context, "Location added", Toast.LENGTH_SHORT).show();
-
-                            // add to database
                         }
-                        //startActivity(intent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-
                     }
                 })
                 .create();
     }
-
 }
