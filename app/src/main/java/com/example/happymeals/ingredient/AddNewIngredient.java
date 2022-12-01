@@ -185,7 +185,7 @@ public class AddNewIngredient extends AppCompatActivity {
                     Toast.makeText(AddNewIngredient.this, "Please select a location", Toast.LENGTH_SHORT).show();
                 }
 
-                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count > 0 && unitCost > 0 && !location.equals("Select")) {
+                if (location.isEmpty() == FALSE && countString.isEmpty() == FALSE && unitCostString.isEmpty() == FALSE && description.isEmpty() == FALSE && count > 0 && unitCost > 0 && !location.equals("Select location")) {
                     Intent intent = new Intent(AddNewIngredient.this, MainActivity.class);
 
                     intent.putExtra("mode", mode);
