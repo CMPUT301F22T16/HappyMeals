@@ -33,7 +33,7 @@ public class SLSelectMealPlanActivity extends AppCompatActivity {
 
         // Add back button to action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("SL Select Meal Plan");
+        getSupportActionBar().setTitle("Shopping List");
 
         // get userId
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

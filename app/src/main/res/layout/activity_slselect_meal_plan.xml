@@ -9,19 +9,21 @@
 
     <TextView
         android:id="@+id/sl_select_mp_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="230dp"
+        android:layout_height="126dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
         android:text="@string/sl_select_meal_plan_activity"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/black"
+        android:textSize="33sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sl_select_mp_list"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_width="367dp"
+        android:layout_height="531dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

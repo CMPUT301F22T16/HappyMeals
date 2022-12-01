@@ -110,10 +110,10 @@ public class DBHandler implements Serializable{
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (ilist != null) {
-                            if (type.equals("A-Z")) {
+                            if (type.equals("Z-A")) {
                                 Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
                             }
-                            else if (type.equals("Z-A")) {
+                            else if (type.equals("A-Z")) {
                                 Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
                             }
                             else if (type.equals("1-9")) {
@@ -170,9 +170,9 @@ public class DBHandler implements Serializable{
                         adapter.clear();
                         if (ilist != null) {
                             type = task.getResult().getString("ing_sort");
-                            if (type.equals("A-Z")) {
+                            if (type.equals("Z-A")) {
                                 Collections.sort(ilist, (o1, o2) -> (o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase())));
-                            } else if (type.equals("Z-A")) {
+                            } else if (type.equals("A-Z")) {
                                 Collections.sort(ilist, (o1, o2) -> (o2.getDescription().toLowerCase().compareTo(o1.getDescription().toLowerCase())));
                             } else if (type.equals("1-9")) {
                                 Collections.sort(ilist, (o1, o2) -> o1.getCost().compareTo(o2.getCost()));

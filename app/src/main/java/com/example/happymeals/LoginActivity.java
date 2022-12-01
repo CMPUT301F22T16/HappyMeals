@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
             // ...
-            Toast.makeText(this, "An error has occured", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

@@ -21,6 +21,7 @@
             android:paddingLeft="9dp"
             android:layout_weight="3.5"
             android:text="TextView"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
